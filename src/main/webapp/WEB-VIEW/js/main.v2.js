@@ -109,29 +109,4 @@ $(document).ready(function(){
 		$('.txtArea').css({"padding-top":"0px","padding-bottom":"0px"});
 	});
 	
-
-	/**
-     * 퀵메뉴 버튼 <!--//[20241129-퍼블]-->
-     */
-	function fullpageHandleQuickButtons() {
-		// 버튼 레이아웃을 body에 추가
-		const buttonLayout = `
-		<div class="action-buttons-wrap">
-			<div class="quick-menu keyframes">
-				<button type="button" class="quick-btn">
-					<div class="icon-wrap">
-						<img src="../../img/common/ico_quick.png" alt="">
-					</div>
-					<div class="text-wrap">
-						<p class="line1">간편상담</p>
-						<p class="line2">신청하기</p>
-					</div>
-				</button>
-			</div>
-		</div>`;
-		$('body').append(buttonLayout);
-
-	}
-	fullpageHandleQuickButtons();
-	
 });

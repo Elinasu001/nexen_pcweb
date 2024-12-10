@@ -754,7 +754,8 @@
   top: 0;
 }
 
-/*s:20241129*/
-/**공통 - 퀵메뉴 버튼**/
-.action-buttons-wrap { right:50px;  bottom: 170px; }
-/*e:20241129*/
+/*s:20241210*/
+/**메인 - 퀵메뉴 버튼**/
+.mainFullPage footer .action-buttons-wrap { display:none !important; }
+.mainFullPage .action-buttons-wrap { right:50px;  bottom: 80px; }
+/*e:20241210*/
