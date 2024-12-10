@@ -3270,7 +3270,8 @@ span#imgFileNm {
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > em { line-height: 20px; width:54px; text-align: center; border-radius: 2px; font-size:10px; font-weight: 500; background:rgb(131, 32, 130, 0.1); color:var(--m-color); }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > label { width:130px; height:auto; }
 
-.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > img { margin-top:10px; height:auto;  width:150px; height:auto; }
+.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > .img { margin-top:10px; width:150px; height:15px; font-size:16px; font-weight: 600; letter-spacing: 1px; color:var(--tit-color);  }
+.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > .img > img { width:150px; height:auto; }
 .review-controls .review-item > ul > li > .review-area  > .order-card > .order-cont > .card-info > span { margin-top:6px; }
 .review-controls .review-item > ul > li > .review-area  > .order-card > .order-cont > .card-info > .btn-order { display:block; margin-top:10px; line-height: 36px; text-align: center; background: #FFFFFF; border:1px solid #888888; border-radius: 100px; transition: background 0.1s ease, color 0.1s ease; }
 .review-controls .review-item > ul > li > .review-area  > .order-card > .order-cont > .card-info > a.btn-order:hover { background: var(--m-color); color:var(--white-color); border:1px solid var(--m-color); }
