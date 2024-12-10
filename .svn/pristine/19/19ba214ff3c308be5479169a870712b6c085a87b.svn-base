@@ -1,0 +1,52 @@
+재렌탈
+header.jsp > line.23
+var reRnctUseYN = "${reRentUseYN}";//재렌탈 고객이 아니면 N
+--------------------------------------------------------------------
+UsrLoginController.java 
+로그인시 재렌탈 여부 > line.140
+로그인 후 safeKey로 재렌탈 여부 조회
+Map<String, Object> map = new HashMap<String, Object>();
+map.put("safeKey", safeKey);
+List<?> reRentalInfo = prodService.getReRentalInfo(map);
+session id > reRentUseYN
+
+
+xml
+prod.p_sReRentalInfo
+{call NXRADMIN.Pkg_Comm.p_sReRentalInfo(?, ?, ?, ?, ?, ?)}
+
+
+
+
+
+
+
+-----------------------
+회원 가입
+
+safekey
+
+0. 아이핀 및 핸드폰으로 나이스페이 통신 후 정보 get
+
+1. 나이스페이와 한번 더 통신하여 safekey를 가져 온다.
+personInsertStep3.jsp > function searchSafeKey()
+MemSubscbController.java > doIrSafeKeyCreateNew()
+
+
+2. 회원 가입 진행
+personInsertStep3.jsp > function btn_insert ()
+MemSubscbController.java > userInsert()
+1번에서 가져온 safekey가 없으면 Map safekey = memService.memberSafeCheck(memberInfoVO); 로 한번더 조회
+회원 정보 저장 > memService.memberInsert(transMap); 
+// 사용자 신규가입(seq,no 등..) insert
+memDao.memberInsert(vo);
+// 사용자 신규가입 상세정보 insert
+memDao.memberDetailInsert(vo);
+
+
+MemSubscbDataSql.xml
+회원 Seq 생성 > mem.memberGetSeq
+개인회원 신규가입 > mem.memberInsert
+개인회원 신규가입(상세정보) > mem.memberDetailInsert
+
+

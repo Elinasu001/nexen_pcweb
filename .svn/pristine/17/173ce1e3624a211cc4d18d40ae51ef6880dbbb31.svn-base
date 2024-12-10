@@ -1,0 +1,274 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+       
+	<!-- layerPopup // -->
+	<div class="popupWrap type08 md-modal" id="safeKeyPop"> <!-- md-show -->
+        <header>
+			<h2>인증번호 발급<a href="#" class="layPopClose md-close"></a></h2>
+		</header>
+        
+        <p class="desc type01">렌탈 계약에 필요한 고객님의 신용정보 조회를 위해 정보를 입력 해 주세요. </p>
+        
+        <!--contents-->
+        <div class="popContents">
+
+
+
+			<form name="form_safeKey" method="post">	
+					<input type="hidden" 					name="path"			value="pc"/>
+					<input type="hidden" id="birthdate" 	name="birthdate" />
+					<input type="hidden" id="mobileno" 		name="mobileno" />
+					<input type="hidden" id="kunnr" 		name="kunnr" />
+					<input type="hidden" id="sendgubun" 	name="sendgubun"  	value="WEB"/>
+					<input type="hidden" id="email" 		name="email"    	value=""/>
+					<input type="hidden" id="custNo" 		name="custNo"   	value="<%=session.getAttribute("custNo") %>"/>
+					<input type="hidden" id="safekey" 		name="safekey"  	value="<%=session.getAttribute("safekey") %>"/>
+					<input type="hidden" id="username" 		name="username" 	value="<%=session.getAttribute("username") %>">
+					<input type="hidden" id="gender" 		name="gender" 		value="<%=session.getAttribute("gendCd") %>">            
+                        
+                <div class="submitAreaWrap type04">
+                    <!--submitLeft-->
+                    <div class="submitLeft">
+                        <div class="submitArea type05">
+                            <div class="submit">
+                                <label for="address"><span>성명</span></label>                                    
+                                <div class="conWrap type07">
+                                    <%=session.getAttribute("username") %>
+                                </div>                   
+                            </div>
+                        </div>
+                    </div>
+                    <!--submitLeft-->
+
+                    <!--submitRight-->
+                    <div class="submitRight">
+                        <div class="submitArea type05">
+                            <div class="submit">
+                                <label for="tel"><span>성별</span></label>
+                                <div class="conWrap type07">
+                                    <input type="radio" name="radio" id="radio1" value="1" class="type06"><label for="radio1"><span>남</span></label>
+                                    <input type="radio" name="radio" id="radio2" value="0" class="type06"><label for="radio2"><span>여</span></label>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <!--submitRight-->
+                </div>
+                
+                
+                <div class="submitArea type05">
+
+                        <div class="submit">
+                            <label for="yearSafekey"><span class="essen black">법정생일</span></label>
+							<select class="type04 w120 ml20" title="년도 선택" id="yearSafekey" name="yearSafekey" onchange="btnWordch();">
+							</select>                         
+	                        
+	                        <select class="type04 w90 ml20" title="월 선택"  id="monSafekey" name="monSafekey" onchange="btnWordch();">
+	                        </select>
+	                        
+	                        <select class="type04 w90 ml20" title="일 선택" id="daySafekey" name="daySafekey" onchange="btnWordch();">
+	                        </select>                         
+                        </div>
+
+                        <div class="submit">
+                            <label for="phone11"><span class="essen black">휴대폰번호</span></label>
+                        		<select class="type04 w120 ml20" id="phon1Safekey" name="phon1Safekey" title="휴대전화 앞자리 선택">
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+								</select> 
+                            <span class="divi type02"></span>
+	                        	<input type="text" id="phon2Safekey" name="phon2Safekey" class="type03 w120" title="휴대폰 중간번호 입력란" value="" onkeyup="validNumberCheck.keyUp(event);" maxlength="4"><span class="divi type02"></span>
+                        		<input type="text" id="phon3Safekey" name="phon3Safekey" class="type03 w120" title="휴대폰 끝번호 입력란" value=""  onkeyup="validNumberCheck.keyUp(event);" onkeyup="btnWord()" onkeypress="return fn_press(event, 'numbers');" onkeydown="fn_press_han(this);" maxlength="4">
+                        </div>
+                </div>
+         
+                
+            <div class="popTerms">
+					<input type="checkbox" id="step01_agree" name="step01_agree" onchange="btnWordch()" value="" class="type01"><label for="step01_agree"><span></span>모든 약관을 확인하고 전체 동의합니다.</label>
+                    <div class="terms">
+                        가. 수집목적 : 고객의 청약 여부 확인 <br/>
+                        나. 수집항목 : 성명, 성별, 법정생일, 전화번호<br/>
+                        다. 이용기간 : 법령에서 정한 기간까지 보유 후 파기 
+                    </div>
+            </div>
+</form>
+            <div class="btnArea center">
+				 <button type="button" onclick="safekeyClose('');"class="type04 w320">취소<i class="ico01"></i></button>
+				 <button type="button" onclick="safekeyOpen();" class="type01 w320">발급<i class="ico01"></i></button>
+            </div>
+            
+            <p class="desc type07">
+                   1) 위탁기관 : NICE평가정보주식회사<br/>
+                   2) 위탁업무 : 본인인증, 이용약관 및 개인정보 수집 · 이용/제공 · 활용/조회 동의
+            </p>
+            
+        </div>
+        <!--contents-->
+
+    </div>
+	<div class="md-overlay"></div>
+	<!-- layerPopup // -->
+	
+
+	<script type="text/javascript" src="/js/lib/classie.js"></script>
+    <script type="text/javascript" src="/js/lib/modalEffects.js"></script>       
+
+<script type="text/javascript">
+
+$( document ).ready(function() {
+	/* 법정생일 셋팅 */
+	getYearSelect();
+	getMonSelect(); 
+	getDaySelect();
+	
+	var gender = $('#gender').val();
+	console.log("gender   : "+gender);
+	if(gender == '1'){
+		$('#radio1').prop("checked",true);
+	}else{
+		$('#radio2').prop("checked",true);
+		$('#gender').val('0');
+	}
+	
+});
+
+function btnWordch(){
+	var frm = document.form_safeKey;
+	
+	var yearSafekey 	= frm.yearSafekey.value;
+	var monSafekey 		= frm.monSafekey.value;
+	var daySafekey 		= frm.daySafekey.value;
+	var phon1Safekey 	= frm.phon1Safekey.value;
+	var phon2Safekey 	= frm.phon2Safekey.value;
+	var phon3Safekey 	= frm.phon3Safekey.value;
+	var step01_agree 	= frm.step01_agree.checked;
+		
+	if(yearSafekey != '' & monSafekey != '' & daySafekey != '' &
+			phon2Safekey.length == 4 & phon3Safekey.length == 4 & step01_agree == true){
+
+	}
+}
+function btnWord(){
+	var frm = document.form_safeKey;
+	
+	var yearSafekey = frm.yearSafekey.value;
+	var monSafekey = frm.monSafekey.value;
+	var daySafekey = frm.daySafekey.value;
+	var phon1Safekey = frm.phon1Safekey.value;
+	var phon2Safekey = frm.phon2Safekey.value;
+	var phon3Safekey = frm.phon3Safekey.value;
+	var step01_agree = frm.step01_agree.checked;
+		
+	if(yearSafekey != '' & monSafekey != '' & daySafekey != '' &
+			phon2Safekey.length == 4 & phon3Safekey.length == 4 & step01_agree == true){
+	}
+}
+
+
+function getYearSelect() {
+	var now = new Date();
+	var yearSafekeyHtml = "";
+		yearSafekeyHtml += '<option value="" >년도</option>';
+		
+	for(i=now.getFullYear()-90; i < now.getFullYear()+1; i++) {
+			yearSafekeyHtml += '<option value="'+i+'">'+i+" 년 </option>";
+	}
+	$('#yearSafekey').html(yearSafekeyHtml);
+}
+
+function getMonSelect() {
+	
+	var monSafekeyHtml = "";
+		monSafekeyHtml += '<option value="" >월</option>';
+	for(var i=1; i<13; i++) {
+		if(i <= 9 ){
+			monSafekeyHtml += '<option value="0'+i+'">'+i+" 월 </option>";	
+		}else{
+			monSafekeyHtml += '<option value="'+i+'">'+i+" 월 </option>";
+		}
+		
+	}
+	$('#monSafekey').html(monSafekeyHtml);
+}
+
+function getDaySelect() {
+	var daySafekeyHtml = "";
+		daySafekeyHtml += '<option value="" >일</option>';
+	  for(var i=1; i<32; i++) {
+			if(i <= 9 ){
+				daySafekeyHtml += '<option value="0'+i+'">'+i+" 일 </option>";	
+			}else{
+				daySafekeyHtml += '<option value="'+i+'">'+i+" 일 </option>";
+			}
+		  
+	   } 
+	  $('#daySafekey').html(daySafekeyHtml);
+}
+
+
+function safekeyOpen() {
+	if(form_safeKey.step01_agree.checked == false) {
+		alert("이용약관 및 개인정보 수집 이용에 동의해 주세요");
+		return false;
+	}
+	else if(form_safeKey.yearSafekey.value == '' || form_safeKey.monSafekey.value == '' || form_safeKey.daySafekey.value == ''){
+		alert("법정생일을 확인해주세요.");
+		return false;
+	}
+	else if(form_safeKey.phon2Safekey.value.length < 4 || form_safeKey.phon3Safekey.value.length < 4 ){
+		alert("휴대폰번호를 확인해주세요.");
+		return false;
+	}
+	
+	var frm = document.form_safeKey;
+	
+	var yearSafekey  =	frm.yearSafekey.value;
+	var monSafekey   =  frm.monSafekey.value;
+	var daySafekey   =  frm.daySafekey.value;
+	var phon1Safekey =  frm.phon1Safekey.value;
+	var phon2Safekey =  frm.phon2Safekey.value;
+	var phon3Safekey =  frm.phon3Safekey.value;
+	
+	frm.birthdate.value = yearSafekey+monSafekey+daySafekey;
+	frm.mobileno.value = phon1Safekey+phon2Safekey+phon3Safekey;
+
+ 	window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+ 	frm.action = "/member/checkplusSend";
+	frm.target = "popupChk";
+	frm.submit();	
+	
+}
+
+function safekeyClose(key){
+	if(key != ''){
+		$('#safekey').val(key);	
+	}
+	$('#safeKeyPop').removeClass('md-show');
+}
+
+
+/* 숫자만 입력받기 */
+function fn_press(event, type) {
+	var evt_code = (window.netscape) ? ev.which : event.keyCode;	
+    if(type == "numbers") {
+    	if((evt_code < 48) || (evt_code > 57)){
+    		return false;
+    	}
+    }
+}
+/* 한글입력 방지 */
+function fn_press_han(obj){
+    if(event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39
+    || event.keyCode == 46 ) return;
+    obj.value = obj.value.replace(/[\ㄱ-ㅎㅏ-ㅣ가-힣]/g, '');
+}
+</script>

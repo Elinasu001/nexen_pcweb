@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="../../img/common/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="../../css/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" href="../../css/layout.css">
+    <link type="text/css" rel="stylesheet" href="../../css/new_layout.css">
+    <link rel="stylesheet" type="text/css" href="../../css/nice-select.css">
+
+    <script type="text/javascript" src="../../js/lib/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../../js/common_ui.js"></script>
+    <script type="text/javascript" src="../../js/util.js"></script>
+    <script src="../../js/lib/jquery.nice-select.min.js"></script>
+    </script>
+    <title>렌탈-구매하기 | NEXT LEVEL</title>
+</head>
+
+<body>
+    <div class="allWrap">
+
+        <div class="popupWrap map md-modal md-show" id="map"> <!-- md-modal-2 md-show -->
+            <a href="#" class="layPopClose md-close" onclick="fn_mapClose()"></a>
+
+            <!--contents-->
+            <div class="popContents">
+                <!--mapInfoBox-->
+                <div class="mapInfoBox">
+                    <div class="mapInfoTop">
+                        <!-- 찾기 검색 -->
+                        <div class="searchArea">
+                            <!-- <p class="tit">나와 가까운 렌탈 전문점은 어디 있을까?</p> -->
+                            <h3 class="type08">전문점 찾기</h3>
+
+                            <ul>
+                                <li>
+                                    <select class="type04 po_05" title="시/도 선택" onchange="selectSiGunGu();" id="sido"><!--[20241206 퍼블] : .w130 클래스 삭제-->
+                                        <option value="0">시/도 선택</option>
+                                        <option value="강원">강원</option>
+
+                                        <option value="경기">경기</option>
+
+                                        <option value="경남">경남</option>
+
+                                        <option value="경북">경북</option>
+
+                                        <option value="광주">광주</option>
+
+                                        <option value="대구">대구</option>
+
+                                        <option value="대전">대전</option>
+
+                                        <option value="부산">부산</option>
+
+                                        <option value="서울">서울</option>
+
+                                        <option value="세종">세종</option>
+
+                                        <option value="울산">울산</option>
+
+                                        <option value="인천">인천</option>
+
+                                        <option value="전남">전남</option>
+
+                                        <option value="전북">전북</option>
+
+                                        <option value="제주">제주</option>
+
+                                        <option value="충남">충남</option>
+
+                                        <option value="충북">충북</option>
+
+                                    </select>
+                                    <select class="type04 po_05" title="시/군/구 선택" id="sigungu"><!--[20241206 퍼블] : .w130 클래스 삭제-->
+                                        <option value="">시/군/구 선택</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <input type="text" name="meajang" class="type08 w100per" id="meajang" title="매장명 입력란" placeholder="매장명을 입력해보세요">
+                                    <input type="hidden" id="meajangCd" value="">
+                                </li>
+                            </ul>
+                            <!--//[20241206 퍼블] btn-wrap 태그 추가, 한 눈에 보기 버튼/찾 기 버튼 수정-->
+                            <div class="btn-wrap">
+                                <button type="button" class="btn btn-view" onclick="selectStoreAll('1');">한 눈에 보기</button>
+                                <button type="button" class="btn btn-search" onclick="selectStore('1'); return false;">검색하기</button>
+                            </div>
+                            <!--[20241206 퍼블] btn-wrap 태그 추가, 한 눈에 보기 버튼/찾 기 버튼 수정//-->
+                        </div>
+                        <!-- 찾기 검색 -->
+
+                        <div class="totalBar">
+                            <!--//[20241206 퍼블] 텍스트, 레이아웃 수정-->
+                            <div class="total">렌탈 전문점 검색결과<span id="storeListCnt" class="num">334</span><span>지점</span></div>
+                            <!--[20241206 퍼블] 텍스트, 레이아웃 수정//-->
+                            <a href="#" class="orderListBtn"></a>
+                        </div>
+                        
+                    </div>
+
+                    <div class="mapInfoBottom orderList"><!--[20241206 퍼블] 인라인 스타일 삭제 (height 삭제)-->
+                        <div class="scrollBox type04"><!--[20241206 퍼블] 인라인 스타일 삭제 (height 삭제)-->
+                            <div class="serResult_01">
+                                <ul id="storeList">
+                                    <li class="storeAll"></li>
+                                    <li class="storeItem sotrList0"><!--[20241206 퍼블] .storeItem 클래스 추가 -->
+                                        <div class="storeList">
+                                            <ul>
+                                                <!--//[20241206 퍼블] 일괄 수정-->
+                                                <li  class="icoArea ic-recom">추천 렌탈 전문점</li>
+                                                <li id="nmClick" class="tit">넥스트레벨 역삼점<span class="num"><img src="../../img/product/map_star.png">4.5</span><span class="num all-num">총 12건</span></li>
+                                                <li class="txt">서울특별시 은평구 연서로 193</li>
+                                                <!--[20241206 퍼블] 일괄 수정//-->
+                                                <li>[드라이브스루 가능]</li>
+                                            </ul>
+                                            <div class="mStateIcon"><!--[20242405 퍼블] 추천 삭제, 1급 정비 이미지 변경-->
+                                                <div class="state"> <img src="../../img/common/state_ico01.png" alt="1급정비">
+                                                    <span>1급정비</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico02.png" alt="타이어">
+                                                    <span>타이어</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico03.png" alt="경정비">
+                                                    <span>경정비</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico04.png" alt="겨울용">
+                                                    <span>겨울용</span>
+                                                </div>
+                                                
+                                                <div class="state"> <img src="../../img/common/state_ico05.png" alt="세차">
+                                                    <span>세차</span>
+                                                </div>
+                                            </div>
+                                            <!--//[20241206 퍼블] 수정 ( btn-wrap 태그 추가, <i class="ico15 po_10 fr"></i> 삭제), .type20 클래스로 변경-->
+                                            <div class="btn-wrap">
+                                                <button type="button" class="type20">선택하기</button>
+                                                <button type="button" class="type20">이동하기</button>
+                                            </div>
+                                            <!--[20241206 퍼블] 수정 ( btn-wrap 태그 추가, <i class="ico15 po_10 fr"></i> 삭제,  .type20 클래스로 변경)//-->
+                                            <!-- <button type="button" class="type18">선택하기<i class="ico15 po_10 fr"></i></button>
+                                            <button type="button" class="type18">이동하기<i class="ico15 po_10 fr"></i></button> 삭제 -->
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="pagingFooter">
+                            <div class="paging" id="pagingMap">
+                                <a class="on" href="javascript:;" >1</a>
+                                <a href="javascript:selectO2o(2);">2</a>
+                                <a href="javascript:selectO2o(3);">3</a>
+                                <a href="javascript:selectO2o(4);">4</a>
+                                <a href="javascript:selectO2o(5);">5</a>
+                                <a href="javascript:selectO2o(6);">6</a>
+                                <a href="javascript:selectO2o(7);">7</a>
+                                <a href="javascript:selectO2o(8);">8</a>
+                                <a href="javascript:selectO2o(9);">9</a>
+                                <a href="javascript:selectO2o(10);">10</a>
+                                <span>
+                                    <a href="javascript:selectO2o(11);" class="next"></a>
+                                </span>
+                                <span>
+                                    <a href="javascript:selectO2o(14);" class="end"></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--mapInfoBox-->
+                <!-- 지도 들어갈 자리 세로값 840px [20241206 퍼블] width:840px로 변경 필요-->
+                <div class="mapView" id="mapDiv" style="width: 840px; height: 800px; overflow: hidden;"></div>
+                <!-- 지도 들어갈 자리 -->
+            <!--contents-->
+            </div>
+        </div>
+        <div class="md-overlay"></div>
+    </div>
+    <!-- allWrap 끝 -->
+</body>
+
+</html>

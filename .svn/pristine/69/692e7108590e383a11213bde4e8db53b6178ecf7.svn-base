@@ -1,0 +1,117 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<script type="text/javascript" src="/js/lib/jquery-3.4.1.min.js"></script>
+
+
+
+<form name="order_info" id="order_info" method="post" >
+	<input type="hidden" class="orderInfo1" name="pay_method" 	id="pay_method" 		value="${pgPaymentVo.payMethod}"/><!-- 결제 수단 정보 설정(신용카드 : 100000000000, 계좌이체 : 010000000000) 해당하는 값을 모두 더해주면 됩니다-->
+	<input type="hidden" class="orderInfo1" name="req_tx"  		id="req_tx" 			value="pay" /><!-- 승인(pay)/취소,매입(mod) -->
+	<input type="hidden" class="orderInfo1" name="site_cd" 		id="site_cd" 		value="<%=AppContext.getString(CoreConstants.KCP_SITE_CD)%>"/>
+	<input type="hidden" class="orderInfo1" name="site_name" 	id="site_name" 		value="<%=AppContext.getString(CoreConstants.KCP_SITE_NAME)%>"/>
+	<input type="hidden" class="orderInfo1" name="quotaopt"    	id="quotaopt" 		value="<%=AppContext.getString(CoreConstants.KCP_QUOTAOPT)%>"/><!-- 할부옵션 : 표준웹에서 카드결제시 최대로 표시할 할부개월 수를 설정합니다.(0 ~ 18 까지 설정 가능) 50000원 미만의 금액은 일시불로만 표기됩니다-->
+	<input type="hidden" class="orderInfo1" name="currency"   	id="currency" 		value="<%=AppContext.getString(CoreConstants.KCP_CURRENCY)%>"/><!-- 필수 항목 : 결제 금액/화폐단위 -->
+	<input type="hidden" class="orderInfo1" name="module_type" 	id="module_type" 	value="<%=AppContext.getString(CoreConstants.KCP_MODULE_TYPE)%>"/>
+	<input type='hidden' class="orderInfo1" name="skin_indx" 	id="skin_indx" 	value='2'/>
+	<input type="hidden" class="orderInfo1" name="res_cd"        id="res_cd" 			value="${pgPaymentVo.resCd}"/>
+	<input type="hidden" class="orderInfo1" name="res_msg"       id="res_msg" 		value="${pgPaymentVo.resMsg}"/>
+	<input type="hidden" class="orderInfo1" name="enc_info"      id="enc_info" 		value="${pgPaymentVo.encInfo}"/>
+	<input type="hidden" class="orderInfo1" name="enc_data"      id="enc_data" 		value="${pgPaymentVo.encData}"/>
+	<input type="hidden" class="orderInfo1" name="ret_pay_method" id="ret_pay_method" 	value="${pgPaymentVo.retPayMethod}"/>
+	<input type="hidden" class="orderInfo1" name="tran_cd"       id="tran_cd" 		value="${pgPaymentVo.tranCd}"/>
+	<input type="hidden" class="orderInfo1" name="use_pay_method" id="use_pay_method" 	value="${pgPaymentVo.usePayMethod}"/>
+	<input type="hidden" class="orderInfo1" name="ordr_chk"      id="ordr_chk" 		value="${pgPaymentVo.ordrChk}"/>
+	<input type="hidden" class="orderInfo1" name="mountCd"      id="mountCd" 		value="${mountCd}"/>
+	<input type="hidden" class="orderInfo1" name="cash_yn"       id="cash_yn" 		value="${pgPaymentVo.cashYn}"/>
+	<input type="hidden" class="orderInfo1" name="cash_tr_code"   id="cash_tr_code" 	value="${pgPaymentVo.cashTrCode}"/>
+	<input type="hidden" class="orderInfo1" name="cash_id_info"   id="cash_id_info" 	value="${pgPaymentVo.cashIdInfo}"/>
+	<input type="hidden" class="orderInfo1" name="good_expr" 	id="good_expr" 		value="0">
+	<input type="hidden" class="orderInfo1" name="kcp_pay_title"  id="kcp_pay_title" 	value="${pgPaymentVo.kcpPayTitle}"/>
+	<input type="hidden" class="orderInfo1" name="disp_tax_yn"  id="disp_tax_yn" 	value="Y"/>
+	<input type="hidden" class="orderInfo1" name="ordr_idxx"  	id="ordr_idxx" 		value="${pgPaymentVo.ordrIdxx}" maxlength="40"/>
+	<input type="hidden" class="orderInfo1" name="good_name"  	id="good_name" 		value="${pgPaymentVo.goodName}"/>
+	<input type="hidden" class="orderInfo1" name="cust_no"    	id="cust_no" 		value="${pgPaymentVo.custNo}"/>
+	<input type="hidden" class="orderInfo1" name="good_mny"   	id="good_mny" 		value="${pgPaymentVo.goodMny}" maxlength="9"/>
+	<input type="hidden" class="orderInfo1" name="buyr_name"  	id="buyr_name" 		value="${pgPaymentVo.buyrName}"/>
+	<input type="hidden" class="orderInfo1" name="buyr_mail"  	id="buyr_mail" 		value="${pgPaymentVo.buyrMail}" maxlength="30" />
+	<input type="hidden" class="orderInfo1" name="buyr_tel1"  	id="buyr_tel1" 		value="${pgPaymentVo.buyrTel1}"/>
+	<input type="hidden" class="orderInfo1" name="buyr_tel2"  	id="buyr_tel2" 		value="${pgPaymentVo.buyrTel2}"/>
+</form>
+
+
+    <script type="text/javascript">
+        /* 신용카드 영수증 */
+        /* 실결제시 : "https://admin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=card_bill&tno=" */
+        /* 테스트시 : "https://testadmin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=card_bill&tno=" */
+         function receiptView( tno, ordr_idxx, amount )
+        {
+            receiptWin = "https://admin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=card_bill&tno=";
+            receiptWin += tno + "&";
+            receiptWin += "order_no=" + ordr_idxx + "&";
+            receiptWin += "trade_mony=" + amount ;
+
+            window.open(receiptWin, "", "width=455, height=815");
+        }
+
+        /* 현금 영수증 */
+        /* 실결제시 : "https://admin8.kcp.co.kr/assist/bill.BillActionNew.do" */
+        /* 테스트시 : "https://testadmin8.kcp.co.kr/assist/bill.BillActionNew.do" */
+        function receiptView2( cash_no, ordr_idxx, amount )
+        {
+            receiptWin2 = "https://testadmin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=cash_bill&cash_no=";
+            receiptWin2 += cash_no + "&";
+            receiptWin2 += "order_id="     + ordr_idxx + "&";
+            receiptWin2 += "trade_mony="  + amount ;
+
+            window.open(receiptWin2, "", "width=370, height=625");
+        }
+
+        /* 가상 계좌 모의입금 페이지 호출 */
+        /* 테스트시에만 사용가능 */
+        /* 실결제시 해당 스크립트 주석처리 */
+        function receiptView3()
+        {
+            receiptWin3 = "http://devadmin.kcp.co.kr/Modules/Noti/TEST_Vcnt_Noti.jsp";
+            window.open(receiptWin3, "", "width=520, height=300");
+        }
+    </script>
+
+    <script type="text/javascript">
+	    $( document ).ready(function() {
+	    	var form = $("#frm", opener.document);
+	    	try {
+	    		$(".orderInfo1").each(function(idx, item){
+		    		var oId = $("#"+$(this).attr("id"), opener.document).val();
+		    		if(oId == undefined || oId == null ) {
+		    			var input = "";
+		    			if($(this).val() != "") {
+		    				input = "<input type='hidden' name='"+$(this).attr("id")+"' id='"+$(this).attr("id")+"' value='"+$(this).val()+"' />";
+		    			} else {
+		    				input = "<input type='hidden' name='"+$(this).attr("id")+"' id='"+$(this).attr("id")+"' value='' />";
+		    			}
+						form.append(input);
+		    		} else {
+		    			$("#"+$(this).attr("id"), opener.document).val($(this).val());
+		    		}
+				});
+
+	    	} catch (e) {
+				console.log(e);
+			}
+
+	    	//yjw serverMode 변경(20220225)
+			var mountCd = $("#mountCd").val();
+			if(mountCd == "40") {
+				$("#frm", opener.document).attr("action" , "/order/orderComplete").submit();
+			} else {
+				$("#frm", opener.document).attr("action" , "/order/orderCompleteTMS2").submit();
+			}
+			//$("#frm", opener.document).attr("action" , "/order/orderComplete").submit();
+			window.self.close();
+		});
+    </script>
+</html>

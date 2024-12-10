@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="../../img/common/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="../../css/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" href="../../css/layout.css">
+    <link type="text/css" rel="stylesheet" href="../../css/new_layout.css">
+    <link rel="stylesheet" type="text/css" href="../css/nice-select.css">
+
+    <script type="text/javascript" src="../../js/lib/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../../js/common_ui.js"></script>
+    <script type="text/javascript" src="../../js/util.js"></script>
+    <script src="../../js/lib/jquery.nice-select.min.js"></script>
+    <title>넥센 전문점 찾기 | NEXT LEVEL</title>
+</head>
+
+<body>
+    <div class="allWrap">
+        <!--subTitleArea-->
+        <div class="subTitleArea type22"><!--[20241206 - 퍼블] : type22 클래스 추가-->
+            <!--  subTitleTop -->
+            <div class="subTitleTop">
+                <!--topArea-->
+                <div class="topAreaWrap ">
+                    <div class="topArea">
+                        <header>
+                            <h1>
+                                <a href="/main"><img src="../../img/common/logo_dark.png" alt="Next Level"
+                                        class="logo-dark" />
+                                    <img src="/img/common/logo_light.png" alt="Next Level" class="logo-light" />
+                                </a>
+                            </h1>
+                            <nav class="gnb">
+                                <ul>
+                                    <li class="nav-menu"> <a href="#">주문하기</a></li>
+                                    <li class="nav-menu"> <a href="#">혜택/서비스</a></li>
+                                    <!-- <li class="logo"><a href="/main"><img src="/img/common/logo_dark.png" alt="Next Level" class="logo-dark" /><img src="/img/common/logo_light.png" alt="Next Level" class="logo-light" /></a></li> -->
+                                    <li class="nav-menu"> <a href="#">뉴스/이벤트</a></li>
+                                    <li class="nav-menu"> <a href="#">고객지원</a></li>
+                                    <li class="nav-menu"> <a href="#">마이페이지</a></li>
+                                </ul>
+                            </nav>
+                            <!-- <a href="#" class="allMenu"></a> -->
+                            <a href="/cart/cartView" class="basket ico_basket_black"></a>
+                            <div id="loginBlock">
+                                <a href="javascript:goTologin();" class="login"></a>
+                            </div>
+                            <!-- <div class="rTopBtn"> -->
+                            <!-- </div> -->
+                        </header>
+                    </div>
+                </div>
+                <!-- mouseover subMenu -->
+                <div class="subMenuWrap">
+                    <div class="subMenu">
+                        <header>
+                            <h1>
+                                <!-- <a href="/main"><img src="/img/common/logo.png" alt="Next Level"/></a> -->
+                                <a href="/main">
+                                    <img src="/img/common/logo_dark.png" alt="Next Level" class="logo-dark" />
+                                    <img src="./img/common/logo_light.png" alt="Next Level" class="logo-light" />
+                                </a>
+                            </h1>
+                            <nav class="gnb">
+                                <ul>
+                                    <li class="nav-menu"><a href="#">주문하기</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a onclick="openSizeFinder( 'num' );">차량번호로 찾기</a></li>
+                                                <li><a onclick="openSizeFinder( 'car' );">차종으로 찾기</a></li>
+                                                <li><a onclick="openSizeFinder( 'size' );">사이즈로 찾기</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">혜택/서비스</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/contents/o2oServiceIntro">O2O 서비스</a></li>
+                                                <li><a href="/contents/rentalServiceIntro">렌탈 서비스</a></li>
+                                                <li><a href="/contents/guaranteeSystem">보증제도 안내</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">뉴스/이벤트</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/news/tireTipList">NEWS&TIP</a></li>
+                                                <li><a href="/evt/evtList">이벤트</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">고객지원</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/bbs/noticeList">공지사항</a></li>
+                                                <li><a href="/bbs/qnaList">자주묻는 질문</a></li>
+                                                <li><a href="/bbs/counselRegister">상담하기</a></li>
+                                                <li><a href="/mypage/questionList">1:1문의</a></li>
+                                                <li><a href="/bbs/specialDealerList">렌탈 전문점 찾기</a></li>
+                                                <li><a href="/bbs/o2oSearchList">넥센 직영점 찾기</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">마이페이지</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/mypage/orderList">나의 주문내역</a></li>
+                                                <li><a href="/mypage/myRentalList">나의 렌탈 관리</a>
+                                                </li>
+                                                <li><a href="/mypage/couponList">나의 쿠폰</a></li>
+                                                <li><a href="/mypage/myRecommend">나의 추천인 코드</a></li>
+
+                                                <li><a href="/mypage/memberModifyPassword">회원정보 관리</a></li>
+                                                <li><a href="javascript:fn_safeKeyView();">인증번호 발급</a></li>
+
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <a href="/cart/cartView" class="basket ico_basket_black"></a>
+                            <a href="javascript:goTologin();" class="login"></a>
+                        </header>
+                    </div>
+                </div>
+                <!-- mouseover subMenu -->
+
+                <!--topArea-->
+                <!-- allMenu -->
+                <div class="allMenuWrap">
+                    <div class="allMenuBox">
+                        <header>
+                            <div class="topArea">
+                                <h1>
+                                    <a href="/main"><img src="/img/common/logo.png" alt="Next Level" /></a>
+                                </h1>
+                                <ul class="topMenu">
+                                    <li><i class="ico02"></i><a href="./member/join">회원가입</a></li>
+                                    <li><i class="ico03"></i><a href="./cart/cartView">장바구니</a></li>
+                                    <li id="loginArea"><i class="ico04"></i><a href="javascript:goTologin();">로그인</a>
+                                    </li>
+                                </ul>
+                                <a href="#" class="allMenuClose"></a>
+                            </div>
+                        </header>
+
+                        <!-- allMenu content-->
+                        <div class="content">
+                            <div class="siteMapWrap">
+                                <!--sMenuBox-->
+                                <div class="sMenuBox">
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">주문하기</h3>
+                                        <ul>
+                                            <li><a href="/product/prdList?viewGbn=H">타이어</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">뉴스/<br />이벤트</h3>
+                                        <ul>
+                                            <li><a href="/news/tireTipList">NEWS&TIP</a></li>
+                                            <li><a href="/evt/evtList">이벤트</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">마이넥센</h3>
+                                        <ul>
+                                            <li><a href="/mypage/orderList">나의 주문내역</a></li>
+                                            <li><a href="/mypage/myRentalList">나의 렌탈 관리</a>
+                                            </li>
+                                            <li><a href="/mypage/couponList">나의 쿠폰</a></li>
+                                            <li><a href="/mypage/myRecommend">나의 추천인 코드</a></li>
+                                            <li><a href="/mypage/questionList">1:1문의</a></li>
+                                            <li><a href="/mypage/memberModifyPassword">회원정보 관리</a></li>
+                                            <li><a href="javascript:fn_safeKeyView();">인증번호 발급</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+                                </div>
+                                <!--sMenuBox-->
+
+                                <!--sMenuBox-->
+                                <div class="sMenuBox type02">
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">혜택/<br />서비스</h3>
+                                        <ul>
+                                            <li><a href="/contents/o2oServiceIntro">O2O 서비스 소개</a></li>
+                                            <li><a href="/contents/rentalServiceIntro">렌탈 서비스 소개</a></li>
+                                            <li><a href="/contents/guaranteeSystem">보증제도 소개</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">고객지원</h3>
+                                        <ul>
+                                            <li><a href="/bbs/noticeList">공지사항</a></li>
+                                            <li><a href="/bbs/qnaList">자주 묻는 질문</a></li>
+                                            <li><a href="/bbs/counselRegister">상담하기</a></li>
+                                            <li><a href="/bbs/specialDealerList">전문점 안내</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+                                </div>
+                                <!--sMenuBox-->
+                            </div>
+                        </div>
+                        <!-- allMenu content-->
+                    </div>
+                </div>
+                <!-- allMenu -->
+                <!--subTitleArea-->
+                <div class="titleArea type03">
+                    <h2 class="type03"><img src="/img/title/h2_b_10.png" alt="상담 신청을 남겨주세요." /></h2>
+                    <h3 class="type01">
+                        <img src="/img/title/h2_title_19.png" alt="상담하기" />
+                    </h3>
+
+                </div>
+            </div>
+            <!--  subTitleTop -->
+        </div>
+        <!--subTitleArea-->
+        <!--subContentsWrap-->
+        <div class="subContentsWrap">
+            <div class="subContents fluid">
+                <!--mapInfoBox-->
+                <div class="mapInfoBox type02">
+                    <div class="mapInfoTop">
+                        <!-- 찾기 검색 -->
+                        <div class="searchArea">
+                            <p class="tit">나와 가까운 넥센 전문점은 어디 있을까?</p>
+                            <h3 class="type08">넥센 전문점 찾기</h3>
+                            <ul>
+                                <li>
+                                    <select class="type04 po_05" title="시/도 선택" onchange="selectSiGunGu();" id="sido"><!--[20241206 퍼블] : .w130 클래스 삭제-->
+                                        <option value="">시/도 선택</option>
+                                        <option value="강원">강원</option>
+                                        <option value="경기">경기</option>
+                                        <option value="경남">경남</option>
+                                        <option value="경북">경북</option>
+                                        <option value="광주">광주</option>
+                                        <option value="대구">대구</option>
+                                        <option value="대전">대전</option>
+                                        <option value="부산">부산</option>
+                                        <option value="서울">서울</option>
+                                        <option value="세종">세종</option>
+                                        <option value="울산">울산</option>
+                                        <option value="인천">인천</option>
+                                        <option value="전남">전남</option>
+                                        <option value="전북">전북</option>
+                                        <option value="제주">제주</option>
+                                        <option value="충남">충남</option>
+                                        <option value="충북">충북</option>
+                                    </select>
+
+                                    <select class="type04 po_05" title="시/군/구 선택" id="sigungu"><!--[20241206 퍼블] : .w130 클래스 삭제-->
+                                        <option value="">시/군/구 선택</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <input type="text" name="meajang" class="type08 w100per" id="meajang"  title="매장명 입력란" placeholder="매장명을 입력해보세요">
+                                    <button type="button" class="btn btn-search img">검색하기 </button>
+                                </li>
+                            </ul>
+                            <!--//[20241206 퍼블] btn-wrap 태그 추가, 한 눈에 보기 버튼/찾 기 버튼 수정-->
+                            <div class="btn-wrap">
+                                <button type="button" class="btn btn-view" onclick="selectStoreAll('1');">한 눈에 보기</button>
+                                <button type="button" class="btn btn-search" onclick="selectStore('1'); return false;">검색하기</button>
+                            </div>
+                            <!--[20241206 퍼블] btn-wrap 태그 추가, 한 눈에 보기 버튼/찾 기 버튼 수정//-->
+                        </div>
+                        <!-- 찾기 검색 -->
+
+                        
+
+                        <div class="totalBar">
+                            <!--//[20241206 퍼블] 텍스트, 레이아웃 수정-->
+                            <div class="total">넥센 전문점 검색결과<span id="storeListCnt" class="num">334</span><span>지점</span></div>
+                            <!--[20241206 퍼블] 텍스트, 레이아웃 수정//-->
+                        </div>
+                    </div>
+
+                    <div class="mapInfoBottom orderList" style="overflow:auto;">
+                        <div class="type04">
+                            <div class="serResult_01">
+                                <ul id="storeList">
+                                    <li class="storeAll"></li>
+                                    <li class="storeItem sotrList0"><!--[20241206 퍼블] .storeItem 클래스 추가 -->
+                                        <div class="storeList">
+                                            <ul>
+                                                <!--//[20241206 퍼블] 일괄 수정-->
+                                                <li  class="icoArea ic-recom">추천 넥센 전문점</li>
+                                                <li id="nmClick" class="tit">넥스트레벨 역삼점<span class="num"><img src="../../img/product/map_star.png">4.5</span><span class="num all-num">총 12건</span></li>
+                                                <li class="txt">서울특별시 은평구 연서로 193</li>
+                                                <!--[20241206 퍼블] 일괄 수정//-->
+                                            </ul>
+                                            <div class="mStateIcon"><!--[20242405 퍼블] 추천 삭제, 1급 정비 이미지 변경-->
+                                                <div class="state"> <img src="../../img/common/state_ico01.png" alt="1급정비">
+                                                    <span>1급정비</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico02.png" alt="타이어">
+                                                    <span>타이어</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico03.png" alt="경정비">
+                                                    <span>경정비</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico04.png" alt="겨울용">
+                                                    <span>겨울용</span>
+                                                </div>
+                                                
+                                                <div class="state"> <img src="../../img/common/state_ico05.png" alt="세차">
+                                                    <span>세차</span>
+                                                </div>
+                                            </div>
+                                            <!--//[20241206 퍼블] 수정 ( btn-wrap 태그 추가, <i class="ico15 po_10 fr"></i> 삭제), .type20 클래스로 변경-->
+                                            <div class="btn-wrap">
+                                                <button type="button" class="type20">길찾기</button>
+                                                <button type="button" class="type20">상세보기</button>
+                                            </div>
+                                            <!--[20241206 퍼블] 수정 ( btn-wrap 태그 추가, <i class="ico15 po_10 fr"></i> 삭제,  .type20 클래스로 변경)//-->
+                                        </div>
+                                    </li>
+                                    <li class="storeItem sotrList1"><!--[20241206 퍼블] .storeItem 클래스 추가 -->
+                                        <div class="storeList">
+                                            <ul>
+                                                <!--//[20241206 퍼블] 일괄 수정-->
+                                                <!-- <li  class="icoArea ic-recom">추천 넥센 전문점</li> -->
+                                                <li id="nmClick" class="tit">넥스트레벨 역삼점<span class="num"><img src="../../img/product/map_star.png">4.5</span><span class="num all-num">총 12건</span></li>
+                                                <li class="txt">서울특별시 은평구 연서로 193</li>
+                                                <!--[20241206 퍼블] 일괄 수정//-->
+                                            </ul>
+                                            <div class="mStateIcon"><!--[20242405 퍼블] 추천 삭제, 1급 정비 이미지 변경-->
+                                                <div class="state"> <img src="../../img/common/state_ico01.png" alt="1급정비">
+                                                    <span>1급정비</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico02.png" alt="타이어">
+                                                    <span>타이어</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico03.png" alt="경정비">
+                                                    <span>경정비</span>
+                                                </div>
+
+                                                <div class="state"> <img src="../../img/common/state_ico04.png" alt="겨울용">
+                                                    <span>겨울용</span>
+                                                </div>
+                                                
+                                                <div class="state"> <img src="../../img/common/state_ico05.png" alt="세차">
+                                                    <span>세차</span>
+                                                </div>
+                                            </div>
+                                            <!--//[20241206 퍼블] 수정 ( btn-wrap 태그 추가, <i class="ico15 po_10 fr"></i> 삭제), .type20 클래스로 변경-->
+                                            <div class="btn-wrap">
+                                                <button type="button" class="type20">길찾기</button>
+                                                <button type="button" class="type20">상세보기</button>
+                                            </div>
+                                            <!--[20241206 퍼블] 수정 ( btn-wrap 태그 추가, <i class="ico15 po_10 fr"></i> 삭제,  .type20 클래스로 변경)//-->
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pagingFooter">
+                            <div class="paging" id="pagingMap">
+                                <a href="javascript:selectStoreAll(1);"  class="on" href="">1</a>
+                                <a href="javascript:selectStoreAll(2);">2</a>
+                                <a href="javascript:selectStoreAll(3);">3</a>
+                                <a href="javascript:selectStoreAll(4);">4</a>
+                                <a href="javascript:selectStoreAll(5);">5</a>
+                                <a href="javascript:selectStoreAll(6);">6</a>
+                                <a href="javascript:selectStoreAll(7);">7</a>
+                                <a href="javascript:selectStoreAll(8);">8</a>
+                                <a href="javascript:selectStoreAll(9);">9</a>
+                                <a href="javascript:selectStoreAll(10);">10</a>
+                                <span><a href="javascript:selectStoreAll(11);" class="next"></a></span>
+                                <span><a href="javascript:selectStoreAll(67);" class="end"></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--mapInfoBox-->
+            </div>
+
+            <!-- 다음 맵 들어갈 자리 -->
+            <div class="mapArea" id="mapDiv"
+                style="position: relative; overflow: hidden; background: url(&quot;https://t1.daumcdn.net/mapjsapi/images/bg_tile.png&quot;);">
+                <!-- 다음 맵 들어갈 자리 -->
+            </div>
+
+            <!--subContentsWrap-->
+
+            <!-- footer  -->
+            <footer>
+                <div class="footerWrap">
+                    <div class="foTop">
+                        <ul class="foMenu">
+                            <li><a href="./contents/termOfService">이용약관</a></li>
+                            <li><a href="./contents/privacyPolicy"><span style="color:#A566FF">개인정보처리방침</span></a></li>
+                            <li><a href="http://www.nexentire.com/kr/" target="_blank">기업소개</a></li>
+                        </ul>
+                    </div>
+                    <address>
+                        경상남도 양산시 충렬로 355 넥센타이어 주식회사 <br />
+                        대표이사 강호찬 | 사업자등록번호 621-81-10769 | 통신판매업신고번호 제2015-경남양산-0139호<br />
+                    </address>
+
+                    <div class="customer">
+                        <ul>
+                            <li class="fn ls01">고객센터 <span>1855-0100</span></li>
+                            <li>평일 09:00 ~ 18:00 / 토요일, 공휴일 휴무</li>
+                        </ul>
+                    </div>
+
+                    <div class="foCopyright">
+                        <img src="./img/common/footer_logo.png" class="foLogo" alt="넥센타이어" /> <span>Copyright ⓒ 2019
+                            NEXTLEVEL. all rights reserved</span>
+
+                        <ul class="boSnsGo">
+                            <li>
+                                <a href="#;" class="sns01" title="페이스북 바로가기" onClick="javascript:window.open(' https://www.facebook.com/NEXENTIRE.KOREA');"></a>
+                            </li>
+                            <li>
+                                <a href="#;" class="sns02" title="블로그 바로가기" onClick="javascript:window.open('https://blog.naver.com/nexen_tire');"></a>
+                            </li>
+                            <li>
+                                <a href="#;" class="sns03" title="유튜브 바로가기" onClick="javascript:window.open('https://www.youtube.com/user/nexentireglobal');"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+            <!-- footer -->
+        </div>
+        <!-- allWrap 끝 -->
+</body>
+
+</html>

@@ -1,0 +1,952 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<%@ page import="com.nexwrms.cfo.util.SessionInfoUtil" %>
+<%@ page import="com.nexwrms.core.util.SessionUtil" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<link rel="stylesheet" type="text/css" href="/css/slick.css"/>
+<link rel="stylesheet" type="text/css" href="/css/main.css"/>
+<link rel="stylesheet" type="text/css" href="/css/nice-select.css">
+
+
+
+<body>
+<!-- Google Tag Manager (noscript) 20240229-->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZDR68JW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W52NN6B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+	<div class="mainWrap">
+		<!--topArea-->
+		<div class="topAreaWrap">
+			<div class="topArea">
+				<header>
+					<%@ include file="/WEB-INF/view/header_include.jsp" %>
+				</header>
+			</div>
+
+			<!-- mouseover subMenu -->
+			<div class="subMenuWrap">
+				<div class="subMenu">
+					<header>
+						<%@ include file="/WEB-INF/view/headerGnb_include.jsp" %>
+					</header>
+				</div>
+			</div>
+			<!-- mouseover subMenu -->
+		</div>
+		<!--topArea-->
+
+		<!-- allMenu -->
+		<div class="allMenuWrap">
+			<div class="allMenuBox">
+				<%@ include file="/WEB-INF/view/headerAllMenuBox_include.jsp" %>
+			</div>
+		</div>
+		<!-- allMenu -->
+
+		<!-- 배너영역 -->
+		<div class="mbannerWrap" style="display:none;">
+			<div class="item" id="mainBanner">
+			</div>
+			<div class="control">
+				<div class="counter">
+					<span class="now">1</span> /
+					<span class="allcnt">${bannerCnt}</span>
+					<button class="playBtn"><span>일시정지/재생</span></button>
+				</div>
+				<div class="btns">
+					<button class="left"><span>이전보기</span></button>
+					<button class="right"><span>다음보기</span></button>
+				</div>
+				<div class="tbView">
+					<input type="checkbox" name="nomore" id="nomore" style="display: inline; height: 14px;"/><label for="nomore">일주일간 보지 않기</label>
+					<button class="topBclose"><img src="/img/common/btn_close2.jpg" alt="닫기" /></button>
+				</div>
+			</div>
+		</div>
+		<!-- 배너영역 -->
+
+		<div id="fullpage">
+			<!--section0-->
+			<div class="section " id="section0">
+				<div class="mContent">
+					<c:if test="${not empty mainImg}">
+					<div class="main-caroucel">
+						<c:forEach var="main" items="${mainImg}">
+							<div class="main-caroucel-item" style="background-color:${main.bgColor};">
+							<c:choose>
+								<c:when test="${not empty main.linkUrl}">
+									<a href="${main.linkUrl}">
+										<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${main.imgUrl}" alt=""/>
+									</a>
+								</c:when>
+								<c:otherwise>
+									<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${main.imgUrl}" alt=""/>
+								</c:otherwise>
+							</c:choose>
+							</div>
+						</c:forEach>
+<!-- 						<div class="main-caroucel-item" style="background-color:#9EC1D8;">
+							<img src="/img/main/event_popup/20201202_pc_popup_3.png" alt=""/>
+						</div> --> 
+<!-- 						<div class="main-caroucel-item" style="background-color:#8148A0;"> -->
+<!-- 							<a href="/evt/evtDetail?bdojSeq=48013&tabNo=11"><img src="/img/main/main_visual3_202107.jpg" alt=""/></a> -->
+<!-- 						</div> -->
+<!-- 						<div class="main-caroucel-item" style="background-color:#ED8A46;"> -->
+<!-- 							<img src="/img/main/main_visual2_01.jpg" alt=""/> -->
+<!-- 						</div> -->
+<!-- 						<div class="main-caroucel-item" style="background-color:#ED8A46;"> -->
+<!-- 							<img src="/img/main/main_visual2_02.jpg" alt=""/> -->
+<!-- 						</div> -->
+<!-- 						<div class="main-caroucel-item" style="background-color:#55B6D6;"> -->
+<!-- 							<img src="/img/main/main_visual2_03.jpg" alt=""/> -->
+<!-- 						</div> -->
+<!-- 						<div class="main-caroucel-item" style="background-color:#DC588A;"> -->
+<!-- 							<img src="/img/main/main_visual2_04.jpg" alt=""/> -->
+<!-- 						</div> -->
+					</div>
+					</c:if>
+
+					<div class="find-size">
+						<div class="find-size-warp">
+							<div class="car-num-form">
+								<div class="img-wrap">
+									<img src="/img/main/size_01.png" alt="" />
+								</div>
+								<div class="input-wrap">
+									<!-- <form onsubmit="openSizeFinder( 'num', $('#mainSizeNumInput').val()  ); return false;"> -->
+									<!-- <input type="text" placeholder="차량 번호를 입력해주세요. ex) 123차4567" id="mainSizeNumInput" onkeypress="fn_press_nice(this);" maxlength="9" onkeydown="cmmEnterSchKey(this);" onblur="javascript:validationCmmCarNo(this);"> -->
+									<input type="text" placeholder="차량 번호를 입력해주세요. ex) 123차4567" id="mainSizeNumInput" maxlength="9" onkeydown="cmmEnterSchKey(this);" onblur="javascript:validationCmmCarNo(this);">
+									<button onclick="chkCarNum(document.getElementById('mainSizeNumInput'))" ><img src="/img/main/size_btn.png" alt="" /></button>
+									<!-- </form> -->
+								</div>
+							</div>
+							<div><a onclick="openSizeFinder( 'car'  )"><img src="/img/main/size_02.png" alt="" /></a></div>
+							<div><a onclick="openSizeFinder( 'size'  )"><img src="/img/main/size_03.png" alt="" /></a></div>
+						</div>
+					</div>
+
+					<!-- <div class="main-product-banner">
+						<div><a href="/product/prdDetail?petternCd=N%27FERA+AU7&frCd=null&classCd=P1&classCdNew=&matCd=null&plyRating=&seasonCd=01&seasonCdNm=%EC%82%AC%EA%B3%84%EC%A0%88%EC%9A%A9&labelType=C"><img src="/img/main/product_banner_01.jpg" alt="" /></a></div>
+						<div><a href="/product/prdDetail?petternCd=NFERA-RU5&frCd=null&classCd=S1&classCdNew=&matCd=null&plyRating=&seasonCd=01&seasonCdNm=%EC%82%AC%EA%B3%84%EC%A0%88%EC%9A%A9&labelType=C"><img src="/img/main/product_banner_02.jpg" alt="" /></a></div>
+						<div><a href="/product/prdDetail?petternCd=ROADIAN+GTX&frCd=null&classCd=S1&classCdNew=&matCd=null&plyRating=&seasonCd=01&seasonCdNm=%EC%82%AC%EA%B3%84%EC%A0%88%EC%9A%A9&labelType=C"><img src="/img/main/product_banner_03.jpg" alt="" /></a></div>
+						<div><a href="/product/prdDetail?petternCd=NPRIZ+AH8&frCd=null&classCd=P1&classCdNew=&matCd=null&plyRating=&seasonCd=01&seasonCdNm=%EC%82%AC%EA%B3%84%EC%A0%88%EC%9A%A9&labelType=C"><img src="/img/main/product_banner_04.jpg" alt="" /></a></div>
+					</div> -->
+
+				</div>
+
+			</div>
+			<!--section0-->
+
+			<div class="section" id="section4">
+				<div class="mContent">
+					
+					<div class="section-titie">
+						<h3>TV CF</h3>
+					</div>
+
+					<div class="video-row">
+						<!-- 23/07 10233006 추현욱 동영상 노출 동적 처리 개발
+						<div class="video-item">
+							<div class="video">
+								<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Mp0kl5UHyAU?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
+						<div class="video-item">
+							<div class="video">
+								<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/rOeYQn-qQuE?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
+						<div class="video-item">
+							<div class="video">
+								<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/zZM1bM2ZnRs?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
+						<div class="video-item">
+							<div class="video">
+								<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/9ZnUfbJYbbM?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
+						23/07 10233006 추현욱 동영상 노출 동적 처리 개발 -->
+					</div>
+				</div>
+			</div>
+
+			<c:if test="${not empty reViewListNew}">
+			<div class="section" id="section1">
+				<div class="mContent">
+					
+					<div class="section-titie">
+						<h3>Reviews</h3>
+					</div>
+					
+					<div class="review-caroucel">
+						<c:forEach var="review" items="${reViewListNew}">
+							<a href="/product/prdDctDetail?dpPrNo=${review.dpNo}&itemCd=${review.itemCd}&usePsNo=${review.usePsNo}&patternCd=${review.patternCd}#tabLoc">
+								<div class="review-item">
+									<div class="review-head">
+										<div class="review-type">
+											<div class="buy-type ${review.ordChn}"></div>
+										</div>
+										<div class="review-title">
+											<div class="logo">
+												<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${review.logoDtlImgUrl}"/>
+											</div>
+											<div class="title">${review.title}</div>
+										</div>
+										<div class="star-box">
+											<c:set var="totStars" value="${empty review.totStarsSeCd || review.totStarsSeCd == 'null' ? 0.0 : review.totStarsSeCd }" />
+											<fmt:parseNumber var="totStarSe" type="number" value="${totStars}" integerOnly="true"/>
+											<div class="star star-${totStarSe}"></div>
+										</div>
+									</div>
+		
+									<div class="service-info">
+										<div class="car-box">${review.carInfo} <c:if test="${not empty review.carInfo}">|</c:if> ${review.dispSize}</div>
+										<c:if test="${review.dlvTyDtlCd == 1030 || review.dlvTyDtlCd == null || review.dlvTyDtlCd == ''}">
+											<div class="service-box"> ${review.procDueBhfNm} | ${review.dlvTyDtlCdNm}</div>
+										</c:if>
+										<c:if test="${review.dlvTyDtlCd != 1030 && review.dlvTyDtlCd != null && review.dlvTyDtlCd != ''}">
+											<div class="service-box">GO서비스 | ${review.dlvTyDtlCdNm}</div>
+										</c:if>
+										<div class="rec-box">
+											<div class="thumb_up">${review.rcmdCnt}</div>
+										</div>
+									</div>
+									<div class="text" style="white-space:pre-line;">
+										${review.contents}
+									</div>
+									<div class="review-footer">
+										<div class="picture">
+											<c:forEach var="atflList" items="${mainReviewAtflList}">
+												<c:if test="${not empty atflList.atflUrl}">
+													<c:if test="${atflList.usePsNo == review.usePsNo}">
+														<div class="picture-item"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${atflList.atflUrl}"></div>
+													</c:if>
+												</c:if>
+											</c:forEach>
+										</div>
+										<div class="writ-info">
+											<fmt:parseDate value="${review.regDe}" var="reviewDate" pattern="yyyyMMdd"/>
+											<div class="date"><fmt:formatDate value="${reviewDate}" pattern="yyyy.MM.dd"/></div>
+											<div class="writer">${review.custNm}</div>
+										</div>
+									</div>
+									
+								</div>
+							</a>
+						</c:forEach>
+					</div>
+				</div>
+				
+				<div class="event-banner" style="background-color: #202759;">
+					<div class="banner-wrap" >
+						<div class="banner-item"><a href="/evt/evtList"><img src="/img/main/banner_01.jpg"/></a></div>
+						<div class="banner-item"><a href="/bbs/counselRegister"><img src="/img/main/banner_02.jpg"/></a></div>
+					</div>
+				</div>
+			</div>
+			</c:if>
+
+			<div class="section" id="section2">
+				<div class="mContent"> <!-- mContent Div Start -->
+					<div class="section-titie">
+						<h3>투데이 특가</h3>
+					</div>
+					<c:set var="today" value="<%=new java.util.Date()%>" />
+					<c:set var="date"><fmt:formatDate value="${today}" pattern="yyyyMMdd" /></c:set> 
+					<fmt:formatNumber value="${date}" type="number" var="dataNum" groupingUsed="false"/>
+					<div class="specialprice-caroucel">
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000000112&itemCd=15395NXUA&patternCd=NPRIZ AH8">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/43ecc2b5-f9fe-45e9-974a-8e529978367f.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_ah8.png" alt="" /></div>
+								<div class="product-size">205/55R16</div>
+								<div class="product-price">
+									<div class="buy-price">
+									<span class="org_price">￦119,300</span>
+									<span class="dc_price">￦83,600</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 2 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000000112&itemCd=12993NXUA&patternCd=NPRIZ AH8">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/43ecc2b5-f9fe-45e9-974a-8e529978367f.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_ah8.png" alt="" /></div>
+								<div class="product-size">215/55R17</div>
+								<div class="product-price">
+									<div class="buy-price">
+									<span class="org_price">￦139,900</span>
+									<span class="dc_price">￦98,000</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 3 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000003126&itemCd=18288NX&patternCd=NF Supreme">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/5bfaf73f-8d52-40c1-add0-70c284f6fff0.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_supreme.png" alt="" /></div>
+								<div class="product-size">225/55R17</div>
+								<div class="product-price">
+									<div class="buy-price">
+										<span class="org_price">￦227,800</span>
+										<span class="dc_price">￦148,100</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 4 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000003126&itemCd=18266NX&patternCd=NF Supreme">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/5bfaf73f-8d52-40c1-add0-70c284f6fff0.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_supreme.png" alt="" /></div>
+								<div class="product-size">245/45R18</div>
+								<div class="product-price">
+									<div class="buy-price">
+										<span class="org_price">￦265,500</span>
+										<span class="dc_price">￦172,600</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 5 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000000112&itemCd=16938NXUA&patternCd=NPRIZ AH8">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/43ecc2b5-f9fe-45e9-974a-8e529978367f.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_ah8.png" alt="" /></div>
+								<div class="product-size">205/60R16</div>
+								<div class="product-price">
+									<div class="buy-price">
+									<span class="org_price">￦154,800</span>
+									<span class="dc_price">￦108,400</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 6 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000000131&itemCd=17042NXUA&patternCd=ROADIAN GTX">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/5d965d12-cf1d-45ec-a315-aee568857093.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_gtx.png" alt="" /></div>
+								<div class="product-size">225/55R18</div>
+								<div class="product-price">
+									<div class="buy-price">
+									<span class="org_price">￦168,400</span>
+									<span class="dc_price">￦117,900</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 7 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000000131&itemCd=17569NXUA&patternCd=ROADIAN GTX">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/5d965d12-cf1d-45ec-a315-aee568857093.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_gtx.png" alt="" /></div>
+								<div class="product-size">235/60R18</div>
+								<div class="product-price">
+									<div class="buy-price">
+									<span class="org_price">￦214,900</span>
+									<span class="dc_price">￦150,500</span>
+									</div>
+								</div>
+							</span>
+						</a>
+						<!-- 8 -->
+						<a class='main-product-item' href="/product/prdDctDetail?dpPrNo=DP0000000003127&itemCd=18291NX&patternCd=NF Supreme SUV">
+							<span>
+								<div class="product-image"><img src="https://www.nexen-nextlevel.com/atprdfile_cms/a838c1c0-fcb1-4d63-9289-fb33156242cc.png" alt="" /></div>
+								<div class="product-brand"><img src="/img/main/main_brand_logo_nexen.png" alt="" /></div>
+								<div class="product-logo"><img src="/img/main/product_logo_supreme_suv.png" alt="" /></div>
+								<div class="product-size">235/55R19</div>
+								<div class="product-price">
+									<div class="buy-price">
+										<span class="org_price">￦221,100</span>
+										<span class="dc_price">￦143,800</span>
+									</div>
+								</div>
+							</span>
+						</a>
+					</div>
+				</div><!--  mContent Div End -->
+			</div>
+
+			<div class="section" id="section3">
+				<div class="mContent">
+
+					<div class="service-items">
+						<div class="service-item">
+							<div class="service-image">
+								<a href="/contents/o2oServiceIntro#tab01"><img src="/img/main/service_01.jpg" alt="" /></a>
+							</div>
+						</div>
+						<!-- <div class="service-item">
+							<div class="service-image">
+								<a href="/contents/o2oServiceIntro#tab02"><img src="/img/main/service_02.jpg" alt="" /></a>
+							</div>
+						</div> -->
+						<div class="service-item">
+							<div class="service-image">
+								<a href="/contents/o2oServiceIntro#tab03"><img src="/img/main/service_03.jpg" alt="" /></a>
+							</div>
+						</div>
+						<div class="service-item">
+							<div class="service-image">
+								<a href="/contents/rentalServiceIntro"><img src="/img/main/service_04.jpg" alt="" /></a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+
+			<!-- footerArea -->
+			<div class="section fp-auto-height">
+				<!-- footer -->
+				<footer>
+					<%@ include file="/WEB-INF/view/footer_include.jsp" %>
+				</footer>
+				<!-- footer -->
+
+			</div>
+
+
+			<!-- footerArea -->
+		</div>
+
+		<!--loading -->
+		<div class="loadingWrap" id="loadingWrap" style="display: none">
+			<div class="loading">
+				<img src="/img/common/loading.gif" alt="loading" class="loadImg">
+				<div class="loadingBg"></div>
+			</div>
+		</div>
+		<!--loading -->
+
+
+		<!-- 2019-15-17 layerPopup  일반 차종 사이즈 팝업  -->
+		<div class="popupWrap type02 md-modal-3 md-effect-1" id="modal-22"> <!-- md-show -->
+			<header>
+				<h2>
+					사이즈
+					<a href="#" class="size" id="show022" title="사이즈 확인 툴팁"></a>
+					<a href="#" class="layPopClose md-close"></a>
+				</h2>
+			</header>
+
+			<!--tipShow-->
+			<div class="tipShow type02 tip07" id="tipshow022">
+				<header>
+					<h3 class="type06">타이어 사이즈 확인</h3> <i class="tipOver"></i>
+				</header>
+
+				<img src="/img/product/size.png" alt="타이어 사이즈"/>
+			</div>
+			<!--tipShow-->
+
+			<div class="sizeSelectView">
+			</div>
+
+			<!--contents-->
+			<div class="popContents">
+				<div class="alertView">
+					<!-- sizeSelect-->
+
+					<div class="sBoxAll"> <!--scrollBox-->
+						<div class="sLeftWrap">
+							<h3 class="type09">렌탈</h3>
+							<!--sLeft-->
+							<div class="sLeft" id="rentalSize">
+							</div>
+							<!--sLeft-->
+						</div>
+						<div class="sRightWrap">
+							<h3 class="type09">구매</h3>
+							<!--sRight-->
+							<div class="sRight" id="o2oSize">
+							</div>
+							<!--sRight-->
+						</div>
+					</div>
+					<!-- sizeSelect-->
+				</div>
+			</div>
+			<!--contents-->
+		</div>
+		<!-- layerPopup // -->
+
+
+
+
+		<!-- //////////////////////////////////////////////////////////////////////////// -->
+
+
+
+		<!-- 2019-12-17 layerPopup  나이스 사이즈 팝업-->
+		<div class="popupWrap type02 md-modal-3 md-effect-1" id="modal-23"> <!-- md-show -->
+			<header>
+				<h2>
+					차량번호
+					<a href="#" class="size" id="show023" title="사이즈 확인 툴팁"></a>
+					<a href="#" class="layPopClose md-close"></a>
+				</h2>
+			</header>
+
+			<!--tipShow-->
+			<div class="tipShow type02 tip07" id="tipshow023">
+				<header>
+					<h3 class="type06">타이어 사이즈 확인</h3> <i class="tipOver"></i>
+				</header>
+
+				<img src="/img/product/size.png" alt="타이어 사이즈"/>
+			</div>
+			<!--tipShow-->
+
+			<div class="sizeSelectView">
+			</div>
+
+			<!--contents-->
+			<div class="popContents">
+				<div class="alertView">
+					<!-- sizeSelect-->
+
+					<div class="sBoxAll"> <!--scrollBox-->
+						<div class="sLeftWrap">
+							<h3 class="type09">렌탈</h3>
+							<!--sLeft-->
+							<div class="sLeft" id="nicerentalSize">
+							</div>
+							<!--sLeft-->
+						</div>
+						<div class="sRightWrap">
+							<h3 class="type09">구매</h3>
+							<!--sRight-->
+							<div class="sRight" id="niceo2oSize">
+							</div>
+							<!--sRight-->
+						</div>
+					</div>
+					<!-- sizeSelect-->
+				</div>
+			</div>
+			<!--contents-->
+		</div>
+		<!-- layerPopup // -->
+
+
+
+		<!-- layerPopup - 나이스 디엔알 검색 완료 // -->
+		<div class="popupWrap type02 md-modal-3" id="niceResult"> <!-- md-show -->
+			<header class="noLine">
+				<a href="#" class="size" id="show01" title="사이즈 확인 툴팁"></a>
+				<a href="#" class="layPopClose md-close"></a>
+			</header>
+			<!--tipShow-->
+			<div class="tipShow type02 tip07" id="tipshow01">
+				<header>
+					<h3 class="type06">타이어 사이즈 확인</h3> <i class="tipOver"></i>
+				</header>
+
+				<img src="/img/product/size.png" alt="타이어 사이즈"/>
+			</div>
+			<!--tipShow-->
+
+			<p class="desc">※ NICE디앤알 빅데이터 기반이며, 소유차량에 대해서 로그인 후 검색 가능합니다.</p>
+
+			<div class="numberSearch">
+				<label for="carNumber">차량번호</label>
+				<input type="text" class="type04" placeholder="차량번호를 입력해 주세요." id="niceResultCarNo" disabled="disabled">
+			</div>
+
+			<!--contents-->
+			<div class="popContents">
+				<div class="searchResult" id="niceResultArea">
+				</div>
+			</div>
+			<!--contents-->
+		</div>
+		<!-- layerPopup - 나이스 디엔알 검색 완료 // -->
+
+
+		<!-- layerPopup - 나이스 디엔알 사이즈 선택  팝업 // -->
+		<div class="popupWrap type02 md-modal-3 md-effect-1"  id="niceTireSize"> <!-- md-show -->
+			<header>
+				<h2>
+					차량번호
+					<a href="#" class="size" id="show01" title="사이즈 확인 툴팁"></a>
+					<a href="#" class="layPopClose md-close"></a>
+				</h2>
+			</header>
+
+			<!--tipShow-->
+			<div class="tipShow type02 tip07" id="tipshow01">
+				<header>
+					<h3 class="type06">타이어 사이즈 확인</h3> <i class="tipOver"></i>
+				</header>
+
+				<img src="/img/product/size.png" alt="타이어 사이즈"/>
+			</div>
+			<!--tipShow-->
+
+			<div class="mSizeSelectView">
+				<p id="niceSizeCarNo"></p>
+			</div>
+
+			<!--contents-->
+			<div class="popContents">
+				<div class="alertView">
+					<!-- sizeSelect-->
+					<div class="scrollBox" id="niceTireSizeArea">
+					</div>
+					<!-- sizeSelect-->
+				</div>
+			</div>
+			<!--contents-->
+
+		</div>
+		<div class="md-overlay"></div>
+		<!-- layerPopup // -->
+
+
+		<!-- 세이프키 생성 화면 -->
+		<%@ include file="/WEB-INF/view/member/createCustSafeKey.jsp" %>
+
+	</div>
+	<!--mainWrap-->
+	<c:if test="${not empty mainPopupImg}">
+	<div class="event-popup">
+		<div class="popup-wrap">
+			<div class="popup-box">
+				<div class="popup-body">
+					<c:forEach var="popup" items="${mainPopupImg}">
+						<a href="${popup.linkUrl}" target="_blank"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${popup.imgUrl}"/></a>
+					</c:forEach>
+					<!-- <a href="/evt/evtDetail?bdojSeq=43187&tabNo=11" target="_blank"><img src="/img/main/event_popup/20201103_popup_1.png"/></a>
+					<a href="/evt/evtDetail?bdojSeq=43115&tabNo=11" target="_blank"><img src="/img/main/event_popup/20201102_popup_2.png"/></a>
+					 -->
+<!-- 					<a href="/evt/evtDetail?bdojSeq=48013&tabNo=11" target="_blank"><img src="/img/main/event_popup/2021_01_event_1.png"/></a> 1월 이벤트 -->
+					
+<!-- 					<a href="https://www.instagram.com/p/CGq5DyXFFTq" target="_blank"><img src="/img/main/event_popup/20201102_popup.png"/></a>  -->
+<!-- 					<img src="/img/main/event_popup/20200810_popup.jpg"/> -->
+				</div>
+				<div class="popup-tail">
+					<a href="javascript:;" onclick="close_event_popup( true )"><img src="/img/main/event_popup/today.png"/></a>
+					<a href="javascript:;" onclick="close_event_popup( false )"><img src="/img/main/event_popup/close.png"/></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	</c:if>
+
+
+	<input type="hidden" name="extShape" id="extShape" />
+
+	<script type="text/javascript" src="/js/lib/jquery.fullPage.js"></script>
+	<script type="text/javascript" src="/js/lib/slick.min.js"></script>
+	<!-- <script type="text/javascript" src="/js/main.js"></script> -->
+	
+	<script src="/js/lib/jquery.nice-select.min.js"></script>
+
+	<script type="text/javascript" src="/js/main.v2.js"></script>
+	
+	<!-- ADN 메인패널 설치 start -->
+	<script type="text/javascript">
+	var adn_pinad_param = adn_pinad_param || [];
+	adn_pinad_param.push([{
+	 ui:'107378',	
+	 ci:'1073780001',
+	 gi:'102638'
+	}]);
+	</script>
+	<script type="text/javascript" async src="//fin.rainbownine.net/js/across_adn_mainpanel_pc_ad_1.0.5.js"></script>
+	<!-- ADN 메인패널 설치 end -->
+	
+	<%@ include file="/WEB-INF/view/findSizeModal.jsp" %>
+	<script type="text/javascript">
+	$(function(){
+		$("body").append( $("#modal-privacyPolicy") );
+		$("body").append( $("#modal-consignment") );
+
+		$(".sizeFinder, .md-modal").on('scroll',function( e ){
+			e.preventDefault();
+			e.stopPropagation();
+
+			return false;
+			console.log( '1' );
+			return false;
+		});
+	});
+
+	</script>
+	
+	<!-- 인터웍스 -->
+	<script type="text/javascript"><!--
+		var iwm_ads_id='nexentire', iwm_ads_label='*main';
+		//-->
+	</script>
+	<script type="text/javascript" src="//cdn.interworksmedia.co.kr/js/conversion.min.js"></script>
+	<!-- 인터웍스 -->
+</body>
+
+<script type="text/javascript">
+
+	var bannerCnt = "${bannerCnt}";
+
+	$(document).ready(function(){
+
+		var bannerData = {
+			imgPrposSeCd : "10"
+		};
+
+		/* 다른화면에서 넘어온 에러문구 파라메터 */
+		var error = '${error}';
+
+		if(error != '' && error != null ){
+			alert(error)
+			error == '';
+		}	
+		/* 다른화면에서 넘어온 에러문구 파라메터 */
+
+		bannerData = JSON.stringify(bannerData);
+		$.ajax({
+			type: "POST" ,
+			url:"/main/mainBannerImg",
+			cache:false,
+			data: bannerData,
+			contentType:"application/json;charset=UTF-8",
+			success:function(data){
+				cfnRequestSuccessCallback("selectMainBannerImg", data);
+			}
+		})
+	})
+
+
+
+
+// 띠 배너
+var TBLng;
+var TBCnt = 1;
+var TBIntervalCnt = 0;
+var TBLeft;
+var TBRight;
+var RollingTime = 2500;
+var TBRolling;
+
+function cfnRequestSuccessCallback(callback, result){
+	if (callback == "selectMainBannerImg") {
+		if (result.rtnCode == 0) {
+			var data = result.selectMainBannerImg;
+			var linkUrl;
+			var htmlStr = "";
+			if (data.length > 0) {
+				for(var i=0; i < data.length; i++) {
+					linkUrl = data[i].linkUrl;
+					if (ValidUtil.isEmpty(linkUrl)){
+						linkUrl = "#;";
+					}
+					htmlStr +="	<a href='"+linkUrl+"' style='background:url(<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>"+data[i].imgUrl.replaceAll('\\','/')+") no-repeat center top;'></a>";
+				}
+				$("#mainBanner").html(htmlStr);
+				
+				// 롤링셋팅
+				TBLng = $('.mbannerWrap > .item > a').length;
+				TBCnt = 1;
+				TBIntervalCnt = 0;
+				TBLeft = $('.mbannerWrap').find('.left');
+				TBRight = $('.mbannerWrap').find('.right');
+
+				// 배너 컨트롤 초기화
+				if (TBLng < 2)
+				{
+					$('.mbannerWrap').find('.counter').hide();
+					$('.mbannerWrap').find('.btns').hide();
+				}
+				$('.mbannerWrap').find('.allcnt').html(TBLng);
+
+				if (TBLng > 1)
+				{
+					TBRolling = StartInterval();
+				}
+				
+				
+				$(".mbannerWrap").show();
+			}
+			/* 23/07 10233006 추현욱 동영상 노출 동적 처리 개발 */
+			var videos = result.selectMainVideo;
+			var videoUrl;
+			var videoHtmlStr = "";
+			if(videos.length > 0) {
+				for(var i=0; i < videos.length; i++) {
+					videoUrl = videos[i].linkUrl;
+					
+					if(videos.length == 1) {	// 동영상 1개면 1x1 CSS 적용
+						videoHtmlStr = "<div class=\"video-item1\"><div class=\"video\"><iframe width=\"560\" height=\"315\" src=" + videoUrl + " frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div></div>";
+					}else {						// 4x4 CSS 적용
+						videoHtmlStr = "<div class=\"video-item2\"><div class=\"video\"><iframe width=\"560\" height=\"315\" src=" + videoUrl + " frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div></div>";
+					}
+					
+					$(".video-row").append(videoHtmlStr);
+				}
+			}
+			/* 23/07 10233006 추현욱 동영상 노출 동적 처리 개발 */
+		}
+	}
+}
+// 배너 -- end
+
+// topbanner close
+$('.mbannerWrap').find('.topBclose').on('click', function(){
+
+	$('#nomore').prop("checked") ? setCookie("no_tb", "y", "7") : setCookie("no_tb", 0, 0);
+	StopInterval();
+	$('.mbannerWrap').remove();
+});
+
+// cookie
+(function checkCookie() {
+	if (getCookie("no_tb") != "")
+	{
+		$('.mbannerWrap').remove();
+	}
+})();
+
+function setCookie(cname, cvalue, exdays) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+	var expires = "expires=" + d.toGMTString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
+
+// 배너 이벤트
+$('.left').on('click', function(){
+	TBCnt--;
+	if (TBCnt == 0)
+	{
+		TBCnt = TBLng;
+	}
+	TBL(TBCnt);
+});
+
+$('.left').on('mouseenter', function(){
+	StopInterval();
+	$('.mbannerWrap').find('.playBtn').addClass('on');
+	TBIntervalCnt = 1;
+});
+
+$('.right').on('click', function(){
+	TBCnt++;
+	if (TBCnt == TBLng + 1)
+	{
+		TBCnt = 1;
+	}
+	TBL(TBCnt);
+});
+
+$('.right').on('mouseenter', function(){
+	StopInterval();
+	$('.mbannerWrap').find('.playBtn').addClass('on');
+	TBIntervalCnt = 1;
+});
+
+$('.mbannerWrap').find('.playBtn').on('click', function(){
+	TBIntervalCnt++;
+	if (TBIntervalCnt == 1)
+	{
+		StopInterval();
+		$(this).addClass('on');
+	} else {
+		$(this).removeClass('on');
+		TBIntervalCnt = 0;
+		restartRolling();
+	}
+});
+
+function StartInterval() {
+	i = setInterval(function(){
+		TBCnt++;
+		if (TBCnt == TBLng + 1)
+		{
+			TBCnt = 1;
+		}
+		TBL(TBCnt);
+	},RollingTime);
+	return i;
+}
+
+// 롤링 시작
+function restartRolling(){
+	TBRolling = StartInterval();
+}
+
+// 재생정지
+function StopInterval(){
+	clearInterval(TBRolling);
+}
+
+function TBL(TBCnt) {
+	$('.mbannerWrap > .item > a').hide();
+	$('.mbannerWrap > .item > a').eq(TBCnt - 1).show();
+	$('.mbannerWrap').find('.now').html(TBCnt);
+}
+
+function findSizePop(){
+	//검샘 레이어 팝업 오픈
+	$("#modal-1").addClass("md-show");
+	//팝업 선택 값 초기화
+	$("input[name='carSearch']").prop("checked", false);	//차량간편검색
+	$("input[name='makerCd']").prop("checked", false);		//제조사
+}
+
+
+// TopRollingBanner End
+
+
+function close_event_popup( oneday ){
+	$('.event-popup').hide();
+	if( oneday == true )
+		setCookie("hide_event_popup", "Y", "1");
+}
+$(function(){
+	if (getCookie("hide_event_popup") != "Y"){
+		$('.event-popup').show();
+	}
+});
+
+</script>

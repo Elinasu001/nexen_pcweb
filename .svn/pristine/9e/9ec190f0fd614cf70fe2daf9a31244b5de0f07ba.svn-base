@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+
+	<script type="text/javascript" src="/js/lib/jquery-3.4.1.min.js"></script>
+		<form>
+			<input type="hidden" id="serverMode" value="<%=System.getProperty(CoreConstants.SERVER_MODE)%>"> <!-- 임시로 -->
+    	</form>
+    <script type="text/javascript">
+
+  	//yjw serverMode 제거(20220225)
+	$( document ).ready(function() {
+	   	$("#ordrIdxx", opener.document).val("${ordrIdxx}");
+	   	$("#pgToken", opener.document).val("${pgToken}");
+		$("#frm", opener.document).attr("action" , "/order/kakaoComplateTMS2").submit();
+		//$("#frm", opener.document).attr("action" , "/order/kakaoComplate").submit();
+
+		window.self.close();
+	});
+    </script>
+</html>

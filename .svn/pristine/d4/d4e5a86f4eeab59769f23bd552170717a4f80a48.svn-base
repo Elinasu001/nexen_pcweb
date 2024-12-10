@@ -1,0 +1,130 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.nexwrms.cfo.util.SessionInfoUtil" %>
+<%@ page import="com.nexwrms.core.util.SessionUtil" %>
+
+
+   <header>
+       <div class="topArea">
+                         <h1>
+                             <a href="/main"><img src="../img/common/logo.png" alt="Next Level"/></a>
+                         </h1>
+
+               <ul class="topMenu">
+                   <%if(SessionUtil.getAttribute(SessionInfoUtil.SESSION_INFO_USR_VO) == null){ %>
+                   <li><i class="ico02"></i><a href="/member/join">회원가입</a></li>
+                   <%}else{%>
+                   <li><i class="ico02"></i><a href="/mypage/memberModifyPassword">회원정보</a></li>
+                   <%}%>
+                   <li><i class="ico03"></i><a href="/cart/cartView">장바구니</a></li>
+                   <%if(SessionUtil.getAttribute(SessionInfoUtil.SESSION_INFO_USR_VO) != null){ %>
+                   <li><i class="ico04"></i><a href="javascript:logout();">로그아웃</a></li>
+                   <%}else{%>
+                   <li id="loginArea"><i class="ico04"></i><a href="javascript:goTologin();">로그인</a></li>
+                   <%}%>
+               </ul>
+
+                         <a href="#" class="allMenuClose"></a>
+                     </div>
+                 </header>
+
+                 <!-- allMenu content-->
+                 <div class="content">
+                     <div class="siteMapWrap">
+                         <!--sMenuBox-->
+                         <div class="sMenuBox">
+                             <!--sMenu-->
+                             <div class="sMenu">
+                                 <h3 class="type03">주문하기</h3>
+                                 <ul>
+                                      <li><a href="/product/prdList?viewGbn=H">타이어</a></li>
+                                 </ul>
+                             </div>
+                             <!--sMenu-->
+
+                             <!--sMenu-->
+                             <div class="sMenu">
+                                 <h3 class="type03">뉴스/<br/>이벤트</h3>
+                                 <ul>
+	                             	 <li><a href="/news/tireTipList">NEWS&TIP</a></li>
+	                             	 <li><a href="/evt/evtList">이벤트</a></li>
+	                                 <!-- <li><a href="javascript:alert('준비중입니다.');">이벤트</a></li> -->
+                                 </ul>
+                             </div>
+                             <!--sMenu-->
+
+                             <!--sMenu-->
+                             <div class="sMenu">
+                                 <h3 class="type03">마이넥센</h3>
+                                 <ul>
+                                     <li><a href="/mypage/orderList">나의 주문내역</a></li>
+                                     <li><a href="/mypage/myRentalList">나의 렌탈 관리</a>
+                                        <!--  <ul>
+                                             <li><a href="/mypage/zeroServiceCreate">ㆍ 걱정제로 서비스 신청</a></li>
+                                             <li><a href="/mypage/engineServiceCreate">ㆍ 엔진오일 서비스 신청</a></li>
+                                         </ul> -->
+                                     </li>
+                                     <!-- 
+                                     <li><a href="#">나의 수납 내역</a>
+                                         <ul>
+                                             <li><a href="#">ㆍ 납부방법 변경</a></li>
+                                             <li><a href="#">ㆍ 중도 선납/완납</a></li>
+                                             <li><a href="#">ㆍ 연체금 납부</a></li>
+                                         </ul>
+                                     </li> -->
+                                     <li><a href="/mypage/couponList">나의 쿠폰</a></li>
+                                     <li><a href="/mypage/myRecommend">나의 추천인 코드</a></li>
+                                     <li><a href="/mypage/questionList">1:1문의</a></li>
+                                     <li><a href="/mypage/memberModifyPassword">회원정보 관리</a></li>
+                                     <li><a href="javascript:fn_safeKeyView();">인증번호 발급</a></li>
+                                 </ul>
+                             </div>
+                             <!--sMenu-->
+                         </div>
+                         <!--sMenuBox-->
+
+
+                         <!--sMenuBox-->
+                         <div class="sMenuBox type02">
+                             <!--sMenu-->
+                             <div class="sMenu">
+                                 <h3 class="type03">혜택/<br/>서비스</h3>
+                                 <ul>
+                                     <li><a href="/contents/o2oServiceIntro">O2O 서비스 소개</a></li>
+                                     <li><a href="/contents/rentalServiceIntro">렌탈 서비스 소개</a></li>
+                                     <li><a href="/contents/guaranteeSystem">보증제도 소개</a></li>
+                                 </ul>
+                             </div>
+                             <!--sMenu-->
+
+                             <!--sMenu-->
+                             <div class="sMenu">
+                                 <h3 class="type03">고객지원</h3>
+                                 <ul>
+                                     <li><a href="/bbs/noticeList">공지사항</a></li>
+                                     <li><a href="/bbs/qnaList">자주 묻는 질문</a></li>
+                                     <li><a href="/bbs/counselRegister">상담하기</a></li>
+                                     <li><a href="/bbs/specialDealerList">전문점 안내</a></li>
+                                 </ul>
+                             </div>
+                             <!--sMenu-->
+                         </div>
+                         <!--sMenuBox-->
+                     </div>
+                 </div>
+                 <!-- allMenu content-->
+<script type="text/javascript">
+function fn_safeKeyView() {
+	
+var loginId = "<%=session.getAttribute("userLoginId") %>";
+	if(loginId == "" || loginId == 'null') {
+		alert("로그인 후 사용 가능합니다.");
+		location.href = "/login/userLogin";
+		return;
+	}else{
+		$('.allMenuClose').click();
+		$('#safeKeyPop').addClass("md-show");
+	}
+}
+</script>
+

@@ -1,0 +1,23 @@
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <!-- 세이프키 생성 화면 -->
+	<%@ include file="/WEB-INF/view/member/createCustSafeKey.jsp" %>
+	<div id="loadingWrap2"></div>
+   	<!--loading -->
+	<div class="loadingWrap" id="loadingWrap" style="display: none;">
+		<div class="loading">
+			<img src="/img/common/loading.gif" alt="loading" class="loadImg">
+            <div class="loadingBg"></div>
+		</div>
+	 </div>
+	<!--loading -->
+	
+	<!-- 사이즈 찾기 팝업 -->
+		<%@ include file="/WEB-INF/view/findSizeModal.jsp" %>
+	<!-- 사이즈 찾기 팝업 -->
+  	
+  	<!-- footer  -->
+   	<footer>
+		<%@ include file="/WEB-INF/view/footer_include.jsp" %>
+   	</footer>
+   	<!-- footer -->

@@ -1,0 +1,1569 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+
+            <!-- 장바구니 Tab-->
+            <div class="orderInfo"> <!--productInfo-->
+                <div class="subContents">
+                    <!-- tabs -->
+                    <div class="tabsWrap">
+                        <ul class="tabs">
+                            <li class="active" id="o2o" rel="tab11">구매</li>
+                            <li class="" id="ren" rel="tab22">렌탈</li>
+                        </ul>
+                    </div>
+                    <!-- tabs -->
+
+                    <!-- tab01-->
+                    <div id="tab11" class="tabContent">
+                        <div class="titleSearch">
+                            <h3 class="type08">구매</h3>
+
+                            <div class="carNumber type01">
+							    <input type="text" name="searchText" id="searchText" class="type04 w205" placeholder="검색어를 입력하세요" value="${O2osearchText}" onkeydown="enterSchKey();"><a href="javascript:fn_SearchCart('O');" class="searchBtn03"></a>
+							</div>
+                        </div>
+
+                        <table class="tbl list">
+                            <caption>구매 장바구니</caption>
+                            <colgroup>
+                                <col style="width:50px"/>
+                                <col style="width:180px"/>
+                                <col />
+                                <col style="width:160px"/>
+                                <col style="width:190px"/>
+                                <col style="width:120px"/>
+                                <col style="width:50px"/>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="tCenter">
+                                        <input type="checkbox" id="O2oCheckAll" name="" value="0" class="type01"><label for="O2oCheckAll"><span></span></label>
+                                    </th>
+                                    <th scope="col"></th>
+                                    <th scope="col" class="tLeft">
+                                        상품및 차량정보
+                                    </th>
+                                    <th scope="col">
+                                        수량
+                                    </th>
+                                    <th scope="col">
+                                        구매금액
+                                    </th>
+                                    <th scope="col"> </th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="o2oBody">
+
+		                <c:choose>
+						    <c:when test="${fn:length(o2oList) > 0}">
+    							<c:forEach var="name" items="${o2oList}" varStatus="status">
+		                                 <tr id="cartNumSeq_${name.cartNo}">
+		                                    <td class="tCenter">
+		                                        <input type="checkbox" id="basketChk_${name.cartNo}" chkGbn="${name.makerNm}@${name.modelNm}"  prcPlcNo="${name.prcPlcNo}"  dpPrNo="${name.dpPrNo}" name="basketChk" value="${name.cartNo}" qty="${name.cntCd}" itemCd="${name.itemCd}" noOrderGbn="${name.noOrderGbn}" ptnNm="${name.patnNm}" class="type01"><label for="basketChk_${name.cartNo}"><span></span></label>
+		                                    </td>
+		                                    <td>
+		                                        <div class="proViewWrap">
+		                                            <div class="proView">
+		                                                <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${name.thumimg}" alt=""/>
+		                                            </div>
+		                                        </div>
+		                                    </td>
+		                                    <td>
+		                                      		  <!-- 상품정보 -->
+		                                        <div class="proViewInfo">
+		                                                <ul>
+		                                                    <li>${name.patnNm}</li>
+		                                                    <li>
+		                                                         <span>승용차</span>  <span>${name.seasonCdNm}</span>
+		                                                         <span>
+		                                                         	<%-- <c:if test="${fn:contains(name.tireSize, '순정') eq true}">순정</c:if>
+		                                                         	<c:if test="${fn:contains(name.tireSize, '호환') eq true}">호환</c:if>
+		                                                         	<c:if test="${fn:contains(name.tireSize, '범용') eq true}">범용</c:if> --%>
+		                                                         	${name.sectionWidth}/${name.aspectRatio}R${name.wheelInches}
+		                                                         </span>
+		                                                    </li>
+		                                                    <c:if test="${name.makerNm != null }">
+			                                                    <li>
+			                                                         <span>${name.makerNm}</span>  <span>${name.modelNm}</span>
+			                                                    </li>
+		                                                    </c:if>
+		                                                </ul>
+		                                            </div>
+		                                        		<!-- 상품정보 -->
+		                                    </td>
+		                                    <td class="tCenter">
+		                                       		 <!-- 수량 -->
+		                                        <div class="quantity" id="basicAmt_${name.cartNo}"  bassSaleAmt="${name.bassSaleAmt}" saleAmt="${name.saleAmt}" bassStmemAmt="${name.bassStmemAmt}" >
+		                                            <a href="javascript:fn_minus(${name.cartNo})" class="qMinus"></a>
+		                                            <span class="circle02" id="cndCdSeq_${name.cartNo}" >${name.cntCd}</span>
+		                                            <a href="javascript:fn_plus(${name.cartNo})" class="qPlus"></a>
+		                                        </div>
+		                                       		 <!-- 수량 -->
+		                                    </td>
+		                                    <td>
+		                                        <!-- 구매금액 -->
+		                                         <div class="purchacePrice">
+		                                            <div class="price">
+		                                                <dl>
+		                                                    <dt></dt>
+		                                                    <dd>
+	                                                        	<span class="beforePrice" id="o2oSaleAmt_${name.cartNo}">
+	                                                        		<c:if test="${(name.orderOriAmt * name.cntCd) ne name.orderPayAmt}">
+	                                                        			\<fmt:formatNumber value="${name.orderOriAmt}" pattern="#,###" />
+	                                                        		</c:if>
+	                                                        	</span>
+		                                                    </dd>
+		                                                </dl>
+		                                                <dl>
+		                                                    <dt>구매할인</dt>
+		                                                    <dd id="o2oDisCAmt_${name.cartNo}">\<fmt:formatNumber value="${name.orderPayAmt}" pattern="#,###" /></dd>
+		                                                </dl>
+                                                		<dl id="pkgArea_${name.cartNo}">
+                                                		</dl>
+                                                		<form id="pkg_${name.cartNo}" name="pkg" method="post" >
+                                                			<input type="hidden" name="pkgAmt" id="pkgAmt_${name.cartNo}" /> 		<!-- 패턴코드-->
+                                                			<input type="hidden" name="pkgPlcNo" id="pkgPlcNo_${name.cartNo}" /> 		<!-- 패턴코드-->
+                                                		</form>
+		                                            </div>
+		                                        </div>
+		                                        		<!-- 구매금액 -->
+		                                    </td>
+		                                    <td class="tRight">
+		                                        <button type="button" onclick="javascript:fn_O2oOder('${name.cartNo}');" class="type06">바로 주문</button>
+		                                    </td>
+		                                    <td>
+		                                        <a href="javascript:fn_O2oODel(${name.cartNo});" class="tDel" title="삭제하기"></a>
+		                                    </td>
+		                                </tr>
+
+
+
+								</c:forEach>
+
+						    </c:when>
+						    <c:otherwise>
+                                <tr>
+                                    <td colspan="8" class="noResult">
+                                    	장바구니 목록이 없습니다.
+<!-- 										<div class='noDataArea'>
+											<p>리뷰가 없습니다.</p>
+										</div> -->
+                                    </td>
+                                </tr>
+						    </c:otherwise>
+						</c:choose>
+
+                            </tbody>
+                        </table>
+
+                        <!-- 총 구매 예상 금액 -->
+                        <div class="totalPrice">
+                            <button type="button" onclick="javascript:fn_O2oODelChk();" class="type08">선택삭제</button>
+
+                            <div class="price">
+                                <dl>
+                                    <dt>총 구매 예상 금액</dt>
+                                    <dd id="o2oTotAmt"></dd>
+                                </dl>
+
+                                 <button type="button" onclick="javascript:fn_O2oOderAll();" class="type01 center w387">주문하기</button>
+                            </div>
+                        </div>
+                        <!-- 총 구매 예상 금액 -->
+                    </div>
+                    <!-- tab01-->
+
+
+
+                    <!-- tab02-->
+                    <div id="tab22" class="tabContent">
+                        <div class="titleSearch">
+                            <h3 class="type08">렌탈</h3>
+
+                            <div class="carNumber type01">
+							    <input type="text" name="searchTxtRental" id="searchTxtRental" class="type04 w205" value="${RentalsearchText}" onkeydown="enterSchKey();" placeholder="검색어를 입력하세요"><a href="javascript:fn_SearchCart('R');" class="searchBtn03"></a>
+							</div>
+                        </div>
+
+                        <table class="tbl list">
+                            <caption>렌탈 장바구니</caption>
+                            <colgroup>
+                                <col style="width:50px"/>
+                                <col style="width:180px"/>
+                                <col />
+                                <col style="width:90px"/>
+                                <col style="width:90px"/>
+                                <col style="width:180px"/>
+                                <col style="width:140px"/>
+                                <col style="width:50px"/>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="tCenter">
+                                        <input type="checkbox" id="RentalCheckAll" name="" value="0" class="type01"><label for="RentalCheckAll"><span></span></label>
+                                    </th>
+                                    <th scope="col"></th>
+                                    <th scope="col" class="tLeft">
+                                        	상품및 차량정보
+                                    </th>
+                                    <th scope="col">
+                                        	수량
+                                    </th>
+                                    <th scope="col">
+                                        	렌탈기간
+                                    </th>
+                                    <th scope="col">
+                                        	구매금액
+                                    </th>
+                                    <th scope="col"> </th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+<!-- //////렌탈 리스트 시작  -->
+                            <tbody>
+
+
+                <c:choose>
+				    <c:when test="${fn:length(freeRenList) > 0 or fn:length(nomalRenList) > 0 or fn:length(memberRenList) > 0}">
+                            <!-- 자유렌탈 리스트 먼저 보여준다. -->
+                            <c:if test="${fn:length(freeRenList) > 0}">
+    							<c:forEach var="name" items="${freeRenList}" varStatus="status">
+
+    								<form id="formfree${status.index}" name="formfree${status.index}" method="post" >
+											<input type="hidden" name="patternCd"    value="${name.patternCd}" /> 		<!-- 패턴코드-->
+											<input type="hidden" name="petternCd"    value="${name.patternCd}" /> 		<!-- 패턴코드 이건 왜 이렇게 해놔가지고 ㅠㅠ-->
+											<input type="hidden" name="matCd"        value="${name.matCd}" />   		<!-- 상품코드-->
+											<input type="hidden" name="makerCd"      value="${name.makerCd}" />   		<!-- 제조사코드-->
+											<input type="hidden" name="makerCdNm"    value="${name.makerCdNm}" />   	<!-- 제조사명-->
+											<input type="hidden" name="modelCd"      value="${name.modelCd}" />   		<!-- 차종코드-->
+											<input type="hidden" name="carNumber"    value="${name.carNumber}" />       <!--차량번호-->
+											<input type="hidden" name="contentsCd"   value="${name.contentsCd}" />   	<!-- 사양코드-->
+											<input type="hidden" name="modelCdNm"    value="${name.mcNm}" />   			<!-- 차종코드명-->
+											<input type="hidden" name="frCd"         value="${name.frCd}" />   			<!-- 전후구분코드-->
+											<input type="hidden" name="dispSize"     value="${name.dispSize}" />   		<!-- 사이즈-->
+											<input type="hidden" name="sectionWidth" value="${name.sectionWidth}" />   	<!-- 단면폭-->
+											<input type="hidden" name="aspectRatio"  value="${name.aspectRatio}" />   	<!-- 편평비-->
+											<input type="hidden" name="wheelInches"  value="${name.wheelInches}" />   	<!-- 휠인치-->
+											<input type="hidden" name="cntCdNm"      value="${name.cntCdNm}" />   		<!-- 수량코드명-->
+											<input type="hidden" name="periodCdNm"   value="${name.periodCdNm}" />   	<!-- 기간코드명-->
+											<input type="hidden" name="regiCdAmt"    value="${name.regiCdAmt}" />   	<!-- 등록비금액-->
+											<input type="hidden" name="regiCd"    	 value="${name.regiCd}" />   		<!-- 등록비코드-->
+											<input type="hidden" name="rentalAmt"    value="${name.rentalAmt}" />   	<!-- 월렌탈금액-->
+											<input type="hidden" name="ordListImg"   value="${name.atflPathNm}" />      <!-- 주문상품 썸네일 이미지 -->
+											<input type="hidden" name="classCd"      value="${name.classCd}" />
+											<input type="hidden" name="seasonCd"     value="${name.seasonCd}" />
+											<input type="hidden" name="seasonCdNm"   value="${name.seasonCdNm}" />
+											<input type="hidden" name="safeKey"      value="${clientVo.safeKey}" />
+											<input type="hidden" name="periodCd"     value="${name.periodCd}" />
+											<input type="hidden" name="saleCd"       value="${name.saleCd}" />
+											<input type="hidden" name="limitCnt"     value="${name.limitCnt}" />		<!-- 2+2 타이어 제한갯수 -->
+											<input type="hidden" name="cntCd"    	 value="${name.cntCd}" />			<!-- 수량코드 -->
+											<input type="hidden" name="saleNm"    	 value="${name.saleNm}" />			<!-- 수량코드 -->
+											<input type="hidden" name="plyRating"    value="${name.plyRating}"/>
+											<input type="hidden" name="itemNo"       value="${name.itemNo}" />
+											<input type="hidden" name="oeYn"       	 value="${name.oeYn}" />
+											<input type="hidden" name="pageGbn"  	 id="pageGbn"    value="C"			 	/> 	<!--  페이지 구분(주문에 넘어갈때 확인) 	 -->
+										</form>
+
+			                              <tr id="freeList_${status.index}">
+			                                    <td class="tCenter">
+			                                        <input type="checkbox" id="freeBasket_${status.index}" name="Basket" value="${status.index}" class="type01"><label for="freeBasket_${status.index}"><span></span></label>
+			                                    </td>
+			                                    <td>
+			                                        <div class="proViewWrap">
+			                                            <div class="proView">
+			                                                <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${name.atflPathNm}" alt="${name.atflNm}">
+			                                            </div>
+			                                        </div>
+			                                    </td>
+			                                    <td>
+			                                        <!-- 상품정보 -->
+			                                        <div class="proViewInfo">
+			                                                <ul>
+			                                                    <li>${name.patternCd}</li>
+			                                                    <li>
+			                                                    	<c:if test="${name.classCd eq 'P1'}">
+																		<span>승용차용</span>
+																	</c:if>
+																	<c:if test="${name.classCd eq 'S1'}">
+																		<span>SUV용</span>
+																	</c:if>
+			                                                         <span>${name.seasonCdNm}</span>
+																	<c:if test="${name.oeYn eq 'Y'}">
+																		<span>순정</span>
+																	</c:if>
+																	<c:if test="${name.oeYn eq 'N'}">
+																		<span>호환</span>
+																	</c:if>
+			                                                         <span>${name.dispSize}</span>
+			                                                    </li>
+			                                                    <li>
+			                                                         <span>${name.makerCdNm} </span>  <span>${name.mcNm}</span>
+			                                                    </li>
+		                                                        <li>
+		                                                             <div class="rental">
+		                                                                 <span>[ ${name.saleNm} ]</span>
+		                                                             </div>
+		                                                        </li>
+			                                                </ul>
+			                                            </div>
+			                                        <!-- 상품정보 -->
+			                                    </td>
+			                                    <td class="tCenter">
+			                                        <!-- 수량 -->
+			                                        <div class="quantity">
+			                                            <span class="circle02">${name.cntCd}</span>
+			                                        </div>
+			                                        <!-- 수량 -->
+			                                    </td>
+			                                    <td class="tCenter">
+			                                        ${name.periodCd}개월
+			                                    </td>
+			                                    <td>
+			                                         <!-- 구매금액  -->
+			                                         <div class="purchacePrice">
+			                                            <div class="price rental">
+			                                                <dl>
+			                                                    <dt>월 렌탈료</dt>
+			                                                    <dd>
+			                                                       \<fmt:formatNumber value="${name.rentalAmt}" pattern="#,###" />
+			                                                    </dd>
+			                                                </dl>
+			                                                <dl>
+			                                                    <dt>렌탈 등록비</dt>
+			                                                    <dd>
+			                                                       \<fmt:formatNumber value="${name.regiCdAmt}" pattern="#,###" />
+			                                                    </dd>
+			                                                </dl>
+			                                            </div>
+			                                        </div>
+			                                        <!-- 구매금액  -->
+			                                    </td>
+			                                    <td class="tRight">
+			                                        <button type="button" onclick="javascript:check_credit(${name.itemNo},'free', ${status.index});" class="type06 mb4">바로 주문</button>
+			                                        <button type="button" onclick="javascript:fn_optionUpdate(${status.index},'free');" class="type07">옵션 변경</button>
+			                                    </td>
+			                                    <td>
+			                                        <a href="javascript:fn_rentalDelete(${name.itemNo},'free', ${status.index});" class="tDel"  title="삭제하기"></a>
+			                                    </td>
+			                                </tr>
+								</c:forEach>
+                            </c:if>
+
+                            <!-- 자유렌탈 리스트 끝 -->
+
+                            <!-- 일반 렌탈 리스트 보여준다. -->
+
+                            <c:if test="${fn:length(nomalRenList) > 0}">
+    							<c:forEach var="name" items="${nomalRenList}" varStatus="status">
+
+
+    									<form id="formNomal${status.index}" name="formNomal${status.index}" method="post" >
+											<input type="hidden" name="patternCd"    value="${name.patternCd}" /> 		<!-- 패턴코드-->
+											<input type="hidden" name="petternCd"    value="${name.patternCd}" /> 		<!-- 패턴코드 이건 왜 이렇게 해놔가지고 ㅠㅠ-->
+											<input type="hidden" name="matCd"        value="${name.matCd}" />   		<!-- 상품코드-->
+											<input type="hidden" name="makerCd"      value="${name.makerCd}" />   		<!-- 제조사코드-->
+											<input type="hidden" name="makerCdNm"    value="${name.makerCdNm}" />   	<!-- 제조사명-->
+											<input type="hidden" name="modelCd"      value="${name.modelCd}" />   		<!-- 차종코드-->
+											<input type="hidden" name="carNumber"    value="${name.carNumber}" />       <!--차량번호-->
+											<input type="hidden" name="contentsCd"   value="${name.contentsCd}" />   	<!-- 사양코드-->
+											<input type="hidden" name="modelCdNm"    value="${name.mcNm}" />   			<!-- 차종코드명-->
+											<input type="hidden" name="frCd"         value="${name.frCd}" />   			<!-- 전후구분코드-->
+											<input type="hidden" name="dispSize"     value="${name.dispSize}" />   		<!-- 사이즈-->
+											<input type="hidden" name="sectionWidth" value="${name.sectionWidth}" />   	<!-- 단면폭-->
+											<input type="hidden" name="aspectRatio"  value="${name.aspectRatio}" />   	<!-- 편평비-->
+											<input type="hidden" name="wheelInches"  value="${name.wheelInches}" />   	<!-- 휠인치-->
+											<input type="hidden" name="cntCdNm"      value="${name.cntCdNm}" />   		<!-- 수량코드명-->
+											<input type="hidden" name="periodCdNm"   value="${name.periodCdNm}" />   	<!-- 기간코드명-->
+											<input type="hidden" name="regiCdAmt"    value="${name.regiCdAmt}" />   	<!-- 등록비금액-->
+											<input type="hidden" name="regiCd"    	 value="${name.regiCd}" />   		<!-- 등록비코드-->
+											<input type="hidden" name="rentalAmt"    value="${name.rentalAmt}" />   	<!-- 월렌탈금액-->
+											<input type="hidden" name="ordListImg"   value="${name.atflPathNm}" />      <!-- 주문상품 썸네일 이미지 -->
+											<input type="hidden" name="classCd"      value="${name.classCd}" />
+											<input type="hidden" name="seasonCd"     value="${name.seasonCd}" />
+											<input type="hidden" name="seasonCdNm"   value="${name.seasonCdNm}" />
+											<input type="hidden" name="safeKey"      value="${clientVo.safeKey}" />
+											<input type="hidden" name="periodCd"     value="${name.periodCd}" />
+											<input type="hidden" name="saleCd"       value="${name.saleCd}" />
+											<input type="hidden" name="limitCnt"     value="${name.limitCnt}" />		<!-- 2+2 타이어 제한갯수 -->
+											<input type="hidden" name="cntCd"    	 value="${name.cntCd}" />			<!-- 수량코드 -->
+											<input type="hidden" name="saleNm"    	 value="${name.saleNm}" />			<!-- 수량코드 -->
+											<input type="hidden" name="plyRating"    value="${name.plyRating}"/>
+											<input type="hidden" name="itemNo"       value="${name.itemNo}" />
+											<input type="hidden" name="oeYn"       	 value="${name.oeYn}" />
+											<input type="hidden" name="pageGbn"  	 id="pageGbn"    value="C"			 	/> 	<!--  페이지 구분(주문에 넘어갈때 확인) 	 -->
+										</form>
+
+			                              <tr id="nomalList_${status.index}">
+			                                    <td class="tCenter">
+			                                        <input type="checkbox" id="nomalBasket_${status.index}" name="Basket" value="${status.index}" class="type01"><label for="nomalBasket_${status.index}"><span></span></label>
+			                                    </td>
+			                                    <td>
+			                                        <div class="proViewWrap">
+			                                            <div class="proView">
+			                                                <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${name.atflPathNm}" alt="${name.atflNm}">
+			                                            </div>
+			                                        </div>
+			                                    </td>
+			                                    <td>
+			                                        <!-- 상품정보 -->
+			                                        <div class="proViewInfo">
+			                                                <ul>
+			                                                    <li>${name.patternCd}</li>
+			                                                    <li>
+			                                                    	<c:if test="${name.classCd eq 'P1'}">
+																		<span>승용차용</span>
+																	</c:if>
+																	<c:if test="${name.classCd eq 'S1'}">
+																		<span>SUV용</span>
+																	</c:if>
+			                                                         <span>${name.seasonCdNm}</span>
+																	<c:if test="${name.oeYn eq 'Y'}">
+																		<span>순정</span>
+																	</c:if>
+																	<c:if test="${name.oeYn eq 'N'}">
+																		<span>호환</span>
+																	</c:if>
+			                                                         <span>${name.dispSize}</span>
+			                                                    </li>
+			                                                    <li>
+			                                                         <span>${name.makerCdNm} </span>  <span>${name.mcNm}</span>
+			                                                    </li>
+		                                                        <li>
+		                                                             <div class="rental">
+		                                                                 <span>[ ${name.saleNm} ]</span>
+		                                                             </div>
+		                                                        </li>
+			                                                </ul>
+			                                            </div>
+			                                        <!-- 상품정보 -->
+			                                    </td>
+			                                    <td class="tCenter">
+			                                        <!-- 수량 -->
+			                                        <div class="quantity">
+			                                            <span class="circle02">${name.cntCd}</span>
+			                                        </div>
+			                                        <!-- 수량 -->
+			                                    </td>
+			                                    <td class="tCenter">
+			                                        ${name.periodCd}개월
+			                                    </td>
+			                                    <td>
+			                                         <!-- 구매금액  -->
+			                                         <div class="purchacePrice">
+			                                            <div class="price rental">
+			                                                <dl>
+			                                                    <dt>월 렌탈료</dt>
+			                                                    <dd>
+			                                                       \<fmt:formatNumber value="${name.rentalAmt}" pattern="#,###" />
+			                                                    </dd>
+			                                                </dl>
+			                                                <dl>
+			                                                    <dt>렌탈 등록비</dt>
+			                                                    <dd>
+			                                                       \<fmt:formatNumber value="${name.regiCdAmt}" pattern="#,###" />
+			                                                    </dd>
+			                                                </dl>
+			                                            </div>
+			                                        </div>
+			                                        <!-- 구매금액  -->
+			                                    </td>
+			                                    <td class="tRight">
+			                                        <button type="button" onclick="javascript:check_credit(${name.itemNo},'nomal' , ${status.index});" class="type06 mb4">바로 주문</button>
+			                                        <button type="button" onclick="javascript:fn_optionUpdate(${status.index},'nomal');" class="type07">옵션 변경</button>
+			                                    </td>
+			                                    <td>
+			                                        <a href="javascript:fn_rentalDelete(${name.itemNo},'nomal', ${status.index});" class="tDel"  title="삭제하기"></a>
+			                                    </td>
+			                                </tr>
+								</c:forEach>
+
+
+                            </c:if>
+
+                            <!-- 일반렌탈 리스트 끝 -->
+
+                            <!-- 멤버십 렌탈 리스트 보여준다. -->
+
+                            <c:if test="${fn:length(memberRenList) > 0}">
+    							<c:forEach var="name" items="${memberRenList}" varStatus="status">
+
+    							    	<form id="membership${status.index}" name="membership${status.index}" method="post" >
+											<input type="hidden" name="patternCd"    value="${name.patternCd}" /> 		<!-- 패턴코드-->
+											<input type="hidden" name="petternCd"    value="${name.patternCd}" /> 		<!-- 패턴코드 이건 왜 이렇게 해놔가지고 ㅠㅠ-->
+											<input type="hidden" name="matCd"        value="${name.matCd}" />   		<!-- 상품코드-->
+											<input type="hidden" name="makerCd"      value="${name.makerCd}" />   		<!-- 제조사코드-->
+											<input type="hidden" name="makerCdNm"    value="${name.makerCdNm}" />   	<!-- 제조사명-->
+											<input type="hidden" name="modelCd"      value="${name.modelCd}" />   		<!-- 차종코드-->
+											<input type="hidden" name="carNumber"    value="${name.carNumber}" />       <!--차량번호-->
+											<input type="hidden" name="contentsCd"   value="${name.contentsCd}" />   	<!-- 사양코드-->
+											<input type="hidden" name="modelCdNm"    value="${name.mcNm}" />   			<!-- 차종코드명-->
+											<input type="hidden" name="frCd"         value="${name.frCd}" />   			<!-- 전후구분코드-->
+											<input type="hidden" name="dispSize"     value="${name.dispSize}" />   		<!-- 사이즈-->
+											<input type="hidden" name="sectionWidth" value="${name.sectionWidth}" />   	<!-- 단면폭-->
+											<input type="hidden" name="aspectRatio"  value="${name.aspectRatio}" />   	<!-- 편평비-->
+											<input type="hidden" name="wheelInches"  value="${name.wheelInches}" />   	<!-- 휠인치-->
+											<input type="hidden" name="cntCdNm"      value="${name.cntCdNm}" />   		<!-- 수량코드명-->
+											<input type="hidden" name="periodCdNm"   value="${name.periodCdNm}" />   	<!-- 기간코드명-->
+											<input type="hidden" name="regiCdAmt"    value="${name.regiCdAmt}" />   	<!-- 등록비금액-->
+											<input type="hidden" name="regiCd"    	 value="${name.regiCd}" />   		<!-- 등록비코드-->
+											<input type="hidden" name="rentalAmt"    value="${name.rentalAmt}" />   	<!-- 월렌탈금액-->
+											<input type="hidden" name="ordListImg"   value="${name.atflPathNm}" />      <!-- 주문상품 썸네일 이미지 -->
+											<input type="hidden" name="classCd"      value="${name.classCd}" />
+											<input type="hidden" name="seasonCd"     value="${name.seasonCd}" />
+											<input type="hidden" name="seasonCdNm"   value="${name.seasonCdNm}" />
+											<input type="hidden" name="safeKey"      value="${clientVo.safeKey}" />
+											<input type="hidden" name="periodCd"     value="${name.periodCd}" />
+											<input type="hidden" name="saleCd"       value="${name.saleCd}" />
+											<input type="hidden" name="limitCnt"     value="${name.limitCnt}" />		<!-- 2+2 타이어 제한갯수 -->
+											<input type="hidden" name="cntCd"    	 value="${name.cntCd}" />			<!-- 수량코드 -->
+											<input type="hidden" name="saleNm"    	 value="${name.saleNm}" />			<!-- 수량코드 -->
+											<input type="hidden" name="plyRating"    />
+											<input type="hidden" name="itemNo"        value="${name.itemNo}" />
+											<input type="hidden" name="oeYn"       	 value="${name.oeYn}" />
+											<input type="hidden" name="pageGbn"  	 id="pageGbn"    value="C"			 	/> 	<!--  페이지 구분(주문에 넘어갈때 확인) 	 -->
+										</form>
+
+			                              <tr id="memberList_${status.index}">
+			                                    <td class="tCenter">
+			                                        <input type="checkbox" id="memberBasket_${status.index}" name="Basket" value="${status.index}" class="type01"><label for="memberBasket_${status.index}"><span></span></label>
+			                                    </td>
+			                                    <td>
+			                                        <div class="proViewWrap">
+			                                            <div class="proView">
+			                                                <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${name.atflPathNm}" alt="${name.atflNm}">
+			                                            </div>
+			                                        </div>
+			                                    </td>
+			                                    <td>
+			                                        <!-- 상품정보 -->
+			                                        <div class="proViewInfo">
+			                                                <ul>
+			                                                    <li>${name.patternCd}</li>
+			                                                    <li>
+			                                                    	<c:if test="${name.classCd eq 'P1'}">
+																		<span>승용차용</span>
+																	</c:if>
+																	<c:if test="${name.classCd eq 'S1'}">
+																		<span>SUV용</span>
+																	</c:if>
+			                                                         <span>${name.seasonCdNm}</span>
+																	<c:if test="${name.oeYn eq 'Y'}">
+																		<span>순정</span>
+																	</c:if>
+																	<c:if test="${name.oeYn eq 'N'}">
+																		<span>호환</span>
+																	</c:if>
+			                                                         <span>${name.dispSize}</span>
+			                                                    </li>
+			                                                    <li>
+			                                                         <span>${name.makerCdNm} </span>  <span>${name.mcNm}</span>
+			                                                    </li>
+		                                                        <li>
+		                                                             <div class="rental">
+		                                                                 <span>[ ${name.saleNm} ]</span>
+		                                                             </div>
+		                                                        </li>
+			                                                </ul>
+			                                            </div>
+			                                        <!-- 상품정보 -->
+			                                    </td>
+			                                    <td class="tCenter">
+			                                        <!-- 수량 -->
+			                                        <div class="quantity">
+			                                            <span class="circle02">${name.cntCd}</span>
+			                                        </div>
+			                                        <!-- 수량 -->
+			                                    </td>
+			                                    <td class="tCenter">
+			                                        ${name.periodCd}개월
+			                                    </td>
+			                                    <td>
+			                                         <!-- 구매금액  -->
+			                                         <div class="purchacePrice">
+			                                            <div class="price rental">
+			                                                <dl>
+			                                                    <dt>월 렌탈료</dt>
+			                                                    <dd>
+			                                                       \<fmt:formatNumber value="${name.rentalAmt}" pattern="#,###" />
+			                                                    </dd>
+			                                                </dl>
+			                                                <dl>
+			                                                    <dt>렌탈 등록비</dt>
+			                                                    <dd>
+			                                                       \<fmt:formatNumber value="${name.regiCdAmt}" pattern="#,###" />
+			                                                    </dd>
+			                                                </dl>
+			                                            </div>
+			                                        </div>
+			                                        <!-- 구매금액  -->
+			                                    </td>
+			                                    <td class="tRight">
+			                                        <button type="button" onclick="javascript:check_credit(${name.itemNo},'member', ${status.index});" class="type06 mb4">바로 주문</button>
+			                                        <button type="button" onclick="javascript:fn_optionUpdate(${status.index},'member');" class="type07">옵션 변경</button>
+			                                    </td>
+			                                    <td>
+			                                        <a href="#" class="tDel" title="삭제하기"></a>
+			                                    </td>
+			                                </tr>
+								</c:forEach>
+						        <!-- 멤버십렌탈 리스트 끝 -->
+                            </c:if>
+				    	</c:when>
+					    <c:otherwise>
+	                        <tr>
+	                            <td colspan="8" class="noResult">
+	                                장바구니 목록이 없습니다.
+	                            </td>
+	                        </tr>
+					    </c:otherwise>
+					</c:choose>
+
+                            </tbody>
+                        </table>
+
+                        <!-- 월 예상 렌탈료 -->
+                        <div class="totalPrice type02">
+                            <button type="button" onclick="javascript:fn_rentalDeleteChk();" class="type08">선택삭제</button>
+                            <p class="desc">※ 렌탈 등록비는 익월 렌탈료와 함께 청구됩니다.</p>
+                        </div>
+                    </div>
+                    <!-- tab02-->
+                </div>
+            </div>
+            <!-- 장바구니 Tab-->
+
+
+		</div>
+		<!--subContentsWrap-->
+	<div class="md-overlay"></div>
+	<form id="cartFrm" name="cartFrm" method="post" >
+		<input type="hidden" name="cartNo"  			id="cartNo"  value=""/>  			<!--  장바구니 번호 	 -->
+		<input type="hidden" name="O2osearchText"  	  	id="O2osearchText"  value=""/>  	<!--  구매 검색값  -->
+		<input type="hidden" name="RentalsearchText"  	id="RentalsearchText"  value=""/>  	<!--  렌탈 검색값 -->
+		<input type="hidden" name="tabGbn"  			id="tabGbn"  value="O"/>  			<!--  tab구분 기본 구매탭  -->
+		<input type="hidden" name="cartNoArr" />
+		<input type="hidden" name="pageGbn"  	 id="pageGbn"    value="C"			 	/> 	<!--  페이지 구분(주문에 넘어갈때 확인) 	 -->
+		<input type="hidden" name="pkgAmtOne"  	 id="pkgAmtOne"  value="0"				/> 	<!--  페이지 구분(주문에 넘어갈때 확인) 	 -->
+	</form>
+
+	<input type="hidden" name="safeKeyNew" id="safeKeyNew"  value="${clientVo.safeKey}" />
+	<input type="hidden" name="bizAppYn" id="bizAppYn"  value="${clientVo.bizAppYn}" /> <!-- 사업자승인 여부 -->
+
+	<input type="hidden" id="serverMode" value="<%=System.getProperty(CoreConstants.SERVER_MODE)%>"> <!-- 임시로 -->
+
+	<!-- ************************ 옵션수정 레이어 ************************ -->
+		<%@ include file="/WEB-INF/view/cart/cartUpdatePop.jsp" %>
+	<!-- ************************ /옵션수정 레이어 ************************ -->
+
+
+<script type="text/javascript">
+ex2cts.push('track', 'cart');
+
+var officerCd = '${officerCd}'; //임직원 코드
+var tabGbn = '${tabGbn}'; //
+
+$( document ).ready(function() {
+	o2oTotAmtText();
+	init_event();
+});
+
+function init_event(){
+
+    $("#o2o").click(function(e) {
+    	$('#tabGbn').val('O');
+	 });
+    $("#ren").click(function(e) {
+    	$('#tabGbn').val('R');
+	 });
+
+	if(tabGbn == 'R'){
+		$('#ren').click();
+		$('#tab11').css("display","none");
+		$('#tab22').css("display","");
+	}
+
+	$('#O2oCheckAll').click(function(e) {
+		if($(this).is(":checked")) {
+			$("input[name='basketChk']").prop("checked" , true);
+		}else{
+			$("input[name='basketChk']").prop("checked" , false);
+			o2oTotAmtText();
+		}
+		fn_creatSalePlcAmt();
+	});
+
+	$('#RentalCheckAll').click(function(e) {
+		if($(this).is(":checked")) {
+			$("input[name='Basket']").prop("checked" , true);
+		}else{
+			$("input[name='Basket']").prop("checked" , false);
+		}
+	});
+
+	$("input[name='basketChk']").click(function(e) {
+		fn_creatSalePlcAmt();
+	});
+}
+
+function fn_creatSalePlcAmt(){
+	var listArr = [];
+
+	$("input[name='basketChk']").each(function(){
+		if($(this).is(":checked")) { //체크면 패키지 가격 가져온다
+            var obj = {
+            		dpPrNo		: $(this).attr('dpPrNo'), 	// 전시상품번호
+            		prcPlcNo 	: $(this).attr('prcPlcNo'),	// 가격정책번호
+            		itemCd		: $(this).attr('itemCd'),	// 아이템 번호
+            		ordQy		: Number($(this).attr('qty'))		// 수량
+        			};
+            listArr.push(obj);
+		}else{//아니면 원래 가격을 넣어준다.
+			var cartNo = $(this).val();
+		  		$('#pkgAmt_'+cartNo).val(0);
+		  		$('#pkgPlcNo_'+cartNo).val('');
+		  		$('#pkgArea_'+cartNo).children().remove();
+		}
+	});
+
+	console.log(JSON.stringify(listArr));
+
+	if(listArr.length > 0 ){
+	     var pUrl = "/cart/pakageO2oAmt";
+	     var pSendData = JSON.stringify(listArr);
+
+		$.ajax({
+		   url: pUrl,
+		   type: "POST",
+		   cache:false,
+		   data: pSendData,
+		   contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+		   success: function(data) {
+
+			  if(data.resultList.length > 0){
+				  for(var i=0; i < data.resultList.length; i++) {
+					  console.log(data.resultList[i].dpPrNo);
+					  console.log(data.resultList[i].itemCd);
+					  console.log(data.resultList[i].pkgPlcNo);
+					  console.log(data.resultList[i].pkgDcAmt);
+					  console.log("**************************************");
+					  /* 패키지 할인 가격이 있으면 */
+					  if(data.resultList[i].pkgDcAmt > 0){
+						  $("input[name='basketChk']").each(function(){
+
+							  var itemcd = $(this).attr('itemcd');
+							  var dpPrNo = $(this).attr('dpPrNo');
+							  var cartNo = $(this).val();
+
+							  if($(this).is(":checked")) {
+								  if(itemcd == data.resultList[i].itemCd && dpPrNo == data.resultList[i].dpPrNo){
+									  $('#pkgAmt_'+cartNo).val(data.resultList[i].pkgDcAmt);
+									  $('#pkgPlcNo_'+cartNo).val(data.resultList[i].pkgPlcNo);
+									  $('#pkgArea_'+cartNo).children().remove();
+									  var html = "";
+									  	  html += "<dt>패키지 추가할인</dt>";
+									  	  html += "<dd>";
+									  	  var pkgDcAmt = "\\"+ data.resultList[i].pkgDcAmt;
+									  	  html +=  NumUtil.setComma(pkgDcAmt);
+									  	  html +=  "</dd>";
+									  	$('#pkgArea_'+cartNo).html(html);
+								  }
+							  }else{
+								  $('#pkgAmt_'+cartNo).val(0);
+								  $('#pkgPlcNo_'+cartNo).val('');
+								  $('#pkgArea_'+cartNo).children().remove();
+							  }
+						  });
+					  }else{ /* 아무것도 없으면 */
+
+						$("input[name='basketChk']").each(function(){
+							  var itemcd = $(this).attr('itemcd');
+							  var dpPrNo = $(this).attr('dpPrNo');
+							  var cartNo = $(this).val();
+							  if($(this).is(":checked")) {
+								  if(itemcd == data.resultList[i].itemCd && dpPrNo == data.resultList[i].dpPrNo){
+									  $('#pkgAmt_'+cartNo).val(0);
+									  $('#pkgPlcNo_'+cartNo).val('');
+									  $('#pkgArea_'+cartNo).children().remove();
+								  }
+							  }
+
+						});
+
+					  }
+				  }
+			  }else{//가지고 온 데이터가 없으면 모두 리셋
+				  $("input[name='basketChk']").each(function(){
+					  var cartNo = $(this).val();
+					  $('#pkgAmt_'+cartNo).val(0);
+					  $('#pkgPlcNo_'+cartNo).val('');
+					  $('#pkgArea_'+cartNo).children().remove();
+				  });
+			  }
+
+			   	//총결제금액을 위해서 다시 돌려준다.
+			   	var o2oTotAmt = 0;
+				$("input[name='basketChk']").each(function(){
+					if($(this).is(":checked")) { //체크면 패키지 가격 가져온다
+						var cartnum = $(this).val();
+						var amt = $('#o2oDisCAmt_'+cartnum).text().replace(/\\/g,'').replace(/,/gi,'');
+						var pkgAmt = $('#pkgAmt_'+cartnum).val();
+
+						o2oTotAmt =  o2oTotAmt + Number(amt)- Number(pkgAmt);
+					}
+				});
+				o2oTotAmt = "\\"+o2oTotAmt;
+				$("#o2oTotAmt").text(NumUtil.setComma(o2oTotAmt));
+		   },
+		   error: function (e) {
+				console.log(e);
+			}
+		});
+	}
+}
+
+
+function fn_minus(cartNo){
+	var id = $("#basicAmt_"+cartNo);
+	var bassSaleAmt = id.attr('basssaleamt');   //기표가
+	var saleAmt = id.attr('saleamt');			//판매가
+	var bassStmemAmt = id.attr('bassstmemamt');	//임직원가
+	var cntNo = $("#cndCdSeq_"+cartNo).text();
+
+	var orderOriAmt = 0; 	//최종 판매금액
+	var orderPayAmt = 0; 	//최종 주문 결제금액
+	var orderSaleAmt = 0; 	//최종 할인 차감금액
+
+	cntNo= Number(cntNo)-1;
+
+	if(cntNo < 1){
+		ComUtil.alert("최소 1본이 있어야 합니다.");
+		return false;
+	}
+
+	if(officerCd == "" || officerCd == null){
+		/* 일반가 */
+		orderOriAmt  = bassSaleAmt * cntNo;
+		orderPayAmt  = saleAmt * cntNo;
+		orderSaleAmt = orderOriAmt - orderPayAmt;
+	}else{
+		/* 임직원가 */
+		orderOriAmt  = bassSaleAmt * cntNo;
+		orderPayAmt  = bassStmemAmt * cntNo;
+		orderSaleAmt = orderOriAmt - orderPayAmt;
+	}
+
+	console.log("cntNo   :"+cntNo);
+	console.log("orderOriAmt   :"+orderOriAmt);
+	console.log("orderPayAmt   :"+orderPayAmt);
+	console.log("orderSaleAmt  :"+orderSaleAmt);
+
+	fn_cartUpdate(cntNo,orderOriAmt,orderPayAmt,orderSaleAmt,cartNo);
+	orderOriAmt ="\\"+orderOriAmt;
+	orderPayAmt = "\\"+orderPayAmt;
+
+	$("#cndCdSeq_"+cartNo).text(cntNo);
+	$("#o2oSaleAmt_"+cartNo).text(NumUtil.setComma(orderOriAmt));
+	$("#o2oDisCAmt_"+cartNo).text(NumUtil.setComma(orderPayAmt));
+
+	o2oTotAmtText();
+}
+
+function fn_plus(cartNo){
+
+	var id = $("#basicAmt_"+cartNo);
+	var bassSaleAmt = id.attr('basssaleamt');
+	var saleAmt = id.attr('saleamt');
+	var bassStmemAmt = id.attr('bassstmemamt');
+	var cntNo = $("#cndCdSeq_"+cartNo).text();
+
+	var orderOriAmt = 0; 	//최종 판매금액
+	var orderPayAmt = 0; 	//최종 주문 결제금액
+	var orderSaleAmt = 0; 	//최종 할인 차감금액
+
+
+	cntNo= Number(cntNo)+1;
+
+	if(cntNo > 4){
+		ComUtil.alert("최대 4본 입니다.");
+		return;
+	}
+
+	if(officerCd == "" || officerCd == null){
+		/* 일반가 */
+		orderOriAmt  = bassSaleAmt * cntNo;
+		orderPayAmt  = saleAmt * cntNo;
+		orderSaleAmt = orderOriAmt - orderPayAmt;
+	}else{
+		/* 임직원가 */
+		orderOriAmt  = bassSaleAmt * cntNo;
+		orderPayAmt  = bassStmemAmt * cntNo;
+		orderSaleAmt = orderOriAmt - orderPayAmt;
+	}
+
+
+	console.log("cntNo   :"+cntNo);
+	console.log("orderOriAmt   :"+orderOriAmt);
+	console.log("orderPayAmt   :"+orderPayAmt);
+	console.log("orderSaleAmt  :"+orderSaleAmt);
+
+	fn_cartUpdate(cntNo,orderOriAmt,orderPayAmt,orderSaleAmt,cartNo);
+	orderOriAmt ="\\"+orderOriAmt;
+	orderPayAmt = "\\"+orderPayAmt;
+
+	$("#cndCdSeq_"+cartNo).text(cntNo);
+	$("#o2oSaleAmt_"+cartNo).text(NumUtil.setComma(orderOriAmt));
+	$("#o2oDisCAmt_"+cartNo).text(NumUtil.setComma(orderPayAmt));
+
+	o2oTotAmtText();
+}
+
+
+function fn_cartUpdate(cntCd,orderOriAmt,orderPayAmt,orderSaleAmt, cartNo){
+
+	var pUrl = "/cart/udateO2oCart";
+	var pSendData = { 	 cntCd  : "0"+cntCd
+						,cartNo : cartNo
+						,orderOriAmt : orderOriAmt
+						,orderPayAmt : orderPayAmt
+						,orderSaleAmt : orderSaleAmt
+					};
+		pSendData = JSON.stringify(pSendData);
+	var pReqId = "";
+
+	$.ajax({
+	    url: pUrl,
+	    type: "POST",
+	    cache:false,
+	    data: pSendData,
+	    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	    success: function(data) {
+	    	fn_creatSalePlcAmt();
+	    	//o2oTotAmtText();
+	    },
+	    error: function (e) {
+			console.log(e);
+		}
+	});
+}
+
+function o2oTotAmtText(){
+	var o2oTotAmt = 0;
+	$("dd[id ^= 'o2oDisCAmt_']").each(function(){
+		var amt = $(this).text().replace(/\\/g,'').replace(/,/gi,'');
+		o2oTotAmt =  o2oTotAmt + Number(amt);
+	});
+
+	o2oTotAmt = "\\"+o2oTotAmt;
+	$("#o2oTotAmt").text(NumUtil.setComma(o2oTotAmt));
+}
+
+/* 구매 단건주문 */
+function fn_O2oOder(cartNO){
+
+	var noordergbn = $('#basketChk_'+cartNO).attr('noOrderGbn');
+
+	if(noordergbn == 'N'){
+		ComUtil.confirm("죄송합니다. 가격변동으로 주문할수 없습니다.<br/> 삭제하시겠습니까?", '' , function(){
+			fn_O2oODel(cartNO);
+		});
+		return;
+	}
+
+	ComUtil.confirm("주문 하시겠습니까?", '' , function(){
+		var frm = document.cartFrm;
+		frm.cartNoArr.value = cartNO;
+		if($('#pkgAmt_'+cartNO).val() == ''){
+			frm.pkgAmtOne.value = "0";
+		}else{
+			frm.pkgAmtOne.value = $('#pkgAmt_'+cartNO).val();
+		}
+
+		//yjw serverMode 제거(20220225)
+		frm.action = "/order/orderPurchaseTMS2";
+		frm.submit();
+	});
+}
+
+function fn_O2oOderAll(){
+	var cartChk = new Array();
+	var checkNum = 0;
+	var bonsu = 0;
+
+	var chkArray = new Array();
+	var ischk = false;
+	var noordergbn = true;
+	var noorderPtn = "";
+
+	$("input[name='basketChk']").each(function(){
+
+		if($(this).is(":checked")) {
+			if($(this).attr('noOrderGbn') == 'N'){ //상품중 가격변동이 있는게 하나라도 있다면 진행 불가
+				noordergbn = false;
+				noorderPtn += "["+ $(this).attr('ptnNm') +"]";
+			}else{
+				var num = $(this).attr('id').replace('basketChk_', '');
+				bonsu += Number($('#cndCdSeq_'+num).text());
+				for(var k=0; k<chkArray.length; k++) {
+					if($(this).attr("chkGbn") != chkArray[k]) {
+						ischk = true;
+						return;
+					}
+				}
+				chkArray.push($(this).attr("chkGbn"))
+				checkNum++;
+
+			}
+		}
+	});
+
+	if(!noordergbn){
+		ComUtil.alert("죄송합니다.<br/>가격변동으로 구매하실 수 없는 상품이 있습니다.<br/>삭제하시고 재주문 하시기 바랍니다. <br/>대상 :"+noorderPtn);
+		return;
+	}
+
+	if(bonsu > 4){
+		ComUtil.alert("4본이상 구매하실 수 없습니다.");
+		$('#O2oCheckAll').click();
+		return false;
+	}
+
+ 	if(ischk) {
+		ComUtil.alert("동일한 제조사 및 차량 모델인 경우에만 주문 가능합니다.");
+		return;
+	}
+
+	if(checkNum == 0){
+		ComUtil.alert("주문하실 상품을 체크해주세요.");
+		return false;
+	}
+
+	$("input[name='basketChk']").each(function(){
+		if($(this).is(":checked")) {
+			cartChk.push($(this).val());
+		}
+	});
+
+	ComUtil.confirm("주문 하시겠습니까?", '' , function(){
+		//yjw serverMode 제거(20220225)
+		var form = document.createElement("form");
+       	form.setAttribute("charset", "UTF-8");
+       	form.setAttribute("method", "Post");  //Post 방식
+       	form.setAttribute("action", "/order/orderPurchaseTMS2");
+
+		cartChk.forEach(function (item, index, array) {
+		console.log("item ::::::::::::::::::::"+item);
+ 	    var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "cartNoArr");
+        hiddenField.setAttribute("value", item);
+        form.appendChild(hiddenField);
+
+	 	var hiddenField2 = document.createElement("input");
+	 	hiddenField2.setAttribute("type", "hidden");
+	 	hiddenField2.setAttribute("name", "pkgAmtArr");
+	 	hiddenField2.setAttribute("value", item+'@'+$('#pkgAmt_'+item).val()+'@'+$('#pkgPlcNo_'+item).val());
+        form.appendChild(hiddenField2);
+	});
+
+     document.body.appendChild(form);
+     form.submit();
+
+	});
+}
+
+function fn_O2oODelChk(){
+	var cartChk = new Array();
+	var cheknum = 0;
+
+	$("input[name='basketChk']").each(function(){
+		if($(this).is(":checked")) {
+			cheknum++;
+		}
+	});
+
+	if(cheknum == 0){
+		ComUtil.alert("삭제하실 상품을 선택해주세요.");
+		return false;
+	}
+
+	if(confirm("상품을 삭제하시겠습니까?")){
+		$("input[name='basketChk']").each(function(){
+			if($(this).is(":checked")) {
+				fn_O2oODel($(this).val());
+			}
+		});
+	}
+}
+
+function fn_O2oODel(cartNo){
+	var pUrl = "/cart/deleteO2oCart";
+	var pSendData = { cartNo : cartNo };
+		pSendData = JSON.stringify(pSendData);
+	var pReqId = "";
+
+	$.ajax({
+	    url: pUrl,
+	    type: "POST",
+	    cache:false,
+	    data: pSendData,
+	    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	    success: function(data) {
+	    	$("#cartNumSeq_"+cartNo).remove();
+	    	if($('tr[id^=cartNumSeq_]').length == 0){
+	    		var shtml = "";
+		    		shtml += "<tr>";
+		    		shtml += "<td colspan='8' class='noResult'>";
+		    		shtml += "				장바구니를 등록해주세요.";
+		    		shtml += "</td>";
+		    		shtml += "</tr>";
+					$("#o2oBody").html(shtml);
+
+	    	}
+	    	o2oTotAmtText();
+	    },
+	    error: function (e) {
+			console.log(e);
+		}
+	});
+}
+
+/* 구매 단건주문 */
+function fn_SearchCart(gbn){
+
+	var frm = document.cartFrm;
+	var searchText1 = $('#searchText').val();
+	var searchText2 = $('#searchTxtRental').val();
+	var url = "";
+	frm.O2osearchText.value = searchText1;
+	frm.RentalsearchText.value = searchText2;
+
+	if(gbn == 'O'){
+		$("#tabGbn").val('O');
+		url = "/cart/cartView";
+	}else if(gbn == 'R'){
+		$("#tabGbn").val('R');
+		url = "/cart/cartView";
+	}
+
+	frm.action = url;
+	frm.submit();
+}
+
+function enterSchKey(){
+	var evt_code = (window.netscape) ? ev.which : event.keyCode;
+	if (evt_code == 13) {
+		event.keyCode = 0;
+		fn_SearchCart();
+	}
+}
+
+function fn_optionUpdate(index,gbn){
+	var frm = "";
+	if(gbn == "nomal"){
+		frm = document.forms['formNomal'+index];
+	}else if(gbn == "free"){
+		frm = document.forms['formfree'+index];
+	}else if(gbn == "member"){
+		frm = document.forms['membership'+index];
+	}
+
+	var popfrm = document.cartPopFrm;
+
+	var popSaleName = frm.saleNm.value; //렌탈명
+	var popPatternCd = frm.patternCd.value; // 패턴코드
+
+	var popClassCd = frm.classCd.value; //승용차 SUV
+	if(popClassCd == 'P1'){
+		popClassCd = '승용차용';
+	}else{
+		popClassCd = 'SUV용';
+	}
+
+	var popSeasonCdNm = frm.seasonCdNm.value; //계절
+
+	var popOeYn = frm.oeYn.value; //순정 호환
+	if(popOeYn == 'Y'){
+		popOeYn = '순정';
+	}else{
+		popOeYn = '호환';
+	}
+
+	var popDispSize =  "("+ popOeYn + ") "+  frm.dispSize.value; //디스플레이
+
+	var popMakerCdNm = frm.makerCdNm.value; //자동차회사
+	var popMcNm = frm.modelCdNm.value; //자동차 모델명
+
+	popfrm.periodCd.value 	= 	frm.periodCd.value;
+	popfrm.cntCd.value 		=	frm.cntCd.value;
+	popfrm.saleCd.value 	=	frm.saleCd.value;
+	popfrm.rentalINdex.value =	index;
+	popfrm.rentalGbn.value =	gbn;
+	popfrm.regiCdAmt.value =	frm.regiCdAmt.value; ;
+
+	$('#popSaleName').text(popSaleName);
+	$('#popPatternCd').text(popPatternCd);
+	$('#popClassCd').text(popClassCd);
+	$('#popSeasonCdNm').text(popSeasonCdNm);
+	$('#popOeYn').text(popOeYn);
+	$('#popDispSize').text(popDispSize);
+	$('#popMakerCdNm').text(popMakerCdNm);
+	$('#popMcNm').text(popMcNm);
+
+	if(gbn == 'free'){//자유렌탈일때
+
+        $.ajax({
+            type: "POST",
+            url: "/cart/openCartOption",
+            data: $("#formfree"+index).serialize(),
+            cache: false,
+            processData: false,
+            success: function (data) {
+            	settingPopup(data,'free');
+            	$('#rentalUPPop').addClass('md-show');
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
+	}else if(gbn == 'nomal'){
+		var vheelinches = frm.wheelInches.value;
+		var plyRating = frm.wheelInches.value;
+		var wheelInchesText = frm.wheelInches.value;
+		var	wheelInches = wheelInchesText.split(" ")[0];
+		var	plyRating = frm.plyRating.value;   /*  wheelInchesText.split(" ")[1].replace('P', ''); */
+
+		frm.plyRating.value = plyRating;
+
+		var pUrl = "/cart/selectUpdateRentalInfo";
+		var pSendData = {
+							sectionWidth : frm.sectionWidth.value
+							,aspectRatio : frm.aspectRatio.value
+							,wheelInches : wheelInches
+							,plyRating   : plyRating
+							,petternCd	 : frm.patternCd.value
+							,cntCd		 : frm.cntCd.value
+							,periodCd	 : frm.periodCd.value
+							,saleCd		 : frm.saleCd.value
+							,matCd		 : frm.matCd.value
+							,frCd		 : frm.frCd.value
+						};
+
+			pSendData = JSON.stringify(pSendData);
+		var pReqId = "";
+
+		$.ajax({
+		    url: pUrl,
+		    type: "POST",
+		    cache:false,
+		    data: pSendData,
+		    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+		    success: function(data) {
+				settingPopup(data,'nomal');
+		    },
+		    error: function (e) {
+				console.log(e);
+			}
+		});
+
+
+		//$('#rentalUPPop').removeClass('md-show');
+		$('#rentalUPPop').addClass('md-show');
+
+
+	}else if(gbn == 'member'){
+
+	}
+}
+
+/* 렌탈 체크된거 삭제 */
+function fn_rentalDeleteChk(){
+
+	var chkNum = 0;
+	$("input[name='Basket']").each(function(){
+		if($(this).is(":checked")) {
+			chkNum++;
+		}
+	});
+
+
+	if(chkNum == 0){
+		ComUtil.alert("삭제하실 렌탈상품을 선택해 주세요.");
+		return false;
+	}
+
+	if(confirm("상품을 삭제하시겠습니까?")){
+		$("input[name='Basket']").each(function(){
+
+			if($(this).is(":checked")) {
+				var atr = $(this).attr('id');
+				var idx = $(this).val();
+				var renGbn = "";
+				var frm = "";
+				var itemNo = "";
+
+				if(atr.indexOf("nomalBasket_") != -1 ){//일반렌탈
+					frm = document.forms['formNomal'+idx];
+					renGbn = "nomal";
+					itemNo = frm.itemNo.value;
+				}else if(atr.indexOf("freeBasket_") != -1){//자유렌탈
+					frm = document.forms['formfree'+idx];
+					renGbn = "free";
+					itemNo = frm.itemNo.value;
+				}else if(atr.indexOf("memberBasket_") != -1){//멤버십렌탈
+					frm = document.forms['membership'+idx];
+					renGbn = "member";
+					itemNo = frm.itemNo.value;
+				}
+
+				//삭제
+				fn_rentalDelete(itemNo,renGbn,idx);
+			}
+		});
+	}
+}
+
+/* 렌탈 단일 삭제 */
+function fn_rentalDelete(itemNo, renGbn, index){
+
+	var pUrl = "/cart/deleteRentalCart";
+	var pSendData = { itemNo : itemNo};
+		pSendData = JSON.stringify(pSendData);
+	var pReqId = "";
+
+	$.ajax({
+	    url: pUrl,
+	    type: "POST",
+	    cache:false,
+	    data: pSendData,
+	    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	    success: function(data) {
+			if(renGbn == 'nomal'){
+		    	$("#formNomal"+index).remove();
+		    	$("#nomalList_"+index).remove();
+			}else if(renGbn == 'free'){
+		    	$("#formfree"+index).remove();
+		    	$("#freeList_"+index).remove();
+			}else if(renGbn == 'member'){
+		    	$("#membership"+index).remove();
+		    	$("#memberList_"+index).remove();
+			}
+			//총 렌탈비 계산 다시 해준다
+			o2oTotAmtText();
+	    },
+	    error: function (e) {
+			console.log(e);
+		}
+	});
+
+
+}
+
+/******************************************************************************************/
+/******************************* 주문하기  ***************************************************/
+/******************************************************************************************/
+
+function check_credit(itemNo , gbn , formIdx){
+	var custDivCd = "<%=session.getAttribute("custDivCd") %>";
+	var comDivCd = "<%=session.getAttribute("comDivCd") %>";
+	var userLoginId = "<%=session.getAttribute("userLoginId") %>";
+	console.log("custDivCd    : "+custDivCd);
+	console.log("comDivCd     :"+comDivCd);
+	console.log("userLoginId     :"+userLoginId);
+
+
+	if(userLoginId == null || userLoginId == ''){
+		if(!confirm("로그인 후 이용 가능합니다.\n\n로그인 하시겠습니까?")) {
+			return;
+		}else{
+
+		}
+	}
+	if($('#bizAppYn').val() == "N") {
+		ComUtil.alert("사업자 고객의 경우 렌탈 계약을 위한 </br>승인이 필요합니다.</br>고객센터 ☎1855-0100 으로 </br>전화 주시기 바랍니다.</br>감사합니다.");
+		return;
+	} else if($('#safeKeyNew').val() == "" || $('#safeKeyNew').val() == 'null') {
+		ComUtil.alert("(인증번호)를 발급 받으셔야 주문이 가능합니다.</br>마이넥센메뉴에서 인증번호를 발급 받으세요.");
+		return;
+	}
+
+	if(custDivCd == "1"){//개인고객
+		indi_credit(itemNo , gbn , formIdx);
+	}else if(custDivCd == "2"){//사업자 고객
+		if(comDivCd == "1"){//개인 사업자
+			license_credit(itemNo , gbn , formIdx, custDivCd, comDivCd);
+		}else{//법인사업자
+			//indiLic_credit(itemNo , gbn , formIdx);
+			license_credit(itemNo , gbn , formIdx, custDivCd, comDivCd);
+		}
+	}else{//그외
+
+	}
+}
+
+//개인 고객 신용정보 조회
+function indi_credit(itemNo , gbn , formIdx){
+
+	var frm = "";
+
+	var pUrl = "/order/certifyPerson";
+	var pSendData = {};
+		pSendData = JSON.stringify(pSendData);
+	var pReqId = "";
+
+	$.ajax({
+	    url: pUrl,
+	    type: "POST",
+	    cache:false,
+	    data: pSendData,
+	    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	    success: function(data) {
+	    	/*
+			 * 신용등급 -> 신용포인트로 변경.(crGrade)
+			 * 변경일 : 2020.12.28
+			 */
+			if(data.rtnMap == null || data.rtnMap == ''){
+				var alterMsg = '고객님, 죄송합니다.\n';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.\n';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.\n';
+				ComUtil.alert(alterMsg);
+			}else if(Number(data.rtnMap.creditLvlCd) >= Number(data.rtnMap.crGrade)){
+				var alterMsg = '고객님, 죄송합니다.\n';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.\n';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.\n';
+				ComUtil.alert(alterMsg);
+			}else{
+				//yjw serverMode 제거(20220225)
+				if(gbn == "free") {
+					frm = $("#formfree"+formIdx);
+					$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+					//$("#formfree"+formIdx).attr("action" , "/order/orderRental")
+					$("#formfree"+formIdx).submit();
+				} else {
+					frm = $("#formNomal"+formIdx);
+					$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+					//$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+					$("#formNomal"+formIdx).submit();
+				}
+			}
+	    },
+	    error: function (e) {
+			console.log(e);
+		}
+	});
+}
+
+//법인사업자 고객 신용정보조회
+function license_credit(itemNo , gbn , formIdx, custDivCd, comDivCd){
+
+	var pUrl = "/order/certifyCompany";
+	var pSendData = {};
+		pSendData = JSON.stringify(pSendData);
+	var pReqId = "";
+	var frm = "";
+
+	$.ajax({
+	    url: pUrl,
+	    type: "POST",
+	    cache:false,
+	    data: pSendData,
+	    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	    success: function(data) {
+			if(data.rtnMap == null || data.rtnMap == ''){
+				var alterMsg = '고객님, 죄송합니다.\n';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.\n';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.\n';
+				ComUtil.alert(alterMsg);
+			}else if(data.rtnMap.gradeYn != 'Y'){
+				var alterMsg = '고객님, 죄송합니다.\n';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.\n';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.\n';
+				ComUtil.alert(alterMsg);
+			}else{
+				//개인사업자인경우
+				if(custDivCd == "2" && comDivCd == "1") {
+					indi_credit();
+				} else {
+					//yjw serverMode 제거(20220225)
+					if(gbn == "free") {
+						frm = $("#formfree"+formIdx);
+						$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+						//$("#formfree"+formIdx).attr("action" , "/order/orderRental")
+						$("#formfree"+formIdx).submit();
+					} else {
+						frm = $("#formNomal"+formIdx);
+						$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+						//$("#formNomal"+formIdx).attr("action" , "/order/orderRental")
+						$("#formNomal"+formIdx).submit();
+					}
+				}
+			}
+	    },
+	    error: function (e) {
+			console.log(e);
+		}
+	});
+}
+
+
+//개인 사업자 고객 신용정보 조회
+function indiLic_credit(itemNo , gbn , formIdx){
+	var pUrl = "/order/certifyPerson";
+	var pSendData = {};
+		pSendData = JSON.stringify(pSendData);
+	var pReqId = "";
+	var frm = "";
+
+	$.ajax({
+	    url: pUrl,
+	    type: "POST",
+	    cache:false,
+	    data: pSendData,
+	    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	    success: function(data) {
+	    	/*
+			 * 신용등급 -> 신용포인트로 변경.(crGrade)
+			 * 변경일 : 2020.12.28
+			 */
+			if(data.rtnMap == null || data.rtnMap == ''){
+				var alterMsg = '고객님, 죄송합니다.\n';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.\n';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.\n';
+				ComUtil.alert(alterMsg);
+			}else if(Number(data.rtnMap.creditLvlCd) >= Number(data.rtnMap.crGrade)){
+				var alterMsg = '고객님, 죄송합니다.\n';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.\n';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.\n';
+				ComUtil.alert(alterMsg);
+			}else{
+				//yjw serverMode 제거(20220225)
+				if(gbn == "free") {
+					frm = $("#formfree"+formIdx);
+					$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+					//$("#formfree"+formIdx).attr("action" , "/order/orderRental")
+					$("#formfree"+formIdx).submit();
+				} else {
+					frm = $("#formNomal"+formIdx);
+					$("#formNomal"+formIdx).attr("action" , "/order/orderRentalTMS2")
+					//$("#formNomal"+formIdx).attr("action" , "/order/orderRental")
+					$("#formNomal"+formIdx).submit();
+				}
+			}
+	    },
+	    error: function (e) {
+			console.log(e);
+		}
+	});
+}
+
+</script>

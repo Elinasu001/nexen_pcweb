@@ -1,0 +1,177 @@
+@charset "utf-8";
+/*  */
+
+/* Common */
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,
+em,img,ins,kbd,q,samp,small,strong,sub,sup,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,
+table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,
+hgroup,menu,nav,section,summary,time,mark,audio,video {margin:0; padding:0;  border:0; outline:0; font-size:100%; background:transparent; font-family: 'NanumBarunGothic' , 'Sans-serif'; font-style: normal; letter-spacing:-.1px;}
+input,textarea,table{color:#414141; font-family: 'NanumBarunGothic' , 'Sans-serif'; font-style: normal; font-size:14px;line-height:1;
+/*scrollbar-face-color:#f3f3f3;
+scrollbar-highlight-color:#FFFFFF;
+scrollbar-3dlight-color:#dfdfdf;
+scrollbar-darkshadow-color:#f3f3f3;
+scrollbar-shadow-color:#f3f3f3;
+scrollbar-arrow-color:#767676;
+scrollbar-track-color:#d8d8d8;*/}/* w3c css검사 */
+
+
+/*  */
+body{word-break:break-all; color:#3f3f3f;}
+html,body{min-height:100%;/* overflow-x:auto; *//*overflow-y:auto*/}
+img,fieldset{border:0}
+img{vertical-align:middle;}
+ul,ol,li{list-style:none}
+li{line-height:100%}
+em,address{font-style:normal}
+i,a,span,em{display:inline-block;}
+a{text-decoration:none;color:#333;/*outline:none;*//* select-dummy:expression(this.hideFocus=true); */cursor:pointer}/* w3c css검사 */
+a:hover,a:active,a:focus{text-decoration:none;cursor:pointer}
+a label{cursor:pointer;}
+
+/* Common Add */
+textarea,input[type=text],input[type=password]{box-sizing:border-box}
+select{font-family: 'Spoqa Han Sans Regular' , 'Sans-serif'; width:100%; height:22px; font-size:13px; color:#333; border:1px solid #717379; padding:0 5px 0 13px; -webkit-appearance:none; -moz-appearance:none; appearance:none; background:url('../img/common/arrow_01.png') no-repeat right 20px}
+select:focus{outline:none; border:1px solid #e51937}
+select::-ms-expand{display:none;} /* remove default arrow on ie10 and ie11 */
+select:focus::-ms-value {color:#333; background:transparent;}
+select option{color:#333}
+caption,legend{visibility:hidden;overflow:hidden;width:0;height:0;font-size:0;line-height:0;text-align:left}
+input[type=text],input[type=password],input[type=number]{font-family: 'NanumBarunGothic' , 'Sans-serif'; height:13px; color:#333; padding:4px 5px 2px; border:1px solid #ccc; color:#b6b6b6; vertical-align:middle;outline:none;}
+input[type=text]::-ms-clear{display:none}
+input[type="text"]:focus{outline:none; /*border:1px solid #812990*/}
+input[type=radio]{/**width:13px;*height:13px;*/margin:-2px 0 2px;vertical-align:middle}/* w3c css검사 */
+input[type=checkbox]{/**width:12px;*height:12px;*/vertical-align:middle}/* w3c css검사 */
+input[type="checkbox"] + label{cursor:pointer}
+input[type=file]{border:0}
+textarea{overflow-y:auto;width:100%; padding:19px 19px; text-align: left; border:1px solid #ccc; color:#333; resize:none; line-height:1.5}
+textarea:focus{outline:none}
+hr{display:none}
+table{border-collapse:collapse;border-spacing:0;}
+th{font-weight:normal}
+button {font-family:'Spoqa Han Sans Light', 'Sans-serif'; margin:0;padding:0;border:0;background:none;cursor:pointer;letter-spacing:-1px; background-color:transparent; /*overflow:visible !important; ie6,7 padding bug hack*/}
+button span{margin:-2px 0 0 -3px !important;} /* Mozilla 계열만 인식되는 firefox 핵 *//* w3c css검사 */    
+/*@media screen and (-webkit-min-device-pixel-ratio:0) {
+button span{margin:-1px 0 0 -3px !important;}
+}*/ /* Webkit 엔진계열만 인식하는 safari,chrome 핵 */
+
+.blind{position:absolute;width:0;height:0;overflow:hidden;line-height:0}
+/* Set Class */ 
+.overview{overflow:hidden;/*zoom:1*/}/* w3c css검사 */
+
+
+/* Spoqa Han Sans 폰트 */
+@font-face { 
+	font-family: 'Spoqa Han Sans Regular'; 
+	src: url('../css/font/Spoqa Han Sans Regular.eot'); 
+	src: url('../css/font/Spoqa Han Sans Regular?#iefix') format('embedded-opentype'), 
+	url('../css/font/Spoqa Han Sans Regular.woff2') format('woff2'), 
+	url('../css/font/Spoqa Han Sans Regular.woff') format('woff'), 
+	url('../css/font/Spoqa Han Sans Regular.ttf') format('truetype'), 
+	url('../css/font/Spoqa Han Sans Regular.svg#Spoqa Han Sans Regular') format('svg'); 
+	font-weight: normal; 
+	font-style: normal; 
+}
+
+@font-face {
+    font-family: 'Spoqa Han Sans Bold';
+    src: url('../css/font/Spoqa Han Sans Bold.eot');
+    src: url('../css/font/Spoqa Han Sans Bold.eot?#iefix') format('embedded-opentype'),
+         url('../css/font/Spoqa Han Sans Bold.woff2') format('woff2'),
+         url('../css/font/Spoqa Han Sans Bold.woff') format('woff'),
+         url('../css/font/Spoqa Han Sans Bold.ttf') format('truetype'),
+         url('../css/font/Spoqa Han Sans Bold.svg#Spoqa Han Sans Bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Spoqa Han Sans Light';
+    src: url('../css/font/Spoqa Han Sans Light.eot');
+    src: url('../css/font/Spoqa Han Sans Light.eot?#iefix') format('embedded-opentype'),
+         url('../css/font/Spoqa Han Sans Light.woff2') format('woff2'),
+         url('../css/font/Spoqa Han Sans Light.woff') format('woff'),
+         url('../css/font/Spoqa Han Sans Light.ttf') format('truetype'),
+         url('../css/font/Spoqa Han Sans Light.svg#Spoqa Han Sans Light') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Spoqa Han Sans Thin';
+    src: url('../css/font/Spoqa Han Sans Thin.eot');
+    src: url('../css/font/Spoqa Han Sans Thin.eot?#iefix') format('embedded-opentype'),
+         url('../css/font/Spoqa Han Sans Thin.woff2') format('woff2'),
+         url('../css/font/Spoqa Han Sans Thin.woff') format('woff'),
+         url('../css/font/Spoqa Han Sans Thin.ttf') format('truetype'),
+         url('../css/font/Spoqa Han Sans Thin.svg#Spoqa Han Sans Thin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 은영체 */
+@font-face {
+    font-family: 'KCC-eunyoung'; 
+    src: url('../css/font/KCC-eunyoung-Regular.woff') format('woff'); 
+    font-weight: normal; 
+    font-style: normal;
+} 
+
+/* NanumBarunGothic 기본 폰트 */
+@font-face{
+	font-family: "NanumBarunGothic";
+	src: url('../css/font/NanumBarunGothic.eot') format('eot');
+	src: url('../css/font/NanumBarunGothic.woff') format('woff');
+}
+/* NanumBarunGothic 굵은 폰트 */
+@font-face{
+	font-family: "NanumBarunGothicBold";
+	src: url('../css/font/NanumBarunGothicBold.eot') format('eot');
+	src: url('../css/font/NanumBarunGothicBold.woff') format('woff');
+}
+
+   @font-face {
+    font-family: 'NanumBarunGothicLight';
+    src: url('../css/font/NanumBarunGothicLightSubset.eot');
+    src: url('../css/font/NanumBarunGothicLightSubset.eot?#iefix') format('embedded-opentype'),
+         url('../css/font/NanumBarunGothicLightSubset.woff2') format('woff2'),
+         url('../css/font/NanumBarunGothicLightSubset.woff') format('woff'),
+         url('../css/font/NanumBarunGothicLightSubset.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: 'NanumBarunGothicUltraLight';
+    src: url('../css/font/NanumBarunGothicUltraLightSubset.eot');
+    src: url('../css/font/NanumBarunGothicUltraLightSubset.eot?#iefix') format('embedded-opentype'),
+         url('../css/font/NanumBarunGothicUltraLightSubset.woff2') format('woff2'),
+         url('../css/font/NanumBarunGothicUltraLightSubset.woff') format('woff'),
+         url('../css/font/NanumBarunGothicUltraLightSubset.ttf') format('truetype');
+   }
+
+   
+
+/* 정렬 */
+.t_alCenter{text-align:center}
+.t_alRight{text-align:right}
+.fl{float:left}
+.fr{float:right}
+
+.hideTxt{position:absolute; top:-999999px; z-index:-1; visibility:hidden}
+
+.ls_base{letter-spacing:0}
+.tx_ell{overflow:hidden;text-overflow:ellipsis; white-space:nowrap}
+.show{display:block}
+.hide{display:none}
+
+
+/* all */
+input::-webkit-input-placeholder {font-family: 'NanumBarunGothic' , 'Sans-serif'; letter-spacing:-.5px; font-size:18px; color:#bbbbbb}
+input::-moz-placeholder {font-family: 'NanumBarunGothic' , 'Sans-serif'; letter-spacing:-.5px; font-size:18px; color:#bbbbbb} /* firefox 19+ */
+input::-ms-input-placeholder {font-family: 'NanumBarunGothic' , 'Sans-serif'; letter-spacing:-.5px; font-size:18px; color:#bbbbbb} /* ie */
+input:-moz-placeholder { font-family: 'NanumBarunGothic' , 'Sans-serif'; letter-spacing:-.5px; font-size:18px; color:#bbbbbb}
+input.type01:-ms-input-placeholder,input.type03:-ms-input-placeholder,input.type04:-ms-input-placeholder{color:#bbbbbb;}
+
+
+textarea::-webkit-input-placeholder {color:#bbbbbb !important}
+textarea:-moz-placeholder {color:#bbbbbb !important}   /* Firefox 18- */
+textarea::-moz-placeholder {color:#bbbbbb !important}  /* Firefox 19+ */
+textarea:-ms-input-placeholder{color:#bbbbbb !important}

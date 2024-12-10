@@ -1,0 +1,5262 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="com.nexwrms.core.context.AppContext"%>
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants"%>
+
+<link type="text/css" rel="stylesheet" href="/css/slick.css">
+<link type="text/css" rel="stylesheet" href="/css/product_detail_new.css">
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars-theme-round.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+<script type="text/javascript" src="/js/lib/slick.min.js"></script>
+
+<!-- 무상교체서비스 제외처리 -->
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyyMMdd" var="toDay" />
+<!-- 무상교체서비스 제외처리 -->
+
+<!-- Google Tag Manager (noscript) 20240229-->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZDR68JW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W52NN6B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- ************************헤더영역************************ -->
+<%@ include file="/WEB-INF/view/header.jsp"%>
+<!-- ************************ 헤더영역************************ -->
+
+<div class="header-choice-size">
+	<div class="choice-size-inner">
+		<ul id="carSearchParamView"></ul>
+		<div class="btn-box">
+			<a onclick="openSizeFinder( 'num'  )"><img  src="/img/product/btn_rescan.jpg" alt="다시 검색하기" style="cursor:pointer;"/></a>
+		</div>
+	</div>
+</div>
+
+<div class="product-detail-top">
+	<div class="step-nav">
+		<ul>
+			<li>Step 1. 상품 선택</li>
+			<li class="active">Step 2. 옵션 선택</li>
+			<li>Step3. 주문 및 결제</li>
+		</ul>
+	</div>
+	<div class="product-detail-wrap">
+		<div class="shoping-info-section">
+			<div class="product-image-wrap">
+				<div class="proThum">
+					<ul>
+						<!-- 렌탈이 있을경우 -->
+						<!-- 쿠폰적용및 cms 이미지 oms 로 이동  -->
+						<c:forEach var="tireImg" items="${tireImgList}" varStatus="status">
+							<c:if test="${status.count != 4}">
+								<li><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${tireImg}" alt="타이어이미지" /></li>
+							</c:if>
+							<c:if test="${status.count == 4}">
+								<li>
+									<div class="pattern">
+										<span class="mask"></span>
+										<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${tireImg}" alt="" />
+									</div>
+								</li>
+							</c:if>
+						</c:forEach>
+					</ul>
+					<div class="slide-rang">
+						<div id="slideBar" ></div>
+					</div>
+					<div class="product-type">
+						<div class='review' id="reviewTab">
+							<span id="reviewTabStarPoint" class="star point${resultMapCom.reviewGrdPtImg*10}"></span>
+							<span id="reviewTabScore" class='score'>${resultMapCom.reviewGrdPt}</span>
+							<span id="reviewTabCnt" class='cnt'>(${resultMapCom.reviewCnt})</span>
+						</div>
+
+						 ${resultMapCom.classCdNm}· ${resultMapCom.seasonCdNm}
+					</div>
+				</div> <!-- proThum -->
+
+			</div>
+			<div class="shoping-detail">
+				<c:if test="${bestYn == 'Y' || hitYn == 'Y' || rcmdYn == 'Y' || recomYn == 'Y'}">
+				</c:if>
+				<div class="stateIcon">
+					<ul class = 'stateIcon01'>
+						<!-- 히트-->
+						<c:if test="${resultMapCom.hotYn eq 'Y'}">
+							<li><span class="badge-hot"></span></li>
+						</c:if>
+						<!-- 베스트-->
+						<c:if test="${resultMapCom.rcmdYn eq 'Y' }">
+							<li><span class="badge-best"></span></li>
+						</c:if>
+
+					</ul>
+				</div>
+				<div class="product-slogan">${resultMapCom.stpntCont}</div>
+				<div class="product-logo">
+					<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${logoDtlImgUrl}" alt="" />
+				</div>
+
+				<div class="product-size"></div>
+				<!-- <a class="buy_button" id="btnBuyO2o"><img src="/img/product/btn_o2o.png"></a> -->
+
+				<!-- 주문서 클릭하면 나오는 영역 -->
+				<div class="orderWrap_new">
+					<!-- tabs -->
+					<div class="tabsWrap">
+						<ul class="tabs">
+							<li class="active" rel="tab04" id="o2oSystem">구매하기</li>
+							<li class="" rel="tab05" id="rental">렌탈하기</li>
+						</ul>
+					</div>
+					<!-- tabs -->
+
+					<!-- tabcontents -->
+					<div class="tabContentWrap">
+						<!-- tab04-->
+						<div id="tab04" class="ptabContent">
+							<div class="orderCheckWrap">
+								<div class="orderOptions" >
+									<dl>
+										<dt>구매 혜택</dt>
+										<dd>
+											<c:choose>
+												<c:when test="${fn:length(resultMapCom.custGrpCd) > 0 }">
+													제휴할인가
+												</c:when>
+												<c:otherwise>
+													<c:if test="${resultMapCom.petternCd.indexOf('NFERA') > -1 || resultMapCom.petternCd.indexOf('AU7') > -1}">
+														이벤트할인가
+													</c:if>
+													<c:if test="${resultMapCom.petternCd.indexOf('NFERA') <= -1 && resultMapCom.petternCd.indexOf('AU7') <= -1}">
+														이벤트할인가
+													</c:if>
+												</c:otherwise>
+											</c:choose>
+											&nbsp;&nbsp;&nbsp;<a href="javascript:;" id="coupon" style="display:none;"><img src="/img/product/get_coupon.jpg"  alt="쿠폰 받기"/></a>
+										</dd>
+									</dl>
+									<dl>
+										<dt>타이어 장착</dt>
+										<dd>무료(TPMS 탈장착비 포함)</dd>
+									</dl>
+									<dl>
+										<dt>항균연막탈취</dt>
+										<dd>무료</dd>
+									</dl>
+									<dl>
+										<dt>GO 서비스<br>(방문장착)</dt>
+										<dd><b>출장비 무료 이벤트 <span style="text-decoration:line-through; text-decoration-color:red; text-decoration-thickness:2px;">50,000원</span></b></dd>
+									</dl>
+								</div>
+								<hr/>
+								<div class="orderCheck" id="o2oQty">
+									<dl>
+										<dt>구매수량</dt>
+										<dd>
+											<input type='radio' name='o2oQtyRadio' id='radio02' value='02'><label for='radio02'>2본</label>
+											<input type='radio' name='o2oQtyRadio' id='radio04' value='04'><label for='radio04'>4본</label>
+										</dd>
+									</dl>
+
+								 	<!-- 상품옵션 들어올시 제거 되야함 -->
+								 	<dl >
+										<dt>얼라인먼트 정비</dt>
+										<dd>
+											<div class="alignment_002">
+												최대 80% 할인! (국산차 / 수입차 동일)
+											</div>
+										</dd>
+									</dl>
+									<!-- 상품옵션 들어올시 제거 되야함 -->
+
+									<!-- 추가될 내용 : 상품옵션 -->
+									<c:forEach var="opt" items="${optList}" varStatus="status">
+										<c:if test="${status.count > 0 }" >
+											<dl class='serviceTemp'>
+												<dt>
+													<span class="label">${opt.optPlcNm } <span class="info-ico" ></span></span>
+												</dt>
+												<dd>
+													<div class='alignment_001 optRadio' >
+														<input type='radio' name='o2oOptRadio_${status.count}' id='radioOpta_${status.count}' value='Y'>
+														<label for='radioOpta_${status.count}'>
+															<span class="price-actual">
+																<fmt:formatNumber value="${opt.optPchsPrc}" pattern="#,###" /> 원  ${opt.bfComment}
+															</span>
+														</label>
+														<input type='radio' name='o2oOptRadio_${status.count}' id='radioOptb_${status.count}' value='N' checked><label for='radioOptb_${status.count}'>${opt.afComment}</label>
+														<input type='hidden' name='o2oPlcNo_${status.count}' value="${opt.optPlcNo}" >
+														<input type='hidden' name='o2oOptPchsPrc_${status.count}' value="${opt.optPchsPrc}" >
+														<input type='hidden' name='o2oOptPlcNm_${status.count}' value="${opt.optPlcNm}" >
+														<input type='hidden' name='o2oOptBfComment_${status.count}' value="${opt.bfComment}" >
+														<input type='hidden' name='o2oOptAfComment_${status.count}' value="${opt.afComment}" >
+													</div>
+												</dd>
+											</dl>
+										</c:if>
+									</c:forEach>
+									<!-- 추가될 내용 : 상품옵션 -->
+									<dl style="display: none;">
+										<c:choose>
+											<c:when test="${officerCd eq ''}">
+												<dt>판매금액</dt>
+												<dd id="bassSaleFeeAmt">0000000</dd>
+											</c:when>
+											<c:otherwise>
+												<dt>임직원가</dt>
+												<dd id="officerFeeAmt">0000000</dd>
+											</c:otherwise>
+										</c:choose>
+									</dl>
+									<dl style="display: none;">
+										<dt>할인</dt>
+										<dd id="discFeeAmt">0000000</dd>
+									</dl>
+								</div>
+								<div class="price" id="onlyPriceDiv">
+									<dl>
+										<dt>할인가</dt>
+										<dd>
+											<span class="only_price"></span>
+										</dd>
+									</dl>
+									<span id="only4descText" class="desc" style="display:none;"></span>
+								</div>
+
+								<div class="price" id="salePriceDiv" style="display:none;">
+									<dl>
+										<dt>할인가</dt>
+										<dd>
+											<span class="org_price"></span>
+											<span class="ext_price"></span>
+										</dd>
+									</dl>
+
+									<div>
+										<span id="sale4descText" class="desc" style="display:none;"></span>
+									</div>
+								</div>
+
+								<div class="btnArea type05">
+									<button type="button" class="type05 center w387" id="rentalCounsel1">구매상담</button>
+									<button type="button" class="type02 center w387" id="productCart1">장바구니</button>
+									<button type="button" class="type01 center w387" id="productOrder1">주문하기</button>
+								</div>
+							</div>
+
+						</div>
+						<!-- tab04-->
+
+						<!-- tab05 자유렌탈 & 알뜰렌탈-->
+						<div id="tab05" class="ptabContent" style="display: none;">
+							<div class="rentalCheckWrap">
+								<ul id="createRentalList">
+									<li>
+										<div class="rentalList">
+											<dl>
+												<dt>렌탈수량</dt>
+												<dd id='quantityRen'>
+													<input type='radio' name='quantity' id='quantity01' value='01'><label for='quantity01'><span>1본</span></label>
+													<input type='radio' name='quantity' id='quantity02' value='02'><label for='quantity02'><span>2본</span></label>
+													<input type='radio' name='quantity' id='quantity03' value='03'><label for='quantity03'><span>3본</span></label>
+													<input type='radio' name='quantity' id='quantity04' value='04'><label for='quantity04'><span>4본</span></label>											</dd>
+											</dl>
+											<dl>
+												<dt>렌탈기간</dt>
+												<dd id="termRen">
+													<input type="radio" name="term" id="term12" value="12" class="type06"><label for="term12"><span>12개월</span></label>
+													<input type="radio" name="term" id="term24" value="24" class="type06"><label for="term24"><span>24개월</span></label>
+													<input type="radio" name="term" id="term36" value="36" class="type06"><label for="term36"><span>36개월</span></label>
+													<!-- <input type="radio" name="term" id="term48" value="48" class="type06"><label for="term48"><span>48개월</span></label> -->
+												</dd>
+											</dl>
+											<dl>
+												<dt>렌탈등록비</dt>
+												<dd id='feeRen'>
+													<input type='radio' name='term000' id='termradio0100' value='01'><label for='termradio0100'>0</label>
+													<input type='radio' name='term000' id='termradio02000' value='02'><label for='termradio02000'>50000</label>
+												</dd>
+											</dl>
+											<dl>
+												<dt>렌탈상품</dt>
+												<dd id="rentalStyleWrap">
+													<div>
+														<select class="wide rentalstyle" name="rentaltype">
+															<option value="rentaltype00">자유렌탈</option>
+															<option value="freeRental111">자유렌탈111</option>
+														</select>
+													</div>
+													<div class="rental-option-detail-wrap">
+													<ul class="rental-option-detail" id="tab_rentaltype00">
+
+													<!-- 무상교체서비스 제외처리 -->
+													<c:if test="${toDay < 20220101}">
+
+														<li id="tierFreeSelect">
+															<span class="label">타이어 무상교체 <span class="info-ico" tip='tipshow01' ></span></span>
+															<span class="retn-opt-select">
+																<select class="small wide rent-opt" name="tierFrChg" onchange="setSelCodeNew();"></select>
+															</span>
+															<!-- <span class="retn-opt"><span class="num">3</span>회</span> -->
+														</li>
+													</c:if>
+
+														<li id="freeAlinSelect">
+															<span class="label">얼라인먼트서비스 <span class="info-ico" id='info_tipshow03'></span></span>
+															<span class="retn-opt-select">
+																<select class="small wide rent-opt" name="freeAlin" onchange="setSelCodeNew();"></select>
+															</span>
+														</li>
+														<li id="freeGpsChangSelect">
+															<span class="label">무상 위치교환 <span class="info-ico" tip='tipshow04' id='info_tipshow04' ></span></span>
+															<span class="retn-opt-select">
+																<select class="small wide rent-opt" name="freeLoc" onchange="setSelCodeNew();"></select>
+															</span>
+														</li>
+
+														<li id="freeCheckSelect">
+															<span class="label">Check서비스 <span class="info-ico" tip='tipshow06' id='info_tipshow06'></span></span>
+															<span class="retn-opt-select">
+																<select class="small wide rent-opt" name="freeCheck" onchange="setSelCodeNew();"></select>
+															</span>
+														</li>
+													</ul>
+													</div>
+
+													<!--tipShow-->
+													<div class="tipShow tip01" id="tipshow01">
+														<header>
+															<h3 class="type06">타이어 무상 교체 서비스</h3>
+														</header>
+														<h3 class="type05">
+															<img src="/img/title/h3_title_04.png"
+																alt="고객님께서 렌탈 계약하신 타이어와 동일한 규격의 타이어로 무상교체해드립니다.">
+														</h3>
+
+														<div class="info type01">
+															<dl>
+																<dt>01</dt>
+																<dd class="ver01">렌탈중인 제품이 단종 될 경우 동급의 제품으로 변경되어
+																	제공될 수 있습니다.</dd>
+															</dl>
+															<dl>
+																<dt>02</dt>
+																<dd class="ver01">TPMS, 런플랫 타이어의 경우 장착점에서 추가 비용이
+																	과금될 수 있습니다.</dd>
+															</dl>
+															<dl>
+																<dt>03</dt>
+																<dd>
+																	계약기간 내 렌탈 타이어가 마모한계선 이하의 마모진행, 주행 불가능한 파손의 경우는 <br>언제나
+																	신청하실 수 있으며, 계약기간 종료 6개월 전 ~ 계약 만료일까지는 조건없이 신청이 가능합니다.
+																</dd>
+															</dl>
+														</div>
+													</div>
+													<!--tipShow-->
+													<!--tipShow-->
+													<div class="tipShow tip02" id="tipshow02">
+														<header>
+															<h3 class="type06">엔진오일 교체 서비스</h3>
+														</header>
+
+														<h3 class="type05">
+															<img src="/img/title/h3_title_05.png"
+																alt="고객님께서 렌탈 계약하신 차종에 맞는 엔진오일 교체 서비스를 제공해드립니다.">
+														</h3>
+
+														<div class="info type01">
+															<dl>
+																<dt>01</dt>
+																<dd>
+																	제공되는 엔진오일 부품(엔진오일, 오일크리너, 에어필터)는 순정이 아닌 <br>고객님의
+																	차종에 맞는 부품이 제공됩니다.
+																</dd>
+															</dl>
+															<dl>
+																<dt>02</dt>
+																<dd>
+																	수입차량의 경우 부품만 제공되며 교체 공임은 교체점에서 납부하셔야 합니다. <br>(수입차
+																	가능 교체점 확인 필요)
+																</dd>
+															</dl>
+														</div>
+													</div>
+													<!--tipShow-->
+													<!--tipShow-->
+													<div class="tipShow tip03" id="tipshow03">
+														<header>
+															<h3 class="type06">무상 얼라인먼트 서비스</h3>
+														</header>
+
+														<div class="content">
+															<img src="/img/product/pro_info_03.jpg" alt="무상 얼라인먼트">
+														</div>
+													</div>
+													<!--tipShow-->
+													<!--tipShow-->
+													<div class="tipShow tip04" id="tipshow04">
+														<header>
+															<h3 class="type06">무상 위치교환 서비스</h3>
+														</header>
+
+														<div class="content">
+															<img src="/img/product/pro_info_04.jpg" alt="무상 위치교환">
+														</div>
+
+													</div>
+													<!--tipShow-->
+													<!--tipShow-->
+													<div class="tipShow tip05" id="tipshow05">
+														<header>
+															<h3 class="type06">방문점검서비스</h3>
+														</header>
+
+														<h3 class="type05">
+															<img src="../img/title/h3_title_03.png"
+																alt="찾아가는 점검서비스">
+														</h3>
+
+														<div class="info">
+															<dl>
+																<dt>차량 점검</dt>
+																<dd>엔젠오일 / 배터리 / 냉각수,부동액 / 통화장치 / 윈도우 브러시</dd>
+															</dl>
+															<dl>
+																<dt>타이어 점검</dt>
+																<dd>타이어 마모, 편마모 / 타이어 손상부위 점검</dd>
+															</dl>
+															<dl>
+																<dt>스페셜 서비스</dt>
+																<dd>항균 연막탈취 / 워셔액 점검,보충 / 타이어 공기압 점검, 보충</dd>
+															</dl>
+														</div>
+													</div>
+													<!--tipShow-->
+													<!--tipShow-->
+													<div class="tipShow tip03" id="tipshow06">
+														<header>
+															<h3 class="type06">Check서비스</h3>
+														</header>
+
+														<div class="content">
+															<img src="/img/product/pro_info_06.jpg" alt="Check서비스">
+														</div>
+													</div>
+													<!--tipShow-->
+												</dd>
+											</dl>
+										</div>
+									</li>
+								</ul>
+								<div class="price">
+									<dl style="display:none;">
+										<dt>추가렌탈료</dt>
+										<dd id="plusFreeRentalAmt">0000000</dd>
+									</dl>
+									<dl style="display:none;">
+										<dt>할인금액</dt>
+										<dd id="saleFreeRentalAmt">0000000</dd>
+									</dl>
+									<dl>
+										<dt>총 납입금액</dt>
+										<dd id="totalFreeRentalAmt">￦0,000,000</dd>
+									</dl>
+									<dl>
+										<dt>월 렌탈료</dt>
+										<dd >
+											<span id="monthFreeRentalAmt">￦00,000</span>
+											<span class="card_desc">※ 하나카드 최대 1만6천원 할인<br/>※ 국민카드 최대 2만원 할인</span>
+										</dd>
+									</dl>
+								</div>
+								<div class="btnArea type05">
+									<button type="button" class="type05 center w387" id="rentalCounsel2">렌탈상담</button>
+									<button type="button" class="type02 center w387" id="productCart2">장바구니</button>
+									<button type="button" class="type01 center w387" id="productOrder2">주문하기</button>
+								</div>
+							</div>
+						</div> <!-- ptabContent -->
+					</div>
+				</div>
+			</div> <!-- shoping-detail -->
+		</div>
+	</div>
+</div>
+
+<!-- layerPopup > 비회원 주문 조회 // -->
+<div class="popupWrap type03 md-modal-3 md-effect-1" id="modal-nonCustContinue">
+	<div class="modal-inner">
+		<!-- md-show -->
+		<header class="noLine">
+			<a href="#" class="layPopClose md-close"></a>
+		</header>
+		<!--contents-->
+		<div class="popContents">
+			<div class="header">
+				<img src="/img/product/no_coupon.png"/>
+				비회원으로 주문하시면 <br/>
+				쿠폰할인을 받을 수 없습니다.
+			</div>
+			<div class="agreement">
+				<div class="agreement-item">
+					개인정보 수집 및 이용<span class="red">(필수)</span>
+					<a href="javascript:policyLayPopOpen('modal-privacyPolicy');">view</a>
+				</div>
+				<div class="agreement-item">
+					개인정보 처리업무 위탁 동의<span class="red">(필수)</span>
+					<a href="javascript:policyLayPopOpen('modal-consignment');">view</a>
+				</div>
+			</div>
+			<div class="btnArea">
+				<button type="button" class="type04 btn-nouser" onclick="javascript:nonCustOrderPass();">모두 동의 후 비회원 주문  </button>
+				<button type="button" class="type04 btn-login" onclick="javascript:nonCustLogin();">회원 로그인</button>
+			</div>
+		</div>
+		<!--contents-->
+	</div>
+</div>
+		<!-- ADN 상품패널 설치 start -->
+		<div id="suggestad_wrap_container"></div>
+		<script type="text/javascript">
+		var adn_suggestad_param = adn_suggestad_param || [];
+		adn_suggestad_param.push([{
+		 ui:'107378',	
+		 ci:'1073780001',
+		 gi:'102639'
+		}]);
+		</script>
+		<script type="text/javascript" src="//fin.rainbownine.net/js/across_adn_recommend_pc_ad_1.0.5.js"></script>
+		<!-- ADN 상품패널 설치 end -->
+		<!-- 상품정보 Tab-->
+		<div class="productInfoView" id="tabLoc">
+			<div class="productInfo">
+
+				<!-- tabs -->
+				<div class="tabsWrap">
+					<ul class="tabs">
+						<li id="tab3" class="active" rel="tab03" onclick="javascript:getReviewList(1);">구매후기</li>
+						<li id="tab1" class="" rel="tab01">상품정보</li>
+						<li id="tab2" class="" rel="tab02">계약/배송/반품/교환/AS</li>
+					</ul>
+				</div>
+				<!-- tabs -->
+
+				<!-- tab03-->
+				<div id="tab03" class="tabContent">
+					<div class="reviewWrap2">
+						<div class="review-section">
+
+							<!--review-sidebar -->
+							<div class="review-sidebar">
+								<div class="sidebar-inner">
+									<div class="side-title-wrap">
+										<span class="side-title">고객 총 평점</span>
+										<span class="point" id ="totStar">4.8</span>
+										<div class="star">
+											<div class="progrss-bar" style="width:90%" id ="totStarImg"></div>
+										</div>
+									</div>
+									<div class="review-product">
+										<span>리뷰제품</span>
+										<select id="ptList">
+											<c:forEach var="ptAll" items="${patternCdAll}">
+												<c:if test="${ptAll.petternCdNm ne \"N'FERA AU7\"}">
+													<option value="${ptAll.petternCdNm}" data-dp="${ptAll.dpPrNo}" data-it="${ptAll.itemCd}">${fn:replace(ptAll.petternCdNm, "\'","")}</option>
+												</c:if>
+											</c:forEach>
+										</select>
+									</div>
+
+									<hr/>
+
+									<div class="review-order">
+										<div><input type='radio' name='reviewOrder' id='reviewOrderItem02' value='reg' checked><label for='reviewOrderItem02'>최신순</label></div>
+										<div><input type='radio' name='reviewOrder' id='reviewOrderItem01' value='rcmd'><label for='reviewOrderItem01'>추천순</label></div>
+										<div><input type='radio' name='reviewOrder' id='reviewOrderItem03' value='starsHigh'><label for='reviewOrderItem03'>평점 높은 순</label></div>
+									</div>
+
+									<div class="review-filter-type">
+										<div><input type='radio' name='reviewFilterType' id='reviewFilterType01' value='' checked><label for='reviewFilterType01'>전체</label></div>
+										<div><input type='radio' name='reviewFilterType' id='reviewFilterType02' value='O'><label for='reviewFilterType02'>구매</label></div>
+										<div><input type='radio' name='reviewFilterType' id='reviewFilterType03' value='R'><label for='reviewFilterType03'>렌탈</label></div>
+									</div>
+
+									<hr/>
+
+									<div class="review-filter-service">
+										<div><input type='checkbox' name='reviewFilterService' id='reviewFilterService01' value='Go'><label for='reviewFilterService01'>GO서비스만 보기</label></div>
+										<div><input type='checkbox' name='reviewFilterService' id='reviewFilterService02' value='File'><label for='reviewFilterService02'>포토 리뷰만 보기</label></div>
+									</div>
+
+									<hr/>
+									<div class="review-side-btn">
+										<button class="reset-setting" id="btnReset">설정 초기화</button>
+									</div>
+								</div>
+							</div>
+							<!--review-sidebar -->
+							<!--review-->
+							<div class="review-container">
+								<div class="photo-gallery" id="mediaReview">
+<!-- 									<a href="javascritp:;" onclick="open_review_item();"><img src="/img/product/review_01.jpg"></a> -->
+<!-- 									<a href="javascritp:;" onclick="open_review_gallery();"><img src="/img/product/review_01.jpg"><div class="more"><div class="num">149</div><span>더보기+</span></div></a> -->
+								</div>
+								<div class="total"></div>
+
+								<!--class="faq_box"-->
+								<div> <!-- class="accordion"> -->
+									<ul id="reviewBox">
+										<!--	 구매 후기 영역	-->
+									</ul>
+								</div>
+
+								<!--paging-->
+								<div class="paging" id="paging"></div>
+								<!--paging-->
+							</div>
+							<!--review-->
+						</div>
+					</div>
+				</div>
+				<!-- tab03-->
+				
+				<!-- tab01-->
+				<div id="tab01" class="tabContent">
+					<div class="videoWrap">
+					    <c:choose>
+							<c:when test="${resultMapCom.movUrl != '' && resultMapCom.movUrl != null && resultMapCom.movUrl.indexOf('http') > -1  }">
+								<iframe width="840" height="472" src="${resultMapCom.movUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</c:when>
+							<c:otherwise>
+								<c:if test="${resultMapCom.movUrl != '' && resultMapCom.movUrl != null }" >
+									<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>/img/product/${resultMapCom.movUrl}" alt="" />
+								</c:if>
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<div class="proInfoView detailImg">
+						<c:if test="${prodDtlInfoImg != '' && prodDtlInfoImg != null }" >
+							<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${prodDtlInfoImg}" alt="타이어 상세정보" />
+						</c:if>
+					</div>
+				</div>
+				<!-- tab01-->
+
+				<!-- tab02-->
+				<div id="tab02" class="tabContent">
+					<div class="totalService">
+						<h3>
+							<img src="/img/product/info_title_04.png" alt="주문에서 장착 그리고 정기점검까지!" />
+						</h3>
+						<div class="service">
+							<dl>
+								<dt>
+									<span>01</span>타이어주문
+								</dt>
+								<dd>
+									인터넷으로 <br />간편하게 주문
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<span>02</span>무료배송
+								</dt>
+								<dd>
+									내가 지정한 전문 <br />렌탈점으로 배송
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<span>03</span>도착문자발송
+								</dt>
+								<dd>
+									주문제품 전문 렌탈점에 <br />도착완료 알림
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<span>04</span>무료장착
+								</dt>
+								<dd>
+									주문한 <br />전문 렌탈점 방문
+								</dd>
+							</dl>
+
+							<dl>
+								<dt>
+									<span>05</span>친절한 해피콜
+								</dt>
+								<dd>
+									렌탈계약 확인 및 <br />만족도 전화
+								</dd>
+							</dl>
+
+							<dl>
+								<dt>
+									<span>06</span>안전운전
+								</dt>
+								<dd>
+									새 타이어로 <br />언제나 안전운전
+								</dd>
+							</dl>
+
+							<dl>
+								<dt>
+									<span>07</span>주기적 정기점검
+								</dt>
+								<dd>정기 점검 서비스</dd>
+							</dl>
+						</div>
+					</div>
+
+					<div class="proInfoView">
+						<dl>
+							<dt class="fl">계약</dt>
+							<dd>
+								<div class="info">
+									렌탈료는 중도완납 하실 수 있습니다. <br /> 계약기간 內 해지 시 위약금이 발생합니다. <br /> (위약금
+									: 잔여 렌탈료 40%, 각종 서비스 비용(장착비, 엔진오일&타이어 무상교체 등의 서비스 비용) 일체) <br />
+									위의 기재된 사항은 회사 내부 사정에 따라서 변경될 수 있습니다.
+								</div>
+							</dd>
+						</dl>
+
+						<dl>
+							<dt class="fl">배송/장착</dt>
+							<dd>
+								<div class="info">
+									전국 무료 배송<br /> 배송/장착 소요시간<br /> (3일 이내 타이어 렌탈 전문점(장착점) 도착, 배송
+									지연 시 별도 안내, 주말/공휴일 제외)
+								</div>
+							</dd>
+						</dl>
+
+						<dl>
+							<dt class="fl">반품/교환</dt>
+							<dd>
+								<div class="info">
+									반품/교환 가능한 경우<br /> - 약관에 의하여 청약철회가 가능한 경우 반품, 교환이 가능합니다.<br />
+									- 제품의 하자, 배송오류 등의 이유로 반품하실 경우, 반품 배송비는 무료입니다.<br /> - 고객님의 오주문
+									및 단순한 변심에 의해 상품의 교환 또는 반품 요청 시 왕복 배송비용은 고객님 부담이오니, 양해하여 주시기
+									바랍니다.<br />
+									<br /> 반품/교환 불가능한 경우<br /> - 구매자의 사용 또는 일부 소비에 의하여 상품가치가 현저히
+									감소한 경우<br /> - 고객님의 책임으로 인한 상품 멸실 또는 상품이 훼손된 경우<br /> - 반품/교환
+									배송비(왕복) : 1만원(개당)
+								</div>
+							</dd>
+						</dl>
+
+						<dl>
+							<dt class="fl">A/S</dt>
+							<dd>
+								<div class="info">
+									A/S 문의 : 고객센터(1855-0100) <br /> A/S 지점 : 넥센타이어에서 지정한 타이어 렌탈
+									전문점(장착점)
+								</div>
+							</dd>
+						</dl>
+
+						<dl>
+							<dt class="fl">소유권 이전</dt>
+							<dd>
+								<div class="info">
+									소유권 이전은 장착완료일로부터 5년 이후 이전됩니다. <br /> 계약기간 종료 후 렌탈료는 청구되지 않으며,
+									타이어는 자가관리 통한 사용이 가능합니다.
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+				</div>
+				<!-- tab02-->
+				
+			</div>
+		</div>
+			<!-- ************************푸터영역************************ -->
+			<%@ include file="/WEB-INF/view/footer.jsp"%>
+			<!-- ************************ /푸터영역************************ -->
+
+	</div>
+	<!--subContentsWrap-->
+
+</div>
+<!-- allWrap 끝 -->
+
+<!-- ###################################### layerPopup 영역 ######################################  -->
+
+<!--loading -->
+<div class="loadingWrap" id="loadingWrapnew" style="display: none;">
+	<div class="loading">
+		<img src="/img/common/loading.gif" alt="loading" class="loadImg">
+		<div class="loadingBg"></div>
+	</div>
+</div>
+<!--loading -->
+
+<!-- layerPopup // -->
+<div class="popupWrap md-modal md-effect-1" id="carInfoSearch">
+	<!-- md-show -->
+	<header>
+		<h2>
+			렌탈/구매 검색안내
+		</h2>
+	</header>
+
+	<!--contents-->
+	<div class="popContents">
+		<div class="alertView">
+			<p class="desc type02">주문 진행은 정확한 차량번호 또는 차종 검색 이후에 가능합니다(사이즈
+				검색제외).</p>
+
+			<div class="resultView alert"></div>
+
+			<div class="btnArea">
+				<button type="button" class="type04 w50per" onclick="javascript:fn_carInfoSearchClose();">취소<i class="ico01"></i></button>
+				<button type="button" class="type01 w50per" onclick="javascript:fn_carInfoSearchPopGo();">차량검색<i class="ico01"></i></button>
+			</div>
+		</div>
+	</div>
+	<!--contents-->
+</div>
+<!-- layerPopup // -->
+
+<!-- layerPopup // -->
+<div class="popupWrap md-modal" id="o2ojangchackGuide">
+	<!-- md-show -->
+	<header>
+		<h2>
+			장착 서비스 이용가이드 <a href="#" class="layPopClose md-close"></a>
+		</h2>
+	</header>
+
+
+	<!--contents-->
+	<div class="popContents type03">
+		<div class="tipCon">
+			<h3>방문장착 서비스</h3>
+
+			<p>차량키를 받지 않고 차량 장소(위치)차량번호만 알려주면 원하는 시간대에 타이어 교체 서비스</p>
+		</div>
+
+		<div class="tipCon">
+			<h3>픽업&딜리버리 서비스</h3>
+
+			<p>방문장착 서비스가 불가한 현장이거나 차량 이동이 필요한 경우 픽업 후 다시 딜리버리 해주는 서비스</p>
+		</div>
+
+		<div class="tipCon">
+			<h3>전문점 장착 서비스</h3>
+
+			<p>편하신 시간에 가까운 전문점에 방문해서 받는 서비스</p>
+		</div>
+
+		<div class="tipCon">
+			<h3>
+				현재 O2O 장착 서비스 가능 지역
+			</h3>
+
+			<p>
+				더 많은 고객들의 편의를 위해 서비스 권역을 확대 중에 있습니다. 많은 관심 부탁 드립니다.
+			</p>
+		</div>
+
+		<!-- 서비스 가능 지역 -->
+		<div class="serviceAvail">
+			<p><span class="storeAv">서울시</span></p>
+			<p><span class="storeAv">경기도</span></p>
+			<p><span class="storeAv">인천시</span></p>
+			<p><span class="storeAv">부산시</span></p>
+			<p><span class="storeAv">대구시</span></p>
+			<p><span class="storeAv">대전시</span></p>
+			<p><span class="storeAv">광주시</span></p>
+			<p><span class="storeAv">울산시</span></p>
+			<p><span class="storeAv">세종시</span></p>
+			<p><span class="storeAv">거제시</span></p>
+			<p><span class="storeAv">경산시</span></p>
+			<p><span class="storeAv">경주시</span></p>
+			<p><span class="storeAv">계룡시</span></p>
+			<p><span class="storeAv">공주시</span></p>
+			<p><span class="storeAv">광양시</span></p>
+			<p><span class="storeAv">구미시</span></p>
+			<p><span class="storeAv">김제시</span></p>
+			<p><span class="storeAv">김천시</span></p>
+			<p><span class="storeAv">김해시</span></p>
+			<p><span class="storeAv">나주시</span></p>
+			<p><span class="storeAv">논산시</span></p>
+			<p><span class="storeAv">당진시</span></p>
+			<p><span class="storeAv">밀양시</span></p>
+			<p><span class="storeAv">사천시</span></p>
+			<p><span class="storeAv">상주시</span></p>
+			<p><span class="storeAv">서산시</span></p>
+			<p><span class="storeAv">순천시</span></p>
+			<p><span class="storeAv">아산시</span></p>
+			<p><span class="storeAv">양산시</span></p>
+			<p><span class="storeAv">여수시</span></p>
+			<p><span class="storeAv">영천시</span></p>
+			<p><span class="storeAv">원주시</span></p>
+			<p><span class="storeAv">익산시</span></p>
+			<p><span class="storeAv">전주시</span></p>
+			<p><span class="storeAv">정읍시</span></p>
+			<p><span class="storeAv">제천시</span></p>
+			<p><span class="storeAv">진주시</span></p>
+			<p><span class="storeAv">창원시</span></p>
+			<p><span class="storeAv">천안시</span></p>
+			<p><span class="storeAv">청주시</span></p>
+			<p><span class="storeAv">춘천시</span></p>
+			<p><span class="storeAv">충주시</span></p>
+			<p><span class="storeAv">통영시</span></p>
+			<p><span class="storeAv">포항시</span></p>
+			<p><span class="storeAv">고령군</span></p>
+			<p><span class="storeAv">고성군</span></p>
+			<p><span class="storeAv">괴산군</span></p>
+			<p><span class="storeAv">군위군</span></p>
+			<p><span class="storeAv">담양군</span></p>
+			<p><span class="storeAv">보은군</span></p>
+			<p><span class="storeAv">산청군</span></p>
+			<p><span class="storeAv">성주군</span></p>
+			<p><span class="storeAv">영동군</span></p>
+			<p><span class="storeAv">영암군</span></p>
+			<p><span class="storeAv">예산군</span></p>
+			<p><span class="storeAv">옥천군</span></p>
+			<p><span class="storeAv">완주군</span></p>
+			<p><span class="storeAv">음성군</span></p>
+			<p><span class="storeAv">의령군</span></p>
+			<p><span class="storeAv">임실군</span></p>
+			<p><span class="storeAv">장성군</span></p>
+			<p><span class="storeAv">장흥군</span></p>
+			<p><span class="storeAv">증평군</span></p>
+			<p><span class="storeAv">진안군</span></p>
+			<p><span class="storeAv">창녕군</span></p>
+			<p><span class="storeAv">청도군</span></p>
+			<p><span class="storeAv">칠곡군</span></p>
+			<p><span class="storeAv">태안군</span></p>
+			<p><span class="storeAv">하동군</span></p>
+			<p><span class="storeAv">함안군</span></p>
+			<p><span class="storeAv">홍성군</span></p>
+			<p><span class="storeAv">화순군</span></p>
+			<p><span class="storeAv">화천구</span></p>
+			<p><span class="storeAv">횡성군</span></p>
+		</div>
+		<!-- 서비스 가능 지역 -->
+	</div>
+	<!--contents-->
+
+	<div class="btnArea type07 center cb">
+		<button type="button" class="type01 w50per" onclick="javascript:fn_o2oOrderGo();">확인<i class="ico01"></i>
+		</button>
+	</div>
+
+</div>
+<!-- layerPopup // -->
+
+<!-- 2019-15-17 layerPopup  일반 차종 사이즈 팝업  -->
+<div class="popupWrap type02 md-modal-3 md-effect-1" id="modal-22">
+	<!-- md-show -->
+	<header>
+		<h2>
+			사이즈
+			<button type="button" id="modal-22-back" class="type19 w100 fr">
+				<i class="ico16"></i> 뒤로가기
+			</button>
+			<a href="#" class="size" id="show022" title="사이즈 확인 툴팁"></a> <a
+				href="#" class="layPopClose md-close"></a>
+		</h2>
+	</header>
+
+	<!--tipShow-->
+	<div class="tipShow type02 tip07" id="tipshow022">
+		<header>
+			<h3 class="type06">타이어 사이즈 확인</h3>
+			<i class="tipOver"></i>
+		</header>
+
+		<img src="/img/product/size.png" alt="타이어 사이즈" />
+	</div>
+	<!--tipShow-->
+
+	<div class="sizeSelectView"></div>
+
+	<!--contents-->
+	<div class="popContents">
+		<div class="alertView">
+			<!-- sizeSelect-->
+
+			<div class="sBoxAll">
+				<!--scrollBox-->
+				<div class="sLeftWrap">
+					<h3 class="type09">렌탈</h3>
+					<!--sLeft-->
+					<div class="sLeft" id="rentalSize"></div>
+					<!--sLeft-->
+				</div>
+				<div class="sRightWrap">
+					<h3 class="type09">구매</h3>
+					<!--sRight-->
+					<div class="sRight" id="o2oSize"></div>
+					<!--sRight-->
+				</div>
+			</div>
+			<!-- sizeSelect-->
+		</div>
+	</div>
+	<!--contents-->
+</div>
+<!-- layerPopup // -->
+
+<!-- 나이스 DNR용 차량사이즈 layerPopup 2019-12-17 // -->
+<div class="popupWrap type02 md-modal-3 md-effect-1" id="modal-23">
+	<!-- md-show -->
+	<header>
+		<h2>
+			차량번호 <a href="#" class="size" id="show01" title="사이즈 확인 툴팁"></a> <a
+				href="#" class="layPopClose md-close"></a>
+		</h2>
+	</header>
+
+	<!--tipShow-->
+	<div class="tipShow type02 tip07" id="tipshow01">
+		<header>
+			<h3 class="type06">타이어 사이즈 확인</h3>
+			<i class="tipOver"></i>
+		</header>
+
+		<img src="../img/product/size.png" alt="타이어 사이즈" />
+	</div>
+	<!--tipShow-->
+
+	<div class="sizeSelectView"></div>
+
+	<!--contents-->
+	<div class="popContents">
+		<div class="alertView">
+			<!-- sizeSelect-->
+			<div class="sBoxAll">
+				<!--scrollBox-->
+				<!--sLeft-->
+				<div class="sLeftWrap">
+					<h3 class="type09">렌탈</h3>
+					<div class="sLeft" id="niceSizeRental">
+						<!-- innerHtml 영역 -->
+					</div>
+				</div>
+				<!--sLeft-->
+				<!--sRight-->
+				<div class="sRightWrap">
+					<h3 class="type09">구매</h3>
+					<div class="sRight" id="niceSizeO2oSystem">
+						<!-- innerHtml 영역 -->
+					</div>
+				</div>
+				<!--sRight-->
+			</div>
+			<!-- sizeSelect-->
+		</div>
+	</div>
+	<!--contents-->
+
+</div>
+<!-- layerPopup // -->
+
+<!-- 후기 팝업 02 -->
+
+<div class="popupWrap md-modal-3 md-effect-1" id="modal-review-detail-view">
+	<header>
+		<span>리뷰 살펴 보기</span>
+		<a href="javascript:;" onclick="close_review_gallery();" class="layPopClose"></a>
+	</header>
+	<div class="modal-body">
+		<div class="review-container">
+			<div class="review-gallery" id="reviewImg">
+
+			</div>
+
+			<div class="review-item" id="reviewPop">
+
+			</div>
+		</div>
+	</div>
+		<div class="review-btns" id="pageReview">
+<!-- 			<button class="btn-prev" id="preClick" value="" data-img="">이전 리뷰 보기</button> -->
+<!-- 			<button class="btn-next" id="postClick" value="" data-img="">다음 리뷰 보기</button> -->
+		</div>
+	</div>
+</div>
+<!-- 후기 팝업 02 //-->
+
+<!-- 후기 팝업 01 -->
+<div class="popupWrap md-modal-3 md-effect-1" id="modal-review-gallery">
+	<header>
+		<span>리뷰 살펴 보기</span>
+		<a href="javascript:;" onclick="close_review_gallery();" class="layPopClose"></a>
+	</header>
+	<div class="modal-body" id="reviewPop2">
+<!-- 		<div class="photo-gallery os-theme-round"> -->
+<!-- 			<a href="javascript:;" onclick="open_review_item();" class="vod"><img src="/img/product/review_01.jpg"></a> -->
+<!-- 			<a href="javascript:;" onclick="open_review_item();"><img src="/img/product/review_01.jpg"></a> -->
+<!-- 		</div> -->
+	</div>
+</div>
+<!-- 후기 팝업 01 //-->
+
+<!-- ###################################### layerPopup 영역 ######################################  -->
+
+
+<!-- ************************로그인팝업************************ -->
+<%@ include file="/WEB-INF/view/login/userLoginPopup.jsp"%>
+<!-- ************************//로그인팝업************************ -->
+
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+<script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<input type="hidden" id="cpnPlcPtrnYn" value="N"> <!-- 쿠폰 정책의 해당 타이어 패턴 존재 유무로 쿠폰 버튼 노출 처리 -->
+<input type="hidden" id="serverMode" value="<%=System.getProperty(CoreConstants.SERVER_MODE)%>"> <!-- 임시로 -->
+
+<form id="carInfoFrm" name="carInfoFrm" method="post">
+	<input type="hidden" name="grpPay" id="grpPay" value="${grpPay}" />                                   <!-- 그룹가격 적용여부 -->
+	<input type="hidden" name="dpPrNo" id="dpPrNo" value="${resultMapCom.dpPrNo}" />                      <!--  전시상품번호 	 -->
+	<input type="hidden" name="matCd" id="matCd" value="${resultMapCom.matCd}" />                         <!-- 렌탈 상품코드 -->
+	<input type="hidden" name="patternCd" id="patternCd" value="${resultMapCom.patternCd}" />             <!-- 패턴 코드 -->
+	<input type="hidden" name="rentPatternCd" id="rentPatternCd" value="${resultMapCom.rentPatternCd}" /> <!-- 렌탈용 패턴 코드 -->
+	<input type="hidden" name="makerCd" id="makerCd" value="${resultMapCom.makerCd}" />                   <!-- 제조사 코드 -->
+	<input type="hidden" name="makerNm" id="makerNm" value="${resultMapCom.makerNm}" />                   <!-- 제조사 명 -->
+	<input type="hidden" name="modelCd" id="modelCd" value="${resultMapCom.modelCd}" />                   <!-- 차 모델 코드 -->
+	<input type="hidden" name="modelNm" id="modelNm" value="${resultMapCom.modelNm}" />                   <!-- 차 모델  명 -->
+	<input type="hidden" name="contentsCd" id="contentsCd" value="${resultMapCom.contentsCd}" />          <!-- 차 사양 코드 -->
+	<input type="hidden" name="contentsNm" id="contentsNm" value="${resultMapCom.contentsNm}" />          <!-- 차 사양명 -->
+	<input type="hidden" name="classCd" id="classCd" value="${resultMapCom.classCd}" />
+	<input type="hidden" name="classCdNew" id="classCdNew" value="${resultMapCom.classCdNew}" />          <!-- 차량분류 -->
+	<input type="hidden" name="carNo" id="carNo" value="${resultMapCom.carNo}" />                         <!-- 차량번호 -->
+	<input type="hidden" name="dMakerCd" id="dMakerCd" value="${dMakerCd}" />                             <!-- 제조사 코드 -->
+	<input type="hidden" name="searchSw" id="searchSw" value="${resultMapCom.searchSw}" />                <!-- 단면폭 -->
+	<input type="hidden" name="searchAr" id="searchAr" value="${resultMapCom.searchAr}" />                <!-- 편평비 -->
+	<input type="hidden" name="searchWi" id="searchWi" value="${resultMapCom.searchWi}" />                <!-- 인치 -->
+	<input type="hidden" name="oeYn" id="oeYn" value="" />                                                <!-- 순정 호환 -->
+	<input type="hidden" name="plyRating" id="plyRating" value="${resultMapCom.plyRating}" />             <!-- 강도 -->
+	<input type="hidden" name="TireSizeCd" id="TireSizeCd" />                                             <!-- 사이즈ㅡ > 단면폭 + 편평비 + 인치 -->
+	<input type="hidden" name="TireSizeNm" id="TireSizeNm" />                                             <!-- 사이즈ㅡ > 단면폭 + 편평비 + 인치 -->
+	<input type="hidden" name="TireSize" id="TireSize" value="" />                                        <!-- 사이즈ㅡ > 단면폭 + 편평비 + 인치 -->
+	<input type="hidden" name="frCd" id="frCd" value="${resultMapCom.frCd}" />
+	<input type="hidden" name="itemCd" id="itemCd" value="${resultMapCom.itemCd}" />
+	<input type="hidden" name="itemNm" id="itemNm" value="${resultMapCom.itemNm}" />
+	<input type="hidden" name="systemGbn" id="systemGbn" value="${systemGbn}" />
+	<input type="hidden" name="seasonCd" id="seasonCd" value="${resultMapCom.seasonCd}" />                <!-- 계절구분 -->
+	<input type="hidden" name="seasonCdNm" id="seasonCdNm" value="${resultMapCom.seasonCdNm}" />          <!-- 계절 구분-->
+	<input type="hidden" name="recomPeriodCd" id="recomPeriodCd" value="36" />                            <!-- 추천상품 기간(Default는 '36'이고, 추천상품 주문 시  periodCd 저장 -->
+	<input type="hidden" name="prdtGrp" id="prdtGrp" value="01" />                                        <!-- 판매유형코드 기본 자유렌탈-->
+	<input type="hidden" name="prdtGrpDtl" id="prdtGrpDtl" value="04" />                                  <!-- 판매유형상세코드  기본 자유렌탈-->
+	<input type="hidden" name="cntCdNm" id="cntCdNm" value="" />                                          <!-- 수량코드 -->
+	<input type="hidden" name="accuOrdPdLmtCd" id="accuOrdPdLmtCd" value="" />                            <!-- 누적 주문 기간 제한 코드(SD243) -->
+	<input type="hidden" name="accuOrdTmeLmtCd" id="accuOrdTmeLmtCd" value="" />                          <!-- 누적 주문 회차 제한 코드(SD244) -->
+	<input type="hidden" name="tmeOrdQyLmtCd" id="tmeOrdQyLmtCd" value="" />                              <!-- 회차 주문 수량 제한 코드(SD245) -->
+	<input type="hidden" name="accuOrdQyLmtCd" id="accuOrdQyLmtCd" value="" />                            <!-- 누적 주문 수량 제한 코드(SD246) -->
+	<input type="hidden" name="orderGbn" id="orderGbn" value="" />                                        <!--  주문이 구매인지 렌탈인지 	 -->
+	<input type="hidden" name="pageGbn" id="pageGbn" value="D" />                                         <!--  페이지 구분(주문에 넘어갈때 확인) 	 -->
+	<input type="hidden" name="custGrpCd" id="custGrpCd" value="${resultMapCom.custGrpCd}" />             <!--  제휴 그룹코드  	 -->
+
+	<!-- 렌탈 판매금액 정보 -->
+	<input type="hidden" name="saleNm" id="saleNm" value="" />                                            <!-- 판매상품명-->
+	<input type="hidden" name="saleCd" id="saleCd" value="S000000001" />                                  <!-- 판매상품코드 기본 자유렌탈-->
+	<input type="hidden" name="description" id="description" />
+	<input type="hidden" name="MonthRentalAmt" id="MonthRentalAmt" value="" />                            <!-- 월 렌탈료 -->
+	<input type="hidden" name="addRentAmt" id="addRentAmt" value="" />                                    <!-- 추가렌탈료 -->
+	<input type="hidden" name="discountAmt" id="discountAmt" value="" />                                  <!-- 할인금액 -->
+	<input type="hidden" name="totalPayYn" id="totalPayYn" value="" />                                    <!-- 총 납입금 -->
+	<input type="hidden" name="saleTyCd" id="saleTyCd" value="" />                                        <!-- 판매 타입 코드 -->
+
+	<!-- 구매에서 넘어온 가격 -->
+	<input type="hidden" name="bassSaleFee" id="bassSaleFee" value="${resultMapCom.bassSaleFee}" /><!-- 원가금액 -->
+	<input type="hidden" name="saleFee" id="saleFee" value="${resultMapCom.saleFee}" /><!-- 할인가 -->
+	<input type="hidden" name="stmemSaleAmt" id="stmemSaleAmt" value="${resultMapCom.stmemSaleAmt}" /><!-- 임직원가 -->
+	<input type="hidden" name="pointAccurt" id="pointAccurt" value="${resultMapCom.pointAccurt}" /><!-- 적립율 -->
+
+	<!-- 구매 판매금액 정보 -->
+	<input type="hidden" name="orderO2oOriAmt" id="orderO2oOriAmt" value="${resultMapCom.bassSaleFee}" /><!-- 판매금액 -->
+	<input type="hidden" name="orderO2oSaleAmt" id="orderO2oSaleAmt" value="${resultMapCom.saleFee}" /><!-- 할인금액 -->
+	<input type="hidden" name="orderO2oPayAmt" id="orderO2oPayAmt" value="0" /><!-- 결제금액 -->
+	<input type="hidden" name="orderO2oCnt" id="orderO2oCnt" value="1" /><!-- 구매수량 기본 1본-->
+
+	<input type="hidden" name="nomalRentalId" id="nomalRentalId" value="rentaltype00" /><!-- 기본 자유렌탈 선택 -->
+	<input type="hidden" name="userId" id="userId" value="${userVo.loginId}" /><!-- 사용자아이디 -->
+	<input type="hidden" name="renThumImg" id="renThumImg" value="${renThumImg}" /><!-- 이미지 썸네일 -->
+	<input type="hidden" name="o2oThumImg" id="o2oThumImg" value="${o2oThumImg}" /><!-- 이미지 썸네일 -->
+
+	<input type="hidden" name="prcPlcNo" id="prcPlcNo" /><!-- 가격 정책 번호 -->
+
+	<input type="hidden" name="niceGradeCd" id="niceGradeCd" value="${resultMapCom.niceGradeCd}" /><!-- niceGradeCd -->
+
+
+	<!-- paging -->
+	<input type="hidden" name="brdDivCd" id="brdDivCd" value="2" /><!-- 렌탈게시판테이블 구매후기 코드 -->
+	<input type="hidden" name="pageNo" id="pageNo" value="${pageNo}" /><!-- 현재 페이지 -->
+	<input type="hidden" name="pageSize" id="pageSize" value="9" /><!-- 페이지에 표시할 수 -->
+
+	<input type="hidden" name="reRentUseYN" id="reRentUseYN" value="${reRentUseYN}" /><!-- 재렌탈 유무 -->
+
+	<!-- **************주문시에 렌탈로 넘어갈 파라메터 ***************-->
+	<!-- 선택한 엔진오일서비스 코드, 가격 -->
+	<input type="hidden" name="selEnginCd" id="selEnginCd" value="" />
+	<input type="hidden" name="selEnginCdAmt" id="selEnginCdAmt" value="" />
+
+	<!-- 선택한 위치교환서비스 코드, 가격 -->
+	<input type="hidden" name="selLocCd" id="selLocCd" value="" />
+	<input type="hidden" name="selLocCdAmt" id="selLocCdAmt" value="" />
+
+	<!-- 선택한 방문점검 코드, 가격 -->
+	<input type="hidden" name="selVisCd" id="selVisCd" value="" />
+	<input type="hidden" name="selVisCdAmt" id="selVisCdAmt" value="" />
+
+	<!-- 선택한 보관 코드, 가격 -->
+	<input type="hidden" name="selSaveCd" id="selSaveCd" value="" />
+	<input type="hidden" name="selSaveCdAmt" id="selSaveCdAmt" value="" />
+
+	<!-- 선택한 타이어 무상 교체 서비스 코드, 가격 -->
+	<input type="hidden" name="selTcCd" id="selTcCd" value="" />
+	<input type="hidden" name="selTcCdAmt" id="selTcCdAmt" value="" />
+
+	<!-- 선택한 프리미엄(사계절보증제도) 코드, 가격 -->
+	<input type="hidden" name="selPrCd" id="selPrCd" value="" />
+	<input type="hidden" name="selPrCdAmt" id="selPrCdAmt" value="" />
+
+	<!-- 선택한 타이어 Check 서비스 코드, 가격 -->
+	<input type="hidden" name="selCheckCd" id="selCheckCd" value="" />
+	<input type="hidden" name="selCheckCdAmt" id="selCheckCdAmt" value="" />
+
+	<!-- 선택한 얼라인먼트 코드, 가격 -->
+	<input type="hidden" name="selArCd" id="selArCd" value="" />
+	<input type="hidden" name="selArAmt" id="selArAmt" value="" />
+	<input type="hidden" name="regiAmt" id="regiAmt" value="0" />
+	<input type="hidden" name="periodCd" id="periodCd" value="36" />
+
+	<!-- 자유렌탈 이외에 얼라인먼트 값 -->
+	<input type="hidden" name="rentArYn" id="rentArYn" value="N" />
+	<!-- **************주문시에 렌탈로 넘어갈 파라메터 ***************-->
+
+	<input type="hidden" name="carSearchParam"	id="carSearchParam" 	value='${carSearchParam}' />
+
+	<!-- 상품옵션 추가 내용 2020.08.13-->
+	<input type="hidden" name="optTotAmt" id="optTotAmt" value='0'/>
+	<input type="hidden" name="optCo"     id="optCo"     value="N" />
+ 	<input type="hidden" name="optAmt"    id="optAmt" 	 value="0" />
+ 	<input type="hidden" name="optPlcNm"  id="optPlcNm"  value="" />
+ 	<input type="hidden" name="optPlcNo"  id="optPlcNo"  value="" />
+ 	<input type="hidden" name="optBfComment"  id="optBfComment"  value="" />
+ 	<input type="hidden" name="optAfComment"  id="optAfComment"  value="" />
+
+	<!-- 전륜후륜 추가 내용 2020.09.15-->
+ 	<input type="hidden" name="searchAddSw"    id="searchAddSw" value="${resultMapCom.searchAddSw}" /><!-- 추가 타이어 단면폭 -->
+	<input type="hidden" name="searchAddAr"    id="searchAddAr" value="${resultMapCom.searchAddAr}" /><!-- 추가 타이어 편평비 -->
+	<input type="hidden" name="searchAddWi"    id="searchAddWi" value="${resultMapCom.searchAddWi}" /><!-- 추가 타이어 인치 -->
+	<input type="hidden" name="tireFrCd"       id="tireFrCd"    value="${resultMapCom.tireFrCd}" /><!-- 추가 타이어 인치 -->
+	<input type="hidden" name="tireSizeYn"     id="tireSizeYn"/>  <!-- 전후륜 사이즈 상이한경우 : N 동일시 : Y -->
+	<input type="hidden" name="addTireInfo"    id="addTireInfo" value='${resultMapCom.addTireInfo}'/> <!-- 추가 타이어 존재시  json 형식으로 담음  -->
+	<input type="hidden" name="driveFwd"       id="driveFwd"    value='${resultMapCom.driveFwd}' />
+	<input type="hidden" name="driveRwd"       id="driveRwd"    value='${resultMapCom.driveRwd}' />
+	<input type="hidden" name="addDpPrNo"      id="addDpPrNo"   value='${resultMapCom.addDpPrNo}' />
+	<input type="hidden" name="addItemCd"      id="addItemCd"   value='${resultMapCom.addItemCd}' />
+	<input type="hidden" name="addMatCd"       id="addMatCd"    value='${resultMapCom.addMatCd}' />
+	<input type="hidden" name="labelType"      id="labelType"   value='${labelType}' />
+	<input type="hidden" name="addTireYn"      id="addTireYn"   value='${resultMapCom.addTireYn}' />
+
+	<input type="hidden" name="sectionWidth" 	id="sectionWidth" 	value="${resultMapCom.sectionWidth}" />	<!-- 단면폭 or sectionWidth -->
+	<input type="hidden" name="aspectRatio" 	id="aspectRatio" 	value="${resultMapCom.aspectRatio}" />		<!-- 편평비 or aspectRatio -->
+	<input type="hidden" name="wheelInches" 	id="wheelInches" 	value="${resultMapCom.wheelInches}" />		<!-- 인치    or wheelInches -->
+	<input type="hidden" name="sectionRwWidth" 	id="sectionRwWidth" value="${resultMapCom.sectionRwWidth}" />	<!-- 후륜 단면폭 or sectionWidth -->
+	<input type="hidden" name="aspectRwRatio" 	id="aspectRwRatio" 	value="${resultMapCom.aspectRwRatio}" />		<!-- 후륜 편평비 or aspectRatio -->
+	<input type="hidden" name="wheelRwInches" 	id="wheelRwInches" 	value="${resultMapCom.wheelRwInches}" />		<!-- 후륜 인치    or wheelInches -->
+
+</form>
+
+<form name="purchaseForm">
+<input type="hidden" name="saveParam" id="saveParam" />
+</form>
+
+<form name="selfRental">
+	<!-- 선택한 엔진오일서비스 코드, 가격 -->
+	<input type="hidden" name="selEnginCd" value="0" />
+	<input type="hidden" name="selEnginCdAmt" value="0" />
+
+	<!-- 선택한 위치교환서비스 코드, 가격 -->
+	<input type="hidden" name="selLocCd" value="0" />
+	<input type="hidden" name="selLocCdAmt" value="0" />
+	<!-- 선택한 방문점검 코드, 가격 -->
+	<input type="hidden" name="selVisCd" value="0" />
+	<input type="hidden" name="selVisCdAmt" value="0" />
+	<!-- 선택한 보관 코드, 가격 -->
+	<input type="hidden" name="selSaveCd" value="" />
+	<input type="hidden" name="selSaveCdAmt" value="" />
+	<!-- 선택한 타이어 무상 교체 서비스 코드, 가격 -->
+	<input type="hidden" name="selTcCd" value="" />
+	<input type="hidden" name="selTcCdAmt" value="" />
+	<!-- 선택한 프리미엄(사계절보증제도) 코드, 가격 -->
+	<input type="hidden" name="selPrCd" value="0" />
+	<input type="hidden" name="selPrCdAmt" value="0" />
+	<!-- 선택한 얼라인먼트 코드, 가격 -->
+	<input type="hidden" name="selArCd" value="0" />
+	<input type="hidden" name="selArAmt" value="0" />
+	<input type="hidden" name="regiAmt" value="0" />
+	<!-- 선택한 check 코드, 가격 -->
+	<input type="hidden" name="selCheckCd" value="0" />
+	<input type="hidden" name="selCheckCdAmt" value="0" />
+	<!-- 디폴트 25000원 -->
+	<input type="hidden" name="periodCd" value="36" />
+	<!-- 디폴트 36개월 -->
+</form>
+
+<!-- 상담신청 -->
+<!-- <form name="counselForm" method="post" action="/view/snl/board/goCounsel.do"> -->
+<form name="counselForm" id="counselForm" method="post">
+	<input type="hidden" name="makerCd" />
+	<!-- 제조사 -->
+	<input type="hidden" name="modelCd" />
+	<!-- 차종 -->
+	<input type="hidden" name="dispCd" />
+	<!-- 규격 -->
+	<input type="hidden" name="cntCd" id="cntCd" />
+	<!-- 수량 -->
+</form>
+
+<input type="hidden" name="bizAppYn" id="bizAppYn"  value="${clientVo.bizAppYn}" /> <!-- 사업자승인 여부 -->
+<!-- [20220824_1] kstka 주문사전가능여부 확인  -->
+<input type="hidden" name="custNo" id="custNo" />
+
+<script type="text/javascript">
+
+ex2cts.push('track', 'prdDetail');
+
+var setSelCodeNew;
+var getReviewList;
+var fn_loginSuc;
+var fn_tireItemOrder;
+var fn_o2oItemOder;
+var fn_rentalOrderCart;
+var fn_O2oOrderCart;
+var fn_o2oDownCoupon;
+var fn_carInfoSearchClose;
+var fn_carInfoSearchPopGo;
+
+$(document).ready(function(){
+	var systemGbn = '${resultMapCom.systemGbn}';
+	var userYn = '${userVo.loginId}';
+	var TireSize = '${resultMapCom.searchSw}'+'/'+'${resultMapCom.searchAr}'+'R'+'${resultMapCom.searchWi}';
+	var officerCd = '${officerCd}'; //임직원 코드
+	var couponItemYn = "Y";
+	var gbItemCd = "";
+	var gbItemGrpCd = "";
+	var gbItemTyCd = "";
+	var gbItemTyDtlCd = "";
+
+	var fncust = "";
+	var fncom = "";
+	var fnid = "";
+	var month = "36";//기본 렌탈기간 36개월
+	var orgPay = {};
+
+	$("#ptList").val($('#patternCd').val());
+
+	//검색조건1 - 제품 패턴명
+	//검색조건2 - 추천순, 최신순, 평점 높은순, 평점 낮은순
+	//검색조건3 - 전체, 구매, 렌탈
+	//검색조건4 - GO서비스만 보기, 포토 리뷰만 보기
+
+	// 패턴 선택에 따라 상품페이지 이동이 필요하다.
+	$('#ptList').change(function() {
+		$('#patternCd').val($(this).val());
+		location.href = "/product/prdDctDetail?dpPrNo="+$(this).find("option:selected").data("dp")+"&itemCd="+$(this).find("option:selected").data("it")+"&patternCd="+$('#patternCd').val()+"#tabLoc";
+	});
+	
+	$('[name="reviewOrder"]').on('click', function() {
+		 getReviewList(1);
+	});
+	$('[name="reviewFilterType"]').on('click', function() {
+		 getReviewList(1);
+	});
+	$('[name="reviewFilterService"]').on('click', function() {
+		 getReviewList(1);
+	});
+
+	$('#btnReset').on('click', function () {
+		$("#reviewOrderItem01").prop("checked" , true);
+		$("#reviewFilterType01").prop("checked" , true);
+		$("input[name='reviewFilterService']").prop("checked" , false);
+
+		getReviewList(1);
+	});
+
+	$("#reviewTab").on("click" , function(){
+		getReviewList(1);
+		$(".productInfo ul.tabs li").removeClass("active");
+		$("#tab3").addClass("active");
+		$(".productInfo .tabContent").hide();
+		$("#tab03").fadeIn();
+
+		var height = $("#tab3").offset();
+		$("html, body").animate({scrollTop: height.top}, 400);
+	});
+
+	$(document).on("click", "#opReview", function() {
+		var drno= $(this).attr('value');
+		var dataImg= $(this).attr('data-img');
+
+		open_review_item(drno, dataImg);
+	});
+
+	$(document).on("click", "#preClick", function() {
+		var drno= $(this).attr('value');
+		if(Number(drno) < 1) {
+			alert('이전 리뷰가 없습니다.');
+			return;
+		} else {
+			open_review_itemNext(drno);
+		}
+	});
+
+	$(document).on("click", "#postClick", function() {
+		var drno= $(this).attr('value');
+		var len= $(this).attr('data-len');
+		if(Number(len) < Number(drno)) {
+			alert('다음 리뷰가 없습니다.');
+			return;
+		} else {
+			open_review_itemNext(drno);
+		}
+	});
+
+	var imgPath = '';
+
+	$(document).on("click", "#sImg_0", function() {
+		imgPath = $("#sImg_0").attr('src');
+		$("#bImg").attr('src', imgPath);
+	});
+	$(document).on("click", "#sImg_1", function() {
+		imgPath = $("#sImg_1").attr('src');
+		$("#bImg").attr('src', imgPath);
+	});
+	$(document).on("click", "#sImg_2", function() {
+		imgPath = $("#sImg_2").attr('src');
+		$("#bImg").attr('src', imgPath);
+	});
+
+	//최근에 본상품
+	$('.proThum ul').slick({
+		arrows:false,
+		dots:false,
+		fade:true
+
+	// draggable:false,
+	//   pauseOnHover:true,
+	//   accessibility:false,
+	//   adaptiveHeight:true
+	}).on('swipe', function(event, slick, direction){
+		var now = $(this).slick('slickCurrentSlide');
+		$( "#slideBar" ).slider( "value", now );
+	});
+
+	$( "#slideBar" ).slider({
+	  range: "max",
+	  min: 0,
+	  max: $(".proThum ul .slick-slide:not(.slick-cloned)").length -1 ,
+	  value: 0,
+	  slide: function( event, ui ) {
+			  $('.proThum ul').slick('slickGoTo', ui.value  );
+	  }
+	});
+
+	$('#rentalStyleWrap select.rentalstyle').niceSelect();
+
+	$('select.rent-opt').niceSelect();
+	$('select.rent-opt').on('change click',function(){
+
+		var opt = $(this).val()? $(this).val().split('|') : [0,0,0];
+
+		$(this).next().find('span.current').html(
+			'<span class="num2">'+opt[1]+'</span>회'
+		);
+	}).click();
+
+	//옵션상품 선택가능한 조건일 경우
+	if($('select.ord-opt').length > 0){
+
+
+		$('select.ord-opt').niceSelect();
+		$('select.ord-opt').on('change click',function(e){
+			// $(".nice-select.rent-opt")
+			var opt = $(this).val()? $(this).val().split('|') : [0,0,0];
+			$(this).next().find('span.current').html(
+				'<span class="num2">'+opt[1]+'</span>회'
+			);
+
+			if(Number(opt[1]) > 0){
+				switch(e.currentTarget.name){
+					case "alChg":
+						$("#alSvcCo").val(Number(opt[1]));
+						fn_calcOptAmt(opt[1],"얼라인먼트");
+						break;
+					case "swChg":
+						$("#swSvcCo").val(Number(opt[1]));
+						fn_calcOptAmt(opt[1],"타이어장착");
+						break;
+					case "dvChg":
+						$("#dvSvcCo").val(Number(opt[1]));
+						fn_calcOptAmt(opt[1],"항균연막탈취");
+						break;
+					case "ccChg":
+						$("#ccSvcCo").val(Number(opt[1]));
+						fn_calcOptAmt(opt[1],"세차서비스");
+						break;
+					default:
+						break;
+				}
+			}else{
+				switch(e.currentTarget.name){
+					case "alChg":
+						$("#alSvcCo").val(0);
+						$("#alSvcAmt").val(0);
+						$("#alSvcAmtTxt").text("\\" + NumUtil.setComma(0));
+						break;
+					case "swChg":
+						$("#swSvcCo").val(0);
+						$("#swSvcAmt").val(0);
+						$("#swSvcAmtTxt").text("\\" + NumUtil.setComma(0));
+						break;
+					case "dvChg":
+						$("#dvSvcCo").val(0);
+						$("#dvSvcAmt").val(0);
+						$("#dvSvcAmtTxt").text("\\" + NumUtil.setComma(0));
+						break;
+					case "ccChg":
+						$("#ccSvcCo").val(0);
+						$("#ccSvcAmt").val(0);
+						$("#ccSvcAmtTxt").text("\\" + NumUtil.setComma(0));
+						break;
+					default:
+						break;
+				}
+				var frm = document.carInfoFrm;
+				var optAmt = Number(frm.alSvcAmt.value) + Number(frm.swSvcAmt.value) + Number(frm.dvSvcAmt.value) + Number(frm.ccSvcAmt.value);
+				frm.optAmt.value = optAmt;
+				calculateO2oSet();
+			}
+
+		}).click();
+	}
+
+
+	$("input[name='o2oQtyRadio']").on('click',function(){
+
+		var svcCo = $("input[name='o2oQtyRadio']:checked").val();
+		fn_calcOptAmt();
+
+
+		if( $("input[name='o2oQtyRadio']:checked").val() == '04' ){
+
+		}else{
+
+		}
+	});
+
+	$('.order').on("click",function(e){
+		if(systemTab == 'R'){ //구매는 없고 렌탈만 있으면 렌탈 보여주기
+			$('#rental').click();
+		}else if(systemTab == 'O'){//렌탈은 없고 구매만 있으면 구매탭 보여주기
+			$('#o2oSystem').click();
+		}else {
+			if(btnType == 'rental'){
+				$('#rental').click();
+			} else {
+				$('#o2oSystem').click();
+			}
+		}
+	});
+
+	//쿠폰 받기 이벤트.
+	$('#coupon').on("click",function(e){
+		var custDivCd = "<%=session.getAttribute("custDivCd")%>";
+		var comDivCd = "<%=session.getAttribute("comDivCd")%>";
+		var userLoginId = "<%=session.getAttribute("userLoginId")%>";
+
+		if(custDivCd == "null"){
+			custDivCd = fncust;
+		}
+		if(comDivCd == "null"){
+		    comDivCd = fncom;
+		}
+		if(userLoginId == "null"){
+			userLoginId = fnid;
+		}
+
+		fn_o2oDownCoupon(custDivCd, comDivCd, userLoginId);
+
+	});
+
+	//구매 또는 렌탈 단일 화면일시에 탭을 막아준다.
+	$('#rental,#o2oSystem').on("click",function(e){
+		var id = $(this).attr('id');
+		var frm = document.carInfoFrm;
+		var popSearchGbn = ValidUtil.isEmpty(frm.modelCd) ? "N" : "Y";//팝업 조회 구분. 차량번호 , 차종 : Y 사이즈 : N
+
+		if(systemTab == "R" && id =="o2oSystem" ){
+
+			//$('#rental').click();
+			//ComUtil.alert("구매하실수 없는 상품입니다.");
+			ComUtil.alert("구매하실수 없는 상품입니다.","","",function(){
+				$('#rental').click();
+			});
+
+		} else if(systemTab == "O" &&  id =="rental"){
+			ComUtil.alert("일시불 구매만 가능한 제품입니다. 렌탈 주문은 재검색을 통해서 차종정보를 선택해 주세요.","","",function(){
+				$('#o2oSystem').click();
+				openSizeFinder('car');
+			});
+		} else if(systemTab == "C" &&  id =="rental"){
+			if(popSearchGbn == "N"){
+				$('#o2oSystem').click();
+				ComUtil.confirm("일시불 구매만 가능한 제품입니다. 렌탈 주문은 재검색을 통해서 차종정보를 선택해 주세요.",""
+				,function() {  //확인함수
+					openSizeFinder('car');
+				}
+				,function() {} //취소함수
+				,"차종으로 찾기"
+				,"구매 주문하기");
+			}
+		}
+	});
+
+
+	function chgDateToStr(date) {
+		var year = date.getFullYear();              //yyyy
+		var month = (1 + date.getMonth());          //M
+		month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+		var day = date.getDate();                   //d
+		day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+		return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+	}
+
+	$('#rentalCounsel1,#productCart1,#productOrder1,#rentalCounsel2,#productCart2,#productOrder2').on("click",function(e){
+		////// sap 작업으로 인하여 버튼 막기
+		var today = new Date();
+		var todayHours = today.getHours();
+		var fstChkStartDay = "2021080900";
+		var fstChkEndDay = "2021080904";
+		var tHours = (todayHours < 10) ? "0"+todayHours : todayHours;
+		if((chgDateToStr(today)+''+tHours) >= fstChkStartDay && (chgDateToStr(today)+''+tHours) < fstChkEndDay) {
+			ComUtil.alert("시스템 점검으로 인하여 8/9 00:00 ~ 04:00까지 <br> 주문이 불가합니다.");
+			return;
+		}
+		var tabid = $(this).attr('id');
+		var custDivCd = "<%=session.getAttribute("custDivCd")%>";
+		var comDivCd = "<%=session.getAttribute("comDivCd")%>";
+		var userLoginId = "<%=session.getAttribute("userLoginId")%>";
+
+		if(custDivCd == "null"){
+			custDivCd = fncust;
+		}
+		if(comDivCd == "null"){
+		    comDivCd = fncom;
+		}
+		if(userLoginId == "null"){
+			userLoginId = fnid;
+		}
+
+		if(tabid =="rentalCounsel1"){    //구매 상담
+			fn_CounselRegister('o2o');
+		}else if(tabid =="productCart1"){//구매 장바구니
+			fn_O2oOrderCart(custDivCd,comDivCd,userLoginId);
+		}else if(tabid =="productOrder1"){//구매 주문하기
+
+			//전후륜 로직 추가
+			//전후륜에 추가 타이어가 존재시 장착 서비스 이용가이드 팝업 제외
+			var addTireYn     = ValidUtil.isEmpty($("#addTireYn").val()) ? "N" : $("#addTireYn").val();
+			var addTireInfoYn = (ValidUtil.isEmpty($("#addTireInfo").val() )) ? "N" : "Y";
+			var orderPurchYn = $("#tireSizeYn").val() == "Y"
+				                  || ( addTireYn == "Y" && addTireInfoYn == "Y")
+				                  || ValidUtil.isEmpty(addDpPrNo);
+			//debugger;
+			if(!orderPurchYn){
+				if ((userYn == null || userYn == '' || userYn == 'null')) {
+					//fn_nonCustOrder();
+					if(ValidUtil.isEmpty($("#addTireInfo").val())){
+						$("#modal-nonCustContinue").addClass("md-show");
+					}else{
+						$("#modal-nonCustContinue").removeClass("md-show");
+					}
+				}else{
+					fn_o2oOrderGo();
+				}
+			}else{
+				if ((userYn == null || userYn == '' || userYn == 'null')) {
+					fn_nonCustOrder();
+				}else{
+					/* 20230202_장착서비스 팝업 미노출 및 주문페이지로 바로 이동(권형태 선임 요청) */
+					// $('#o2ojangchackGuide').addClass("md-show");
+					fn_o2oOrderGo();
+				}
+			}
+
+		}else if(tabid =="rentalCounsel2"){//렌탈 상담
+			fn_CounselRegister('rental');
+		}else if(tabid =="productCart2"){	//렌탈 장바구니
+			fn_rentalOrderCart(custDivCd,comDivCd,userLoginId);
+		}else if(tabid =="productOrder2"){	//렌탈 주문하기
+
+			/* [20220829_1] kstka 주문사전검증 */
+			fn_beforeOrderConfirm(custDivCd,comDivCd,userLoginId, officerCd, 0);
+
+		//	fn_tireItemOrder(custDivCd,comDivCd,userLoginId);
+		}
+	});
+
+	/********************************검색 팝업*****************************/
+	//검색 버튼 클릭 시 - modal-1 레이어 팝업 호출 팝업 스타트
+	$("#btnSearch,#btnReSearch,#btnBuyO2o,#btnBuyRent").on("click" , function(){
+		//검샘 레이어 팝업 오픈
+		$("#modal-1").addClass("md-show");
+		//팝업 선택 값 초기화
+		$("input[name='carSearch']").prop("checked", false);	//차량간편검색
+		$("input[name='makerCd']").prop("checked", false);		//제조사
+		$('body').addClass('bgFix');
+	});
+
+	//뒤로가기 버튼 이벤트 생성 2019-12-30
+	$('button[id*="-back"]').on("click", function(e){
+		var viewid = $(this).attr('id');
+
+		//1.차종검색 되돌리기!!!
+		if(viewid == 'modal-3-back'){ //제조사화면
+			$('input[name="carSearch"]').prop("checked" , false);
+			$("#modal-3").removeClass("md-show");
+			$("#modal-1").addClass("md-show");
+			$(".scrollBox").eq(0).hide();
+		}else if(viewid == 'modal-4-back'){
+			$('input[name="makerCd"]').prop("checked" , false);
+			$("#modal-4").removeClass("md-show");
+			$("#modal-3").addClass("md-show");
+			$(".scrollBox").eq(1).hide();
+		}else if(viewid == 'modal-5-back'){
+			$('input[name="modelCd"]').prop("checked" , false);
+			$("#modal-5").removeClass("md-show");
+			$("#modal-4").addClass("md-show");
+			$(".scrollBox").eq(2).hide();
+		}else if(viewid == 'modal-22-back'){
+			$('input[name="modelCd"]').prop("checked" , false);
+			$("#modal-22").removeClass("md-show");
+			$("#modal-4").addClass("md-show");
+			$(".scrollBox").eq(2).hide();
+		}
+		//1.차종검색 되돌리기!!!
+
+		//2.사이즈검색 되돌리기!!!
+		if(viewid == 'modal-6-back'){
+			$('input[name="carSearch"]').prop("checked" , false);
+			$("#modal-6").removeClass("md-show");
+			$("#modal-1").addClass("md-show");
+			$(".scrollBox").eq(3).hide();
+		}else if(viewid == 'modal-7-back'){
+			$('input[name="sectionWidth"]').prop("checked" , false);
+			$("#modal-7").removeClass("md-show");
+			$("#modal-6").addClass("md-show");
+			$(".scrollBox").eq(4).hide();
+		}else if(viewid == 'modal-8-back'){
+			$('input[name="aspectRatio"]').prop("checked" , false);
+			$("#modal-8").removeClass("md-show");
+			$("#modal-7").addClass("md-show");
+			$(".scrollBox").eq(5).hide();
+		}
+	});
+
+	//옵션 선택시 이벤트
+	$(".optRadio").on('click', function(e){
+
+		var checkId = $(e.target).attr("id");
+		var checkYn = $(e.target).prop("checked");
+
+		if(checkYn == "Y"){
+			$.each($(".optRadio") , function(i , obj){
+				var idx = (i+1);
+				var objId   = $(':radio[name="o2oOptRadio_'+(idx)+'"]:checked').prop("id")
+				var optPchsPrc = $(':input[name="o2oOptPchsPrc_'+(idx)+'"]').val();
+				if(checkId == objId){
+				}
+			});
+		}
+		var optTotAmt  = 0;   //옵션 전체 금액
+	    var optAmt     = "";  //옵션 별 금액
+	    var optCo      = "";  //옵션 사용 수량 ( 0 : 사용안함 , 1 : 사용함.)
+	    var optPlcNo   = "";  //옵션 정책번호
+	    var optPlcNm   = "";  //옵션 정책명
+	    var optBfComment   = "";  //앞코멘트
+	    var optAfComment   = "";  //뒤코멘트
+
+	    var delemeter = "@";
+		$.each($(".optRadio") , function(j , obj){
+			var idx = (j+1);
+			var plcNo      = $(':input[name="o2oPlcNo_'+(idx)+'"]').val();
+			var plcNm   = $(':input[name="o2oOptPlcNm_'+(idx)+'"]').val();
+			var optPchsPrc = $(':input[name="o2oOptPchsPrc_'+(idx)+'"]').val();
+			var bfComment = $(':input[name="o2oOptBfComment_'+(idx)+'"]').val();
+			var afComment = $(':input[name="o2oOptAfComment_'+(idx)+'"]').val();
+
+			//$("label[for='radioOpta_"+(idx)+"'").text("정비 : "+optData.optPchsPrc + " 원");
+			//$(':radio[name="radioOptb_'+(j+1)+'"]').val();
+
+			var checkYn = $(":radio[name='o2oOptRadio_"+(idx)+"']:checked").val();
+			if(checkYn == "Y"){
+				optTotAmt += Number(optPchsPrc);
+			}
+			if($(".optRadio").length == j){
+				delemeter ="";
+			}
+			optCo     += ((checkYn == "Y") ? "1" : "0") + delemeter;
+			optAmt    += (optPchsPrc).toString() + delemeter;
+			optPlcNo  += plcNo + delemeter;
+			optPlcNm  += plcNm + delemeter;
+			optBfComment  += bfComment + delemeter;
+			optAfComment  += afComment + delemeter;
+		});
+
+		$("#optTotAmt").val(optTotAmt);
+		$("#optAmt").val(optAmt);
+		$("#optCo").val(optCo);
+		$("#optPlcNo").val(optPlcNo);
+		$("#optPlcNm").val(optPlcNm);
+		$("#optBfComment").val(optBfComment);
+		$("#optAfComment").val(optAfComment);
+
+		calculateO2oSet();
+
+	});
+
+
+	$('select[name="rentaltype"]').on("change" , function(){
+		var opt = $("option:selected",this);
+		if($(this).val() != 'rentaltype00'){
+			// 추천렌탈 등록비 추가 20191207
+			fn_nomalRentalAmt();
+		}
+		$('#nomalRentalId').val( $(this).val() );
+		$('#saleCd').val($(opt).attr('salecd'));
+		$('#saleNm').val($(opt).attr('title'));
+		$('#prdtGrp').val($(opt).attr('prdtgrp'));
+		$('#prdtGrpDtl').val($(opt).attr('prdtgrpdtl'));
+		fn_topRadioBtnControll( $(this).val() );
+
+		$(".rental-option-detail").hide();
+		$("#tab_"+$(this).val() ).show();
+	});
+
+
+	//돈 천단위마다 콤마찍는 함수
+	function inputNumberWithComma() {
+
+		var minSaleFee = '${minSaleFee}';
+		var otPay = '${resultMapCom.otPay}';
+		minSaleFee  	= '\\' + NumUtil.setComma(minSaleFee);
+		otPay  	= '\\' + NumUtil.setComma(otPay);
+		$('#minSaleFee').text(minSaleFee);
+		$('#otPay').text(otPay);
+
+	}
+
+	//구매탭을 선택할 것인지 렌탈 탭을 선택할것인지 검색에 대한 값
+	var btnType = '${selectBtn}';
+	console.log('btnType ::', btnType);
+	var systemTab = '${labelType}';
+	var serverMode = $("#serverMode").val();
+	console.log('serverMode ::', serverMode);
+	if(serverMode == "prd"){ //운영이면
+		$("#coupon").hide();
+	}
+
+	//렌탈상품이 아닌경우 렌탈탭 hidden
+	//구매주문만 있는경우
+	// 렌탈/구매 지만 차종코드가 없는 경우 hidden
+	if(systemTab == "O" || (systemTab == "C" && $.trim($('#matCd').val()) == "")){
+		$("#rental").hide();
+	}
+
+	//setTimeout(function(){fn_CtreateRentalTab("LoginPop"); }, 5000);
+	function enterSchKey() {
+		var evt_code = (window.netscape) ? ev.which : event.keyCode;
+		if (evt_code == 13) {
+			event.keyCode = 0;
+			$("#btnCarNumber").click();
+		}
+	}
+
+	var evManager = {
+		loginName : "${userVo.getUsrName()}"
+		,
+		niceGradeCd : new Array()
+		,
+		init : function(){
+			var makerNm 	= '${resultMapCom.makerNm}';
+			var searchWi 	= '${resultMapCom.searchWi}';
+			var carNo 		= '${resultMapCom.carNo}';
+			var oeYn 		= '${resultMapCom.description}';
+
+			$(".scrollBox").hide();
+			/** 믿음 추가 내용 **/
+			var frm = document.carInfoFrm;
+			var popSearchGbn = ValidUtil.isEmpty(frm.modelCd) ? "N" : "Y"; //팝업 조회 구분. 차량번호 , 차종 : Y 사이즈 : N
+			var carSearchParam = $("#carSearchParam").val();
+		    var fChoiceArr;
+		    var fChoiceArrR;
+			$('#carSearchParamView').empty();
+			$.each(JSON.parse(carSearchParam), function(key, value){
+				if(key != 'driveDsp') {
+					if(key == 'driveFwd'){
+					    fChoiceArr = value.split('/');
+					    fChoiceArrR = fChoiceArr[1].split('R');
+					    if (fChoiceArrR[0] == '-') {
+					    	value = fChoiceArr[0] + 'R'+ fChoiceArrR[1];
+					    }
+					    $("#driveFwd").val(value);
+						value = '(전륜)'+value;
+						$('#carSearchParamView').append('<li class="size">'+ value +'</li>');
+					}else if(key == 'driveRwd'){
+						fChoiceArr = value.split('/');
+					    fChoiceArrR = fChoiceArr[1].split('R');
+					    if (fChoiceArrR[0] == '-') {
+					    	value = fChoiceArr[0] + 'R'+ fChoiceArrR[1];
+					    }
+					    $("#driveRwd").val(value);
+						value = '(후륜)'+value;
+						$('#carSearchParamView').append('<li class="size">'+ value +'</li>');
+					}else{
+						if(!ValidUtil.isEmpty(value)) {
+
+							if(    key != 'sectionWidth'
+								&& key != 'aspectRatio'
+								&& key != 'wheelInches'
+								&& key != 'sectionRwWidth'
+								&& key != 'aspectRwRatio'
+								&& key != 'wheelRwInches'
+								&& key != 'tireSizeYn'
+							){
+								$('#carSearchParamView').append('<li>'+ value +'</li>');
+							}
+						}
+					}
+				}
+               if(key == 'tireSizeYn')    $("#tireSizeYn").val(value);
+			});
+			//전후륜 재설정
+			//타이어 조회 팝업에서는 전후륜을 설정하였지만 상품 list에 전후륜이 없을경우 재설정한다.
+			var tireSizeYn = "Y"; // 전륜 또는 후륜만 있을경우  Y , 전/후륜일경우 N
+			if($("#tireSizeYn").val() == "N" && !ValidUtil.isEmpty($("#addItemCd").val())){
+				tireSizeYn = "N";
+			}
+			$("#tireSizeYn").val(tireSizeYn);
+
+			$('#TireSize').val(TireSize);
+			var tireFrNm   = ($("#tireFrCd").val() == "R") ? "후륜" : "전륜";
+			var tireSizeNm = (tireSizeYn == "N") ? tireFrNm+" | "+TireSize : TireSize;
+			$('.product-size').html(tireSizeNm);
+
+
+			/** 믿음 추가 내용 **/
+			if(oeYn != '' && oeYn != null && oeYn != "null"){
+				oeYn = oeYn.replace('(', '');
+				oeYn = oeYn.replace(')', '');
+				$('#oeYnTxT').text(oeYn);
+				if(oeYn == '순정'){
+					$('#oeYn').val('Y');
+				}else if(oeYn == '호환'){
+					$('#oeYn').val('N');
+				}
+			}
+			//초기진입시 구매쪽 기본 본수 체크
+			createRentalO2oQty("INIT");
+
+			/** 믿음 수정 내용 **/
+			if(popSearchGbn == "N"){
+				selectGetItemCd(); //itemCd  불러오기
+			} else {//타이어 사이즈가 있을때
+				if(systemGbn == 'R'){//뭔가 있으면 초기 렌탈정보 보여주기
+					if(popSearchGbn == "Y"){//타이어 사이즈가 없으면 렌탈 조회를 못하기 때문에 꼭 있어야 한다.
+						//1.초기진입시 렌탈이 있으면 렌탈에 대한 수량 기간 등록비를 조회 및 셋팅해준다.
+							fnSelectRntalRegAmtList();
+
+							if(officerCd == "" || officerCd == null ){
+						 	 	//임직원 제외 서비스
+							 	//2.자유렌탈 서비스 리스트
+								freeRentalServiceList();
+								setSelCodeNew();
+							}
+
+					 	 //3.일반렌탈 리스트 생성
+						 	calculateFee();
+						 //4.렌탈이 있으면 matCd랑 frCd불러오기
+						 	selectGetMatCdFrcd();
+					 }
+				}else if(systemGbn == 'O'){//뭔가 있으면 초기 구매정보 보여주기
+					 selectGetItemCd(); //itemCd  불러오기 및 구매가격 재생성 및 가격 뿌려주기 함수 호출
+					 //calculateO2oSet();
+				}else{ //요거는 구매 렌탈 둘다 있을때.
+					if(TireSize != "" && TireSize != null){//타이어 사이즈가 없으면 렌탈 조회를 못하기 때문에 꼭 있어야 한다.
+					 	//1.초기진입시 렌탈이 있으면 렌탈에 대한 수량 기간 등록비를 조회 및 셋팅해준다.
+						fnSelectRntalRegAmtList();
+
+
+						if(officerCd == "" || officerCd == null ){
+							//임직원 제외 서비스
+							//2.자유렌탈 서비스 리스트
+						 	freeRentalServiceList();
+						 	setSelCodeNew();
+						}
+
+				 		//3.일반렌탈 리스트 생성
+					 	calculateFee();
+					}
+					//2.구매비용 계산 함수
+					selectGetItemCd(); //itemCd  불러오기
+					//4.렌탈이 있으면 matCd랑 frCd불러오기
+					selectGetMatCdFrcd();
+
+/* 					//5.임직원일 경우 렌탈 등록비 재조회
+					if(officerCd != "" && officerCd != null ){
+						setTimeout(function() {fn_nomalRentalAmt();}, 100);
+					}	 */
+				}
+				orderTabEvent();
+			}
+			/** 믿음 수정 내용 **/
+
+			// 전륜 / 후륜 타이어 조회
+
+			/* 옵션 가격 설정 */
+			fn_calcOptAmt();
+
+			/* 2020.09.21 전후륜 타이어 로직 추가 추가 구매일 경우 구매수량및 옵션 세팅*/
+			if(!ValidUtil.isEmpty($("#tireSizeYn").val()) && $("#tireSizeYn").val() == "N"){
+				$.each($(':radio[name="o2oQtyRadio"]') , function(idx , obj) {
+					var objValue = $(obj).val();
+					if(objValue > '02'){
+						$('label[for="'+obj.id+'"]').attr("style","display:none");
+					}
+				});
+				$(".serviceTemp").attr("style","display:none")
+
+			}
+
+			 if (location.hash == "#tabLoc") {
+			     getReviewList(1);
+				 $(".productInfo ul.tabs li").removeClass("active");
+			     $("#tab3").addClass("active");
+			     $(".productInfo .tabContent").hide();
+			     $("#tab03").fadeIn();
+//		 	     $("#tab01").hide();
+			 }
+
+			//[20221017_1] 선택된 상품 선택 이벤트 적용
+			$('select[name="rentaltype"] option:selected').change();
+		},
+
+		//공통 AJAX 호출
+		commonAjax : function(url, param, callback) {
+			/* $('#loadingWrapnew').css("display",""); */
+
+			$.ajax({
+			    url: url,
+			    type: "POST",
+			    cache:false,
+			    async:false,
+			    data: JSON.stringify(param),
+			    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+			    success: function(data) {
+			    	if(data != null) {
+			    		/* $('#loadingWrapnew').css("display","none"); */
+			    		callback(data);
+
+			    	}
+			    },
+			    error: function (request, status, error) {
+			    	/* $('#loadingWrapnew').css("display","none"); */
+			    	callBackManager.error(error);
+
+				}
+			});
+			// end tag -- common ajax call
+		},
+		reviewPage : function(url, param, callback) {
+
+		}
+	}
+
+	var callBackManager = {
+			//에러 처리
+			error : function(error) {
+				console.log('error callback : ' + error);
+			},
+			//해당 전시상품으로 쿠폰 존재 유무 확인
+			cpnPlcList : function(data){
+				if(data.length > 0) {
+					$("#cpnPlcPtrnYn").val("Y");
+				}
+				var cpnPlcPtrnYn = $("#cpnPlcPtrnYn").val();
+				if(cpnPlcPtrnYn == "N") {
+					$("#coupon").hide();
+				}
+			},
+			rcmdChk : function(data) {
+				var btnId = data.rcmdChk.usePsNo;
+				var rcmdTotCnt = data.rcmdChk.rcmdTotCnt;
+
+				if(data.rcmdChk.rcmdYn == 'Y') {
+					$("#" + btnId).attr('class','thumb_up on');
+				} else {
+					$("#" + btnId).attr('class','thumb_up');
+				}
+				$("#" + btnId).text(rcmdTotCnt);
+
+			},
+			rcmdChkPop : function(data) {
+				getReviewAtflList("", $("#rcmdBtnPop").val());
+			},
+			//구매후기 리스트 생성
+			reviewList : function(data) {
+				var htmlStr = "";
+				var mediaStr = "";
+				var pageCommon = data.pageCommon;
+
+				var totStar = 0;
+				var totStarCnt = 0;
+				var totStarImg = 0;
+				const totImgCnt = data.totImgCnt;
+
+				//일단 한번 다 지움
+				$('#reviewBox').children().remove();
+				$('#mediaReview').children().remove();
+				//일단 한번 다 지움
+
+				if(data.resultAtflList.length > 0){
+					var len;
+					if(data.resultAtflList.length > 7) {
+						len = 6;
+					} else {
+						len = data.resultAtflList.length;
+					}
+					for(var j=0; j < len; j++) {
+						if(data.resultAtflList[j].atflUrl != null) {
+							mediaStr += '<a href="#" id="opReview" data-img="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+data.resultAtflList[j].atflUrl+'" value="'+data.resultAtflList[j].usePsNo+'"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+data.resultAtflList[j].atflUrl+'"></a>';
+
+							if(data.resultAtflList.length > 7 && j == (len-1)) {
+								mediaStr += '<a href="#" onclick="open_review_gallery();"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+data.resultAtflList[j+1].atflUrl+'"><div class="more"><div class="num">'+(totImgCnt-6)+'</div><span>더보기+</span></div></a>';
+							}
+						}
+					}
+				}
+
+				if(data.resultList.length > 0){
+					for(var i=0; i < data.resultList.length; i++) {
+						htmlStr += '<li class="review-item">';
+						htmlStr += '    <div class="review-head">';
+						htmlStr += '        <div class="review-type">';
+						if(data.resultList[i].ordChn == "R"){
+							htmlStr += '            <div class="buy-type R"></div>';
+					 	}else{
+							htmlStr += '            <div class="buy-type O"></div>';
+					 	}
+						// htmlStr += '           <div class="buy-type R after-m"></div>';// 한달 후기
+						htmlStr += '        </div>';
+						htmlStr += '        <div class="service-info">';
+						htmlStr += '            <div class="review-title">';
+						htmlStr += '                <div class="title">'+ data.resultList[i].title +'</div>';
+						htmlStr += '            </div>';
+						htmlStr += '            <div class="star-box"><div class="star star-'+ data.resultList[i].totStarsImg +'"></div> <span>'+ data.resultList[i].totStarsSeCd +'</span></div>';
+						if(data.resultList[i].carInfo != null){
+							htmlStr += '            <div class="car-box">'+data.resultList[i].carInfo+'</div>';
+						}
+						htmlStr += '            <div class="size-box">'+data.resultList[i].dispSize+'</div>';
+						if(data.resultList[i].dlvTyDtlCd == "1030" || data.resultList[i].dlvTyDtlCd == "" || data.resultList[i].dlvTyDtlCd == null){
+							if(data.resultList[i].procDueBhfNmAltYn == "Y"){
+								htmlStr += '            <div class="service-box" title="'+data.resultList[i].procDueBhfNm+'">'+data.resultList[i].dlvTyDtlCdNm+'|'+data.resultList[i].procDueBhfNmVw+'</div>';
+							} else {
+								htmlStr += '            <div class="service-box">'+data.resultList[i].dlvTyDtlCdNm+'|'+data.resultList[i].procDueBhfNmVw+'</div>';
+							}
+					 	} else {
+					 		htmlStr += '            <div class="service-box">GO서비스 | '+data.resultList[i].dlvTyDtlCdNm+'</div>';
+					 	}
+						htmlStr += '        </div>';
+						htmlStr += '        <div class="writer-info">';
+						htmlStr += '            <div class="date">'+data.resultList[i].regDt+'</div>';
+						htmlStr += '            <div class="writer">'+data.resultList[i].custNm+'</div>';
+						htmlStr += '        </div>';
+						htmlStr += '    </div>';
+						htmlStr += '    <div class="review-content">';
+						htmlStr += '        <div class="content">';
+						htmlStr += '            <div class="text" style="white-space:pre-line;">';
+						htmlStr += '                '+data.resultList[i].cont;
+						htmlStr += '                <div class="service-star">';
+						htmlStr += '                    <div>상품 만족도 <div class="star star-'+ data.resultList[i].starsSeCd +'"></div> '+ data.resultList[i].starsSeCd +'</div>';
+						htmlStr += '                    <div>기사 만족도 <div class="star star-'+ data.resultList[i].engrStarsSeCd +'"></div> '+ data.resultList[i].engrStarsSeCd +'</div>';
+						htmlStr += '                    <div>서비스 만족도 <div class="star star-'+ data.resultList[i].dlvStarsSeCd +'"></div> '+ data.resultList[i].dlvStarsSeCd +'</div>';
+						htmlStr += '                </div>';
+						htmlStr += '            </div>';
+						htmlStr += '        <div class="picture">';
+						for(var j=0; j < data.resultAtflList.length; j++) {
+							if(data.resultList[i].usePsNo == data.resultAtflList[j].usePsNo) {
+								if(data.resultAtflList[j].atflUrl != null) {
+									htmlStr += '            <a href="#" id="opReview" data-img="'+data.resultAtflList[j].atflUrl+'" value="'+data.resultAtflList[j].usePsNo+'" alt="리뷰이미지" ><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+data.resultAtflList[j].atflUrl+'"></a>';
+								}
+							}
+						}
+									htmlStr += '        </div>';
+						htmlStr += '        </div>';
+						htmlStr += '        <div class="rec-box">';
+						// htmlStr += '            <button class="thumb_up">25</button>';
+
+						if(data.resultList[i].rcmdYn == 'Y') {
+							htmlStr += '            <button class="thumb_up on" id="'+data.resultList[i].usePsNo+'" name="rcmdBtn" value="'+data.resultList[i].usePsNo+'">'+data.resultList[i].rcmdTotCnt+'</button>';
+						} else {
+							htmlStr += '            <button class="thumb_up" id="'+data.resultList[i].usePsNo+'" name="rcmdBtn" value="'+data.resultList[i].usePsNo+'">'+data.resultList[i].rcmdTotCnt+'</button>';
+						}
+						htmlStr += '        </div>';
+						htmlStr += '    </div>';
+						if(data.resultList[i].answerYn='Y' && data.resultList[i].answer != "" && data.resultList[i].answer != null){
+						htmlStr += '    <div class="review-reply">';
+						htmlStr += '        <div class="content">';
+						htmlStr += '            <div class="text">'+data.resultList[i].answer+'</div>';
+						htmlStr += '        </div>';
+						htmlStr += '        <div class="reply-ico">';
+						htmlStr += '            <span>담당자</span>';
+						htmlStr += '        </div>';
+						htmlStr += '    </div>';
+						}
+						htmlStr += '</li>';
+/*
+ 						htmlStr += "<li>";
+					  	htmlStr += "	<div class='reviewBox'>";
+					 	htmlStr += "		<div class='header'>";
+					 	if(data.resultList[i].ordChn == "R"){
+					 		htmlStr += "			<div class='state'> <i class='rental'></i> </div>";
+					 	}else{
+					 		htmlStr += "			<div class='state'> <i class='purchase'></i> </div>";
+					 	}
+					 	htmlStr += "			<div class='list'>";
+					 	htmlStr += "				<span class='model'>"+ data.resultList[i].patternCd +"</span>";
+					 	htmlStr += "				<span class='txt'>"+ data.resultList[i].title +"</span>";
+					 	htmlStr += "			</div>";
+						htmlStr += "			<div class='nameScore'>";
+						htmlStr += "				<ul>";
+						htmlStr += "    					<li>"+ data.resultList[i].maskid +"</li>";
+						htmlStr += "						<li>"+ data.resultList[i].regDt +"</li>";
+						htmlStr += "						<li>";
+						htmlStr += "							<span class='score s0"+ data.resultList[i].grdPt +"'></span>";
+						htmlStr += "						</li>";
+						htmlStr += "						<li>";
+						htmlStr += "							<i class='plus'></i>";
+						htmlStr += "						</li>";
+						htmlStr += "				</ul>";
+						htmlStr += "			</div>";
+						htmlStr += "		</div>";
+						// htmlStr += "		<div class='reviewCon' style='display: none;'>";
+						htmlStr += "			<p>"+ data.resultList[i].cont +"</p>";
+						if(data.resultList[i].atflPathNm != "" && data.resultList[i].atflPathNm != null && typeof data.resultList[i].atflPathNm != 'undefined'){
+							var imgurl = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>" + data.resultList[i].atflPathNm;
+							htmlStr += "<img src='"+imgurl+"' alt='리뷰이미지'/>";
+						}
+						htmlStr += "		</div>";
+						htmlStr += "	</div>";
+						htmlStr += "</li>";
+  */
+					}
+
+					/* 10233006 리뷰 별점 수정 */
+					$("#reviewTabStarPoint").className = 'star point' + (Math.trunc(data.totStars)*10);
+					$("#reviewTabScore").text(data.totStars);
+					/* 10233006 리뷰 별점 수정 */					
+					
+					$("#totStar").text(data.totStars);
+					$("#totStarImg").width(data.totStarImg+'%');
+					$("#reviewBox").html(htmlStr);
+					$("#mediaReview").html(mediaStr);
+					var cntHtml = "리뷰 <span>"+pageCommon.totalCount+"</span>";
+					$(".total").html(cntHtml);
+
+					//paging
+					PageUtil.fnPageMakeDisplay(pageCommon.totalCount, pageCommon.pageNo, $('#paging') , 'getReviewList', pageCommon.pageSize);
+
+					/* 이벤트 안먹어서 어쩔수 없이 갔다가 붙임 */
+				    $('.accordion').find('.header').on('click', function(e){
+				        var current = $(this).closest('.reviewBox');
+				        var otherView = current.siblings().not(current);
+
+				        $(this).parent().toggleClass('open');
+
+				        // hide the otherView
+				        otherView.find('.reviewCon').slideUp('100');
+				        otherView.find('.nameScore i').addClass('minus').removeClass('plus');
+
+				        // toggle current View
+				        current.find('.reviewCon').slideToggle('100');
+				        current.find('.nameScore i').toggleClass('minus plus');
+				    });
+				    /* 이벤트 안먹어서 어쩔수 없이 갔다가 붙임 */
+				} else{
+					 var htmlStr = "";
+					htmlStr += "<div class='noDataArea'>";
+					htmlStr += "<p>리뷰가 없습니다.</p>";
+					htmlStr += "</div>";
+					$("#reviewBox").html(htmlStr);
+				}
+			},
+			reviewAtflList : function(data) {
+				var htmlStr = "";
+				var popStr = "";
+				var imgStr = "";
+				var pageStr = "";
+				var pageCommon = data.pageCommon;
+				var atflLen = 0;
+				var snImg = "";
+
+				//일단 한번 다 지움
+				$('#reviewPop').children().remove();
+				$('#reviewPop2').children().remove();
+				$('#reviewImg').children().remove();
+				$('#pageReview').children().remove();
+
+				if(data.reviewImg.length > 0) {
+					popStr += '<div class="photo-gallery os-theme-round">';
+					for(var i=0; i < data.reviewImg.length; i++) {
+						snImg = data.reviewImg[i].atflUrl.replace("DP/RV","DP/RV/SN");
+						popStr += '<a href="javascript:;" id="opReview" data-img="'+data.reviewImg[i].atflUrl+'" value="'+data.reviewImg[i].usePsNo+'"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+snImg+'"></a>';
+					}
+					popStr += '</div>';
+
+					$("#reviewPop2").html(popStr);
+				}
+
+				if(data.reviewImg.length > 0) {
+					imgStr += '<div class="detail-image">';
+					imgStr += '		<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+data.reviewImg[0].atflUrl+'" id="bImg">';
+					imgStr += '</div>';
+					imgStr += '<div class="thumbs">';
+					for(var i=0; i < data.reviewImg.length; i++) {
+						imgStr += '<a href="javascript:;" class="thumb-img" ><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>'+data.reviewImg[i].atflUrl+'" id="sImg_'+i+'"></a>';
+					}
+					imgStr += '</div>';
+
+					$("#reviewImg").html(imgStr);
+				}
+				if(data.reviewDtl.length > 0) {
+					htmlStr += '<div class="review-head">';
+					htmlStr += '	<div class="review-type">';
+					if(data.reviewDtl[0].ordChn == "R"){
+						htmlStr += '	<div class="buy-type R"></div>';
+				 	}else{
+						htmlStr += '	<div class="buy-type O"></div>';
+				 	}
+						htmlStr += '</div>';
+						htmlStr += '	<div class="review-title">';
+						htmlStr += '		<div class="star-box"><div class="star star-'+ data.reviewDtl[0].totStarsImg +'"></div><span>'+ data.reviewDtl[0].totStarsSeCd +'</span></div>';
+						htmlStr += '			<div class="title">'+ data.reviewDtl[0].title +'</div>';
+						htmlStr += '		</div>';
+						htmlStr += '	</div>';
+						htmlStr += '	<div class="service-info">';
+						htmlStr += '		<div class="rec-box">';
+						if(data.reviewDtl[0].rcmdYn == 'Y') {
+							htmlStr += '            <button class="thumb_up on" id="rcmdBtnPop" value="'+data.reviewDtl[0].usePsNo+'">'+data.reviewDtl[0].rcmdTotCnt+'</button>';
+						} else {
+							htmlStr += '            <button class="thumb_up" id="rcmdBtnPop" value="'+data.reviewDtl[0].usePsNo+'">'+data.reviewDtl[0].rcmdTotCnt+'</button>';
+						}
+						htmlStr += '		</div>';
+						if(data.reviewDtl[0].carInfo != null){
+							htmlStr += '		<div class="car-box">'+data.reviewDtl[0].carInfo+'</div>';
+						}
+						htmlStr += '		<div class="size-box">'+data.reviewDtl[0].dispSize+'</div>';
+						if(data.reviewDtl[0].dlvTyDtlCd == "1030" || data.reviewDtl[0].dlvTyDtlCd == "" || data.reviewDtl[0].dlvTyDtlCd == null){
+							htmlStr += '	<div class="service-box">'+data.reviewDtl[0].dlvTyDtlCdNm+'|'+data.reviewDtl[0].procDueBhfNm+'</div>';
+						} else {
+							htmlStr += '	<div class="service-box">GO서비스 | '+data.reviewDtl[0].dlvTyDtlCdNm+'</div>';
+						}
+						htmlStr += '	</div>';
+						htmlStr += '	<div class="review-content os-theme-round">';
+						htmlStr += '		<div class="content">';
+						htmlStr += '			<div class="text">';
+						htmlStr += '                '+data.reviewDtl[0].cont;
+						htmlStr += '                <div class="service-star">';
+						htmlStr += '                    <div>상품 만족도 <div class="star star-'+ data.reviewDtl[0].starsSeCd +'"></div> '+ data.reviewDtl[0].starsSeCd +'</div>';
+						htmlStr += '                    <div>기사 만족도 <div class="star star-'+ data.reviewDtl[0].engrStarsSeCd +'"></div> '+ data.reviewDtl[0].engrStarsSeCd +'</div>';
+						htmlStr += '                    <div>서비스 만족도 <div class="star star-'+ data.reviewDtl[0].dlvStarsSeCd +'"></div> '+ data.reviewDtl[0].dlvStarsSeCd +'</div>';
+						htmlStr += '                </div>';
+						htmlStr += '        		<div class="writer-info">';
+						htmlStr += '           			 <div class="date">'+data.reviewDtl[0].regDt+'</div>';
+						htmlStr += '            		<div class="writer">'+data.reviewDtl[0].custNm+'</div>';
+						htmlStr += '      			</div>';
+						htmlStr += '            </div>';
+						htmlStr += '            </div>';
+						if(data.reviewDtl[0].answerYn='Y' && data.reviewDtl[0].answer != "" && data.reviewDtl[0].answer != null){
+							htmlStr += '    <div class="review-reply">';
+							htmlStr += '        <div class="content">';
+							htmlStr += '            <div class="text">'+data.reviewDtl[0].answer+'</div>';
+							htmlStr += '        </div>';
+							htmlStr += '        <div class="reply-ico">';
+							htmlStr += '            <span>담당자</span>';
+							htmlStr += '        </div>';
+							htmlStr += '    </div>';
+						}
+							htmlStr += '    </div>';
+
+							var pre  = Number(data.reviewDtl[0].searchType) -1;
+							var post = Number(data.reviewDtl[0].searchType) +1;
+							atflLen = data.reviewDtl[0].totCnt;
+							pageStr += '<button class="btn-prev" id="preClick" value="'+pre+'" data-len="">이전 리뷰 보기</button>';
+							pageStr += '<button class="btn-next" id="postClick" value="'+post+'" data-len="'+atflLen+'">다음 리뷰 보기</button>';
+					$("#reviewPop").html(htmlStr);
+					$("#pageReview").html(pageStr);
+				}
+			},
+			/* 렌탈 금액 가져오기  */
+			viewRentalList : function(data){
+				fn_CreateViewRentalList(data);
+			},
+			//등록비 불러오기
+			RentalRegAmtList: function(data){
+				fn_CtreateRentalTab(data);
+			},
+			//자유렌탈 불러오기
+			FreeRentalList: function(data){
+				fn_CtreateFreeRentalList(data);
+			},
+			//자유렌탈 서비스 리스트 가져오기
+			FreeRentalServicList: function(data){
+				fn_CtreateRentalServicList(data);
+			},
+			indi_credit: function(data){
+				fn_indi_credit_result(data);
+			},
+			license_credit: function(data){
+				fn_license_credit_rslt(data);
+			},
+			indiLic_credit: function(data){
+				fn_indiLic_credit_result(data);
+			},
+			insertRentalCart: function(data){
+				fn_retalInsertAndGoPage(data);
+			},
+			insertOrderCart: function(data){
+				fn_O2oInsertAndGoPage(data);
+			},
+			/* [20220824_1] kstka 주문사전가능여부 확인 */
+			beforeOrderConfirm: function(data){
+
+				if(data.rtnCode == 0){
+					fn_tireItemOrder_after();
+				}else{
+					ComUtil.alert(data.rtnMsg);
+				}
+			}
+	}
+
+	function orderTabEvent(){
+		if(systemGbn == 'R'){ //구매는 없고 렌탈만 있으면 렌탈 보여주기
+			$('#rental').click();
+		}else if(systemGbn == 'O'){//렌탈은 없고 구매만 있으면 구매탭 보여주기
+			$('#o2oSystem').click();
+		}else {
+			if(btnType == 'rental'){
+				$('#rental').click();
+			} else {
+				$('#o2oSystem').click();
+			}
+		}
+		$('.order').click();
+	}
+
+	function eventFunc(){
+		$('body').removeClass('bgFix');
+	}
+
+	//로그인 팝업
+	function fn_LoginPop(){
+		$("#modalLoginPop").addClass("md-show");
+	}
+
+	//로그인 성공시
+	fn_loginSuc = function(safeKey, custDivCd, comDivCd, userLoginId){
+		var loginGbn = $('#loginPopGbn').val();
+
+		$('#modalLoginPop').removeClass('md-show');
+		$('#loginPopLayer').remove();
+		fnid = "Y";
+
+		$('#safekey').val(safeKey);
+
+		if(loginGbn == 'o2oOrder'){ //구매 주문을 할때
+			fn_o2oItemOder(custDivCd,comDivCd,userLoginId);
+		}else if(loginGbn == 'retalOrder'){ //렌탈주문할때
+
+			/* [20220829_1] kstka 주문사전검증 */
+			fn_beforeOrderConfirm(custDivCd,comDivCd,userLoginId, officerCd, 0);
+
+			//fn_tireItemOrder(custDivCd,comDivCd,userLoginId);
+
+		}else if(loginGbn == 'o2oCart'){ //구매 장바구니
+			fn_O2oOrderCart(custDivCd,comDivCd,userLoginId);
+		}else if(loginGbn == 'retalCart'){ //렌탈 장바구니
+			fn_rentalOrderCart(custDivCd,comDivCd,userLoginId);
+		}else if(loginGbn == 'nice'){
+			$('#modalLoginPop').css("display","none");
+			$('#loginPopup').css("display","none");
+			userYn = userLoginId;
+			$("searchGbn").val("N");
+			$("#modal-1").removeClass("md-show");
+			$("#modal-2").addClass("md-show");
+		}else if(loginGbn == 'downCoupon'){
+			userYn = userLoginId;
+			fn_o2oDownCoupon(custDivCd,comDivCd,userLoginId); //쿠폰 다운로드
+		}else if(loginGbn == 'rcmdChk'){
+			location.reload();
+		}else{
+			fn_CtreateRentalTab("LoginPop"); //로그인 성공하면 타이어 본수를 1 3본 넣어준다.
+		}
+
+		$('#loginArea').children().remove();
+		var html = "";
+			  html += '<i class="ico04"></i><a href="javascript:logout();">로그아웃</a>';
+		$('#loginArea').html(html);
+
+	}
+
+	//로그인 비로그인 본수 갯수 활성화
+	function createRentalO2oQty(gbn){
+		var htmlstr = "";
+
+		//구매 타이어 본수 라디오버튼 생성
+		var checkO2o= "";
+		var checkRental = "";
+
+		if(gbn == "LoginPop"){
+			checkO2o = $(':radio[name="o2oQtyRadio"]:checked').val();
+		}else{
+			checkO2o = "02";
+		}
+		$('#radio'+checkO2o).prop("checked", true);
+	}
+
+	var getParameters = function (paramName) {
+		// 리턴값을 위한 변수 선언
+		var returnValue;
+		// 현재 URL 가져오기
+		var url = location.href;
+		// get 파라미터 값을 가져올 수 있는 ? 를 기점으로 slice 한 후 split 으로 나눔
+		var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+
+		// 나누어진 값의 비교를 통해 paramName 으로 요청된 데이터의 값만 return
+		for (var i = 0; i < parameters.length; i++) {
+			var varName = parameters[i].split('=')[0];
+			if (varName.toUpperCase() == paramName.toUpperCase()) {
+				returnValue = parameters[i].split('=')[1];
+				return decodeURIComponent(returnValue);
+			}
+		}
+	};
+
+	/* 구매 후기 리스트 조회 */
+	getReviewList = function(num){
+		var patternCd = $('#patternCd').val();
+		var brdDivCd  = $('#brdDivCd').val();
+		var usePsNo  = getParameters('usePsNo');
+		$("#pageNo").val(num);
+		var sortOrd;
+		var ordChn;
+		var searchType, searchType2;
+		var loginId = "${userVo.loginId}";
+
+		$("input[name='reviewOrder']").each(function(){
+			if($(this).is(":checked")) {
+				sortOrd = $(this).val();
+			}
+		});
+
+		$("input[name='reviewFilterType']").each(function(){
+			if($(this).is(":checked")) {
+				ordChn= $(this).val();
+			}
+		});
+
+		if($("#reviewFilterService01").is(":checked")) {
+			searchType= $("#reviewFilterService01").val();
+		}
+		if($("#reviewFilterService02").is(":checked")) {
+			searchType2= $("#reviewFilterService02").val();
+		}
+
+		var pUrl = "/product/selectOrderReviewList";
+		var pSendData = {
+						patternCd : patternCd
+						, dpPrNo   : $("#dpPrNo").val()
+						, usePsNo   : usePsNo
+						, brdDivCd : "2"
+						, pageNo   : num
+						, sortOrd  : sortOrd
+						, ordChn   : ordChn
+						, searchType : searchType
+						, searchType2 : searchType2
+						, custId : loginId
+						};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.reviewList);
+	}
+
+	/* 구매 후기 리스트 조회 */
+	getReviewAtflList = function(num, usePsNo){
+		var patternCd = $('#patternCd').val();
+		var brdDivCd  = $('#brdDivCd').val();
+		var sortOrd;
+		var ordChn;
+		var loginId = "${userVo.loginId}";
+
+		var pUrl = "/product/selectReviewDtl";
+		var pSendData = {
+						patternCd : patternCd
+						, dpPrNo   : $("#dpPrNo").val()
+						, usePsNo   : usePsNo
+						, custId : loginId
+						, searchType : num
+						};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.reviewAtflList);
+	}
+
+	// 추천수
+	$(document).on("click","button[name='rcmdBtn']",function(){
+		var loginId = "${userVo.loginId}";
+		if(loginId == "") {
+			ComUtil.confirm("로그인 후 이용가능 합니다. 로그인 화면으로 이동하시겠습니까?", '' , function(){
+				$('#loginPopGbn').val('rcmdChk');
+				fn_LoginPop();
+				return;
+			});
+
+		} else {
+			// 추천 눌렀나 체크
+			var pUrl = "/product/reviewRcmdCheck";
+			var pSendData = {
+							usePsNo   : this.value
+							, custId	: loginId
+							, regId		: loginId
+							, chgId		: loginId
+							};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.rcmdChk);
+
+			// 추천을 눌렀으면 취소, 안눌렀으면 추천, 총 추천 갯수 보여주기
+		}
+	})
+
+	$(document).on("click","#rcmdBtnPop",function(){
+		var loginId = "${userVo.loginId}";
+		if(loginId == "") {
+			ComUtil.confirm("로그인 후 이용가능 합니다. 로그인 화면으로 이동하시겠습니까?", '' , function(){
+				$('#loginPopGbn').val('rcmdChk');
+				fn_LoginPop();
+				return;
+			});
+
+		} else {
+			// 추천 눌렀나 체크
+			var pUrl = "/product/reviewRcmdCheck";
+			var pSendData = {
+							usePsNo   : this.value
+							, custId	: loginId
+							, regId		: loginId
+							, chgId		: loginId
+							};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.rcmdChkPop);
+
+			// 추천을 눌렀으면 취소, 안눌렀으면 추천, 총 추천 갯수 보여주기
+		}
+	})
+
+	/* 추천 렌탈상품 총주문금액 및 월 렌탈료 생성 */
+	//일반 렌탈
+	function calculateFee(){
+		var frm = document.carInfoFrm;
+		// 단면폭,평면비,휠인치,강도 데이터 파싱
+/*
+		// 데이터 파싱
+		var tmpSizeArray1 = TireSize.split("/");
+		// 단면폭
+		var sectionWidth  = tmpSizeArray1[0];
+		var sectionWidth  = tmpSizeArray1[0];
+			sectionWidth  = sectionWidth.replace(' ', '');
+		var tmpSizeArray2 = tmpSizeArray1[1].split("R");
+		// 평면비
+		var aspectRatio  = tmpSizeArray2[0];
+		var	tmpSizeArray3 = tmpSizeArray2[1].split(" ");
+		// 인치
+		var wheelInches = tmpSizeArray3[0];
+		 */
+
+		var sectionWidth = $("#searchSw").val();
+		var aspectRatio  = $("#searchAr").val();
+		var wheelInches  = $("#searchWi").val();
+
+		//타이어 수량
+		var cntCd = $(':radio[name="quantity"]:checked').val();
+
+		if(typeof cntCd == 'undefined' ){
+			cntCd = "02";
+		}
+
+		// 패턴
+		//var petternCd  = frm.patternCd.value;
+		var petternCd  = frm.rentPatternCd.value;
+		// 기간
+		var periodCd = frm.recomPeriodCd.value; // 추천상품은 기간 3년 고정
+
+		// 추천렌탈상품 조회
+		var pUrl = "/product/selectRentalViewList";
+		var pSendData = {sectionWidth 	: sectionWidth
+						,aspectRatio 	: aspectRatio
+						,wheelInches 	: wheelInches
+						,plyRating 		: $('#plyRating').val()
+						,petternCd   	: petternCd
+						,cntCd 			: cntCd
+						,periodCd 		: periodCd};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.viewRentalList);
+	}
+
+	function rentalFeeResult(msg){
+		$("#recommProduct").html(msg);
+	}
+
+	//구매금액  셋팅
+	function calculateO2oSet(){
+
+		var frm = document.carInfoFrm;
+		var bassSaleFee 	= frm.bassSaleFee.value;  	//기본판매가
+		var saleFee 		= frm.saleFee.value;		//판매가
+		var stmemSaleAmt 	= frm.stmemSaleAmt.value;	//임직원가
+		var grpSaleFee    	= "";
+		var bonQty          = $(':radio[name="o2oQtyRadio"]:checked').val();//수량
+		var grpPay          = frm.grpPay.value;
+		var optTotAmt       = $("#optTotAmt").val();    //옵션가격
+
+		var bassSaleFeeAmt = 0;  	//전체 기본판매가
+		var saleFeeAmt = 0;     	//전체 정상판매가
+		var stmemSaleFeeAmt = 0; 	//전체 임직원판매가
+
+		var discAmt = 0;            //할인되는 가격
+
+   		bassSaleFeeAmt 	= Number(bassSaleFee) * Number(bonQty);        	//기본판매가 * 수량
+   		saleFeeAmt     	= Number(saleFee) * Number(bonQty);        		//정상판매가 * 수량
+   		stmemSaleFeeAmt = Number(stmemSaleAmt) * Number(bonQty);        //임직원판매가 * 수량
+
+   		if(grpPay == "Y"){
+
+   			discAmt = bassSaleFeeAmt - saleFeeAmt;
+
+   			$('#orderO2oOriAmt').val(bassSaleFeeAmt);
+   	        $('#orderO2oSaleAmt').val(discAmt);
+   	        $('#orderO2oPayAmt').val(saleFeeAmt+Number(optTotAmt));
+   	        $('#orderO2oCnt').val(bonQty);
+
+   	     	bassSaleFeeAmt 	="\\" + NumUtil.setComma(bassSaleFeeAmt);
+   	     	var couponSaleFee = 0;
+
+			grpSaleFee   	="\\"  + NumUtil.setComma(Number(saleFeeAmt)+Number(optTotAmt));
+   	  		saleFeeAmt  	="\\"  + NumUtil.setComma(Number(saleFeeAmt)+Number(optTotAmt));
+   			discAmt 		= "\\" + NumUtil.setComma(discAmt);
+
+        	$('.org_price').text(bassSaleFeeAmt);//기표가
+   	        $('.ext_price').text(saleFeeAmt);//할인가
+        	$("#onlyPriceDiv").attr('style','display:none;');
+        	$("#salePriceDiv").attr('style','display:"";');
+
+        	if($('.ext_price').text()!=""){
+				$("#sale4descText").text("4본 구매로 휠 얼라인먼트 무상 제공 받고,TPMS 포함한 모든 탈장착 비용은 항상 무료!");// 구매하기 밑에 문구 설정
+ 			}
+        	$("#coupon").hide();
+
+   		}else{
+   			if(officerCd != '' && officerCd != null){ //임직원이면
+
+   	   	        $('#officerFeeAmt').text("");
+   	   	        $('#discFeeAmt').text("");
+
+//    	   			$('#orderO2oOriAmt').val(stmemSaleFeeAmt);
+   	   			$('#orderO2oOriAmt').val(bassSaleFeeAmt);// 원래가격은 임직원가가 아닌 기표가로 표기한다.(그룹,임직원,쿠폰할인,할인 모두 동일)
+   	   	        $('#orderO2oSaleAmt').val(discAmt);
+   	   	        $('#orderO2oPayAmt').val(stmemSaleFeeAmt+Number(optTotAmt));
+   	   	        $('#orderO2oCnt').val(bonQty);
+
+   	   	        //[보류 - 임직원가 그대로 노출]
+//    	   	        var totSaleFeeAmt = stmemSaleFeeAmt; //최종가 (임직원가)
+//    	   	        if(stmemSaleFeeAmt > saleFeeAmt){ //임직원가 > 쿠폰가면 쿠폰가를 보여준다.
+//    	   	      		totSaleFeeAmt = saleFeeAmt;
+//    	   	        }
+//  	   	     	bassSaleFeeAmt 	="\\" + NumUtil.setComma(Number(totSaleFeeAmt));
+//    	   	  		saleFeeAmt  	="\\" + NumUtil.setComma(Number(totSaleFeeAmt)+Number(optTotAmt));
+
+   	   	     	bassSaleFeeAmt 	="\\" + NumUtil.setComma(Number(stmemSaleFeeAmt));
+   	   	  		saleFeeAmt  	="\\" + NumUtil.setComma(Number(stmemSaleFeeAmt)+Number(optTotAmt));
+   	   			discAmt 		="\\" + NumUtil.setComma(discAmt);
+
+
+   	   	     	$('#officerFeeAmt').text(bassSaleFeeAmt);
+   	   	        $('#discFeeAmt').text(discAmt);
+   	   	        $('.only_price').text(saleFeeAmt);
+
+   	   	     	if($('.only_price').text() != ""){
+   					$("#only4descText").text("4본 구매로 휠 얼라인먼트 무상 제공 받고,TPMS 포함한 모든 탈장착 비용은 항상 무료!");	// 구매하기 밑에 문구 설정
+   	   	     	}
+   	   		}else{
+   	   	   		discAmt = bassSaleFeeAmt - saleFeeAmt;
+   	   			$('#orderO2oOriAmt').val(bassSaleFeeAmt);
+   	   	        $('#orderO2oSaleAmt').val(discAmt);
+   	   	        $('#orderO2oPayAmt').val(saleFeeAmt+Number(optTotAmt));
+   	   	        $('#orderO2oCnt').val(bonQty);
+
+   	   	     	bassSaleFeeAmt 	="\\" + NumUtil.setComma(bassSaleFeeAmt);
+   				grpSaleFee	= "\\" + NumUtil.setComma(Number(saleFeeAmt)+Number(optTotAmt));
+   	   	  		saleFeeAmt  = "\\" + NumUtil.setComma(Number(saleFeeAmt)+Number(optTotAmt));
+   	   			discAmt 	= "\\" + NumUtil.setComma(discAmt);
+	   	        if(couponItemYn == "Y") {
+	   	        	$('.org_price').text(bassSaleFeeAmt);//기표가
+	   	   	        $('.ext_price').text(grpSaleFee);//할인가
+	   	        	$("#onlyPriceDiv").attr('style','display:none;');
+	   	        	$("#salePriceDiv").attr('style','display:"";');
+
+	   	        	if($('.ext_price').text()!=""){
+	   	 				$("#sale4descText").text("4본 구매로 휠 얼라인먼트 무상 제공 받고,TPMS 포함한 모든 탈장착 비용은 항상 무료!");// 구매하기 밑에 문구 설정
+	   	 			}
+	   	        } else {
+	   	        	$('.only_price').text(saleFeeAmt);
+
+	   	        	if($('.only_price').text()!=""){
+	   	 				$("#only4descText").text("4본 구매로 휠 얼라인먼트 무상 제공 받고,TPMS 포함한 모든 탈장착 비용은 항상 무료!");// 구매하기 밑에 문구 설정
+	   	 			}
+	   	        }
+   	   	        /** 믿음 수정 내용 **/
+   	   		}
+
+   		}
+		//로그인한 유저만 쿠폰가격 적용
+		if(!ValidUtil.isEmpty($("#userId").val())) {
+	        fn_calcCouponAmt();
+   		}
+	}
+
+
+	function fn_CtreateRentalTab(data){
+
+		var quantityRenHtmlstr = "";
+		var termRenHtmlstr = "";
+		var feeRenHtmlstr = "";
+		var userYn = '${userVo.loginId}';
+		var reRentUseYN = $('#reRentUseYN').val();
+
+		var frm = document.selfRental; //첫 진입시는 기본으로 넣어주기
+
+		var quantityChk = $(':radio[name="quantity"]:checked').val();
+		var termChk = $(':radio[name="term"]:checked').val();
+		var feeChk = $(':radio[name="fee"]:checked').val();
+
+		if(typeof quantityChk == 'undefined' || quantityChk == "01"){
+			quantityChk = "02"; //기본 2본
+		}
+		if(typeof termChk == 'undefined' ){
+			termChk = "36"; //기본 36개월
+		}
+		if(typeof feeChk == 'undefined' ){
+			feeChk = "01"; //기본 해당없음
+		}
+
+		//팝업 로그인으로 다가왔을때.
+		if(data == "LoginPop"){
+			//일단 삭제
+			$('#quantityRen').children().remove();
+			if(reRentUseYN != 'N'){
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity01' value='01' class='type06'><label for='quantity01'><span>1본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity02' value='02' class='type06'><label for='quantity02'><span>2본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity03' value='03' class='type06'><label for='quantity03'><span>3본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity04' value='04' class='type06'><label for='quantity04'><span>4본</span></label>";
+			}else{
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity02' value='02' class='type06'><label for='quantity02'><span>2본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity04' value='04' class='type06'><label for='quantity04'><span>4본</span></label>";
+			}
+			//렌탈 추가
+			$("#quantityRen").html(quantityRenHtmlstr);
+			$('#quantity'+quantityChk).prop("checked", true);
+		}else{
+			//일단 삭제
+			$('#quantityRen, #termRen, #feeRen').children().remove();
+			//타이어 본수 생성
+			if(userYn == '' || reRentUseYN == 'N'){
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity02' value='02' class='type06'><label for='quantity02'><span>2본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity04' value='04' class='type06'><label for='quantity04'><span>4본</span></label>";
+			}else{
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity01' value='01' class='type06'><label for='quantity01'><span>1본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity02' value='02' class='type06'><label for='quantity02'><span>2본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity03' value='03' class='type06'><label for='quantity03'><span>3본</span></label>";
+				quantityRenHtmlstr += "<input type='radio' name='quantity' id='quantity04' value='04' class='type06'><label for='quantity04'><span>4본</span></label>";
+			}
+
+			//렌탈 기간 생성
+			for(var i=0; i < data.renNapbuList.length; i++) {
+
+				if(data.renNapbuList[i].searchCd1 != "48"){ //48개월 임시 block처리
+					termRenHtmlstr += "<input type='radio' name='term' id='term"+ data.renNapbuList[i].searchCd1 +"' value='"+ data.renNapbuList[i].searchCd1 +"' class='type06'><label for='term"+ data.renNapbuList[i].searchCd1 +"'><span>"+ data.renNapbuList[i].searchCdNm +"</span></label>";
+				}
+			}
+
+			//렌탈 등록비 생성
+			for(var i=0; i < data.regAmtList.length; i++) {
+				var feeRenAmt = data.regAmtList[i].searchCdNm;
+				if(feeRenAmt == 0){
+					feeRenHtmlstr += "<input type='radio' name='fee' id='fee"+ data.regAmtList[i].searchCd +"' value='"+ data.regAmtList[i].searchCd +"' class='type06'><label for='fee"+ data.regAmtList[i].searchCd +"'><span>"+ NumUtil.setComma(data.regAmtList[i].searchCdNm) +"</span></label>( <b>등록비 면제 이벤트 <span style='text-decoration:line-through; text-decoration-color:red; text-decoration-thickness:2px;'>50,000원</span></b> )";
+				} else {
+					feeRenHtmlstr += "<input type='radio' name='fee' id='fee"+ data.regAmtList[i].searchCd +"' value='"+ data.regAmtList[i].searchCd +"' class='type06'><label for='fee"+ data.regAmtList[i].searchCd +"'><span>"+ NumUtil.setComma(data.regAmtList[i].searchCdNm) +"</span></label>";
+				}
+			}
+
+			//렌탈 추가
+			$("#quantityRen").html(quantityRenHtmlstr);
+			//렌탈 추가
+			$("#termRen").html(termRenHtmlstr);
+			//렌탈 추가
+			$("#feeRen").html(feeRenHtmlstr);
+
+			$('#quantity'+quantityChk).prop("checked", true);
+			$('#term'+termChk).prop("checked", true);
+			/* $('#fee'+feeChk).prop("checked", true); */
+			//본수별 등록비를 가져오고 있어 현재 조회조건에 포함된 본수코드 매핑
+			$('#fee'+data.regAmtList[0].searchCd).prop("checked", true);
+		}
+
+		fn_btnEventInit();
+	}
+
+	//자유렌탈 서비스 리스트 불러오기
+	function freeRentalServiceList(){
+		var periodCd = $(':radio[name="term"]:checked').val();	 //추천개월수
+		var cntCd = $(':radio[name="quantity"]:checked').val();		 //타이어 본수
+
+		//처음 진입시 기본 설정
+		if(typeof periodCd == 'undefined' ){
+			periodCd = "36"; //기본 36개월
+		}
+		if(typeof cntCd == 'undefined' ){
+			cntCd = "02"; //기본 2본
+		}
+
+		var pUrl = "/product/selectFreeRentalServiceList";
+		var pSendData = {periodCd : periodCd, cntCd : cntCd};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.FreeRentalServicList);
+	}
+
+
+	//렌탈 등록비 가져오기
+	function fnSelectRntalRegAmtList(){
+
+		//판매상품코드
+		var saleCd = $('select[name="rentaltype"] option:checked').attr('salecd');
+		//상품그룹
+		var prdtGrp = $('select[name="rentaltype"] option:checked').attr('prdtgrp');
+		//상품상세그룹
+		var prdtGrpDtl = $('select[name="rentaltype"] option:checked').attr('prdtgrpdtl');
+		//타이어 본수
+		var cntCd = $(':radio[name="quantity"]:checked').val();
+
+/* 		if(ValidUtil.isEmpty(saleCd)){
+			saleCd = "S000000092";
+		} */
+
+		if(ValidUtil.isEmpty(prdtGrp)){
+			prdtGrp = "01";
+		}
+
+		if(ValidUtil.isEmpty(prdtGrpDtl)){
+			prdtGrpDtl = "04"; //기본 2본
+		}
+
+		if(ValidUtil.isEmpty(cntCd)){
+			cntCd = "02"; //기본 2본
+		}
+
+		var pUrl = "/product/selectRntalRegAmtList";
+		/* var pSendData = {cntCd : cntCd}; */
+		var pSendData = {
+				saleCd 		: saleCd,
+				prdtGrp 	: prdtGrp,
+				prdtGrpDtl 	: prdtGrpDtl,
+				cntCd 		: cntCd
+			};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.RentalRegAmtList);
+	}
+
+	//자유렌탈
+	function calculateSelfRentalFee(){
+
+		var frm = document.selfRental;
+
+		var selEnginCd = frm.selEnginCd.value;
+		var selLocCd = frm.selLocCd.value;
+		var selVisCd = frm.selVisCd.value;
+		var selSaveCd = frm.selSaveCd.value;
+		var selTcCd = frm.selTcCd.value;
+		var selPrCd = frm.selPrCd.value;
+		var selArCd = frm.selArCd.value;
+		var selCheckCd = frm.selCheckCd.value;
+
+		var selEnginCdAmt = frm.selEnginCdAmt.value;
+		var selLocCdAmt = frm.selLocCdAmt.value;
+		var selVisCdAmt = frm.selVisCdAmt.value;
+		var selSaveCdAmt = frm.selSaveCdAmt.value;
+		var selTcCdAmt = frm.selTcCdAmt.value;
+		var selPrCdAmt = frm.selPrCdAmt.value;
+		var selArAmt = frm.selArAmt.value;
+		var selCheckAmt = frm.selCheckCdAmt.value;
+
+		var searchFrm = document.carInfoFrm;
+		/*
+		// 데이터 파싱
+		var tmpSizeArray1 = TireSize.split("/");
+		// 단면폭
+		var sectionWidth  = tmpSizeArray1[0];
+			sectionWidth  = sectionWidth.replace(' ', '');
+
+		var tmpSizeArray2 = tmpSizeArray1[1].split("R");
+		// 평면비
+		var aspectRatio  = tmpSizeArray2[0];
+
+		var	tmpSizeArray3 = tmpSizeArray2[1].split(" ");
+		// 인치, 강도
+		var wheelInches = tmpSizeArray3[0];
+
+		 */
+		var sectionWidth = $("#searchSw").val();
+		var aspectRatio  = $("#searchAr").val();
+		var wheelInches  = $("#searchWi").val();
+
+		var cntCd = $(':radio[name="quantity"]:checked').val();
+
+		if(typeof cntCd == 'undefined' ){
+			cntCd = "02"; //기본 2본
+		}
+
+		// 상담신청 시 수량 값 form 값에 저장 (IE);
+		$('input[name="cntCd"]').val(cntCd);
+
+		var cntCdNm = searchFrm.cntCdNm.value;
+		if(typeof cntCdNm == 'undefined' || cntCdNm == ""){
+			cntCdNm = "2본"; //기본 2본
+			searchFrm.cntCdNm.value = cntCdNm;
+		}
+
+		var regiAmt = frm.regiAmt.value.replace(',','');
+		//var petternCd = searchFrm.patternCd.value;
+		var petternCd = searchFrm.rentPatternCd.value;
+		var periodCd = frm.periodCd.value;
+
+		var pUrl = "/product/selectCalculateSelfProdFee";
+		var pSendData = {
+						    selEnginCd 		: selEnginCd
+							,selLocCd 		: selLocCd
+							,selVisCd 		: selVisCd
+							,selSaveCd 		: selSaveCd
+							,selTcCd 		: selTcCd
+							,selPrCd 		: selPrCd
+							,selArCd 		: selArCd
+						    ,selEnginCdAmt 	: selEnginCdAmt
+							,selLocCdAmt 	: selLocCdAmt
+							,selVisCdAmt 	: selVisCdAmt
+							,selSaveCdAmt 	: selSaveCdAmt
+							,selTcCdAmt 	: selTcCdAmt
+							,selPrCdAmt 	: selPrCdAmt
+							,selArAmt 		: selArAmt
+							,sectionWidth 	: sectionWidth
+							,aspectRatio 	: aspectRatio
+							,wheelInches 	: wheelInches
+							,plyRating 		: $("#plyRating").val()
+							,cntCd 			: cntCd
+							,regiAmt 		: regiAmt
+							,petternCd 		: petternCd
+							,periodCd 		: periodCd
+							,cntCdNm 		: cntCdNm
+						};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.FreeRentalList);
+
+	}
+
+	/* 자유렌탈 서비스 리스트 먼저 역순으로 뿌려줘야 하기때문에 서비스 리스트 만들어주면서 틀을 잡아준다. */
+	function fn_CtreateRentalServicList(data){
+
+		var htmlstr1 = "";
+		var htmlstr2 = "";
+		var htmlstr3 = "";
+		var htmlstr4 = "";
+		var htmlstr5 = "";
+		var htmlstr6 = "";
+		var htmlstr7 = "";
+		var htmlstr8 = "";
+
+		var periodCd = $(':radio[name="term"]:checked').val();	 //추천개월수
+
+		// tierFreeSelect  //타이어 무상교체  //getProdViewCdList56
+		// engineChageSelect  //엔진오일 교체  // getProdViewCdList51
+		// freeAlinSelect  //무상 얼라이먼트 // getProdViewCdList57
+		// freeGpsChangSelect  //무상 위치교환  // getProdViewCdList52
+		// visitCheckSelect  //방문점검  // getProdViewCdList53
+
+		var datapack = [
+		   {'id':'tierFreeSelect'    ,'data':data.getProdViewCdList56 ,'code':'B00007' } // 타이어 무상교체
+		  ,{'id':'engineChageSelect' ,'data':data.getProdViewCdList51 ,'code':'B00001' } // 엔진오일 교체
+		  ,{'id':'freeAlinSelect'    ,'data':data.getProdViewCdList57 ,'code':'B00008' } // 무상 얼라이먼트
+		  ,{'id':'freeGpsChangSelect','data':data.getProdViewCdList52 ,'code':'B00002' } // 무상 위치교환
+		  ,{'id':'visitCheckSelect'  ,'data':data.getProdViewCdList53 ,'code':'B00003' } // 방문점검
+		  ,{'id':'freeCheckSelect'   ,'data':data.getProdViewCdList58 ,'code':'B00010' } // check
+		];
+
+		for( var i in datapack ){
+			var row = datapack[i];
+
+			if(row.data.length > 0){
+				$('#'+row.id+' select').children().remove();
+
+				if(row.code != "B00010"){
+					$('#'+row.id+' select').append('<option value="'+row.code+'|0|0">해당없음</option>');
+				}
+
+				for(var i=0; i < row.data.length; i++) {
+					if(row.data[i].servCnt == '999'){
+						$('#'+row.id+' select').append('<option value="'+row.data[i].prsDcd+'|'+row.data[i].servCnt+'|'+row.data[i].servCntAmt+'">무제한</option>');
+
+					}else{
+						$('#'+row.id+' select').append('<option value="'+row.data[i].prsDcd+'|'+row.data[i].servCnt+'|'+row.data[i].servCntAmt+'">'+row.data[i].servCnt+'회</option>');
+					}
+				}
+			}
+			$('#'+row.id+' select.rent-opt').niceSelect('update').click();;
+		}
+
+
+		/* innerHtml!!! */
+
+		$('#tierFreeCnt').text('0');
+		/* $('#engineChageCnt').text('0'); */
+		$('#freeAlinCnt').text('0');
+		$('#freeGpsChangCnt').text('0');
+		/* $('#visitCheckCnt').text('0'); */
+		$('#freeCheckCnt').text('0');
+		//$('#FreetierChangeCnt').text('0');
+		//$('#FreeStrgSvCnt').text('0');
+
+
+ 		//5.자유렌탈 조회
+ 		//setSelCodeNew();//form 값이 여기서 바뀌고 재조회가 들어간다.
+		//5.자유렌탈 조회
+
+	    $(".arrowClose").click(function(e) {
+	 	   $(".selBox").slideUp(300);
+	        e.preventDefault();
+	 	});
+	}
+
+	function fn_CtreateFreeRentalList(data){
+
+
+		var saleNm 			= "";
+		var totalAmt 		= 0;
+		var totalRentAmt 	= 0;
+		var dcAmt 			= 0;
+		var prdtGrp 		= "";
+		var rentAmt 		= 0;
+		var prdtGrpDtl 		= "";
+		var saleCd 			= "";
+		var addRentAmt 		= 0;
+		var regiAmt 		= 0;
+		if(data.freeList.length > 0 ){
+			saleNm 			= data.freeList[0].saleNm;
+			totalAmt 		= data.freeList[0].totalAmt; 		//총 렌탈료
+			totalRentAmt 	= data.freeList[0].totalRentAmt; 	//총 납입금액
+			dcAmt 			= data.freeList[0].dcAmt;    		//할인금액
+			prdtGrp 		= data.freeList[0].prdtGrp;
+			rentAmt 		= data.freeList[0].rentAmt;  		//기본 월 렌탈료
+			prdtGrpDtl 		= data.freeList[0].prdtGrpDtl;
+			saleCd 			= data.freeList[0].saleCd;
+			addRentAmt 		= data.freeList[0].addRentAmt; 		//추가렌탈료
+			regiAmt 		= data.freeList[0].regiAmt;    		//렌탈등록비
+
+		}else{
+
+			//자유렌탈 상품 정보 없을시 화면내 비활성화
+			$('#rentalStyleWrap select.rentalstyle option:eq(0)').remove();
+
+		}
+
+		var innerHtml = "";
+		/*
+		var saleNm 			= data.freeList[0].saleNm;
+		var totalAmt 		= data.freeList[0].totalAmt; 		//총 렌탈료
+		var totalRentAmt 	= data.freeList[0].totalRentAmt; 	//총 납입금액
+		var dcAmt 			= data.freeList[0].dcAmt;    		//할인금액
+		var prdtGrp 		= data.freeList[0].prdtGrp;
+		var rentAmt 		= data.freeList[0].rentAmt;  		//기본 월 렌탈료
+		var prdtGrpDtl 		= data.freeList[0].prdtGrpDtl;
+        var saleCd 			= data.freeList[0].saleCd;
+        var addRentAmt 		= data.freeList[0].addRentAmt; 		//추가렌탈료
+        var regiAmt 		= data.freeList[0].regiAmt;    		//렌탈등록비
+        */
+
+        $('#monthFreeRentalAmt').text("");
+        $('#plusFreeRentalAmt').text("");
+        $('#saleFreeRentalAmt').text("");
+        $('#totalFreeRentalAmt').text("");
+
+        $('#freeRentalHashBox').children().remove();
+
+		var monthRentalAmt =  Number(totalAmt) - Number(dcAmt);  //월 렌탈료
+		var addRentalAmt   =  Number(addRentAmt)
+		var saleAmt  	   =  Number(dcAmt)
+		var totalRentAmt   =  Number(totalRentAmt)
+
+
+			monthRentalAmt ="\\"+monthRentalAmt; 	// 월렌탈료
+			addRentalAmt = "\\"+addRentalAmt;    	// 추가렌탈료
+			saleAmt = "\\"+saleAmt;			 	// 할인금액
+			totalRentAmt = "\\"+totalRentAmt;		//총 납입금액
+
+        $('#monthFreeRentalAmt').text(NumUtil.setComma(monthRentalAmt));
+        $('#plusFreeRentalAmt').text(NumUtil.setComma(addRentalAmt));
+        $('#saleFreeRentalAmt').text(NumUtil.setComma(saleAmt));
+        $('#totalFreeRentalAmt').text(NumUtil.setComma(totalRentAmt));
+        $('#rentalStyleWrap select.rentalstyle option:eq(0)').attr('saleCd',saleCd);
+        $('#rentalStyleWrap select.rentalstyle option:eq(0)').attr('prdtGrp',prdtGrp);
+        $('#rentalStyleWrap select.rentalstyle option:eq(0)').attr('prdtGrpDtl',prdtGrpDtl);
+        if($("#4descText").text()==""){
+        	$("#4descText").html("4본 구매로 휠 얼라인먼트 무상 제공 받고,<br/><br/> TPMS 포함한 모든 탈장착 비용은 항상 무료!");//렌탈일때 구매쪽에 금액이 안나와서 문구 위치가 바뀌어서 여기다가만듬
+        }
+
+        /* 해시태그 넣어보기 */
+        innerHtml = "";//$('select[name="tierFrChg"] option:checked').val()
+        var engineChg = $(':radio[name="engineChg"]:checked').next().text();
+        var freeLoc = $(':radio[name="freeLoc"]:checked').next().text();
+        var visitFree = $(':radio[name="visitFree"]:checked').next().text();
+        var strgSevice = $(':radio[name="strgSevice"]:checked').next().text();
+        var tierChage = $(':radio[name="tierChage"]:checked').next().text();
+        var tierFrChg = $(':radio[name="tierFrChg"]:checked').next().text();
+        var freeAlin = $(':radio[name="freeAlin"]:checked').next().text();
+        var cntCdNm = $('#cntCdNm').val();
+        var periodCd = $('input[name="recomPeriodCd"]').val();
+
+        if(typeof cntCdNm != 'undefined' && cntCdNm != null  && cntCdNm != "" ){
+        	innerHtml += '<span class="hash">#타이어수량  '+cntCdNm+'</span>';
+        }
+        if(typeof periodCd != 'undefined' && periodCd != null  && periodCd != "" ){
+        	innerHtml += '<span class="hash">#렌탈기간  '+periodCd+'개월</span>';
+        }
+
+		/* innerHtml!!! */
+		$('#freeRentalHashBox').html(innerHtml);
+	}
+
+
+	/* 선택한 서비스 코드 정보 셋팅 */
+	function setSelCode(prsDcd, servCnt, servCntAmt){
+
+		var frm = document.selfRental;
+
+		if(prsDcd == "B00001"){//엔진오일
+			frm.selEnginCd.value = servCnt;
+			frm.selEnginCdAmt.value = servCntAmt;
+			$('#engineChageCnt').text(servCnt);
+		}else if(prsDcd == "B00002"){//위치교환
+			frm.selLocCd.value = servCnt;
+			frm.selLocCdAmt.value = servCntAmt;
+			$('#freeGpsChangCnt').text(servCnt);
+		}else if(prsDcd == "B00003"){//방문점검
+			frm.selVisCd.value = servCnt;
+			frm.selVisCdAmt.value = servCntAmt;
+			$('#visitCheckCnt').text(servCnt);
+		}else if(prsDcd == "B00004"){//보관
+			frm.selSaveCd.value = servCnt;
+			frm.selSaveCdAmt.value = servCntAmt;
+			//$('#FreeStrgSvCnt').text(servCnt);
+		}else if(prsDcd == "B00006"){//타이어 무상 교체
+			frm.selTcCd.value = servCnt;
+			frm.selTcCdAmt.value = servCntAmt;
+			//$('#FreetierChangeCnt').text(servCnt);
+		}else if(prsDcd == "B00007"){//프리미엄(사계절보증제도)
+			frm.selPrCd.value = servCnt;
+			frm.selPrCdAmt.value = servCntAmt;
+			$('#tierFreeCnt').text(servCnt);
+		}else if(prsDcd == "B00008"){//얼라인먼트
+			frm.selArCd.value = servCnt;
+			frm.selArAmt.value = servCntAmt;
+			$('#freeAlinCnt').text(servCnt);
+		}else if(prsDcd == "B00010"){//check
+			frm.selCheckCd.value = servCnt;
+			frm.selCheckCdAmt.value = servCntAmt;
+			$('#freeCheckCnt').text(servCnt);
+		}
+
+		/* 자유렌탈 가격 재호출 */
+		calculateSelfRentalFee();
+
+		//자유렌탈 항목 선태기 영역 닫기
+		$(".selBox").slideUp(300);
+	}
+
+	setSelCodeNew = function() {
+		var frm = document.selfRental;
+
+		//타이어 무상 교체
+		var tierFrChgVal = $('select[name="tierFrChg"] option:checked').val();
+		var tierFrChgSplt;
+		if(typeof tierFrChgVal != 'undefined' ){
+			tierFrChgSplt = tierFrChgVal.split('|');
+			frm.selPrCd.value = tierFrChgSplt[1];
+			frm.selPrCdAmt.value = tierFrChgSplt[2];
+		}
+		//엔진오일 교체
+		/* var engineChgVal = $('select[name="engineChg"] option:checked').val();
+		var engineChgSplt;
+		if(typeof engineChgVal != 'undefined' ){
+			engineChgSplt = engineChgVal.split('|');
+			frm.selEnginCd.value = engineChgSplt[1];
+			frm.selEnginCdAmt.value = engineChgSplt[2];
+		} */
+
+		//무상 얼라이먼트
+		var freeAlinVal = $('select[name="freeAlin"] option:checked').val();
+		var freeAlinSplt;
+		if(typeof freeAlinVal != 'undefined' ){
+			freeAlinSplt = freeAlinVal.split('|');
+			frm.selArCd.value = freeAlinSplt[1];
+			frm.selArAmt.value = freeAlinSplt[2];
+		}
+
+		//무상 위치교환
+		var freeLocVal = $('select[name="freeLoc"] option:checked').val();
+		var freeLocSplt;
+		if(typeof freeLocVal != 'undefined' ){
+			freeLocSplt = freeLocVal.split('|');
+			frm.selLocCd.value = freeLocSplt[1];
+			frm.selLocCdAmt.value = freeLocSplt[2];
+		}
+
+		//방문점검
+		/* var visitFreeVal = $('select[name="visitFree"] option:checked').val();
+		var visitFreeSplt;
+		if(typeof visitFreeVal != 'undefined' ){
+			visitFreeSplt = visitFreeVal.split('|');
+			frm.selVisCd.value = visitFreeSplt[1];
+			frm.selVisCdAmt.value = visitFreeSplt[2];
+		} */
+
+		//check서비스
+		var freeCheckVal = $('select[name="freeCheck"] option:checked').val();
+		var freeCheckSplt;
+		if(typeof freeCheckVal != 'undefined' ){
+			freeCheckSplt = freeCheckVal.split('|');
+			frm.selCheckCd.value = freeCheckSplt[1];
+			frm.selCheckCdAmt.value = freeCheckSplt[2];
+		}
+
+		/* 자유렌탈 가격 재호출 */
+		calculateSelfRentalFee();
+	}
+
+	function fn_CreateViewRentalList(data){
+		var rentalHtml = "";
+
+		/* 일단 렌탈 리스트 삭제 */
+		$('li[id ^= "nomalRenta"]').remove();
+		$('#loginPopLayer').remove();
+
+		// $('#rentalStyleTabsWrap ul li:not(#tab_freeRental)').remove();
+
+		if(ValidUtil.isEmpty(officerCd)) {
+			//일반
+			$('#rentalStyleWrap select.rentalstyle option:not([value=rentaltype00])').remove();
+		} else {
+			// 240826 백인천 - 가져온 상품이 없다면, 임직원코드를 초기화하여 일반 렌탈상품 정보를 가져오도록 수정.
+			if(data.prodList.length < 0) {
+				officerCd = "";
+				calculateFee();
+			} else {
+				//임직원
+				$('#rentalStyleWrap select.rentalstyle option').remove();		
+			}
+		}
+
+		var now_rent_type = $('#nomalRentalId').val();
+
+		if(ValidUtil.isEmpty(officerCd)) {
+			//일반
+			$(".rental-option-detail-wrap .rental-option-detail:not([id=tab_rentaltype00])").remove();
+		} else {
+			//임직원
+			$(".rental-option-detail-wrap .rental-option-detail").remove();
+		}
+
+		for(var i=0; i < data.prodList.length; i++) {
+
+			if( now_rent_type == 'rentaltype'+i ) {
+
+				$('#rentalStyleWrap select.rentalstyle').append('<option value="rentaltype'+i+'" selected  saleCd='+ data.prodList[i].saleCd +' prdtGrp='+ data.prodList[i].prdtGrp +' prdtGrpDtl='+ data.prodList[i].prdtGrpDtl +' id="rentaltype'+i+'" value="'+i+'">'+ data.prodList[i].saleNm +'</option>');
+				$('#totalFreeRentalAmt').text("\\"+NumUtil.setComma(data.prodList[i].totalRentAmt));
+
+		        if(ValidUtil.isEmpty(data.prodList[i].addRentAmt)) {
+		        	$('#plusFreeRentalAmt').text("\\"+0);
+		        	$('#monthFreeRentalAmt').text("\\"+NumUtil.setComma(data.prodList[i].rentAmt));
+		        }
+		        else {
+		        	var monRentlAmt = Number(data.prodList[i].rentAmt) + Number(data.prodList[i].addRentAmt);
+		        	$('#plusFreeRentalAmt').text("\\"+NumUtil.setComma(data.prodList[i].addRentAmt));
+		        	$('#monthFreeRentalAmt').text("\\"+NumUtil.setComma(monRentlAmt));
+		        }
+		        if(ValidUtil.isEmpty(data.prodList[i].addRentAmt))
+		        	$('#saleFreeRentalAmt').text("\\"+0);
+		        else
+		        	$('#saleFreeRentalAmt').text("\\"+NumUtil.setComma(data.prodList[i].dcAmt));
+			}
+			else
+				$('#rentalStyleWrap select.rentalstyle').append('<option value="rentaltype'+i+'" saleCd='+ data.prodList[i].saleCd +' prdtGrp='+ data.prodList[i].prdtGrp +' prdtGrpDtl='+ data.prodList[i].prdtGrpDtl +' id="rentaltype'+i+'" value="'+i+'">'+ data.prodList[i].saleNm +'</option>');
+
+			$('#rentalStyleWrap select.rentalstyle').niceSelect('update');
+
+			// $('#rentalStyleTabsWrap ul').append('<li class="" rel="nomalRental'+i+'" id="tab_nomalRental'+i+'">'+ data.prodList[i].saleNm +'</li>');
+
+			var optionDetail = '';
+
+			if(ValidUtil.isEmpty(officerCd)) {
+				//일반
+				optionDetail += '<ul class="rental-option-detail" id="tab_rentaltype'+i+'" style="display:none;">';
+			} else {
+				//임직원
+				optionDetail += '<ul class="rental-option-detail" id="tab_rentaltype'+i+'">';
+			}
+
+
+			//무상교체 서비스 제외처리
+			if(${toDay} < '20220101'){
+
+				optionDetail += '	<li id="tierFreeSelect">';
+				optionDetail += '		<span class="label">타이어 무상교체 <span class="info-ico" tip="tipshow01"></span></span>';
+
+				if(data.prodList[i].selPrCd == '0' || typeof data.prodList[i].selPrCd == 'undefined'){
+				optionDetail += '<span class="retn-opt"><span class="noData">해당없음</span></span>';
+				}else if(data.prodList[i].selPrCd == '999'){
+					optionDetail += '<span class="retn-opt"><span class="noData">무제한</span></span>';
+				}else{
+					optionDetail += '<span class="retn-opt"><span class="num">'+ data.prodList[i].selPrCd +'</span>회</span>';
+				}
+
+
+				optionDetail += '	</li>';
+			}
+
+			/* optionDetail += '	<li id="engineChageSelect">';
+			optionDetail += '		<span class="label">엔진오일 교체 <span class="info-ico" tip="tipshow02"></span></span>';
+
+			if(data.prodList[i].selEnginCd == '0' || typeof data.prodList[i].selEnginCd == 'undefined'){
+			optionDetail += '<span class="retn-opt"><span class="noData">해당없음</span></span>';
+			}else if(data.prodList[i].selEnginCd == '999'){
+				optionDetail += '<span class="retn-opt"><span class="noData">무제한</span></span>';
+			}else{
+				optionDetail += '<span class="retn-opt"><span class="num">'+ data.prodList[i].selEnginCd +'</span>회</span>';
+			}
+
+			optionDetail += '	</li>'; */
+
+			optionDetail += '	<li id="freeAlinSelect">';
+			optionDetail += '		<span class="label">얼라인먼트서비스 <span class="info-ico" id="info_tipshow03"></span></span>';
+
+			if(data.prodList[i].selArCd == '0' || typeof data.prodList[i].selArCd == 'undefined'){
+				optionDetail += '<span class="retn-opt"><span class="noData">해당없음</span></span>';
+			}else if(data.prodList[i].selArCd == '999'){
+				optionDetail += '<span class="retn-opt"><span class="noData">무제한</span></span>';
+			}else{
+				optionDetail += '<span class="retn-opt"><span class="num">'+ data.prodList[i].selArCd +'</span>회</span>';
+			}
+
+			optionDetail += '	</li>';
+			optionDetail += '	<li id="freeGpsChangSelect">';
+			optionDetail += '		<span class="label">무상 위치교환 <span class="info-ico" tip="tipshow04"  id="info_tipshow04"></span></span>';
+
+			if(data.prodList[i].selLocCd == '0' || typeof data.prodList[i].selLocCd == 'undefined'){
+			optionDetail += '<span class="retn-opt"><span class="noData">해당없음</span></span>';
+			}else if(data.prodList[i].selLocCd == '999'){
+				optionDetail += '<span class="retn-opt"><span class="noData">무제한</span></span>';
+			}else{
+				optionDetail += '<span class="retn-opt"><span class="num">'+ data.prodList[i].selLocCd +'</span>회</span>';
+			}
+
+
+			optionDetail += '	</li>';
+
+			/* optionDetail += '	<li id="visitCheckSelect">';
+			optionDetail += '		<span class="label">방문점검 <span class="info-ico" tip="tipshow05"></span></span>';
+
+			if(data.prodList[i].selVisCd == '0' || typeof data.prodList[i].selVisCd == 'undefined'){
+			optionDetail += '<span class="retn-opt"><span class="noData">해당없음</span></span>';
+			}else if(data.prodList[i].selVisCd == '999'){
+				optionDetail += '<span class="retn-opt"><span class="noData">무제한</span></span>';
+			}else{
+				optionDetail += '<span class="retn-opt"><span class="num">'+ data.prodList[i].selVisCd +'</span>회</span>';
+			}
+			optionDetail += '	</li>'; */
+
+			optionDetail += '	<li id="freeCheckSelect">';
+			optionDetail += '		<span class="label">Check서비스 <span class="info-ico" tip="tipshow06"  id="info_tipshow06"></span></span>';
+			optionDetail += '		<span class="retn-opt"><span class="num">'+ data.prodList[i].selCheckCd +'</span>회</span>';
+			optionDetail += '	</li>';
+
+			optionDetail += '</ul>';
+
+			$(".rental-option-detail-wrap").append(optionDetail);
+
+			//임직원일때는 처음에 바로 그려준다.
+			if(!ValidUtil.isEmpty(officerCd)) {
+
+				//임직원 상품이 다수일경우 월렌탈료 노출 기준 변경 - 기존은 한개 -> 현재는 선택된 상품의 index기준
+				var idx = $('select[name="rentaltype"] option:selected').index();
+
+				//월렌탈료
+				var totalAmt 			= data.prodList[idx].totalAmt;
+				var totalRentAmt 		= data.prodList[idx].totalRentAmt;
+				var dcAmt 				= data.prodList[idx].dcAmt;
+				var rentAmt 			= data.prodList[idx].rentAmt;
+				var regiAmt 			= data.prodList[idx].regiAmt;
+				var addRentAmt			= data.prodList[idx].addRentAmt;
+
+				var monthRentalAmt 	=  Number(totalAmt) - Number(dcAmt);  	//월 렌탈료
+				var addRentAmt   	=  Number(addRentAmt) 				 		//추가렌탈료
+				var saleAmt  	   	=  Number(dcAmt) 					 	//할인금액
+				var totalRentAmt   	=  Number(totalRentAmt) 			     	//총납입금액
+
+				if(isNaN(monthRentalAmt)){
+					monthRentalAmt = 0;
+				}
+				if(isNaN(addRentAmt)){
+					addRentAmt = 0;
+				}
+				if(isNaN(saleAmt)){
+					saleAmt = 0;
+				}
+				if(isNaN(monthRentalAmt)){
+					monthRentalAmt = 0;
+				}
+
+				var sfrm = document.selfRental;
+
+				var mom_amt = Number(rentAmt) + Number(addRentAmt);  		// 기본렌탈료 + 추가렌료
+				var dc_amt = Number(dcAmt);    								// 렌탈 할인료
+				var regi_amt = Number(regiAmt);  							// 렌탈 등록비
+				var chg_regi_amt = $(':radio[name="fee"]:checked').next().text();
+				var periodCd = sfrm.periodCd.value;							// 선택 기간(개월)
+				// 계산된 총 렌탈료
+
+				var sum_mom_amt = getRentAmt(mom_amt, regi_amt, chg_regi_amt, dc_amt, periodCd);
+
+				monthRentalAmt ="\\"+monthRentalAmt; 	// 월렌탈료
+				addRentAmt = "\\"+addRentAmt;    	// 추가렌탈료
+				saleAmt = "\\"+saleAmt;			 	// 할인금액
+				totalRentAmt = "\\"+totalRentAmt;		//총 납입금액
+
+		        $('#monthFreeRentalAmt').text(NumUtil.setComma(monthRentalAmt));
+		        $('#plusFreeRentalAmt').text(NumUtil.setComma(addRentAmt));
+		        $('#saleFreeRentalAmt').text(NumUtil.setComma(saleAmt));
+		        $('#totalFreeRentalAmt').text(NumUtil.setComma(totalRentAmt));
+			}
+
+			continue;
+
+			rentalHtml += '<li id="nomalRental'+i+'" class="rentalTypeWrap">';
+			rentalHtml += '<div class="rentalType">';
+			rentalHtml += '<div class="hashBox">';
+
+			if(data.prodList[i].hashTag1 != null && data.prodList[i].hashTag1 != '' && data.prodList[i].hashTag1 != ' '){
+				rentalHtml += '<span class="hash">'+ data.prodList[i].hashTag1+ '</span>';
+			}
+			if(data.prodList[i].hashTag2 != null && data.prodList[i].hashTag2 != '' && data.prodList[i].hashTag2 != ' '){
+				rentalHtml += '<span class="hash">'+ data.prodList[i].hashTag2+ '</span>';
+			}
+			if(data.prodList[i].hashTag3 != null && data.prodList[i].hashTag3 != '' && data.prodList[i].hashTag3 != ' '){
+				rentalHtml += '<span class="hash">'+ data.prodList[i].hashTag3+ '</span>';
+			}
+			if(data.prodList[i].hashTag4 != null && data.prodList[i].hashTag4 != '' && data.prodList[i].hashTag4 != ' '){
+				rentalHtml += '<span class="hash">'+ data.prodList[i].hashTag4+ '</span>';
+			}
+
+			rentalHtml += '</div>';
+			rentalHtml += '<div class="renTitle">';
+			rentalHtml += '<div class="type">';
+
+			rentalHtml += '<input type="radio" name="rentaltype" saleCd='+ data.prodList[i].saleCd +' prdtGrp='+ data.prodList[i].prdtGrp +' prdtGrpDtl='+ data.prodList[i].prdtGrpDtl +' id="rentaltype'+i+'" value="'+i+'" class="type04" title="'+ data.prodList[i].saleNm +'"><label for="rentaltype'+i+'"><span class="under">'+ data.prodList[i].saleNm +'</span></label>';
+
+			/* rentalHtml += '<span>렌탈료 1개월 면제</span>'; */
+			rentalHtml += '</div>';
+			rentalHtml += '<div class="price">';
+			rentalHtml += '<dl>';
+
+			var totalAmt 			= data.prodList[i].totalAmt;
+			var totalRentAmt 		= data.prodList[i].totalRentAmt;
+			var dcAmt 				= data.prodList[i].dcAmt;
+			var rentAmt 			= data.prodList[i].rentAmt;
+			var regiAmt 			= data.prodList[i].regiAmt;
+			var addRentAmt			= data.prodList[i].addRentAmt;
+
+			var monthRentalAmt 	=  Number(totalAmt) - Number(dcAmt);  	//월 렌탈료
+			var addRentAmt   	=  Number(addRentAmt) 				 		//추가렌탈료
+			var saleAmt  	   	=  Number(dcAmt) 					 	//할인금액
+			var totalRentAmt   	=  Number(totalRentAmt) 			     	//총납입금액
+
+			if(isNaN(monthRentalAmt)){
+				monthRentalAmt = 0;
+			}
+			if(isNaN(addRentAmt)){
+				addRentAmt = 0;
+			}
+			if(isNaN(saleAmt)){
+				saleAmt = 0;
+			}
+			if(isNaN(monthRentalAmt)){
+				monthRentalAmt = 0;
+			}
+
+			var sfrm = document.selfRental;
+
+			var mom_amt = Number(rentAmt) + Number(addRentAmt);  		// 기본렌탈료 + 추가렌료
+			var dc_amt = Number(dcAmt);    								// 렌탈 할인료
+			var regi_amt = Number(regiAmt);  							// 렌탈 등록비
+			var chg_regi_amt = $(':radio[name="fee"]:checked').next().text();
+			var periodCd = sfrm.periodCd.value;							// 선택 기간(개월)
+			// 계산된 총 렌탈료
+
+			var sum_mom_amt = getRentAmt(mom_amt, regi_amt, chg_regi_amt, dc_amt, periodCd);
+
+			rentalHtml += '<dt>월 렌탈료</dt>';
+			rentalHtml += '<dd id="MonthRentalAmt'+i+'">\\'+ NumUtil.setComma(sum_mom_amt) +'</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>추가렌탈료</dt>';
+			rentalHtml += '<dd id="addRentAmt'+i+'">\\'+ NumUtil.setComma(addRentAmt) +'</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>할인금액</dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<dd id="discountAmt'+i+'">- \\'+ NumUtil.setComma(saleAmt) +'</dd>';
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>총 납입금액</dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<dd id="totalPayYn'+i+'">\\'+ NumUtil.setComma(totalRentAmt) +'</dd>';
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<span class="card_desc">※ 하나카드 최대 1만6천원 할인<br/>※ 국민카드 최대 2만원 할인</span>';
+			rentalHtml += '</div>';
+			rentalHtml += '</div>';
+			rentalHtml += '<div class="customerRental">';
+			rentalHtml += '<div class="custInfo">';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>타이어 무상 교체 </dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<!--count-->';
+			rentalHtml += '<div class="count type02">';
+
+			if(data.prodList[i].selPrCd == '0' || typeof data.prodList[i].selPrCd == 'undefined'){
+			rentalHtml += '<span class="noData">해당없음</span>';
+			}else if(data.prodList[i].selPrCd == '999'){
+				rentalHtml += '<span class="noData">무제한</span>';
+			}else{
+				rentalHtml +=  '<span class="circle">'+ data.prodList[i].selPrCd +'</span>회';
+			}
+
+			rentalHtml += '</div>';
+			// <!--count-->
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>엔진오일 교체 </dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<div class="count type02">';
+
+			if(data.prodList[i].selEnginCd == '0' || typeof data.prodList[i].selEnginCd == 'undefined'){
+				rentalHtml += '<span class="noData">해당없음</span>';
+			}else if(data.prodList[i].selEnginCd == '999'){
+				rentalHtml += '<span class="noData">무제한</span>';
+			}else{
+				rentalHtml +=  '<span class="circle">'+ data.prodList[i].selEnginCd +'</span>회';
+			}
+
+			rentalHtml += '</div>';
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>무상 얼라인먼트 </dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<div class="count type02">';
+
+			if(data.prodList[i].selArCd == '0' || typeof data.prodList[i].selArCd == 'undefined'){
+				rentalHtml += '<span class="noData">해당없음</span>';
+			}else if(data.prodList[i].selArCd == '999'){
+				rentalHtml += '<span class="noData">무제한</span>';
+			}else{
+				rentalHtml +=  '<span class="circle">'+ data.prodList[i].selArCd +'</span>회';
+			}
+
+			rentalHtml += '</div>';
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>무상 위치교환 </dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<div class="count type02">';
+
+			if(data.prodList[i].selLocCd == '0' || typeof data.prodList[i].selLocCd == 'undefined'){
+				rentalHtml += '<span class="noData">해당없음</span>';
+			}else if(data.prodList[i].selLocCd == '999'){
+				rentalHtml += '<span class="noData">무제한</span>';
+			}else{
+				rentalHtml +=  '<span class="circle">'+ data.prodList[i].selLocCd +'</span>회';
+			}
+
+			rentalHtml += '</div>';
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '<dl>';
+			rentalHtml += '<dt>방문점검 </dt>';
+			rentalHtml += '<dd>';
+			rentalHtml += '<div class="count type02">';
+
+			if(data.prodList[i].selVisCd == '0' || typeof data.prodList[i].selVisCd == 'undefined'){
+				rentalHtml += '<span class="noData">해당없음</span>';
+			}else if(data.prodList[i].selVisCd == '999'){
+				rentalHtml += '<span class="noData">무제한</span>';
+			}else{
+				rentalHtml +=  '<span class="circle">'+ data.prodList[i].selVisCd +'</span>회';
+			}
+
+			rentalHtml += '</div>';
+			rentalHtml += '</dd>';
+			rentalHtml += '</dl>';
+			rentalHtml += '</div>';
+			rentalHtml += '</div>';
+			rentalHtml += '</div>';
+			rentalHtml += '</li>';
+			// 탭 추가
+			$('#rentalStyleTabsWrap ul').append('<li class="" rel="nomalRental'+i+'" id="tab_nomalRental'+i+'">'+ data.prodList[i].saleNm +'</li>');
+
+		}
+		$(".rental-option-detail").hide();
+		if(ValidUtil.isEmpty(officerCd)) {
+			//일반
+			$("#tab_"+now_rent_type).show();
+		} else {
+
+			var idx = $('select[name="rentaltype"] option:selected').index();
+			for(var i=0; i < data.prodList.length; i++) {
+				//임직원
+				$("#tab_rentaltype" + idx).hide();
+			}
+			//임직원
+			$("#tab_rentaltype" + idx).show();//렌탈상품 dropList
+		}
+
+		/* 로그인 팝업 활성화 */
+		if(userYn == '' && fnid == ''){
+				rentalHtml += '<li id="loginPopLayer">';
+				rentalHtml += '<div class="orderCheckWrap type02">';
+				rentalHtml += '<div class="orderCheck">';
+				rentalHtml += '<p class="type02">';
+				rentalHtml += '※ 기존 이용 고객님께서는 로그인 후 1본 / 3본 수량도 주문이 가능합니다. <br/>';
+				rentalHtml += '※ 렌탈등록비 및 렌탈료는 장착 후 익월부터 청구됩니다.';
+				/*rentalHtml += '<a href="javascript:fn_LoginPop();"><img src="/img/common/login_btn_01.png" alt="로그인 바로가기"/></a>';*/
+				rentalHtml += '</p>';
+				rentalHtml += '</div>';
+				rentalHtml += '</div>';
+				rentalHtml += '</li>';
+			}
+
+		// $('#createRentalList').append(rentalHtml);
+		// 첫번째 탭 활성화
+
+		// $('#rentalStyleTabsWrap li').eq(0).addClass('active');
+
+
+		var renGbnId = "";
+
+		//officerCd = 임직원
+		if(officerCd != "" && $('#nomalRentalId').val() == 'rentaltype00'){
+			renGbnId = 'rentaltype0';
+		}else{
+			renGbnId = $('#nomalRentalId').val();
+		}
+
+		if(renGbnId != ""){
+			$('#'+renGbnId).parents(".rentalTypeWrap").show();
+			var tab_id = $('#'+renGbnId).parents(".rentalTypeWrap").attr('id')
+			$('#rentalStyleTabsWrap li[rel="'+tab_id+'"]').addClass('active');
+			$('#'+renGbnId).prop("checked", true);
+			if(renGbnId != 'rentaltype00'){
+				fn_nomalRentalAmt();
+			}
+		}
+	}
+
+
+	// 렌탈료 계산
+	var getRentAmt = function(mom_amt, regi_amt, chg_regi_amt, dc_amt, periodCd){
+
+		if(regi_amt != chg_regi_amt){
+			regi_amt =  eval(regi_amt - chg_regi_amt);
+			totRentAmt = mathFloor(eval(mom_amt*periodCd + regi_amt));
+			sum_mom_amt = mathFloor(eval(totRentAmt/periodCd - dc_amt));
+		}else{
+			sum_mom_amt = mathFloor(eval(mom_amt - dc_amt));
+		}
+
+		return sum_mom_amt;
+	};
+
+	// 10의자리 버림
+	var mathFloor = function(num){
+		num = Math.floor(eval(num)/10)*10;
+		return num;
+	}
+
+	function fn_topRadioBtnControll(id){
+		var feeId = $(':radio[name="fee"]:checked').attr('id');
+		var frm = document.selfRental;
+		var frm2 = document.carInfoFrm;
+
+		$('#nomalRentalId').val(id);
+		if(id == 'rentaltype00'){//자유렌탈이면.
+			fnSelectRntalRegAmtList();
+			if(officerCd == "" || officerCd == null ){
+		 	 	//임직원 제외 서비스
+				setSelCodeNew();
+			}
+		}else{
+			var html = "";
+			//일단 삭제
+			$('#feeRen').children().remove();
+
+			//등록비 추가
+			$("#feeRen").html(html);
+
+			if(feeId != "fee01" && feeId != "fee02" &&  feeId != "fee04" ){
+				$('#fee01').prop("checked", true);
+			}else{
+				$('#'+feeId).prop("checked", true);
+			}
+			fn_btnEventInit();
+			frm.periodCd.value = $(':radio[name="term"]:checked').val();
+			frm.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+
+			frm2.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+			frm2.periodCd.value = $(':radio[name="term"]:checked').val();
+			document.carInfoFrm.recomPeriodCd.value = $(':radio[name="term"]:checked').val();
+			changBtnReSearchRentalAtm();
+		}
+	}
+
+
+	function fn_btnEventInit(){
+
+		var frm = document.selfRental;
+		var frm2 = document.carInfoFrm;
+
+		/* 이벤트 초기화 */
+		$(document).off("click","input[name='fee'] , input[name='term'] , input[name='quantity']");
+
+		/* 이벤트 시작 */
+		$(document).on("click","input[name='fee'] , input[name='term'] , input[name='quantity']" , function(){
+
+			// if( $('select[name="rentaltype"] option:checked').attr('id') != 'rentaltype00'){
+			if( $('select[name="rentaltype"]').val() != 'rentaltype00'){
+				// 추천렌탈 등록비 추가 20191207
+				fn_nomalRentalAmt();
+			}
+
+			frm.periodCd.value = $(':radio[name="term"]:checked').val();
+			frm.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+			frm2.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+			frm2.periodCd.value = $(':radio[name="term"]:checked').val();
+			document.carInfoFrm.recomPeriodCd.value = $(':radio[name="term"]:checked').val();
+			changBtnReSearchRentalAtm();
+		});
+
+		$(document).on("mouseover", '#info_tipshow03, #info_tipshow04, #info_tipshow06', function(e){
+
+			var targetId = e.target.id.replace('info_', '');
+			$('#' + targetId).removeAttr('disabled').css('display','block');
+		});
+
+		$(document).on("mouseout", '#info_tipshow03, #info_tipshow04, #info_tipshow06', function(e){
+
+			var targetId = e.target.id.replace('info_', '');
+			$('#' + targetId).css('display','none');
+		});
+	}
+
+	/* 렌탈수량 렌탈기간 렌탈등록비가 움직일때마다 계산을 다시 해준다. */
+	function changBtnReSearchRentalAtm(){
+		var id = $('select[name="rentaltype"] option:checked').val();
+		if(id == 'rentaltype00'){
+			//3.자유렌탈 서비스 리스트
+			freeRentalServiceList();
+			setSelCodeNew();
+		}else{
+
+
+			if(officerCd == "" || officerCd == null ){
+				//임직원 제외 서비스
+				//2.자유렌탈 서비스 리스트
+				freeRentalServiceList();
+			}
+			//4.일반렌탈 리스트 생성
+			calculateFee();
+		}
+	}
+
+	fn_o2oOrderGo = function (){
+		$('#o2ojangchackGuide').removeClass("md-show");
+
+		var custDivCd = "<%=session.getAttribute("custDivCd")%>";
+		var comDivCd = "<%=session.getAttribute("comDivCd")%>";
+		var userLoginId = "<%=session.getAttribute("userLoginId")%>";
+
+			if (custDivCd == "null") {
+				custDivCd = fncust;
+			}
+			if (comDivCd == "null") {
+				comDivCd = fncom;
+			}
+			if (userLoginId == "null") {
+				userLoginId = fnid;
+			}
+
+			orgPay = {};
+			orgPay.bassSaleFee = $("#bassSaleFee").val();
+			orgPay.saleFee = $("#saleFee").val();
+			orgPay.stmemSaleAmt = $("#stmemSaleAmt").val();
+
+			fn_o2oItemOder(custDivCd, comDivCd, userLoginId);
+
+		}
+
+		fn_o2oItemOder = function(cust, com, id) {
+
+			/* 전역변수에다 넣어주기 */
+			fncust = cust;
+			fncom = com;
+			fnid = id;
+			$("#modal-nonCustContinue").removeClass("md-show");
+			fun_calculateO2oSetAjax();
+
+		}
+
+		var params = [];
+
+		function fn_checkGrp(){
+
+			//로그인시 가격계산 다시한다(그룹가격확인)
+			if(typeof orgPay.bassSaleFee != 'undefined'){
+				if(orgPay.bassSaleFee != $("#bassSaleFee").val()
+						|| orgPay.saleFee != $("#saleFee").val()
+						|| orgPay.stmemSaleAmt != $("#stmemSaleAmt").val()){
+
+					if(typeof $("#grpPay").val() == "undefined" || $("#grpPay").val() == "Y" || $("#grpPay").val() == ""){
+						ComUtil.alert("회원님은 제휴코드인증회원입니다. \n 상품을 재검색하여 주시길 바랍니다.","","",function(){
+							location.href = "/main";
+						});
+						return;
+					}
+				}else{
+					$('#orderGbn').val('O');
+
+					var frm           = document.carInfoFrm;
+					var cntCdNm       = $(':radio[name="o2oQtyRadio"]:checked').next().text();
+					var addItemCd     = $("#addItemCd").val();
+					var addDpPrNo     = $("#addDpPrNo").val();
+					var addMatcd      = $("#addMatcd").val();
+					var addTireYn     = ValidUtil.isEmpty($("#addTireYn").val()) ? "N" : $("#addTireYn").val();
+					var addTireInfoYn = (ValidUtil.isEmpty($("#addTireInfo").val() )) ? "N" : "Y";
+
+					//frm.submit();
+					//frontTierSelYn
+					//rearTierSelYn
+
+					//전후륜이 동일 , 추가 타이어 선택 완료 일경우
+					var tireNm      = ($("#tireFrCd").val() == "F") ? "후륜" : "전륜"
+					var addTireFrCd = ($("#tireFrCd").val() == "F") ? "R" : "F";
+
+					var orderPurchYn = $("#tireSizeYn").val() == "Y"
+					                  || ( addTireYn == "Y" && addTireInfoYn == "Y")
+					                  || ValidUtil.isEmpty(addDpPrNo);
+
+					if(orderPurchYn ){
+						//frm.cntCdNm.value = cntCdNm;
+						$("#cntCdNm").val(cntCdNm);
+						//yjw serverMode 제거(20220225)
+						frm.action = "/order/orderPurchaseTMS2";
+						frm.submit();
+					}else{
+						var confirmMsg = tireNm + " 타이어가 존재 합니다.</br> 추가 구매  하시겠습니까?";
+						var cntCd = $(':radio[name="o2oQtyRadio"]:checked').val();
+						var cngYn = ( cntCd > "02") ? true : false;
+						if( cngYn ){
+							confirmMsg = tireNm + " 타이어가 존재 합니다. </br> 위치별 타이어 수량은 2본까지 구매 가능합니다. </br> 추가 구매  하시겠습니까?";
+						}
+						ComUtil.confirm( confirmMsg, ""
+							, function() {
+								if(cngYn){
+									$(':radio[id="radio02"]').prop("checked",true);
+									cntCdNm = $(':radio[name="o2oQtyRadio"]:checked').next().text();
+									$("#cntCdNm"       ).val(cntCdNm);
+									calculateO2oSet();
+								}
+
+								// 구매 결정된 타이어 파라미터 (주문서로 이동할 내역)
+								var params = {
+										"dpPrNo"         : $("#dpPrNo").val()
+									   ,"itemCd"         : $("#itemCd").val()
+									   ,"itemNm"         : $("#itemNm").val()
+									   ,"frCd"           : $("#frCd").val()
+									   ,"pageGbn"        : $("#pageGbn").val()
+									   ,"sectionWidth"   : $("#searchSw").val()
+									   ,"aspectRatio"    : $("#searchAr").val()
+									   ,"wheelInches"    : $("#searchWi").val()
+									   ,"plyRating"      : $("#plyRating").val()
+									   ,"classCd"        : ValidUtil.isEmpty($("#classCdNew").val()) ? $("#classCd").val() : $("#classCdNew").val()
+									   ,"thumimg"        : $("#o2oThumImg").val()
+									   ,"o2oThumImg"     : $("#o2oThumImg").val()
+									   ,"saleTyCd"       : $("#saleTyCd").val()
+									   ,"classCdNm"      : $("#classCdNm").val()
+									   ,"contentsCd"     : $("#contentsCd").val()
+									   ,"contentsNm"     : $("#contentsNm").val()
+									   ,"makerCd"        : $("#makerCd").val()
+									   ,"makerNm"        : $("#makerNm").val()
+									   ,"modelCd"        : $("#modelCd").val()
+									   ,"modelNm"        : $("#modelNm").val()
+									   ,"seasonCd"       : $("#seasonCd").val()
+									   ,"bassSaleFee"    : $("#bassSaleFee").val()
+									   ,"officerCdYn"    : $("#officerCdYn").val()
+									   ,"stmemSaleAmt"   : $("#stmemSaleAmt").val()
+									   ,"saleFee"        : $("#saleFee").val()
+									   ,"orderO2oCnt"    : $("#orderO2oCnt").val()
+									   ,"orderO2oOriAmt" : $("#orderO2oOriAmt").val()
+									   ,"orderO2oPayAmt" : $("#orderO2oPayAmt").val()
+									   ,"tireSize"       : $("#TireSize").val()
+									   ,"pointAccurt"    : $("#pointAccurt").val()
+									   ,"prcPlcNo"       : $("#prcPlcNo").val()
+									   ,"orderPayAmt"    : (Number($("#orderO2oPayAmt").val()) - Number($("#optTotAmt").val())).toString()
+									   ,"pakAmt"         : $("#pakAmt").val()
+									   ,"optAmt"         : $("#optAmt").val()
+									   ,"optCo"          : $("#optCo").val()
+									   ,"optPlcNm"       : $("#optPlcNm").val()
+									   ,"optPlcNo"       : $("#optPlcNo").val()
+									   ,"optBfComment"   : $("#optBfComment").val()
+									   ,"optAfComment"   : $("#optAfComment").val()
+									   ,"cntCdNm"        : $("#cntCdNm").val()
+									   ,"patternCd"      : $("#patternCd").val().replace("'",'')
+									   ,"tireSizeYn"     : $("#tireSizeYn").val()
+									   ,"stmemSaleAmt"   : $("#stmemSaleAmt").val()
+								}
+								$("#addTireInfo").val(JSON.stringify(params));
+
+								$("#dpPrNo"        ).val($("#addDpPrNo").val());
+								$("#itemCd"        ).val($("#addItemCd").val());
+								$("#matCd"         ).val($("#addMatCd").val());
+								$("#frCd"          ).val($("#frCd").val());
+								$("#tireFrCd"      ).val(addTireFrCd);
+								$("#addTireYn"     ).val("Y");
+
+								frm.action = "/product/prdDetail";
+								frm.submit();
+
+							}
+							, function() {
+								//yjw serverMode 제거(20220225)
+								frm.action = "/order/orderPurchaseTMS2";
+								frm.submit();
+							}
+							,"예","아니요"
+						);
+					}
+				}
+			}
+		}
+
+		/* [20220824_1] kstka 주문사전가능여부 확인 */
+		/* 렌탈 주문 사전 검증  */
+		fn_beforeOrderConfirm = function(cust, com, id, cd, cnt) {
+
+			var modelCd = $('#modelCd').val();
+			var carNo = $('#carNo').val();
+
+			if (systemGbn == 'R' || systemGbn == 'C') {
+				if (ValidUtil.isEmpty(modelCd)) {
+					$("#carInfoSearch").addClass("md-show");
+					return;
+				}
+			}
+
+			// 로그인이 되어 있을 시에는 신용평가 후 주문하기 페이지로 이동
+			// 미로그인 시에는 주문하기 진입  로그인 페이지로 이동
+			if ((id == null || id == '' || id == 'null')
+					&& (fnid == null || fnid == '')) {
+				ComUtil.confirm("로그인 후 이용 가능합니다.</br>로그인 하시겠습니까?", "", function() {
+					$('#loginPopGbn').val('retalOrder');
+					fn_LoginPop();
+					return;
+				});
+			}
+
+			/* 전역변수에다 넣어주기 */
+			fncust = cust;
+			fncom = com;
+			fnid = id;
+
+			officerCd = $.trim(cd);
+			if(officerCd != null && officerCd != ""){
+				//임직원코드가 있는데 선택된 상품이 임직원 상품이 아닐때
+				var prdtGrpDtl = $('select[name="rentaltype"] option:selected').attr('prdtGrpDtl');
+				if(cnt > 0){ //주문가능횟수 체크
+					if(prdtGrpDtl != "02"){
+						ComUtil.confirm("임직원상품 대상이십니다. 임직원상품 주문으로 진행하시겠습니까?", "", function() {
+							evManager.init();
+
+							$('#rental').click();
+							return;
+						});
+					}
+				}
+			}
+
+			if($('#bizAppYn').val() == "N") {
+				ComUtil.alert("사업자 고객의 경우 렌탈 계약을 위한 </br>승인이 필요합니다.</br>고객센터 ☎1855-0100 으로 </br>전화 주시기 바랍니다.</br>감사합니다.");
+				return;
+			} else if($('#safekey').val() == "" || $('#safekey').val() == 'null') {
+				ComUtil.alert("(인증번호)를 발급 받으셔야 주문이 가능합니다.</br>마이넥센메뉴에서 인증번호를 발급 받으세요.");
+				return;
+			}
+
+			var rentMonthAmt = $('#monthFreeRentalAmt').text().replace('\\', '').replace(',', '').replace(' ', '');
+			if(rentMonthAmt == 0 ){
+				ComUtil.alert("렌탈료가 책정되지 않은 상품입니다  고객센터에 문의 바랍니다");
+			}else{
+				$('#orderGbn').val('R');
+
+				setOrderData();
+
+				var pUrl = "/order/beforeOrderConfirm";
+				var pSendData = {};
+				evManager.commonAjax(pUrl, pSendData, callBackManager.beforeOrderConfirm);
+			}
+		}
+
+		/* [20220824_1] kstka 주문사전가능여부 확인 */
+		/* 사전검증 후 렌탈주문 */
+		fn_tireItemOrder_after = function() {
+
+			ComUtil.confirm("주문을 진행하시겠습니까?", "", function() {
+
+				var frm = document.carInfoFrm;
+				frm.periodCd.value = $(':radio[name="term"]:checked').val();
+				frm.cntCdNm.value = $(':radio[name="quantity"]:checked').next().text();
+				frm.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+				frm.patternCd.value = $("#rentPatternCd").val();
+
+				frm.action = "/order/orderRentalTMS2";
+				frm.submit();
+			});
+		}
+
+		/* 렌탈주문 */
+		fn_tireItemOrder = function(cust, com, id) {
+
+			var modelCd = $('#modelCd').val();
+			var carNo = $('#carNo').val();
+
+			if (systemGbn == 'R' || systemGbn == 'C') {
+				if (ValidUtil.isEmpty(modelCd)) {
+					$("#carInfoSearch").addClass("md-show");
+					return;
+				}
+			}
+
+			// 로그인이 되어 있을 시에는 신용평가 후 주문하기 페이지로 이동
+			// 미로그인 시에는 주문하기 진입  로그인 페이지로 이동
+			if ((id == null || id == '' || id == 'null')
+					&& (fnid == null || fnid == '')) {
+				ComUtil.confirm("로그인 후 이용 가능합니다.</br>로그인 하시겠습니까?", "", function() {
+					$('#loginPopGbn').val('retalOrder');
+					fn_LoginPop();
+					return;
+				});
+			}
+
+			/* 전역변수에다 넣어주기 */
+			fncust = cust;
+			fncom = com;
+			fnid = id;
+
+			if($('#bizAppYn').val() == "N") {
+				ComUtil.alert("사업자 고객의 경우 렌탈 계약을 위한 </br>승인이 필요합니다.</br>고객센터 ☎1855-0100 으로 </br>전화 주시기 바랍니다.</br>감사합니다.");
+				return;
+			} else if($('#safekey').val() == "" || $('#safekey').val() == 'null') {
+				ComUtil.alert("(인증번호)를 발급 받으셔야 주문이 가능합니다.</br>마이넥센메뉴에서 인증번호를 발급 받으세요.");
+				return;
+			}
+
+			var rentMonthAmt = $('#monthFreeRentalAmt').text().replace('\\', '').replace(',', '').replace(' ', '');
+			if(rentMonthAmt == 0 ){
+				ComUtil.alert("렌탈료가 책정되지 않은 상품입니다  고객센터에 문의 바랍니다");
+			}else {
+				ComUtil.confirm("주문을 진행하시겠습니까?", "", function() {
+					$('#orderGbn').val('R');
+					// 파리미터 값 설정
+					setOrderData();
+					if (cust == "1") {//개인고객
+						indi_credit();
+					} else if (cust == "2") {//사업자 고객
+						if (com == "1") {//개인 사업자
+							license_credit();
+						} else {//법인사업자
+							//indiLic_credit();
+							license_credit();
+						}
+					} else {//그외
+					}
+				});
+			}
+		}
+
+		//개인 고객 신용정보 조회
+		function indi_credit() {
+			var pUrl = "/order/certifyPerson";
+			var pSendData = {};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.indi_credit);
+		}
+
+		//개인고객 신용정보 조회 성공시 신용조회결과 콜백 함수
+		function fn_indi_credit_result(data) {
+			/*
+			 * 신용등급 -> 신용포인트로 변경.(crGrade)
+			 * 변경일 : 2020.12.28
+			 */
+			if (data.rtnMap == null || data.rtnMap == '') {
+				var alterMsg = '고객님, 죄송합니다.<br/>';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.<br/>';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.';
+				ComUtil.alert(alterMsg);
+			} else if (Number(data.rtnMap.creditLvlCd) >= Number(data.rtnMap.crGrade)) {
+				var alterMsg = '고객님, 죄송합니다.<br/>';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.<br/>';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.';
+				ComUtil.alert(alterMsg);
+			} else {
+				var frm = document.carInfoFrm;
+				frm.periodCd.value = $(':radio[name="term"]:checked').val();
+				frm.cntCdNm.value = $(':radio[name="quantity"]:checked').next().text();
+				frm.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+				frm.patternCd.value = $("#rentPatternCd").val();
+
+				//yjw serverMode 제거(20220225)
+				frm.action = "/order/orderRentalTMS2";
+				frm.submit();
+			}
+		}
+
+		//법인사업자 고객 신용정보조회
+		function license_credit() {
+			var pUrl = "/order/certifyCompany";
+			var pSendData = {};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.license_credit);
+		}
+
+		//법인사업자신용조회처리결과
+		function fn_license_credit_rslt(data) {
+			if (data.rtnMap == null || data.rtnMap == '') {
+				var alterMsg = '고객님, 죄송합니다.<br/>';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.<br/>';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.';
+				ComUtil.alert(alterMsg);
+			} else if (data.rtnMap.gradeYn != 'Y') {
+				var alterMsg = '고객님, 죄송합니다.<br/>';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.<br/>';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.';
+				ComUtil.alert(alterMsg);
+			} else {
+				//개인사업자
+				if(fncust == "2" && fncom == "1") {
+					license_credit22();
+				} else {
+					var frm = document.carInfoFrm;
+					frm.periodCd.value = $(':radio[name="term"]:checked').val();
+					frm.cntCdNm.value = $(':radio[name="quantity"]:checked').next().text();
+					frm.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+
+					//yjw serverMode 제거(20220225)
+					frm.action = "/order/orderRentalTMS2";
+					frm.submit();
+				}
+			}
+		}
+
+		//사업주신용조회처리 (개인이나 사업주나 신용정보는 다 똑같아서 개인신용정보 조회 콜백 불러줌)
+		function license_credit22() {
+			var pUrl = "/order/certifyPerson";
+			var pSendData = {};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.indi_credit);
+		}
+
+		//법인 사업자
+		function indiLic_credit() {
+			var pUrl = "/order/certifyPerson";
+			var pSendData = {};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.indiLic_credit);
+		}
+
+		function fn_indiLic_credit_result(data) {
+			/*
+			 * 신용등급 -> 신용포인트로 변경.(crGrade)
+			 * 변경일 : 2020.12.28
+			 */
+			ComUtil.alertClose();
+
+			if (data.rtnMap == null || data.rtnMap == '') {
+				var alterMsg = '고객님, 죄송합니다.<br/>';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.<br/>';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.';
+				ComUtil.alert(alterMsg);
+			} else if (Number(data.rtnMap.creditLvlCd) >= Number(data.rtnMap.crGrade)) {
+				var alterMsg = '고객님, 죄송합니다.<br/>';
+				alterMsg = alterMsg + '고객님께서는 현재 렌탈 계약이 어렵습니다.<br/>';
+				alterMsg = alterMsg + '[구매]를 추천 드립니다.';
+				ComUtil.alert(alterMsg);
+			} else {
+				var frm = document.carInfoFrm;
+				frm.periodCd.value = $(':radio[name="term"]:checked').val();
+				frm.cntCdNm.value = $(':radio[name="quantity"]:checked').next().text();
+				frm.regiAmt.value = $(':radio[name="fee"]:checked').next().text().replace(',','');
+
+				//yjw serverMode 제거(20220225)
+				frm.action = "/order/orderRentalTMS2";
+				frm.submit();
+			}
+		}
+
+		//쿠폰 정책 존재 유무 조회
+		function fn_cpnPlcPtrnYnChk(itemCd, itemGrpCd, itemTyCd, itemTyDtlCd){
+			var pUrl = "/product/selectCpnPlcPtrnYnChk";
+			var pSendData = {
+			    itemCd 		: itemCd,
+				itemGrpCd 	: itemGrpCd,
+				itemTyCd 	: itemTyCd,
+				itemTyDtlCd :itemTyDtlCd
+			};
+
+			/* 전역변수에 넣기 */
+			gbItemCd = itemCd;
+			gbItemGrpCd = itemGrpCd;
+			gbItemTyCd = itemTyCd;
+			gbItemTyDtlCd = itemTyDtlCd;
+			evManager.commonAjax(pUrl, pSendData, callBackManager.cpnPlcList);
+		}
+
+		//쿠폰 다운로드
+		fn_o2oDownCoupon = function(cust, com, id) {
+			/* 전역변수에다 넣어주기 */
+			fncust = cust;
+			fncom = com;
+			fnid = id;
+
+			if ((id == null || id == "" || id == null)
+					&& (fnid == null || fnid == "")) {
+				ComUtil.confirm("로그인 후 이용 가능합니다.</br>로그인 하시겠습니까?", "", function() {
+					$('#loginPopGbn').val('downCoupon');
+					fn_LoginPop();
+					return;
+				});
+			}
+
+			if(fnid != ""){
+				ComUtil.confirm("쿠폰 다운로드 받으시겠습니까?", "", function() {
+					var itemCd = gbItemCd;
+					var itemGrpCd = gbItemGrpCd;
+					var itemTyCd = gbItemTyCd;
+					var itemTyDtlCd = gbItemTyDtlCd;
+					var pUrl = "/product/saveFoCpnMst";
+					var pSendData = {
+						itemCd 		: itemCd,
+						itemGrpCd 	: itemGrpCd,
+						itemTyCd 	: itemTyCd,
+						itemTyDtlCd : itemTyDtlCd
+					};
+					pSendData = JSON.stringify(pSendData);
+
+					$.ajax({
+						url : pUrl,
+						type : "POST",
+						cache : false,
+						data : pSendData,
+						contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+						success : function(data) {
+							if (data.rtnCode == "0") {	//쿠폰 생성 성공 시
+								ComUtil.alert("쿠폰을 발급 받았습니다.");
+
+								/*
+								ComUtil.confirm("쿠폰을 발급 받았습니다. </br> 바로 확인 하시겠습니까?", "", function() {
+									window.location.href = "/mypage/couponList";
+								}); */
+
+							}else if(data.rtnCode == "2") {	//쿠폰 이미 다 발급 시
+								ComUtil.alert("이미 쿠폰을 발급 받았습니다.");
+							}
+						},
+						error : function(request, status, error) {
+							console.log('error callback : ' + error);
+						}
+					});
+				});
+			}
+		}
+
+		//파라메터 넣어주기
+		function setOrderData() {
+			//렌탈주문 & 자유렌탈인 경우
+			if($('.orderWrap_new.rental .tabs .active').attr('id') == 'rental') {
+				if($('select[name="rentaltype"] option:checked').val() == 'rentaltype00') {
+					setSelCodeNew();
+				}
+			}
+
+			var sfrm = document.selfRental;
+			var frm = document.carInfoFrm;
+			var rentalName = ""; //렌탈명이 무엇인지
+			var salecd = ""; //판매코드가 무엇인지
+			var retalGbnId = ""; //무슨렌탈인지
+
+			rentalName = $('select[name="rentaltype"] option:checked').next().text();
+			salecd = $('select[name="rentaltype"] option:checked').attr('salecd');
+			retalGbnId = $('select[name="rentaltype"] option:checked').val();
+
+			$('#saleNm').val(rentalName); //판매상품명
+			$('#saleCd').val(salecd); //판매상품코드
+
+			/* 체크되어있는 렌탈의 가격을 불러온다 */
+
+			var MonthRentalAmt = 0; // 원렌탈료
+			var addRentAmt = 0; // 추가렌탈료
+			var discountAmt = 0; // 할인금액
+			var totalPayYn = 0; // 총 납입금액
+
+			if (retalGbnId == 'rentaltype00') {
+				MonthRentalAmt = $('#monthFreeRentalAmt').text();
+				MonthRentalAmt = MonthRentalAmt.replace('\\', '').replace(',', '')
+						.replace(' ', '');
+
+				addRentAmt = $('#plusFreeRentalAmt').text();
+				addRentAmt = addRentAmt.replace('\\', '').replace(',', '').replace(
+						' ', '');
+
+				discountAmt = $('#plusFreeRentalAmt').text();
+				discountAmt = discountAmt.replace('\\', '').replace(',', '')
+						.replace(' ', '').replace('-', '');
+
+				totalPayYn = $('#totalFreeRentalAmt').text();
+				totalPayYn = totalPayYn.replace('\\', '').replace(',', '').replace(
+						' ', '');
+
+				/* 자유렌탈 렌탈서비스 넣어주기  영역 */
+				frm.selEnginCd.value = sfrm.selEnginCd.value;
+				frm.selLocCd.value = sfrm.selLocCd.value;
+				frm.selVisCd.value = sfrm.selVisCd.value;
+				frm.selSaveCd.value = sfrm.selSaveCd.value;
+				frm.selTcCd.value = sfrm.selTcCd.value;
+				frm.selPrCd.value = sfrm.selPrCd.value;
+				frm.selArCd.value = sfrm.selArCd.value;
+				frm.selCheckCd.value = sfrm.selCheckCd.value;
+				frm.selEnginCdAmt.value = sfrm.selEnginCdAmt.value;
+				frm.selLocCdAmt.value = sfrm.selLocCdAmt.value;
+				frm.selVisCdAmt.value = sfrm.selVisCdAmt.value;
+				frm.selSaveCdAmt.value = sfrm.selSaveCdAmt.value;
+				frm.selTcCdAmt.value = sfrm.selTcCdAmt.value;
+				frm.selPrCdAmt.value = sfrm.selPrCdAmt.value;
+				frm.selArAmt.value = sfrm.selArAmt.value;
+				frm.selCheckCdAmt.value = sfrm.selCheckCdAmt.value;
+				frm.regiAmt.value = sfrm.regiAmt.value.replace(',','');
+				frm.periodCd.value = sfrm.periodCd.value;
+
+			} else {
+				var num = retalGbnId.replace('rentaltype', '');
+
+				MonthRentalAmt = $('#MonthRentalAmt' + num).text();
+				MonthRentalAmt = MonthRentalAmt.replace('\\', '').replace(',', '')
+						.replace(' ', '');
+				addRentAmt = $('#addRentAmt' + num).text();
+				addRentAmt = addRentAmt.replace('\\', '').replace(',', '').replace(
+						' ', '');
+				discountAmt = $('#discountAmt' + num).text();
+				discountAmt = discountAmt.replace('\\', '').replace(',', '')
+						.replace(' ', '').replace('-', '');
+				totalPayYn = $('#totalPayYn' + num).text();
+				totalPayYn = totalPayYn.replace('\\', '').replace(',', '').replace(
+						' ', '');
+
+				if($("#tab_"+retalGbnId +" > #freeAlinSelect .num").length > 0) {
+					if(Number($("#tab_"+retalGbnId +" > #freeAlinSelect .num").text() > 0)) {
+						frm.rentArYn.value = "Y";
+					}
+				}
+			}
+
+			$('#MonthRentalAmt').val(MonthRentalAmt); // 원렌탈료
+			$('#addRentAmt').val(addRentAmt); // 추가렌탈료
+			$('#discountAmt').val(discountAmt); // 할인금액
+			$('#totalPayYn').val(totalPayYn); // 총 납입금액
+		}
+
+
+		fn_rentalOrderCart = function(cust, com, id) {
+
+			var carNo = $('#carNo').val();
+			var modelCd = $('#modelCd').val();
+			if (systemGbn == 'R' || systemGbn == 'C') {
+				if (ValidUtil.isEmpty(modelCd)) {
+					$("#carInfoSearch").addClass("md-show");
+					return;
+				}
+			}
+
+			var retalGbnId = ""; //무슨렌탈인지
+			var resultYn = false;
+			retalGbnId = $('select[name="rentaltype"] option:checked').attr('value');
+
+			if ((id == null || id == '' || id == 'null')
+					&& (fnid == null || fnid == '')) {
+				ComUtil.confirm("로그인 후 이용 가능합니다.</br>로그인 하시겠습니까?", "", function() {
+					$('#loginPopGbn').val('retalCart');
+					fn_LoginPop();
+					return;
+				});
+			}
+
+			/* 전역변수에다 넣어주기 */
+			fncust = cust;
+			fncom = com;
+			fnid = id;
+
+			//ComUtil.confirmClose();
+			ComUtil.confirm("장바구니에 저장 하시겠습니까?", "", function() {
+				setOrderData();
+				var frm = document.carInfoFrm;
+				var regiCd = "ZZZZ"; // 등록비 코드 ZZZZ로 고정
+				var dispSize = TireSize;
+
+				if (retalGbnId == "rentaltype00") { //자유 상품일경우
+					//자유 상품 파라미터
+
+					var pSendData = {
+						//petternCd     : $("#patternCd").val(),
+						petternCd     : $("#rentPatternCd").val(),
+						matCd         : $("#matCd").val(),
+						makerCd       : $("#makerCd").val(),
+						modelCd       : $("#modelCd").val(),
+						contentsCd    : $("#contentsCd").val(),
+						frCd          : $("#frCd").val(),
+						dispSize      : dispSize,
+						sectionWidth  : $("#searchSw").val(),
+						aspectRatio   : $("#searchAr").val(),
+						wheelInches   : $("#searchWi").val() + ' '+ $("#plyRating").val() + 'P',
+						plyRating     : $("#plyRating").val(),
+						carNumber     : $("#carNo").val(),
+						cntCd         : $(':radio[name="quantity"]:checked').val(),
+						prdtGrp       : $('select[name="rentaltype"] option:checked').attr('prdtGrp'),
+						prdtGrpDtl    : $('select[name="rentaltype"] option:checked').attr('prdtGrpDtl'),
+						saleCd        : $('select[name="rentaltype"] option:checked').attr('saleCd'),
+						saleNm        : $('select[name="rentaltype"] option:checked').text(),
+						periodCd      : $(':radio[name="term"]:checked').val(),
+						selEnginCd    : $("#selEnginCd").val(),
+						selLocCd      : $("#selLocCd").val(),
+						selVisCd      : $("#selVisCd").val(),
+						selSaveCd     : $("#selSaveCd").val(),
+						selTcCd       : $("#selTcCd").val(),
+						selPrCd       : $("#selPrCd").val(),
+						selArCd       : $("#selArCd").val(),
+						selCheckCd    : $("#selCheckCd").val(),
+						selEnginCdAmt : $("#selEnginCdAmt").val(),
+						selLocCdAmt   : $("#selLocCdAmt").val(),
+						selVisCdAmt   : $("#selVisCdAmt").val(),
+						selSaveCdAmt  : $("#selSaveCdAmt").val(),
+						selTcCdAmt    : $("#selTcCdAmt").val(),
+						selPrCdAmt    : $("#selPrCdAmt").val(),
+						selArAmt      : $("#selArAmt").val(),
+						selCheckCdAmt : $("#selCheckCdAmt").val(),
+						regiAmt       : $("#regiAmt").val().replace(',',''),
+						regiCd        : regiCd
+					};
+
+				} else { //추천, 일시불 상품 파라미터
+
+					var pSendData = {
+						//petternCd    : $("#patternCd").val(),
+						petternCd    : $("#rentPatternCd").val(),
+						matCd        : $("#matCd").val(),
+						makerCd      : $("#makerCd").val(),
+						modelCd      : $("#modelCd").val(),
+						contentsCd   : $("#contentsCd").val(),
+						frCd         : $("#frCd").val(),
+						dispSize     : dispSize,
+						sectionWidth : $("#searchSw").val(),
+						aspectRatio  : $("#searchAr").val(),
+						wheelInches  : $("#searchWi").val() + ' '+ $("#plyRating").val() + 'P',
+						plyRating    : $("#plyRating").val(),
+						carNumber    : $("#carNo").val(),
+						cntCd        : $(':radio[name="quantity"]:checked').val(),
+						prdtGrp      : $('select[name="rentaltype"] option:checked').attr('prdtGrp'),
+						prdtGrpDtl   : $('select[name="rentaltype"] option:checked').attr('prdtGrpDtl'),
+						saleCd       : $('select[name="rentaltype"] option:checked').attr('saleCd'),
+						saleNm       : $('select[name="rentaltype"] option:checked').attr('title'),
+						periodCd     : $(':radio[name="term"]:checked').val(),
+						regiCd       : regiCd
+					};
+
+				}
+				var pUrl = "/product/insertRentalCart";
+				$.ajax({
+					url : pUrl,
+					type  : "POST",
+					cache : false,
+					async : true,
+					data : JSON.stringify(pSendData),
+					contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+					success : function(data) {
+						resultYn = (data.rtnMsg == "OK") ? true : false;
+						ComUtil.confirm("장바구니에 등록되어 있습니다.</br> 장바구니로 이동하시겠습니까?", "",function() {
+							window.location.href = "/cart/cartView?tab=R";
+						});
+					},
+					error : function(request, status, error) {
+						console.log('error callback : ' + error);
+					}
+				});
+
+				///evManager.commonAjax(pUrl, pSendData,callBackManager.insertRentalCart);
+			});
+		}
+
+		//구매 장바구니 등록
+		fn_O2oOrderCart = function(cust, com, id) {
+
+			if ((id == null || id == '' || id == 'null')
+					&& (fnid == null || fnid == '')) {
+				ComUtil.confirm("로그인 후 이용 가능합니다.</br>로그인 하시겠습니까?", "", function() {
+					$('#loginPopGbn').val('o2oCart');
+					fn_LoginPop();
+					return;
+				});
+			}
+
+			/* 전역변수에다 넣어주기 */
+			fncust = cust;
+			fncom = com;
+			fnid = id;
+
+			ComUtil.confirm("장바구니에 저장 하시겠습니까? <br> 옵션가격은 제외 됩니다. 주문시 재설정 하세요.", "", function() {
+				var pUrl = "/cart/selectCartCheck";
+				var pSendData = {
+					itemCd : $("#itemCd").val()
+				};
+				pSendData = JSON.stringify(pSendData);
+				$.ajax({
+					url : pUrl,
+					type : "POST",
+					cache : false,
+					data : pSendData,
+					contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+					success : function(data) {
+						if (data.cnt > 0) {
+							ComUtil.confirm(
+									"이미 장바구니에 등록되어 있습니다.</br> 장바구니로 이동하시겠습니까?", "",
+									function() {
+										window.location.href = "/cart/cartView";
+									});
+						} else {
+							comfirmO2oCartInsert();
+						}
+					},
+					error : function(request, status, error) {
+						console.log('error callback : ' + error);
+					}
+				});
+			});
+		}
+
+		//장바구니 중복 확인 후에.
+		function comfirmO2oCartInsert() {
+			setOrderData();
+
+  		   var pSendData = {
+			    itemCd       : $("#itemCd").val()          ,
+				patnNm       : $("#patternCd").val()       ,
+				dpPrNo       : $("#dpPrNo").val()          ,
+				makerCd      : $("#makerCd").val()         ,
+				makerNm      : $("#makerNm").val()         ,
+				modelCd      : $("#modelCd").val()         ,
+				modelNm      : $("#modelNm").val()         ,
+				contentsCd   : $("#contentsCd").val()      ,
+				contentsNm   : $("#contentsNm").val()      ,
+				classCd      : ValidUtil.isEmpty($("#classCdNew").val()) ? $("#classCd").val() : $("#classCdNew").val()	,
+				frCd         : $("#frCd").val()            ,
+				tireSize     : $("#TireSize").val()        ,
+				sectionWidth : $("#searchSw").val()        ,
+				aspectRatio  : $("#searchAr").val()        ,
+				wheelInches  : $("#searchWi").val()        ,
+				plyRating    : $("#plyRating").val()       ,
+				cntCd        : $(':radio[name="o2oQtyRadio"]:checked').val(),
+				carNumber    : $("#carNo").val()           ,
+				orderOriAmt  : $("#orderO2oOriAmt").val()  ,
+				orderSaleAmt : $("#orderO2oSaleAmt").val() ,
+				orderPayAmt  : (Number($("#orderO2oPayAmt").val()) - Number($("#optTotAmt").val())).toString()  ,
+				bassSaleAmt  : $("#bassSaleFee").val()     ,
+				saleAmt      : $("#saleFee").val()         ,
+				bassStmemAmt : $("#stmemSaleAmt").val()    ,
+				thumimg      : $("#o2oThumImg").val()      ,
+				seasonCd     : $("#seasonCd").val()        ,
+				seasonCdNm   : $("#seasonCdNm").val()      ,
+				itemNm       : $("#itemNm").val()          ,
+				pointAccurt  : $("#pointAccurt").val()     ,
+				saleTyCd     : $("#saleTyCd").val()        ,
+				prcPlcNo     : $("#prcPlcNo").val()        ,
+				 //상품옵션 추가 Param
+				optTotAmt    : $("#optTotAmt").val()       ,
+				optAmt       : $("#optAmt").val()          ,
+				optCo        : $("#optCo").val()           ,
+				optPlcNm     : $("#optPlcNm").val()        ,
+				optPlcNo     : $("#optPlcNo").val()
+		   };
+
+			var pUrl = "/product/insertO2oCart";
+			evManager.commonAjax(pUrl, pSendData, callBackManager.insertOrderCart);
+		}
+
+		/* 해당 상품 유효성 검사 (총 렌탈료 - 할인 금액 = 음수/양수 판단 ) */
+		function checkGoodValidation(totalRentAmt) {
+			if (Number(totalRentAmt) < 0) {
+				ComUtil.alert("주문할수없는 상품 입니다.");
+				return false;
+			}
+			return true;
+		}
+
+		function fn_retalInsertAndGoPage(data) {
+
+			ComUtil.confirm("상품이 장바구니에 담겼습니다. </br> 바로 확인 하시겠습니까?","", function() {
+				var pUrl = "/cart/cartView?tab=R";
+				window.location.href = pUrl;
+			});
+
+		}
+
+		function fn_O2oInsertAndGoPage(data) {
+			ComUtil.confirm("상품이 장바구니에 담겼습니다. </br> 바로 확인 하시겠습니까?", "", function() {
+				window.location.href = "/cart/cartView";
+			});
+		}
+
+		/* 구매일경우 아이템코드 가지고 오기 */
+		function selectGetItemCd() {
+			var dpPrno = $('#dpPrNo').val();
+			if (dpPrno != '' && dpPrno != null) {
+				$.ajax({
+					url : "/product/selectGetItemCd",
+					type : "POST",
+					cache : false,
+					processData : false,
+					data : $("#carInfoFrm").serialize(),
+					//contentType:"application/x-www-form-urlencoded;charset=UTF-8",  // ajax 통신으로 보내는 타입
+					success : function(data) {
+						if (data.resulet.itemCd != null) {
+							$('#itemCd').val(data.resulet.itemCd);
+							$('#itemNm').val(data.resulet.itemNm);
+							$('#pointAccurt').val(data.resulet.pointAccurt);
+							$('#saleTyCd').val(data.resulet.saleTyCd);
+							$('#prcPlcNo').val(data.resulet.prcPlcNo);
+							fun_calculateO2oSetAjax();
+
+							/** 민근 추가 내용 **/
+							var itemCd = data.resulet.itemCd;
+							var itemGrpCd = data.resulet.itemGrpCd;
+							var itemTyCd = data.resulet.itemTyCd;
+							var itemTyDtlCd = data.resulet.itemTyDtlCd;
+							fn_cpnPlcPtrnYnChk(itemCd, itemGrpCd, itemTyCd, itemTyDtlCd);
+						}
+					},
+					error : function(request, status, error) {
+						console.log(error);
+						var errCode = dpPrno+"/"+$("#searchSw").val()+"/"+$("#searchAr").val()+"/"+$("#searchWi").val();
+						ComUtil.alert(errCode+"\n해당 사이즈 조회 중 에러가 발생 하였습니다.\n표시한 내용과 함께 고객센터로 문의 바랍니다.","","",function(){
+							location.href = "/main";
+						});
+						return;
+					}
+				});
+			}
+		}
+
+		function fun_calculateO2oSetAjax() {
+			var pUrl = "/product/selectO2oOrderAmt";
+			var pSendData = {
+				dpPrNo : $("#dpPrNo").val(),
+				itemCd : $("#itemCd").val()
+			};
+			pSendData = JSON.stringify(pSendData);
+
+			$.ajax({
+				url : pUrl,
+				type : "POST",
+				cache : false,
+				data : pSendData,
+				async : false,
+				contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+				success : function(data) {
+					if(data.result.length > 0){
+						$("#bassSaleFee").val(data.result[0].bassSaleFee); //기본판매가
+						$("#saleFee").val(data.result[0].saleFee); //판매가
+						$("#stmemSaleAmt").val(data.result[0].stmemSaleAmt); //임직원가
+						$("#grpPay").val(data.result[0].grpPay); //그룹가격적용여부
+
+						/** 믿음 추가 내용 **/
+						$('.org_price').text(data.result[0].bassSaleFee);//기표가
+						$('.ext_price').text(data.result[0].saleFee);//기표가
+						/** 믿음 추가 내용 **/
+					}else{
+						if(data.grpYn == "Y"){
+							ComUtil.alert("회원님은 제휴코드인증회원입니다. \n 상품을 재검색하여 주시길 바랍니다.","","",function(){
+								location.href = "/main";
+							});
+							return;
+						}
+					}
+
+					//가격 다시 계산
+					calculateO2oSet();
+
+					fn_checkGrp();
+				},
+				error : function(e) {
+					console.log(e);
+				}
+			});
+		}
+
+		/* 렌탈이 있으면 matCd랑 frCd불러오기 */
+		function selectGetMatCdFrcd() {
+			var pUrl = "/product/selectTireSizeList";
+			/** 믿음 수정 내용 **/
+			var niceGradeLeng = 0;//eval($('#niceGradeCd').val()).length;
+			/** 믿음 수정 내용 **/
+			var pSendData = {};
+
+			if (niceGradeLeng > 0) {
+				pSendData = {
+					modelCd : $("#modelCd").val(),
+					contentsCd : $("#contentsCd").val(),
+					recomYn : "",
+					classCd : $('#classCdNew').val(),
+					//patternCd : $("#patternCd").val(),
+					patternCd : $("#rentPatternCd").val(),
+					systemGbn : "R",
+					sectionWidth : $('#searchSw').val(),
+					aspectRatio : $('#searchAr').val(),
+					wheelInches : $('#searchWi').val(),
+					niceGradeCd : eval($('#niceGradeCd').val())
+				};
+			} else {
+				pSendData = {
+					modelCd : $("#modelCd").val(),
+					contentsCd : $("#contentsCd").val(),
+					recomYn : "",
+					classCd : $('#classCdNew').val(),
+					patternCd : $("#rentPatternCd").val(),
+					//patternCd : $("#patternCd").val(),
+					systemGbn : "R",
+					sectionWidth : $('#searchSw').val(),
+					aspectRatio : $('#searchAr').val(),
+					wheelInches : $('#searchWi').val()
+				};
+			}
+
+			pSendData = JSON.stringify(pSendData);
+
+			$.ajax({
+				url : pUrl,
+				type : "POST",
+				cache : false,
+				data : pSendData,
+				contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+				success : function(data) {
+					if(data != null && data.length > 0 ) {
+						$('#matCd').val(data[0].matCd);
+						$('#frCd').val(data[0].frCd);
+						$('#plyRating').val(data[0].plyRating);
+					}
+				},
+				error : function(e) {
+					console.log(e);
+				}
+			});
+		}
+
+		function fn_innitRentalSearchPop() {
+			/* carInfoSearch */
+			var modelNm = $('#modelNm').val();
+			var carNo = $('#carNo').val();
+			if ((modelNm == null || modelNm == '' || typeof modelNm == 'undefined')
+					&& (systemGbn == 'R' && carNo == '')) {
+				$('body').addClass('bgFix');
+				$('#rental').click();
+				$("#carInfoSearch").addClass("md-show");
+			} else if ((modelNm == null || modelNm == '' || typeof modelNm == 'undefined')
+					&& (systemGbn == 'C' && carNo == '')) {
+				//$('body').addClass('bgFix');
+				//$("#carInfoSearch").addClass("md-show");
+			}
+		}
+
+		fn_carInfoSearchClose = function() {
+			//$("#carInfoSearch").removeClass("md-show");
+			//$('body').removeClass('bgFix');
+			window.history.back();
+		}
+
+		fn_carInfoSearchPopGo = function() {
+			$('body').removeClass('bgFix');
+			$("#carInfoSearch").removeClass("md-show");
+			//검샘 레이어 팝업 오픈
+			//$("#modal-1").addClass("md-show");
+			//팝업 선택 값 초기화
+			//$("input[name='carSearch']").prop("checked", false); //차량간편검색
+			//$("input[name='makerCd']").prop("checked", false); //제조사
+			openSizeFinder('car');
+		}
+
+		/* 일반렌탈일 경우 등록비 본수에 맞게 고정으로 인해 서버에 한번 갔다온다. */
+		function fn_nomalRentalAmt() {
+
+			var pUrl = "/product/selectNomalRentalAmt";
+			var frm1 = document.selfRental;
+			var frm2 = document.carInfoFrm;
+			var pSendData = {
+								saleCd 		: $('select[name="rentaltype"] option:checked').attr('salecd'),
+								prdtGrp 	: $('select[name="rentaltype"] option:checked').attr('prdtgrp'),
+								prdtGrpDtl 	: $('select[name="rentaltype"] option:checked').attr('prdtgrpdtl'),
+								cntCd 		: $(':radio[name="quantity"]:checked').val()
+							};
+
+			pSendData = JSON.stringify(pSendData);
+
+				$.ajax({
+						url : pUrl,
+						type : "POST",
+						cache : false,
+						data : pSendData,
+						contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+						success : function(data) {
+							var html = "";
+							var feeRenAmt = NumUtil.setComma(data.regAmtList[0].searchCdNm);
+
+							$('#feeRen').children().remove();
+							if(feeRenAmt == 0){
+								html += '<input type="radio" checked="checked" name="fee" id="fee01" value="'+data.regAmtList[0].searchCd+'" class="type06"><label for="fee01"><span>'
+								+ NumUtil.setComma(data.regAmtList[0].searchCdNm)
+								+ '</span></label>( <b>등록비 면제 이벤트 <span style="text-decoration:line-through; text-decoration-color:red; text-decoration-thickness:2px;">50,000원</span></b> )';
+							} else {
+								html += '<input type="radio" checked="checked" name="fee" id="fee01" value="'+data.regAmtList[0].searchCd+'" class="type06"><label for="fee01"><span>'
+								+ NumUtil.setComma(data.regAmtList[0].searchCdNm)
+								+ '</span></label>';
+							}
+							frm1.regiAmt.value = data.regAmtList[0].searchCdNm;
+							frm2.regiAmt.value = data.regAmtList[0].searchCdNm;
+							//등록비 추가
+							$("#feeRen").html(html);
+						},
+						error : function(request, status, error) {
+							console.log('error callback : ' + error);
+						}
+					});
+		}
+
+		function fn_CounselRegister(gbn) {
+			location.href = "/bbs/counselRegister?gbn=" + gbn;
+		}
+
+	    $(".orderWrap_new ul.tabs li").click(function (){
+	        $(".orderWrap_new ul.tabs li").removeClass("active");
+	        $(this).addClass("active");
+	        $(".orderWrap_new .ptabContent").hide();
+	        var activeTab = $(this).attr("rel");
+	        var activeTabId = $(this).attr("id");
+			$("#" + activeTab).fadeIn();
+			$(".orderWrap_new").removeClass( 'o2oSystem').removeClass('rental');
+			$(".orderWrap_new").addClass( activeTabId );
+	    });
+
+	    getReviewList(1);
+		$(".productInfoView .tabContent:eq(0)").show();
+
+		function nonCustValidation() {
+			var rtnVal = true;
+
+			return rtnVal;
+		}
+
+		function fn_nonCustOrder() {
+			if(ValidUtil.isEmpty($("#addTireInfo").val())){
+				$("#modal-nonCustContinue").addClass("md-show");
+			}else{
+				$("#modal-nonCustContinue").removeClass("md-show");
+				$('#o2ojangchackGuide').addClass("md-show");
+			}
+		}
+
+//		function nonCustOrderPass() {
+		nonCustOrderPass = function() {
+			if(nonCustValidation()) {
+				var addTireYn     = ValidUtil.isEmpty($("#addTireYn").val()) ? "N" : $("#addTireYn").val();
+				var addTireInfoYn = (ValidUtil.isEmpty($("#addTireInfo").val() )) ? "N" : "Y";
+				var orderPurchYn = $("#tireSizeYn").val() == "Y"
+					                  || ( addTireYn == "Y" && addTireInfoYn == "Y")
+					                  || ValidUtil.isEmpty(addDpPrNo);
+
+				$("#modal-nonCustContinue").removeClass("md-show");
+
+				if(orderPurchYn){
+					/* 20230202_장착서비스 팝업 미노출 및 주문페이지로 바로 이동(권형태 선임 요청) */
+					//$('#o2ojangchackGuide').addClass("md-show");
+					fn_o2oOrderGo();
+				}else{
+					fn_o2oOrderGo();
+				}
+
+			} else {
+				ComUtil.alert("약관 동의 및 개인정보 수집 동의에 체크해주세요.");
+			}
+		}
+
+		nonCustLogin = function() {
+			orgPay = {};
+			orgPay.bassSaleFee = $("#bassSaleFee").val();
+			orgPay.saleFee = $("#saleFee").val();
+			orgPay.stmemSaleAmt = $("#stmemSaleAmt").val();
+			$('#loginPopGbn').val('o2oOrder');
+			fn_LoginPop();
+		}
+
+		/* 옵션가격설정 */
+		function fn_calcOptAmt() {
+			var pUrl = "/product/selectCalcSvcPrc";
+
+			var pSendData = {
+					optPchsQy 	: $(':radio[name="o2oQtyRadio"]:checked').val(),			//수량
+					dpPrNo 		: $("#dpPrNo").val()
+					};
+
+			pSendData = JSON.stringify(pSendData);
+
+			$.ajax({
+					url : pUrl,
+					type : "POST",
+					cache : false,
+					data : pSendData,
+					contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+					success : function(data) {
+
+					    var optTotAmt  = 0;   //옵션 전체 금액
+					    var optAmt     = "";  //옵션 별 금액
+					    var optCo      = "";  //옵션 사용 수량 ( 0 : 사용안함 , 1 : 사용함.)
+					    var optPlcNo   = "";  //옵션 정책번호
+					    var optPlcNm   = "";  //옵션명
+					    var optBfComment   = "";  //앞코멘트
+					    var optAfComment   = "";  //뒤코멘트
+					    var delemeter  = "@";
+
+					    $(".serviceTemp").hide();
+					    if(data.optDtlList.length > 0 ){
+					    	//$(".serviceTemp").attr("style","display:inline");
+					    	if(!ValidUtil.isEmpty($("#tireSizeYn").val()) && $("#tireSizeYn").val() == "N"){
+					    		$(".serviceTemp").hide();
+					    	}else{
+						    	$.each($(".serviceTemp") , function(j , obj){
+						    		var idx = (j+1);
+									var plcNo = $(':input[name="o2oPlcNo_'+(idx)+'"]').val();
+
+									$.each(data.optDtlList , function(i , optData){
+										if(plcNo == optData.optPlcNo){
+											$($(".serviceTemp")[j]).show();
+										}
+									});
+						    	});
+					    	}
+
+							$.each(data.optDtlList , function(i , optData){
+
+								$.each($(".optRadio") , function(j , obj){
+									var idx = (j+1);
+									var plcNo = $(':input[name="o2oPlcNo_'+(idx)+'"]').val();
+
+									if( plcNo == optData.optPlcNo){
+										$("label[for='radioOpta_"+(idx)+"'").text(NumUtil.setComma(optData.optPchsPrc) + " 원  " + optData.bfComment);
+										$(':input[name="o2oOptPchsPrc_'+(idx)+'"]').val(optData.optPchsPrc);
+
+										var checkYn = $(":radio[name='o2oOptRadio_"+(idx)+"']:checked").val();
+										if(checkYn == "Y"){
+											optTotAmt += Number(optData.optPchsPrc);
+										}
+										if(data.length == i){
+											delemeter ="";
+										}
+										optPlcNo += (optData.optPlcNo) + delemeter;
+										optPlcNm += (optData.optPlcNm) + delemeter;
+										optCo    += ((checkYn == "Y") ? "1" : "0" )+ delemeter
+										optAmt   += (optData.optPchsPrc).toString() + delemeter;
+										optBfComment += (optData.bfComment) + delemeter;
+										optAfComment += (optData.afComment) + delemeter;
+									}
+								});
+							});
+					    }else{
+							//$(".serviceTemp").attr("style","display:none");
+							$(".serviceTemp").hide();
+					    	$.each($(".optRadio") , function(j , obj){
+					    		var idx = (j+1);
+								var plcNo = $(':input[name="o2oPlcNo_'+(idx)+'"]').val();
+					    		$("label[for='radioOpta_"+(idx)+"'").text("해딩없음");
+								$('#radioOptb_'+(idx)).prop("checked",true);
+
+					    	});
+					    }
+
+						$("#optTotAmt").val(optTotAmt);
+						$("#optAmt").val(optAmt);
+						$("#optCo").val(optCo);
+						$("#optPlcNm").val(optPlcNm);
+						$("#optPlcNo").val(optPlcNo);
+						$("#optBfComment").val(optBfComment);
+						$("#optAfComment").val(optAfComment);
+						//금액 계산
+						calculateO2oSet();
+
+					},
+					error : function(request, status, error) {
+						console.log('error callback : ' + error);
+					}
+			});
+		}
+
+		/* 쿠폰가격설정 */
+		function fn_calcCouponAmt() {
+			var pUrl = "/product/selectCouponAmt";
+			var itemCnt = Number($(':radio[name="o2oQtyRadio"]:checked').val());
+
+			var pSendData = {
+					itemCd 	    : $("#itemCd").val(),
+					dpPrNo 	    : $("#dpPrNo").val(),
+					ordPkgDcAmt : $("#saleFee").val(),
+					optTotAmt   : $("#optTotAmt").val(),
+					ordQty      : itemCnt
+			};
+
+			pSendData = JSON.stringify(pSendData);
+			$.ajax({
+					url : pUrl,
+					type : "POST",
+					cache : false,
+					data : pSendData,
+					contentType : "application/json;charset=UTF-8", // ajax 통신으로 보내는 타입
+					success : function(data) {
+
+						var saleFee   = Number($('#orderO2oPayAmt').val());
+						var optTotAmt = Number($("#optTotAmt").val());
+						var cpnAmt    = Number(data);
+
+
+						var cpnSaleFee  	="\\"  + NumUtil.setComma(cpnAmt);
+
+//						if(data > 0 && saleFee > cpnAmt ){
+						if(saleFee >= cpnAmt ){
+							$("#salePriceDiv dl dt").text("쿠폰할인가");
+							$('.ext_price').text(cpnSaleFee);//할인가
+						}
+
+						/*
+						if(data > 0 && saleFee > cpnAmt ){
+							$(".cpnAmtYn").attr("style","display:inline");
+						}else{
+							$(".cpnAmtYn").attr("style","display:none");
+						}
+			   	        $('.cpn_price').text(cpnSaleFee);//할인가
+						 */
+					},
+					error : function(request, status, error) {
+						console.log('error callback : ' + error);
+					}
+			});
+		}
+		//init 함수 호출
+		evManager.init();
+		eventFunc();
+		inputNumberWithComma();
+		/* 렌탈관련 페이지를 들어왔을 경우 차종이 없으면 주문으로 넘기지 못한다 때문에 무조껀 재조회 하기 위해 알림 팝업을 띄워준다. */
+		fn_innitRentalSearchPop();
+});
+
+function open_review_gallery(){
+	$('#modal-review-gallery').show();
+	getReviewAtflList("", "");
+	$("#modal-review-gallery .photo-gallery").overlayScrollbars({ });
+}
+function close_review_gallery(){
+	close_review_item();
+	$('#modal-review-gallery').hide();
+	try{
+		$("#modal-review-gallery .photo-gallery").overlayScrollbars().destroy();
+	}catch(e){
+	}
+}
+
+function open_review_item(usePsNo, dataImg){
+	close_review_gallery();
+	$('#modal-review-detail-view').show();
+	// $("#modal-review-gallery .photo-gallery").overlayScrollbars({ });
+	getReviewAtflList("", usePsNo);
+	$("#bImg").attr('src', dataImg);
+	$("#modal-review-detail-view .review-content").overlayScrollbars({});
+}
+function open_review_itemNext(searchType){
+	close_review_gallery();
+	$('#modal-review-detail-view').show();
+	// $("#modal-review-gallery .photo-gallery").overlayScrollbars({ });
+	getReviewAtflList(searchType, "");
+	$("#modal-review-detail-view .review-content").overlayScrollbars({});
+}
+
+function close_review_item(){
+	$('#modal-review-detail-view').hide();
+	try{
+		$("#modal-review-detail-view .review-content").overlayScrollbars().destroy();
+	}catch(e){
+	}
+}
+
+
+</script>

@@ -1,0 +1,544 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.nexwrms.cfo.util.SessionInfoUtil"%>
+<%@ page import="com.nexwrms.core.util.SessionUtil"%>
+<c:set var="pathname"
+	value="${requestScope['javax.servlet.forward.request_uri']}" />
+<%--
+<c:if test="${pathname == '/product/prdList'}">
+	<!--subTitleArea-->
+	<div class="subTitleArea">
+		<!--  subTitleTop -->
+		<div class="subTitleTop">
+</c:if> --%>
+
+
+<c:if
+	test="${pathname == '/cart/cartView' or pathname == '/mypage/orderList' or pathname == '/mypage/memberModify' or pathname == '/mypage/memberModifyPassword'
+or pathname == '/mypage/questionList' or pathname == '/mypage/questionDetail' or pathname == '/mypage/orderDetail' or pathname == '/mypage/questionRegister'
+or pathname == '/mypage/couponList' or pathname == '/bbs/counselRegister' or pathname == '/mypage/orderRivew'  or pathname == '/mypage/memberSecession'
+or pathname == '/mypage/orderRivewUpdate' or pathname == '/mypage/orderRivewView' or pathname == '/contents/o2oServiceIntro' or pathname == '/contents/rentalServiceIntro'
+or pathname == '/contents/termOfService' or pathname == '/contents/privacyPolicy' or pathname == '/contents/guaranteeSystem'
+or pathname == '/news/tireTipList' or pathname == '/news/tireTipDetail' or pathname == '/evt/evtList' or pathname == '/evt/evtDetail'
+or pathname == '/mypage/zeroServiceCreate' or pathname == '/bbs/noticeList' or pathname == '/bbs/noticeDetail' or pathname == '/bbs/qnaList'
+or pathname == '/contents/homeRentalAdviceList' or pathname == '/bbs/specialDealerList' or pathname == '/mypage/zeroServiceUpdate'  or pathname == '/mypage/engineServiceCreate'
+or pathname == '/mypage/engineServiceUpdate' or pathname == '/mypage/orderPurchase' or pathname == '/mypage/myRentalList' or pathname == '/mypage/myRentalDetail'
+or pathname == '/mypage/freeDamageSrvJoin' or pathname == '/mypage/earlyAbrasionSrvJoin' or pathname == '/mypage/freeDamageSrvCreate' or pathname == '/mypage/earlyAbrasionSrvCreate'
+or pathname == '/bbs/o2oSearchList' or pathname == '/mypage/myRecommend' or pathname == '/mypage/orderSvcList'
+}">
+	<!--subTitleArea-->
+	<c:if test="${pathname == '/cart/cartView'}">
+		<div class="subTitleArea type03">
+	</c:if>
+	<c:if test="${pathname == '/mypage/couponList'}">
+		<div class="subTitleArea type06">
+	</c:if>
+	<c:if
+		test="${pathname == '/mypage/questionList' or pathname == '/mypage/questionDetail' or pathname == '/mypage/questionRegister'}">
+		<div class="subTitleArea type07">
+	</c:if>
+	<c:if
+		test="${pathname == '/mypage/myRentalList' or pathname == '/mypage/myRentalDetail'}">
+		<div class="subTitleArea type08">
+	</c:if>
+	<c:if
+		test="${pathname == '/mypage/orderList' or pathname == '/mypage/orderDetail' or pathname == '/mypage/orderSvcList'}">
+		<div class="subTitleArea type09">
+	</c:if>
+
+	<c:if
+		test="${pathname == '/mypage/myRecommend'}">
+		<div class="subTitleArea type09 myrecommend">
+	</c:if>
+
+	<c:if test="${pathname == '/mypage/memberModify'}">
+		<div class="subTitleArea type10">
+	</c:if>
+	<c:if test="${pathname == '/mypage/memberModifyPassword'}">
+		<div class="subTitleArea type11">
+	</c:if>
+	<c:if test="${pathname == '/mypage/memberSecession'}">
+		<div class="subTitleArea type12">
+	</c:if>
+	<c:if
+		test="${pathname == '/mypage/orderRivew' or pathname == '/mypage/orderRivewView' or pathname == '/mypage/orderRivewUpdate'}">
+		<div class="subTitleArea type13">
+	</c:if>
+	<c:if test="${pathname == '/bbs/counselRegister'}">
+		<div class="subTitleArea type16">
+	</c:if>
+	<c:if test="${pathname == '/contents/o2oServiceIntro'}">
+		<div class="subTitleArea type18">
+	</c:if>
+	<c:if test="${pathname == '/contents/termOfService'}">
+		<div class="subTitleArea type18">
+	</c:if>
+	<c:if test="${pathname == '/contents/privacyPolicy'}">
+		<div class="subTitleArea type21">
+	</c:if>
+	<c:if test="${pathname == '/contents/rentalServiceIntro'}">
+		<div class="subTitleArea type21">
+	</c:if>
+
+	<c:if test="${pathname == '/contents/guaranteeSystem'}">
+		<div class="subTitleArea type19">
+	</c:if>
+
+	<c:if
+		test="${pathname == '/mypage/zeroServiceCreate' or pathname == '/mypage/zeroServiceUpdate' or pathname == '/mypage/engineServiceCreate' or pathname == '/mypage/engineServiceUpdate'
+				or pathname == '/mypage/freeDamageSrvJoin' or pathname == '/mypage/earlyAbrasionSrvJoin' or pathname == '/mypage/freeDamageSrvCreate' or pathname == '/mypage/earlyAbrasionSrvCreate'}">
+
+		<div class="subTitleArea type08">
+	</c:if>
+
+	<c:if
+		test="${pathname == '/bbs/noticeList' or pathname == '/bbs/noticeDetail'}">
+		<div class="subTitleArea type151">
+	</c:if>
+	<c:if test="${pathname == '/bbs/qnaList'}">
+		<div class="subTitleArea type17">
+	</c:if>
+	<c:if test="${pathname == '/bbs/specialDealerList' or pathname == '/bbs/o2oSearchList'}">
+		<div class="subTitleArea type14">
+	</c:if>
+	<c:if
+		test="${pathname == '/news/tireTipList' or pathname == '/news/tireTipDetail'}">
+		<div class="subTitleArea type15">
+	</c:if>
+	<c:if
+		test="${pathname == '/evt/evtList' or pathname == '/evt/evtDetail'}">
+		<div class="subTitleArea type20">
+	</c:if>
+
+	<!--  subTitleTop -->
+	<div class="subTitleTop">
+</c:if>
+<!--topArea-->
+
+
+<div class="topAreaWrap <c:if test="${pathname == '/order/orderPurchase'}">fixwhite</c:if> <c:if test="${pathname == '/product/prdList'}">fixwhite</c:if> <c:if test="${pathname == '/product/prdDetail'}">fixwhite</c:if><c:if test="${pathname == '/product/prdDctDetail'}">fixwhite</c:if> ">
+	<div class="topArea">
+		<header>
+			<%@ include file="/WEB-INF/view/header_include.jsp"%>
+		</header>
+	</div>
+</div>
+<!-- mouseover subMenu -->
+<div class="subMenuWrap">
+	<div class="subMenu">
+		<header>
+			<%@ include file="/WEB-INF/view/headerGnb_include.jsp"%>
+		</header>
+	</div>
+</div>
+<!-- mouseover subMenu -->
+
+<!--topArea-->
+
+<!-- allMenu -->
+<div class="allMenuWrap">
+	<div class="allMenuBox">
+		<%@ include file="/WEB-INF/view/headerAllMenuBox_include.jsp"%>
+	</div>
+</div>
+<!-- allMenu -->
+
+<%--
+<c:if test="${pathname == '/product/prdList'}">
+
+	<!--subTitleArea-->
+	<div class="titleArea type03 prdList">
+		<h2 class="type03">
+			내 차에 맞는 타이어 찾기
+			<p class="desc">
+				※ 내 차에 맞는 타이어 검색 시, 추천 제품과 구매가 / 월 렌탈 비용의 확인이 가능합니다.
+			</p>
+			<a href="#" onclick="return false;" title="검색" id="btnSearch"><img src="/img/product/btn_search.png"/></a>
+			<a href="#" onclick="openSizeFinder( 'num', $('#mainSizeNumInput').val()  ); return false;" title="검색" id="newBtnSearch"><img src="/img/product/btn_search.png"/></a>
+		</h2>
+		<!-- <p class="tireMatching"> 내 차에 맞는<br />타이어를<br /> 찾아보세요 ! </p> -->
+	</div>
+	</div>
+	<!--  subTitleTop -->
+
+	<!-- 로그인후 상태 fixed -->
+	<div class="selInfoBarWrap" id="serchRsArea">
+		<div class="selInfoBar">
+			<ul id="carSearchInfoArea" style="display: none">
+			</ul>
+
+			<div class="seBtnArea fr">
+				<!-- @@@ 경정비 항비 숨김 처리 - 개발 일정 상 1차 오픈 후 개발 -->
+				<a href="#" class="maintenance" title="경정비" id="maintenance"
+					style="display: none"></a>
+					<!-- <a href="#" onclick="return false;" class="search" title="검색" id="btnSearch"></a> -->
+			</div>
+		</div>
+	</div>
+	<!-- 로그인후 상태 fixed -->
+	</div>
+	<!--subTitleArea-->
+
+</c:if>
+--%>
+<c:if test="${pathname == '/order/orderComplete' or pathname == '/order/rentalOrderComplete' or pathname == '/order/kakaoComplate' or pathname == '/order/npayComplate'}">
+	<!--subTitleArea-->
+	<div class="titleArea type03" id="orderCpltDiv">
+		<h2 class="type01">
+			<span id="ordNm"></span>님의 탁월한 선택!
+		</h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_07.png" alt="주문완료" />
+		</h3>
+	</div>
+	<div class="titleArea type03" id="orderErrorDiv" style="display:none;">
+		<h2 class="type01">
+			주문이 실패하였습니다.
+		</h2>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+
+</c:if>
+
+
+<c:if
+	test="${pathname == '/cart/cartView' or pathname == '/order/orderPurchase'  }">
+	<!--subTitleArea-->
+	<div class="titleArea type03">
+		<h2 class="type01">탁월한 선택!</h2>
+		<h3 class="type01">
+			<c:if test="${pathname == '/cart/cartView'}">
+				<img src="/img/title/h2_step_06.png" alt="장바구니 주문서 작성 결제" />
+			</c:if>
+			<c:if test="${pathname == '/order/orderPurchase'}">
+				<img src="/img/title/h2_step_07.png" alt="장바구니 주문서 작성 결제">
+			</c:if>
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+
+
+<c:if test="${pathname == '/mypage/memberModify'}">
+	<!--subTitleArea-->
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_15.png" alt="안전한 드라이빙되세요."></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_14.png" alt="회원정보수정" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/mypage/memberModifyPassword'}">
+	<!--subTitleArea-->
+	<div class="titleArea">
+		<h2 class="type03"><img src="/img/title/h2_b_15.png" alt="안전한 드라이빙되세요."></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_14.png" alt="회원정보수정" />
+		</h3>
+	</div>
+
+	<p class="desc type11">
+		<em>정보를 안전하게 보호하기 위해 비밀번호 또는 SNS를 다시 한번 확인합니다. </em> 고객님의 정보를 정확하게
+		입력하세요. 개인정보가 보호받을 수 있도록 최선을 다하고 있습니다.
+	</p>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if
+	test="${pathname == '/mypage/questionList' or pathname == '/mypage/questionDetail' or pathname == '/mypage/questionRegister'}">
+	<!--subTitleArea-->
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_04.png" alt="궁금증을 해결하세요!"/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_09.png" alt="1:1문의" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+
+	<div class="subInfo">
+		<p>
+			문의 전에 <a href="/bbs/qnaList"><span> ‘ 자주 묻는 질문 ’ </span></a> 리스트에서 궁금하신 사항을 확인하시면, 쉽고 빠르게 궁금증을
+			해결하실 수 있습니다. <a href="/bbs/qnaList"><i class="ico12"></i></a>
+		</p>
+	</div>
+	</div>
+	<!--subTitleArea-->
+</c:if>
+
+<c:if
+	test="${pathname == '/mypage/orderList' or pathname == '/mypage/orderDetail' or pathname == '/mypage/orderSvcList'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_12.png" alt="주문하신 상품입니다."/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_13.png" alt="주문내역" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	<div class="subInfo">
+		<p>
+			궁금하신 사항은 ‘<a href="http://pf.kakao.com/_GLznj/chat" target="_blank"><span>1:1문의(카카오톡 채팅상담)</span></a>’ 를 통해 쉽고 빠르게 궁금증을 해결하실 수 있습니다.
+			<i class="ico12" id="question" style="cursor : pointer"></i>
+		</p>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+
+<c:if
+	test="${pathname == '/mypage/myRecommend'}">
+	<div class="titleArea type09">
+		<h2 class="type09"><img src="/img/title/h2_b_12.png" alt="추천 입니다."/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_13.png" alt="추천" />
+		</h3>
+	</div>
+	</div>
+
+
+</c:if>
+
+<c:if
+	test="${pathname == '/mypage/couponList' or pathname == '/bbs/counselRegister' or  pathname == '/mypage/zeroServiceCreate'
+or pathname == '/mypage/zeroServiceUpdate' or pathname == '/mypage/engineServiceCreate' or pathname == '/mypage/engineServiceUpdate'
+or pathname == '/mypage/myRentalList' or pathname == '/mypage/myRentalDetail' }">
+	<!--subTitleArea-->
+	<div class="titleArea type03">
+		<c:if test="${pathname == '/mypage/couponList'}">
+			<h2 class="type03"><img src="/img/title/h2_b_13.png" alt="쿠폰으로 알뜰하게!"/></h2>
+			<h3 class="type01">
+				<img src="/img/title/h2_title_08.png" alt="나의쿠폰" />
+			</h3>
+		</c:if>
+		<c:if test="${pathname == '/bbs/counselRegister'}">
+			<h2 class="type03"><img src="/img/title/h2_b_10.png" alt="상담 신청을 남겨주세요."/></h2>
+			<h3 class="type01">
+				<img src="/img/title/h2_title_19.png" alt="상담하기" />
+			</h3>
+		</c:if>
+		<c:if
+			test="${pathname == '/mypage/zeroServiceCreate' or pathname == '/mypage/zeroServiceUpdate' or pathname == '/mypage/engineServiceCreate' or pathname == '/mypage/engineServiceUpdate' or pathname == '/mypage/myRentalList' or pathname == '/mypage/myRentalDetail'}">
+			<h2 class="type03"><img src="/img/title/h2_b_09.png" alt="책임지고 관리합니다!"/></h2>
+			<h3 class="type01">
+				<c:if
+					test="${pathname == '/mypage/zeroServiceCreate' or pathname == '/mypage/zeroServiceUpdate' }">
+					<img src="/img/title/h2_title_10.png" alt="걱정제로 서비스신청" />
+				</c:if>
+				<c:if
+					test="${pathname == '/mypage/engineServiceCreate' or pathname == '/mypage/engineServiceUpdate'}">
+					<img src="/img/title/h2_title_11.png" alt="엔진오일 서비스신청" />
+				</c:if>
+
+				<c:if
+					test="${pathname == '/mypage/myRentalList' or pathname == '/mypage/myRentalDetail'}">
+					<img src="/img/title/h2_title_12.png" alt="나의렌탈관리" />
+				</c:if>
+			</h3>
+		</c:if>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+
+<c:if
+	test="${pathname == '/mypage/freeDamageSrvJoin' or pathname == '/mypage/earlyAbrasionSrvJoin' or pathname == '/mypage/freeDamageSrvCreate' or pathname == '/mypage/earlyAbrasionSrvCreate'}">
+	<!--subTitleArea-->
+	<div class="titleArea type03">
+			<h2 class="type03"><img src="/img/title/h2_b_09.png" alt="책임지고 관리합니다!"/></h2>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+
+
+
+<c:if
+	test="${pathname == '/mypage/orderRivew' or pathname == '/mypage/orderRivewView' or pathname == '/mypage/orderRivewUpdate'}">
+	<div class="titleArea type03">
+		<h2 class="type01" id="paterncode">작성해주세요</h2>
+		<h3 class="type01">
+			주문후기
+			<!-- <img src="/img/title/h2_title_16.png" alt="구매후기" /> -->
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/mypage/memberSecession'}">
+	<!--subTitleArea-->
+	<div class="titleArea">
+		<h2 class="type01">
+			<span>${userLoginNm}님.</span> 감사했습니다.
+		</h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_15.png" alt="회원탈퇴" />
+		</h3>
+	</div>
+
+	<p class="desc type11">
+		<em>넥스트레벨을 이용해 주셔서 감사합니다.</em> 사이트 이용 시 불편하셨던 점을 말씀해주시면, 더 나은 서비스로 보답
+		드리겠습니다.
+	</p>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+</c:if>
+
+<c:if test="${pathname == '/contents/o2oServiceIntro'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/service/o2o/keyvisual_text.png" alt="스마트 컨슈머를 위해 비대면 장착이 가능한 O2O서비스 런칭!"/></h2>
+		<!-- <h2 class="type03"><img src="/img/title/h2_b_05.png" alt="스마트 컨슈머를 위한!"/></h2> -->
+		<!-- <h3 class="type01">
+			<img src="/img/title/h2_title_21.png" alt="O2O 서비스" />
+		</h3> -->
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/contents/rentalServiceIntro'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/service/rental/keyvisual_text.png" alt="합리적인 타이어 렌탈!"/></h2>
+		<!-- <h2 class="type03"><img src="/img/title/h2_b_06.png" alt="합리적인 타이어 렌탈!"/></h2> -->
+		<!-- <h3 class="type01">
+			<img src="/img/title/h2_title_22.png" alt="렌탈 서비스" />
+		</h3> -->
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/contents/termOfService'}">
+			<div class="titleArea type03">
+			    <h2 class="type03"><img src="/img/title/h2_b_14.png" alt="꼭! 확인하세요."></h2>
+			    <h3 class="type01">
+			        <img src="../img/title/h2_title_26.png" alt="서비스 이용약관"/>
+			    </h3>
+			</div>
+		</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/contents/privacyPolicy'}">
+			<div class="titleArea type03">
+				<h2 class="type01">꼭! 확인하세요. </h2>
+		        <h3 class="type01">
+		            <img src="../img/title/h2_title_27.png" alt="개인정보처리방침"/>
+		        </h3>
+			</div>
+		</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if
+	test="${pathname == '/bbs/noticeList' or pathname == '/bbs/noticeDetail'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_03.png" alt="다양한 소식을 만나보세요"/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_18.png" alt="공지사항" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/bbs/qnaList'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_04.png" alt="궁금증을 해결하세요!"/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_20.png" alt="자주묻는질문" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/contents/homeRentalAdviceList' }">
+	<div class="titleArea">
+		<h2 class="type01">전문점을 찾아보세요.</h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_17.png" alt="전문점찾기" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/bbs/specialDealerList'}">
+	<div class="titleArea">
+		<h2 class="type03"><img src="/img/title/h2_b_11.png" alt="전문점을 찾아보세요."/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_17.png" alt="전문점찾기" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/bbs/o2oSearchList'}">
+	<div class="titleArea">
+		<h2 class="type03"><img src="/img/title/h2_b_11.png" alt="넥센 직영점을 찾아보세요."/></h2>
+		<h3 class="type01">
+			<img src="/img/title/h2_title_17.png" alt="넥센 직영점 찾기" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if test="${pathname == '/contents/guaranteeSystem'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_07.png" alt="품질에 대한 자신감!"/></h2>
+		<h3 class="type01">
+			<img src="../img/title/h2_title_23.png" alt="보증제도" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+<c:if
+	test="${pathname == '/news/tireTipList' or pathname == '/news/tireTipDetail' or pathname == '/evt/evtList' or pathname == '/evt/evtDetail'}">
+	<div class="titleArea type03">
+		<h2 class="type03"><img src="/img/title/h2_b_19.png" alt="다양한 이벤트를 만나보세요."></h2>
+		<h3 class="type01">
+			<img src="../img/title/h2_title_25.png" alt="이벤트" />
+		</h3>
+	</div>
+	</div>
+	<!--  subTitleTop -->
+	</div>
+	<!--subTitleArea-->
+</c:if>
+

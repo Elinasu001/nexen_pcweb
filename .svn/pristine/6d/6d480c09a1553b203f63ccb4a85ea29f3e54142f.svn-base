@@ -1,0 +1,11 @@
+<%@ page language="java" contentType="text/html;charset=utf-8"%>
+
+
+
+<script type="text/javascript">
+$( document ).ready(function() {
+	alert("${message}");
+
+	self.close();
+});
+</script>

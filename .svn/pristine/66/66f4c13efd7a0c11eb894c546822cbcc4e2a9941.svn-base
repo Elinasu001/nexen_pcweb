@@ -1,0 +1,2614 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ page import ="java.util.*" %>
+<%@ page import="java.text.DecimalFormat"%>`
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import = "javax.net.ssl.TrustManager" %>
+<%@ page import = "javax.net.ssl.HostnameVerifier" %>
+<%@ page import = "javax.net.ssl.HttpsURLConnection" %>
+<%@ page import = "javax.net.ssl.SSLContext" %>
+<%@ page import = "javax.net.ssl.SSLSession" %>
+<%@ page import = "javax.net.ssl.X509TrustManager" %>
+<%@ page import = "java.security.cert.X509Certificate" %>
+<%@ page import = "javax.net.ssl.TrustManager" %>
+<%@ page import = "javax.net.ssl.HostnameVerifier" %>
+<%@ page import = "javax.net.ssl.HttpsURLConnection" %>
+<%@ page import = "javax.net.ssl.SSLContext" %>
+<%@ page import = "javax.net.ssl.SSLSession" %>
+<%@ page import = "javax.net.ssl.X509TrustManager" %>
+<%@ page import = "java.security.cert.X509Certificate" %>
+
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%!
+    TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+          public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
+          public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+          public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+       }
+    };
+    // Create all-trusting host name verifier
+    HostnameVerifier allHostsValid = new HostnameVerifier() {
+        public boolean verify(String hostname, SSLSession session) { return true; }
+    };
+%>
+<%
+response.setHeader("Cache-Control","no-store");
+response.setHeader("Pragma","no-cache");
+response.setDateHeader("Expires",0);
+if (request.getProtocol().equals("HTTP/1.1"))
+	response.setHeader("Cache-Control", "no-cache");
+
+SSLContext sc = SSLContext.getInstance("SSL");
+sc.init(null, trustAllCerts, new java.security.SecureRandom());
+HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+%>
+<%
+    /* ============================================================================== */
+    /* =   PAGE : 결제 요청 PAGE                                                    = */
+    /* = -------------------------------------------------------------------------- = */
+    /* =   이 페이지는 Payplus Plug-in을 통해서 결제자가 결제 요청을 하는 페이지    = */
+    /* =   입니다. 아래의 ※ 필수, ※ 옵션 부분과 매뉴얼을 참조하셔서 연동을        = */
+    /* =   진행하여 주시기 바랍니다.                                                = */
+    /* = -------------------------------------------------------------------------- = */
+    /* =   연동시 오류가 발생하는 경우 아래의 주소로 접속하셔서 확인하시기 바랍니다.= */
+    /* =   접속 주소 : http://kcp.co.kr/technique.requestcode.do			        = */
+    /* = -------------------------------------------------------------------------- = */
+    /* =   Copyright (c)  2013   KCP Inc.   All Rights Reserverd.                   = */
+    /* ============================================================================== */
+%>
+<%
+    /* ============================================================================== */
+    /* =   환경 설정 파일 Include                                                   = */
+    /* = -------------------------------------------------------------------------- = */
+    /* =   ※ 필수                                                                  = */
+    /* =   테스트 및 실결제 연동시 site_conf_inc.jsp 파일을 수정하시기 바랍니다.    = */
+    /* = -------------------------------------------------------------------------- = */
+%>
+	<%-- <%@ include file="kcp/site_conf_inc.jsp" %> --%>
+<%
+	request.setCharacterEncoding ( "UTF-8" ) ;
+    /* = -------------------------------------------------------------------------- = */
+    /* =   환경 설정 파일 Include END                                               = */
+    /* ============================================================================== */
+%>
+<%!
+    /* ============================================================================== */
+    /* =   null 값을 처리하는 메소드                                                = */
+    /* = -------------------------------------------------------------------------- = */
+    public String f_get_parm( String val ){
+          if ( val == null ) val = "";
+          return  val;
+        }
+    /* ============================================================================== */
+%>
+<%
+	java.util.Calendar cal = java.util.Calendar.getInstance();
+	//int year = cal.get(java.util.Calendar.YEAR);
+	int yy = cal.get(java.util.Calendar.YEAR);
+	int mm = cal.get(java.util.Calendar.MONTH);
+
+	DecimalFormat df = new DecimalFormat("00");
+	String hour="";
+	String min="";
+
+	if( cal.get(java.util.Calendar.AM_PM) == cal.PM){
+		hour = df.format(cal.get(java.util.Calendar.HOUR)+12) + df.format(cal.get(java.util.Calendar.MINUTE)); //Calendar.PM이면 12를 더한다
+	} else {
+	    hour = df.format(cal.get(java.util.Calendar.HOUR)) + df.format(cal.get(java.util.Calendar.MINUTE));
+	}
+%>
+
+	<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+	<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+	<script type="text/javascript" src="/js/scroll.js"></script>
+
+
+	<script type="text/javascript" src="/js/common_ui.js"></script>
+	<script type="text/javascript" src="/js/lib/jquery-ui.js"></script>
+
+	<%-- <script type="text/javascript" src="<%=g_conf_js_url%>"></script> --%>
+
+	<!-- 다음 맵 api -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%=AppContext.getString(WebConstants.KAKAO_MAP_APPKEY)%>&libraries=services"></script>
+
+
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+
+
+
+                <div class="subContents">
+                    <section>
+                        <div class="proViewInfo type02">
+                            <p>
+                                <span>계약번호 <em>${detailMap.ordNo}</em> </span> <a href="#" class="deView"></a>
+                            </p>
+                        </div>
+
+                        <table class="tbl list">
+                            <caption>렌탈</caption>
+                            <colgroup>
+                                <col style="width:150px"/>
+                                <col />
+                                <col style="width:120px" />
+                                <col style="width:70px"/>
+                                <col style="width:70px"/>
+                                <col style="width:100px"/>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td class="tCenter">
+                                        <div class="proViewWrap">
+                                         	<div class="proView type02">
+                                            <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${detailMap.atflPathNm}" alt="${detailMap.saleNm}"/>
+                                         	</div>
+                                         </div>
+                                    </td>
+                                    <td>
+                                        <!-- 상품정보 -->
+                                        <div class="proViewInfo type04">
+                                             <ul>
+                                                <li>${detailMap.PETTERN_CD}</li>
+                                                <li>
+                                               		 <span>${detailMap.CLASS_NM}</span>
+                                                     <span>${detailMap.SEASON_NM}</span>
+                                                     <span>${detailMap.OE_YN_NM}</span>
+                                                     <span>${detailMap.TIRE_SIZE}</span>
+                                                </li>
+                                             </ul>
+                                        </div>
+                                        <!-- 상품정보 -->
+                                    </td>
+                                    <td class="type03 tCenter vTop">
+                                        <!-- 수량 -->
+                                        <div class="quantity">
+                                            <span>수량</span>
+                                            <span class="circle02">${fn:replace(detailMap.cntNm,'본','')}</span>
+                                        </div>
+                                        <!-- 수량 -->
+                                    </td>
+                                    <td class="tCenter vTop">
+                                   		<fmt:parseNumber var="arreCnt" type="number" value="${detailMap.arreCnt}" />
+                                        <!--계약진행-->
+                                        <c:if test="${detailMap.osYn eq 'N'}">
+	                                        <div class="btn w100">
+	                                            <button type="button" class="type11 w100">${detailMap.STAT_NM}</button>
+	                                            <c:if test="${arreCnt > 0}">
+		                                            <span class="info">${arreCnt}개월 연체</span>
+	                                            </c:if>
+	                                        </div>
+	                                        <!--계약진행-->
+                                        </c:if>
+										<c:if test="${detailMap.osYn eq 'Y'}">
+	                                        <!--계약종료-->
+	                                        <div class="btn w100">
+	                                            <button type="button" class="type11 w100">${detailMap.STAT_NM}</button>
+	                                            <c:if test="${arreCnt > 0}">
+		                                            <span class="info">${arreCnt}개월 연체</span>
+	                                            </c:if>
+	                                        </div>
+	                                        <!--계약종료-->
+										</c:if>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!--계약 정보-->
+                    <h3 class="type11">계약 정보</h3>
+
+                    <div class="submitArea type04">
+                        <div class="submit">
+                            <label for="info01"><span class="black">렌탈 상품</span></label>
+
+                            <div class="conWrap">
+                                	${detailMap.saleNm}
+                            </div>
+                        </div>
+
+                        <div class="submit">
+                            <label for="info02"><span class="black">차량 정보</span></label>
+
+                            <div class="conWrap">
+                                ${detailMap.CAR_INFO}
+                            </div>
+                        </div>
+
+                        <div class="submit">
+                            <label for="info02"><span class="black">장착 정보</span></label>
+
+                            <div class="conWrap">
+                            	<c:if test="${detailMap.procDay ne ''}">
+                            	</c:if>
+                            	${detailMap.INST_NM} - ${fn:replace(detailMap.procDay,'-','.')} (${detailMap.STAT_NM})
+                            </div>
+                        </div>
+
+                        <div class="submit">
+                            <label for="info02"><span class="black">렌탈 기간</span></label>
+
+                            <div class="conWrap">
+                                ${detailMap.periodNm} - ${fn:replace(detailMap.procDay,'-','.')} ~ ${fn:replace(detailMap.osDay,'-','.')}
+                            </div>
+                        </div>
+                    </div>
+                    <!--계약 정보-->
+
+                    <!--렌탈 납부 정보-->
+                    <div class="titleDesc type04">
+                        <h3 class="type11">렌탈 납부 정보</h3>
+                        <p>
+                            월 렌탈 요금 자동이체 등록은 주문 고객님 본인의 계좌 또는 카드만 가능하며 선택한 결제일에 자동으로 결제됩니다.  <br/>
+                            렌탈 등록비는 장착 후 1회만 청구되며, 1회차 렌탈료와 함께 익월부터 청구됩니다.
+                        </p>
+
+						<c:if test="${detailMap.STAT_CD eq '04'}">
+	                        <div class="btn">
+	                             <button type="button" class="type14" onclick="fn_payTypeChPop();">납부방법 변경</button>
+	                             <!-- <button type="button" class="type14" onclick="fn_actTypePop();">중도 선납/완납</button> -->
+	                        </div>
+						</c:if>
+                    </div>
+                    <!--렌탈 납부 정보-->
+
+                    <div class="submitAreaWrap type02">
+                        <!--submitLeft-->
+                        <div class="submitLeft">
+                            <div class="submitArea type04">
+                                <div class="submit">
+                                    <label for="contractor"><span>월 렌탈료</span></label>
+                                    <div class="conWrap">
+                                        <fmt:formatNumber value="${detailMap.MON_AMT}" pattern="#,###" />원
+                                        <span class="serView"><em>수납 내역</em> <a href="#sunab" onclick="sunabTabOpen();" class="goView"></a></span>
+                                    </div>
+                                </div>
+                            </div>
+
+							<!-- 카드 은행 -->
+							<c:choose>
+								<c:when test="${ detailMap.PAY_MTHD_NM eq 'CMS'}">
+		                            <div class="submitArea type04">
+		                                <div class="submit">
+		                                    <label for="phone01"><span>결제수단</span></label>
+		                                    <div class="conWrap">
+		                                        <span class="bank">${detailMap.BANK_NM} </span> ${fn:substring(detailMap.ACCT_NO, 0 ,4)}********
+		                                    </div>
+		                                </div>
+		                            </div>
+
+		                            <div class="submitArea type04">
+		                                <div class="submit">
+		                                    <label for="phone01"><span> 계좌소유주</span></label>
+		                                    <div class="conWrap">
+		                                        	${detailMap.BANK_OWNER}
+		                                    </div>
+		                                </div>
+		                            </div>
+								</c:when>
+								<c:otherwise>
+									<div class="submitArea type04">
+		                                <div class="submit">
+		                                    <label for="phone01"><span>결제수단</span></label>
+		                                    <div class="conWrap">
+		                                        <span class="bank">${detailMap.CARDCOM_NM} </span> ${fn:substring(detailMap.CARD_NO, 0 ,4)}********
+		                                    </div>
+		                                </div>
+		                            </div>
+
+		                            <div class="submitArea type04">
+		                                <div class="submit">
+		                                    <label for="phone01"><span>카드소유주</span></label>
+		                                    <div class="conWrap">
+		                                        	${detailMap.CARD_OWNER}
+		                                    </div>
+		                                </div>
+		                            </div>
+								</c:otherwise>
+							</c:choose>
+                        </div>
+                        <!--submitLeft-->
+
+                        <!--submitRight-->
+                        <div class="submitRight">
+                            <div class="submitArea type04">
+                                <div class="submit">
+                                    <label for="id01"><span>렌탈등록비</span></label>
+                                    <div class="conWrap">
+                                        <fmt:formatNumber value="${detailMap.REGI_AMT}" pattern="#,###" />원
+                                    </div>
+                                </div>
+                            </div>
+
+
+							<c:choose>
+								<c:when test="${ detailMap.PAY_MTHD_NM eq 'CMS'}">
+									<div class="submitArea type04">
+		                                <div class="submit">
+		                                    <label for="info01"><span>결제일</span></label>
+		                                    <div class="conWrap">
+		                                    <fmt:parseNumber var="PAY_DD" type="number" value="${detailMap.PAY_DD}" />
+		                                        ${PAY_DD }일마다 자동이체
+		                                    </div>
+		                                </div>
+		                            </div>
+								</c:when>
+								<c:otherwise>
+									<div class="submitArea type04">
+		                               	<div class="submit">
+		                                    <label for="info01"><span>결제일</span></label>
+		                                    <div class="conWrap">
+		                                    <fmt:parseNumber var="PAY_DD" type="number" value="${detailMap.PAY_DD}" />
+		                                        ${PAY_DD }일마다 자동이체
+		                                    </div>
+		                                </div>
+		                            </div>
+
+		                            <div class="submitArea type04">
+		                                <div class="submit">
+		                                    <label for="info01"><span>유효기간</span></label>
+		                                    <div class="conWrap">
+		                                        <span class="mr15">${fn:substring(detailMap.EXPIRE_YM, 0 ,2)}**년</span>**월
+		                                    </div>
+		                                </div>
+		                            </div>
+								</c:otherwise>
+							</c:choose>
+
+                        </div>
+                        <!--submitRight-->
+                    </div>
+
+                    <!--계약서 발송 정보-->
+                    <div class="titleDesc type06">
+                        <h3 class="type11">계약서 발송 정보</h3>
+                        <p>
+                            이메일 또는 주소로 계약서를 발송됩니다. 정보 변경이 필요하실 경우, 회원정보에서 업데이트해주세요.
+                        </p>
+
+                        <div class="btn">
+                             <button type="button" class="type14" onclick="goMemberUpdate();">회원정보수정</button>
+                        </div>
+                    </div>
+
+                    <div class="submitAreaWrap type02">
+                        <!--submitLeft-->
+                        <div class="submitLeft">
+                            <div class="submitArea type04">
+                                <div class="submit">
+                                    <label for="contractor"><span>주문자</span></label>
+                                    <div class="conWrap">
+                                        ${clientVo.custNm}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--submitLeft-->
+
+                        <!--submitRight-->
+                        <div class="submitRight">
+                            <div class="submitArea type04">
+                                <div class="submit">
+                                    <label for="id01"><span>휴대폰번호</span></label>
+                                    <div class="conWrap">
+                                        ${clientVo.ordrHp1} - ${clientVo.ordrHp2} - ${clientVo.ordrHp3}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--submitRight-->
+                    </div>
+
+                    <div class="submitArea type06 w100per">
+                        <div class="submit">
+                            <label for="email01"><span class="black">이메일</span></label>
+
+                            <div class="conWrap">
+                                ${clientVo.ordrEmail1}@${clientVo.ordrEmail2}&nbsp;
+                            </div>
+                        </div>
+                   </div>
+
+                    <div class="submitArea type06 w100per">
+                        <div class="submit">
+                            <label for="email01"><span class="black">주소</span></label>
+
+                            <div class="conWrap">
+                               	${clientVo.addr1}&nbsp;
+                            </div>
+                        </div>
+                   </div>
+                   <!--계약서 발송 정보-->
+
+
+                   <!-- 서비스 내역 / 수납 내역  -->
+                   <div class="orderInfo type02" id="sunab">
+                        <!-- tabs -->
+                        <div class="tabsWrap">
+                            <ul class="tabs">
+                                <li class="active" rel="tab11">서비스 내역</li>
+                                <li class="" rel="tab22">수납 내역</li>
+                            </ul>
+                        </div>
+                        <!-- tabs -->
+
+                        <!-- tab01-->
+                        <div id="tab11" class="tabContent">
+                            <table class="tbl conView">
+                                <caption>서비스 내역</caption>
+                                <colgroup>
+                                    <col style="width:150px"/>
+                                    <col />
+                                    <col style="width:80px" />
+                                    <col style="width:80px"/>
+                                    <col style="width:140px"/>
+                                    <col style="width:220px"/>
+                                    <col style="width:40px"/>
+                                    <col style="width:140px"/>
+                                    <col style="width:100px"/>
+                                    <col style="width:100px"/>
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="tLeft" colspan="2">
+                                            <span>서비스 구분 <a href="#" class="tip ml05" id="show01"></a></span>
+
+											<!--tipShow-->
+											<div class="tipShow tip06" id="tipshow01">
+												<header>
+													<h3 class="type06">제공서비스안내</h3>
+												</header>
+
+												<div class="info type02">
+													<dl>
+														<dt>기본</dt>
+														<dd>
+                                                            <div class="con">
+                                                                <span>타이어 무상 장착</span>
+                                                                <span>계약한 렌탈 타이어 무상 장착 제공</span>
+                                                            </div>
+                                                        </dd>
+													</dl>
+													<dl>
+														<dt>케어</dt>
+														<dd>
+                                                            <div class="con">
+                                                                <span>방문점검</span>
+                                                                <span>정기방문을 통해 타이어 및 차량 10대 항목 무상점검</span>
+                                                            </div>
+
+                                                            <div class="con">
+                                                                <span>위치교환서비스 무상</span>
+                                                                <span>계약기간 내 2회 한정, 타이어 위치교환 서비스 제공</span>
+                                                            </div>
+
+                                                            <div class="con">
+                                                                <span>얼라인먼트 무상</span>
+                                                                <span>계약기간 내 1회 한정, 타이어 휠얼라인먼트 무상교정 서비스 제공</span>
+                                                            </div>
+                                                        </dd>
+													</dl>
+													<dl>
+														<dt>스페셜</dt>
+														<dd>
+                                                            <div class="con">
+                                                                <span>걱정제로 서비스</span>
+                                                                <span>계약된 타이어 개수만큼 타이어 무상 교체</span>
+                                                            </div>
+
+                                                            <div class="con">
+                                                                <span>엔진오일 서비스</span>
+                                                                <span>엔진오일 3회 무상교체 엔진오일 교체 시, 수입차는 공임비 별도</span>
+                                                            </div>
+                                                        </dd>
+													</dl>
+												</div>
+											</div>
+											<!--tipShow-->
+                                        </th>
+                                        <th scope="col">제공횟수</th>
+                                        <th scope="col">잔여횟수</th>
+                                        <th scope="col">이용일자</th>
+                                        <th scope="col">이용전문점</th>
+                                        <th scope="col"></th>
+                                        <th scope="col">진행상태</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                	<c:if test="${fn:length(rsList11) > 0 }">
+	                                	<c:forEach var="list" items="${rsList11}" varStatus="status">
+	                                    	<tr>
+		                                    	<c:choose>
+		                                    		<c:when test="${status.count eq '1'}">
+		                                    		   <td class="tLeft vTop" rowspan="${fn:length(rsList11)}">
+		                                    		   		<p class="type02">기본</p>
+				                                       </td>
+		                                    		</c:when>
+		                                    		<c:otherwise>
+		                                    		</c:otherwise>
+												</c:choose>
+												<c:choose>
+		                                    		<c:when test="${list.pre ne list.PRS_DCD}">
+				                                        <td class="">
+		                                            	 <p class="fb">${list.PrsNm}</p>
+		                                        		</td>
+		                                        		<td class="tCenter">${list.servCnt0}개</td>
+		                                       			<td class="tCenter">${list.servCntr}개</td>
+		                                    		</c:when>
+		                                    		<c:otherwise>
+		                                    			<td></td>
+		                                    			<td></td>
+		                                    			<td></td>
+		                                    		</c:otherwise>
+												</c:choose>
+		                                        <td class="tCenter">${list.procDay}</td>
+		                                        <td>${list.procInNm}</td>
+		                                        <td>
+		                                            <a href="javascript:fnStore('${list.procInCd}')" class="searchBtn04 po_05"></a>
+		                                        </td>
+		                                        <td class="tCenter">${list.dlvrStatNm}</td>
+		                                        <td></td>
+		                                        <td></td>
+	                                    	</tr>
+										</c:forEach>
+									</c:if>
+									<c:if test="${fn:length(rsList22) > 0 }">
+	                                    <c:forEach var="list" items="${rsList22}" varStatus="status">
+	                                   		<tr>
+			                                   	<c:choose>
+			                                   		<c:when test="${status.count eq '1'}">
+			                                   		   <td class="tLeft vTop" rowspan="${fn:length(rsList22)}">
+			                                   		   		<p class="type02">케어</p>
+				                                       </td>
+			                                   		</c:when>
+			                                   		<c:otherwise>
+			                                   		</c:otherwise>
+												</c:choose>
+												<c:choose>
+			                                   		<c:when test="${list.pre ne list.PRS_DCD}">
+				                                        <td class="">
+			                                           	 <p class="fb">${list.PrsNm}</p>
+			                                       		</td>
+			                                       		<td class="tCenter">${list.servCnt0}개</td>
+		                                       			<td class="tCenter">${list.servCntr}개</td>
+			                                   		</c:when>
+			                                   		<c:otherwise>
+			                                   			<td></td>
+			                                   			<td></td>
+			                                   			<td></td>
+			                                   		</c:otherwise>
+												</c:choose>
+		                                        <td class="tCenter">${list.procDay}</td>
+		                                        <td>${list.procInNm}</td>
+		                                        <td>
+		                                            <a href="javascript:fnStore('${list.procInCd}')" class="searchBtn04 po_05"></a>
+		                                        </td>
+		                                        <td class="tCenter">${list.dlvrStatNm}</td>
+		                                        <td></td>
+		                                        <td></td>
+	                                   		</tr>
+										</c:forEach>
+									</c:if>
+									<c:if test="${fn:length(rsList33) > 0}">
+										<c:forEach var="list" items="${rsList33}" varStatus="status">
+	                                   		<tr>
+			                                   	<c:choose>
+			                                   		<c:when test="${status.count eq '1'}">
+			                                   		   <td class="tLeft vTop" rowspan="${fn:length(rsList33)}">
+			                                   		   		<p class="type02">스페셜 서비스</p>
+				                                       </td>
+			                                   		</c:when>
+			                                   		<c:otherwise>
+			                                   		</c:otherwise>
+												</c:choose>
+												<c:choose>
+			                                   		<c:when test="${list.pre ne list.PRS_DCD}">
+				                                        <td class="">
+			                                           	 <p class="fb">${list.PrsNm}</p>
+			                                       		</td>
+			                                       		<td class="tCenter">${list.servCnt0}개</td>
+		                                        		<td class="tCenter">${list.servCntr}개</td>
+			                                   		</c:when>
+			                                   		<c:otherwise>
+			                                   			<td></td>
+			                                   			<td></td>
+			                                   			<td></td>
+			                                   		</c:otherwise>
+												</c:choose>
+		                                        <td class="tCenter">${list.procDay}</td>
+		                                        <td>${list.procInNm}</td>
+		                                        <td>
+		                                            <a href="javascript:fnStore('${list.procInCd}')"" class="searchBtn04 po_05"></a>
+		                                        </td>
+		                                        <td class="tCenter">${list.dlvrStatNm}</td>
+		                                        <td></td>
+		                                        <td></td>
+	                                   		</tr>
+										</c:forEach>
+									</c:if>
+                                </tbody>
+                            </table>
+
+                            <p class="desc type10">
+                                    ※ 스페셜 서비스(걱정제로/엔진오일 서비스) 신청내역을 클릭하시면 상세 조회, 수정, 삭제할 수 있습니다. <br/>
+                                    &nbsp;&nbsp;&nbsp;&nbsp; (단, 수정, 삭제는 배송 상태가 요청 접수시에만 가능합니다.) <br/><br/>
+                                    ※ 엔진오일 서비스 신청 시, 고객님의 정확한 차량 정보 입력을 위해 차량등록증을 확인해주세요.  <br/>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;정확하지 않은 정보입력으로 인해, 상이한 차종의 엔진오일 패키지[엔진오일,오일필터,에어필터]가  배송될 경우 당사에서는 책임을 지지 않습니다.
+                            </p>
+
+
+                            <div class="btnArea type01 center">
+								<button type="button" id="freeDmgJoin" style="display:none;" class="type01 center w387" onclick="fn_damageServiceJoinGo('${detailMap.ordNo}');">무상 파손 보증 서비스 가입</button>
+								<button type="button" id="freeDmgEarlyJoin" style="display:none;" class="type01 center w387" onclick="fn_abrasionServiceJoinGo('${detailMap.ordNo}');">무상 파손 & 조기마모 보증 서비스 가입</button>
+								<button type="button" id="freeDmgReq" style="display:none;" class="type01 center w387" onclick="fn_damageServiceReqGo('${detailMap.ordNo}');">무상 파손 보증 서비스 신청</button>
+								<button type="button" id="freeDmgEarlyReq" style="display:none;" class="type01 center w387" onclick="fn_abrasionServiceReqGo('${detailMap.ordNo}');">무상 파손 & 조기마모 보증 서비스 신청</button>
+
+                              	<button type="button" class="type01 center w387" onclick="fn_zeroServiceGo();">걱정제로 서비스 신청</button>
+                               	<button type="button" class="type01 center w387" onclick="fn_engineServiceGo();">엔진오일 서비스 신청</button>
+                             </div>
+                        </div>
+                        <!-- tab01-->
+
+                        <!-- tab02-->
+                        <div id="tab22" class="tabContent">
+
+                                <div class="inquiryBox">
+                                    <ul id="month">
+                                        <li><a href="javascript:dateInput('3', '0');" >3개월</a></li>
+                                        <li><a href="javascript:dateInput('6', '0');">6개월</a></li>
+                                        <li><a href="javascript:dateInput('9', '0');">9개월</a></li>
+                                        <li><a href="javascript:dateInput('0', '0');" class="active">전체</a></li>
+                                    </ul>
+
+                                    <div class="calBox">
+                                        <div class="dateWrap">
+                                            <div class="date">
+                                               <input type="text" name="datepicker" class="type03 w150" id="dateStart" title="시작">
+                                            </div>
+
+                                            <span>~</span>
+
+                                            <div class="date">
+                                               <input type="text" name="datepicker" class="type03 w205" id="dateEnd" title="종료">
+                                            </div>
+
+                                            <a href="javascript:myPayMonthListPage('1')" class="searchBtn"></a>
+                                        </div>
+                                    </div>
+									<!--
+                                    <button type="button" class="type16" onclick="allOverduePop();">전체 연체금 납부안내</button>
+                                     -->
+                                </div>
+
+
+
+                            <!--<div class="titleSearch">
+                                <h3 class="type08">렌탈</h3>
+
+                                <div class="carNumber type01">
+                                    <input type="text" name="" class="type04 w205" placeholder="검색어를 입력하세요"><a href="#" class="searchBtn03"></a>
+                                </div>
+                            </div>-->
+
+                            <table class="tbl conView">
+                                <caption>수납내역</caption>
+                                <colgroup>
+                                    <col style="width:50px"/>
+                                    <col style="width:60px"/>
+                                    <col style="width:180px"/>
+                                    <col style="width:140px"/>
+                                    <col style="width:140px"/>
+                                    <col style="width:160px"/>
+                                    <col style="width:120px"/>
+                                    <col style="width:140px"/>
+                                    <col />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="tCenter">
+                                            <input type="checkbox" id="arreChk0" recpAmt="0" arreAmt="0" value="0" class="type01" onclick="fnarreChk(this);"><label for="arreChk0"><span></span></label>
+                                        </th>
+                                        <th scope="col">회차</th>
+                                        <th scope="col">청구일자</th>
+                                        <th scope="col" class="tRight">청구금액</th>
+                                        <th scope="col" class="tRight">수납금액</th>
+                                        <th scope="col" class="tRight">미납금액</th>
+                                        <th scope="col">최종 수납일자</th>
+                                        <th scope="col" class="tRight">납부금액</th>
+                                        <th scope="col">납부수단</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myPayMonthList">
+                                    <tr>
+                                        <td colspan="9" class="noResult">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- 월 예상 렌탈료 -->
+                            <div class="totalPrice type03" id="sunabArea" style="display: none">
+                                <div class="price center">
+                                    <dl>
+                                        <dt>전체 연체 금액</dt>
+                                        <dd id="sumArreAmtTxt"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>현재 납부 금액</dt>
+                                        <dd id="sumRecpAmtSp"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>잔여  렌탈료 금액</dt>
+                                        <dd id="AmtSt"></dd>
+                                    </dl>
+
+                          			<c:if test="${detailMap.STAT_CD eq '04'}">
+	                                    <div class="btnArea type01 center" style="display: none;">
+	                                         <button type="button" class="type01 center w450" onclick="fnOverdue();">연체금 납부신청</button>
+	                                    </div>
+                           			 </c:if>
+
+                                </div>
+                            </div>
+                            <!-- 월 예상 렌탈료 -->
+                        </div>
+                        <!-- tab02-->
+                    </div>
+                    <!-- 서비스 내역 / 수납 내역  -->
+            </div>
+
+
+		</div>
+		<!--subContentsWrap-->
+
+
+		<!-- layerPopup // -->
+		<!--
+		<div class="popupWrap md-modal" id="modal-1"> md-show
+			<header>
+				<h2>전체 연체금 납부안내 <a href="#" class="layPopClose md-close"></a></h2>
+			</header>
+
+	        <p class="desc type13"><span>4회차 이상의 연체건부터 가상계좌를 통해 <br/>전체 연체금 납부가 가능합니다.</span></p>
+	        <p class="desc type14">아래 가상계좌로 입금하시면, 연체금이 일괄 납부 됩니다. </p>
+
+			contents
+			<div class="popContents">
+
+	            <div class="infoBox">
+	                <ul class="bank">
+	                    <li>
+	                        <span class="bName">국민은행</span> <span class="num">54556-4554-4545</span> <span class="cName">넥쎈타이어</span>
+	                    </li>
+	                    <li>
+	                        <span class="bName">우리은행</span> <span class="num">556-4554-4545-565-000</span> <span class="cName">넥쎈타이어</span>
+	                    </li>
+	                    <li>
+	                        <span class="bName">신한은행</span> <span class="num">1156-4554-4545</span> <span class="cName">넥쎈타이어</span>
+	                    </li>
+	                    <li>
+	                        <span class="bName">국민은행</span> <span class="num">54556-4554-8888</span> <span class="cName">넥쎈타이어</span>
+	                    </li>
+	                </ul>
+	            </div>
+			</div>
+			contents
+	    </div>
+	     -->
+		<div class="md-overlay"></div>
+		<!-- layerPopup // -->
+
+
+		<!-- layerPopup // -->
+		<div class="popupWrap md-modal" id="modal-2"> <!-- md-modal md-show -->
+			<header>
+				<h2 class="type02">
+	                	납부방법 변경
+					<a href="#" class="layPopClose md-close"></a>
+				</h2>
+			</header>
+
+			<!--contents-->
+			<div class="popContents type02">
+	             <div class="submitArea type05">
+	                    <div class="submit">
+	                        <label for="name01"><span class="essen black">결제수단</span></label>
+
+	                        <div class="conWrap type04">
+	                        	<input type="hidden" name="rtPayMtd" id="rtPayMtd" value="C"></input> <!-- 납부방식/ C: 카드이죠, A: 은행이죠 -->
+	                            <div class="raGroup">
+	                                <input type="radio" name="pay" id="pay1" checked="checked" onclick="fn_payTypeCh('card');" class="type06" title="신용카드 선택"><label for="pay1"><span>신용카드</span></label>
+	                                <input type="radio" name="pay" id="pay2" onclick="fn_payTypeCh('acc');"  class="type06" title="계좌이체 선택"><label for="pay2"><span>계좌이체</span></label>
+	                            </div>
+	                        </div>
+	                    </div>
+
+	                    <div class="submit">
+	                        <label for="rtCardPayDy"><span class="essen black">결제일</span></label>
+
+	                        <div class="conWrap type04">
+	                             <select name="rtCardPayDy" id="rtCardPayDy" class="type04 w120" title="결제일 선택">
+	                                <option value="05" selected="selected">5일</option>
+									<option value="15">15일</option>
+									<option value="25">25일</option>
+	                            </select>
+
+	                            <input type="checkbox" id="rtCardAgree" name="rtCardAgree" value="0" class="type04" checked="checked"><label for="directdebit"><span></span>자동이체동의</label>
+	                        </div>
+	                    </div>
+
+	                    <div class="submit" name="cardArea">
+	                        <label for="rtCardCorp"><span class="essen black">카드정보</span></label>
+
+	                        <div class="conWrap type04">
+	                             <select name="rtCardCorp" id="rtCardCorp" class="type04 w145" title="카드사 선택">
+	                                <option value="">카드사 선택</option>
+									<c:forEach var="cardCdList" items="${cardCdList}" varStatus="status" >
+										<option value="${cardCdList.cd}">${cardCdList.cdNm}</option>
+									</c:forEach>
+	                            </select>
+
+	                            <input type="number" id="rtCardNo" name="rtCardNo" class="type09 w280" onkeyup="this.value=number_filter(this.value);" title="카드번호 입력란" placeholder="카드번호를 입력하세요">
+
+	                            <p class="validation type04">
+	                                <span><i class="ico11"></i>카드번호 입력시 “-”없이 숫자만 입력하세요.</span>
+	                            </p>
+	                        </div>
+	                    </div>
+
+	                    <div class="submit" name="cardArea">
+	                        <label for="rtCardOwner"><span class="essen black">카드소유주</span></label>
+
+	                        <div class="conWrap type04">
+	                             <input type="text" name="rtCardOwner" id="rtCardOwner" class="type09" value="${detailMap.CARD_OWNER }" title="카드소유주를 입력란" placeholder="카드소유주를 입력하세요">
+	                        </div>
+	                    </div>
+
+	                    <div class="submit" name="cardArea">
+	                        <label for="rtCardValYr"><span class="essen black">유효기간</span></label>
+
+	                        <div class="conWrap type04">
+	                             <select name="rtCardValYr" id="rtCardValYr" class="type04 w120" title="년도 선택">
+	                                <%for(int i=0;i<10;i++){%>
+										<option value="<%=yy+i%>"><%=yy+i%></option>
+									<%}%>
+	                            </select>
+
+	                            <select name="rtCardValMn" id="rtCardValMn" class="type04 w120" title="월 선택">
+	                                <option value="01">01</option>
+									<option value="02">02</option>
+									<option value="03">03</option>
+									<option value="04">04</option>
+									<option value="05">05</option>
+									<option value="06">06</option>
+									<option value="07">07</option>
+									<option value="08">08</option>
+									<option value="09">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+	                            </select>
+	                        </div>
+	                    </div>
+
+	                    <!-- 은행 정보 -->
+                         <div class="submit" name="bankArea">
+                             <label for="rtAcctCorp"><span class="essen black">은행정보</span> </label>
+
+                             <div class="conWrap type04">
+                                  <select class="type04 w145" name="rtAcctCorp" id="rtAcctCorp" title="은행 선택">
+                                     <option value="">은행 선택</option>
+										<c:forEach var="bankCdList" items="${bankCdList}" varStatus="status" >
+											<option value="${bankCdList.cd}">${bankCdList.cdNm}</option>
+										</c:forEach>
+                                 </select>
+                                 <p class="validation type04">
+                                     <span><i class="ico11"></i>은행명을 선택해 주세요</span>
+                                 </p>
+                             </div>
+                         </div>
+
+                         <div class="submit" name="bankArea">
+                             <label for="rtAcctNo"><span class="essen black">계좌번호</span> </label>
+                             <input type="text" name="rtAcctNo" id="rtAcctNo" onkeyup="this.value=number_filter(this.value); fn_setWritecan();" class="type03" placeholder="“-”없이 숫자만 입력하세요.">
+                         </div>
+
+                         <div class="submit" name="bankArea">
+                             <label for="rtCardOwner"><span class="essen black">계좌소유주</span> </label>
+                             <input type="text" name="rtAcctOwner" id="rtAcctOwner" onkeyup="fn_setWritecan();"  class="type03" placeholder="계좌소유주를 입력하세요">
+                             <button type="button" id="ars_button" onclick="fn_arsCallService(); event.preventDefault();" class="type09 po_10 fr">출금이체동의</button>
+                         </div>
+	            </div>
+
+	            <p class="desc type12">
+	                   ※ 신용카드로 변경 시 변경일 기준 다음날 적용됩니다.
+	            </p>
+
+	             <div class="btnArea">
+	                 <button type="button" class="type04 w50per" onclick="popClose();">취소<i class="ico01"></i></button>
+	                 <button type="button" class="type01 w50per" onclick="payChange();">신청<i class="ico01"></i></button>
+	             </div>
+
+			</div>
+			<!--contents-->
+	    </div>
+		<div class="md-overlay"></div>
+		<!-- layerPopup // -->
+
+		<!-- layerPopup // -->
+		<div class="popupWrap md-modal" id="modal-3"> <!-- md-modal md-show -->
+			<header>
+				<h2 class="type02">
+	                 중도선납/완납
+					<a href="#" class="layPopClose md-close"></a>
+				</h2>
+			</header>
+
+			<!--contents-->
+			<div class="popContents type02">
+	             <div class="submitArea type05">
+	                    <div class="submit">
+	                        <label for="rentalPeriod"><span class="black">렌탈기간</span></label>
+
+	                        <div class="conWrap type04">
+	                            <span class="mr10"><em class="fb">${payDetail.periodNm}</em> 개월 중</span>  <span><em class="fb">${payDetail.thisMon}</em>개월 경과</span>
+	                        </div>
+	                    </div>
+
+	                    <div class="submit">
+	                        <label for="rentalFee"><span class="black">월 렌탈료</span></label>
+
+	                        <div class="conWrap type04">
+	                             <fmt:formatNumber value="${payDetail.monAmt}" pattern="#,###" />원
+	                        </div>
+	                    </div>
+
+	                    <div class="submit">
+	                        <label for="paymentType"><span class="black">납부유형</span></label>
+
+	                        <div class="conWrap type04">
+	                             <select class="type04 w220" title="납부유형 선택" name="bayType" id="bayType" onchange="fn_bayTypeCh();">
+	                                <option value="t1">중도선납</option>
+	                                <option value="t2">완납</option>
+	                            </select>
+	                        </div>
+	                    </div>
+
+
+	                    <div class="submit" id="prepaymentSelectTr">
+	                        <label for="validity"><span class="black">선납기간</span></label>
+
+	                        <div class="conWrap type04">
+	                        	<c:set var="ckDay" value="${fn:replace(payDetail.periodNm, '개월', '') - payDetail.thisMon}" />
+                                <c:set var="ckMm" value="6" />
+                                <fmt:formatNumber var="sumAnswer" value="${ckDay}" pattern="#.##"/>
+								<fmt:parseNumber var="ckDayVar" value="${sumAnswer / 6}" integerOnly="true" />
+								<c:choose>
+                                	<c:when test="${ckDay >= 6}">
+			                        	<select name="prptMon" id="prptMon" class="type04 w220" title="선납기간 선택" onchange="fn_prptMon();">
+		                            		<option value="">선택</option>
+	                                    	<c:forEach var="month" items="${monthList}">
+	                                        	<option value="${month.maxCnt}">${month.maxCnt}개월</option>
+	                                        </c:forEach>
+			                            </select>
+									</c:when>
+									<c:otherwise>
+				                        <p class="validation type04">
+				                            <span><i class="ico11"></i>렌탈 잔여 기간이 6개월 미만인 경우 중도 선납이 불가합니다.</span>
+				                        </p>
+									</c:otherwise>
+								</c:choose>
+	                        </div>
+
+	                    </div>
+
+	                     <div class="totalPrice type06">
+	                        <div class="price" id="actType">
+	                            <dl>
+	                                <dt>선납금액</dt>
+	                                <dd>
+	                                    <span>₩ <span id="totRecpAmtSp">0</span></span>
+	                                </dd>
+	                            </dl>
+	                            <dl style="display: none">
+	                                <dt>완납금액</dt>
+	                                <dd>₩ <span id="planAmtSp">0</span></dd>
+	                            </dl>
+	                            <dl>
+	                                <dt>할인금액</dt>
+	                                <dd>- ₩ <span id="totDcAmtSp">0</span></dd>
+	                            </dl>
+	                            <dl>
+	                                <dt>잔여금액</dt>
+	                                <dd>₩ <span id="remainAmtSp">0</span></dd>
+	                            </dl>
+	                        </div>
+	                    </div>
+	            </div>
+
+	             <div class="btnArea">
+	                 <button type="button" class="type04 w50per" onclick="popClose();">취소<i class="ico01"></i></button>
+	                 <button type="button" class="type01 w50per" onclick="prePayment();">신청<i class="ico01"></i></button>
+	             </div>
+
+			</div>
+			<!--contents-->
+	    </div>
+		<div class="md-overlay"></div>
+		<!-- layerPopup // -->
+
+
+	<!-- layerPopup // -->
+	<div class="popupWrap type04 md-modal" id="agency"> <!-- md-show -->
+		<header class="type03">
+			<h2 id="agencyNm">
+                <span id="agencyNm"> </span>
+
+                <span class="icoArea" id="agencyChYn">
+                </span>
+
+				<a href="#" class="layPopClose md-close"></a>
+			</h2>
+		</header>
+
+		<div class="submitAreaWrap type03">
+            <!--submitLeft-->
+            <div class="submitLeft">
+                <div class="submitArea type05">
+                    <div class="submit">
+                        <label for="address"><span>주소</span></label>
+                        <div class="conWrap type06" id="agencyAddr">
+                        </div>
+
+                        <button type="button" class="type18" id="findLoad">길찾기 <i class="ico15 po_10 fr"></i></button>
+                    </div>
+                </div>
+            </div>
+            <!--submitLeft-->
+
+            <!--submitRight-->
+            <div class="submitRight">
+                <div class="submitArea type05">
+                    <div class="submit">
+                        <label for="tel"><span>전화번호</span></label>
+                        <div class="conWrap type07" id="agencyTel">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--submitRight-->
+        </div>
+
+        <div class="submitAreaWrap type03">
+                <div class="submitArea type04 w100per">
+                    <div class="submit">
+                        <label for="bTime"><span>영업시간</span></label>
+                        <div class="conWrap type05" id="agencyBizTime">
+                        </div>
+                    </div>
+
+                    <div class="submit">
+                        <label for="items"><span>취급품목</span></label>
+                        <div class="conWrap type05">
+                            <!--mStateIcon-->
+                            <div class="mStateIcon" id="iconGroup">
+                            </div>
+                            <!--mStateIcon-->
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="customerState">
+            <div class="custInfo">
+                <dl>
+                    <dt>탈착기</dt>
+                    <dd>
+                        <div class="info" >
+                            <span id="desorptNm">20인치 가능</span>
+                        </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>얼라인먼트</dt>
+                    <dd>
+                        <div class="info">
+                            <span id="alignNm">일반 얼라이먼트</span>
+                        </div>
+
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>밸런스</dt>
+                    <dd>
+                        <div class="info">
+                            <span id="balanceNm">진동밸랜스</span>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <p class="desc type07">※ 수입차 및 대형 차량의 경우 고급형 장비가 있는 곳에서 교체하시기 바랍니다. </p>
+
+        <div class="mapAreaWrap">
+            <!-- map 보이는 영역  width:876px; -->
+            <div class="mapView" id="mapDiv"  style="width:879px;height:362px;"></div>
+            <!-- map 보이는 영역 -->
+
+            <!-- 슬라이드 영역 -->
+            <div class="mapSlider">
+                <ul class="bxslider4" id="storeImg">
+                 </ul>
+            </div>
+            <!-- 슬라이드 영역 -->
+        </div>
+
+
+    </div>
+	<div class="md-overlay"></div>
+	<!-- layerPopup // -->
+
+     </form>
+
+
+	<!-- ARS인증 추가 -->
+	<form name="ars_info" method="post">
+		<table id="input_val">
+			<tr>
+				<td>
+					<input type="hidden" name="SECR_KEY" id="SECR_KEY" value="jj0V4mXT1U4qeqx5CFAL"/> <!--  jj0V4mXT1U4qeqx5CFAL -->
+					<input type="hidden" name="TR_CD" id="TR_CD" value="2300"/>
+					<input type="hidden" name="ORG_CD" id="ORG_CD" value="20018"/>
+					<input type="hidden" name="DATE" id="DATE" value=""/>
+					<input type="hidden" name="PHONE" id="PHONE" value=""/>
+					<input type="hidden" name="AUTH_NO" id="AUTH_NO" value="00"/>
+					<input type="hidden" name="AUTH_INQUERY" id="AUTH_INQUERY" value=""/>
+					<input type="hidden" name="REC_INQUERY" value=""/> <!-- 미사용 -->
+					<input type="hidden" name="FILE_SAVE_YN" value="N"/> <!-- 미사용 -->
+					<input type="hidden" name="FILE_NM" value=""/> <!-- 미사용 -->
+					<input type="hidden" name="CUST_NM" id="CUST_NM" value=""/>
+					<input type="hidden" name="BANK_CD" id="BANK_CD" value=""/>
+					<input type="hidden" name="ACCT_NO" id="ACCT_NO" value=""/>
+					<input type="hidden" name="BIRTH_DAY" id="BIRTH_DAY" value=""/>
+					<input type="hidden" name="BUSL_NO" id="BUSL_NO" value=""/>
+					<input type="hidden" name="CUST_TP" id="CUST_TP" value=""/>
+					<input type="hidden" name="BANK_NM" id="BANK_NM" value=""/>
+				</td>
+			</tr>
+		</table>
+		<div id="tot_time"></div>
+		<div id="rtn"></div>
+		<div id="s_source"></div>
+		<div id="source"></div>
+		<div id="ars_success" style="font-size:12px">
+			<input type="hidden" id="ars_succ_yn" name="ars_succ_yn" value="0"/>
+		</div>
+	</form>
+
+	<!-- 무상파손 및 조기마모 hidden value -->
+	<input type="hidden" id="servCd_h" 	     value="${freeDmgJoinChk.servCd}">
+	<input type="hidden" id="b00011UseCnt_h" value="${freeDmgJoinChk.B00011_USE_CNT}">
+	<input type="hidden" id="b00012UseCnt_h" value="${freeDmgJoinChk.B00012_USE_CNT}">
+	<input type="hidden" id="registIngYn_h"  value="${freeDmgJoinChk.registIngYn}">
+	<input type="hidden" id="applyIngYn_h"   value="${freeDmgJoinChk.applyIngYn}">
+	<input type="hidden" id="serverMode" 	 value="<%=System.getProperty(CoreConstants.SERVER_MODE)%>"> <!-- 임시로 -->
+
+	<script type="text/javascript" src="/js/lib/classie.js"></script>
+
+<script type="text/javascript">
+
+	var serverMode = $("#serverMode").val();
+	var servCd = $('#servCd_h').val();
+	var b00012UseCnt = $('#b00012UseCnt_h').val();
+	var b00011UseCnt = $('#b00011UseCnt_h').val();
+	var registIngYn = $('#registIngYn_h').val();
+	var applyIngYn = $('#applyIngYn_h').val();
+	console.log('serverMode ::', serverMode);
+
+	if(serverMode != "prd"){ //운영이 아니면
+		//무상파손&조기마모 버튼 제어
+		freeDmgSrvBtnCtl();
+	}
+
+	/* 플러그인 설치(확인) */
+	function kcp_spinStart(){	//testpay.kcp.co.kr/js/payplus_exe_ex.js에서 사용하는 로딩바함수 오버라이딩
+		$("#loadingWrap").show();
+	}
+	function kcp_spinStop(){	//testpay.kcp.co.kr/js/payplus_exe_ex.js에서 사용하는 로딩바함수 오버라이딩
+		$("#loadingWrap").hide();
+	}
+	//StartSmartUpdate();
+
+	var target_url = "";
+	var hostname = window.location.hostname;//http://도메인
+	hostname = hostname.toLowerCase();
+	if(hostname.indexOf("localhost")!=-1 || hostname.indexOf("http://localhost")!=-1){       //local
+		target_url = "http://dev.coocon.co.kr/sol/gateway/ars_wapi.jsp";
+	}else if(hostname.indexOf("dev.tirerental.co.kr")!=-1){         //개발
+		target_url = "http://dev.coocon.co.kr/sol/gateway/ars_wapi.jsp";
+	}else if(hostname.indexOf("192.168.1.2")!=-1){         			//개발
+		target_url = "http://dev.coocon.co.kr/sol/gateway/ars_wapi.jsp";
+	}else{                                                      //운영
+		target_url = "https://gw.coocon.co.kr/sol/gateway/ars_wapi.jsp";
+	}
+
+	var inputNm = "JSONData=";
+	var start_time = "";
+
+	// Payplus Plug-in 설치 안내
+	function init_pay_button(){
+		if ((navigator.userAgent.indexOf('MSIE') > 0) || (navigator.userAgent.indexOf('Trident/7.0') > 0)){
+	    	try{
+	        	if( document.Payplus.object == null ){
+	            	document.getElementById("display_setup_message").style.display = "block" ;
+	           	}else{
+	           		document.getElementById("display_pay_button").style.display = "block" ;
+	        	}
+	    	}catch(e){
+	        	document.getElementById("display_setup_message").style.display = "block" ;
+	     	}
+	  	}else{
+	    	try{
+	        	if( Payplus == null ){
+	            	document.getElementById("display_setup_message").style.display = "block" ;
+	           	}else{
+	              	document.getElementById("display_pay_button").style.display = "block" ;
+	          	}
+	      	}catch (e){
+	        	document.getElementById("display_setup_message").style.display = "block" ;
+	     	}
+	  	}
+	}
+
+	/*에스크로 결제시 필요한 장바구니 생성*/
+	function create_goodInfo(){
+		var chr30 = String.fromCharCode(30);	// ASCII 코드값 30
+	   	var chr31 = String.fromCharCode(31);	// ASCII 코드값 31
+
+	    var good_info = "seq=1" + chr31
+					    + "ordr_numb=${orderVO.ordrIdxx}" + chr31
+					    + "good_name=${orderVO.patternCd}" + chr31
+					    + "good_cntx=1" + chr31
+					    + "good_amtx=${orderVO.regiCdAmt}";
+
+		document.order_info.good_info.value = good_info;
+	}
+
+	function  jsf__pay( form ){
+		var RetVal = false;
+		/* Payplus Plugin 실행 */
+		if ( MakePayMessage( form ) == true ){
+	    	//openwin = window.open( "/KCP/proc_win.html", "proc_win", "width=449, height=209, top=300, left=300" );
+	    	RetVal = true ;
+		}else{
+	       /*  res_cd와 res_msg변수에 해당 오류코드와 오류메시지가 설정됩니다.
+	           ex) 고객이 Payplus Plugin에서 취소 버튼 클릭시 res_cd=3001, res_msg=사용자 취소
+	           값이 설정됩니다.
+	       */
+	    	res_cd  = document.order_info.res_cd.value ;
+	      	res_msg = document.order_info.res_msg.value ;
+		}
+		//alert(RetVal);
+		return RetVal ;
+	}
+	/* 레이어팝업 */
+	function layer_open(el,height){
+
+		var temp = $('#' + el);
+		var height = height;
+		var bg = temp.prev().hasClass('bg');	//dimmed 레이어를 감지하기 위한 boolean 변수
+
+		if(bg){
+			$('.layer').fadeIn();	//'bg' 클래스가 존재하면 레이어가 나타나고 배경은 dimmed 된다.
+		}else{
+			temp.fadeIn();
+		}
+
+		// 화면의 중앙에 레이어를 띄운다.
+		if (temp.outerHeight() < $(document).height() ) temp.css('top', height);
+		else temp.css('top', '0px');
+		if (temp.outerWidth() < $(document).width() ) temp.css('margin-left', '-'+temp.outerWidth()/2+'px');
+		else temp.css('left', '0px');
+
+		temp.find('a.btn_popClose').click(function(e){
+			if(bg){
+				$('.layer').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
+			}else{
+				temp.fadeOut();
+			}
+			e.preventDefault();
+		});
+
+		$('.layer .bg').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
+			$('.layer').fadeOut();
+			e.preventDefault();
+		});
+	}
+
+
+	//연체금 팝업
+	function allOverduePop(){
+		//$("#modal-1").addClass("md-show");
+	}
+
+	/************************************ 중도 선납,완납 ***********************************************/
+	//중도 선납/완납 팝업 오픈
+	function fn_actTypePop(){
+		$("#actType").val("at2");
+		$("input[name='atNum']").val("at2")
+		$("#modal-3").addClass("md-show");
+	}
+	//선납, 완납 select 선택 이벤트
+	function fn_bayTypeCh(){
+		var bayType = $("#bayType").val();
+		var rdoOrdNo = '${payDetail.ordNo}';
+
+		// 초기화
+		$("#totRecpAmtSp").text("0"); 	//납부금액
+		$("#totDcAmtSp").text("0");   	//할인
+		$("#remainAmtSp").text("0");  	//잔액
+		$("#planAmtSp").text("0");  	//완납 시 금액
+		$("#paySum").val("0");			//실납부
+
+		//선납
+		if(bayType == "t1"){
+			$("#actType dl").eq(0).show();
+			$("#actType dl").eq(1).hide();
+			$("#actType dl").eq(2).show();
+			$("#prepaymentSelectTr").show();
+		}
+		//완납금 조회
+		else{
+			$("#prepaymentSelectTr").hide();
+			$("#actType dl").eq(0).hide();
+			$("#actType dl").eq(1).show();
+			$("#actType dl").eq(2).hide();
+
+			$.ajax({
+	            type: "POST",
+	            dataType: "json",
+	            url: "/mypage/calFullPay",
+	            data: "ordNo="+ rdoOrdNo,
+	            success: function (data) {
+	            	if(data.rtnCode == -1) {
+	            		ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+			    		return;
+			    	}
+	            	$("#planAmtSp").text(NumUtil.setComma(data.planAmt.replace("-",""))); 	//완납 시 금액
+	            	$("#paySum").val(data.planAmt.replace("-",""));			//실납부
+	            },
+	            error: function(xhr,status,error){
+	            	btn_change("-1");
+	            	ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+	            }
+	        });
+		}
+	}
+	//선납금 조회(완납금은 화면 로드 시 조회)
+	function fn_prptMon(){
+		var prptMon  = $("#prptMon").val();
+		var rdoOrdNo = '${payDetail.ordNo}';
+
+		if(prptMon == ""){
+			$("#totRecpAmtSp").text("0"); 	//납부금액
+	    	$("#totDcAmtSp").text("0");   	//할인
+	    	$("#remainAmtSp").text("0");  	//잔액
+	    	$("#paySum").val("0");  		//실납부
+		}else{
+			$.ajax({
+	            type: "POST",
+	            dataType: "json",
+	            url: "/mypage/calPay",
+	            data: "prptMon="+ prptMon+"&ordNo="+ rdoOrdNo+"&dccd="+ "",
+	            success: function (data) {
+	            	console.log(data)
+
+	            	if(data.rtnCode == -1) {
+	            		ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+			    		return;
+			    	}
+
+	            	$("#totRecpAmtSp").text(NumUtil.setComma(data.totRecpAmt)); 	//납부금액
+	            	$("#totDcAmtSp").text(NumUtil.setComma(data.totDcAmt));   	//할인
+	            	$("#remainAmtSp").text(NumUtil.setComma(data.remainAmt));  	//잔액
+	            	$("#paySum").val(data.totRecpAmt);			//실납부
+
+	            },
+	            error: function(xhr,status,error){
+	            	btn_change("-1");
+	            	ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+	            }
+	        });
+		}
+	}
+
+	//선납, 완납 신청 하기 > 결제
+	function prePayment() {
+		var url = "";
+		var valid_message = valid_request();
+		var actType = $("#actType").val();
+		var bayType = $("#bayType").val();
+		var prptMon = $("#prptMon").val();
+		var rtPayMtd = $("#rtPayMtd").val();
+
+		if(bayType == 't1' && prptMon == ""){
+			ComUtil.alert("선납기간을 선택해 주세요");
+			return;
+		}
+
+		var paySum = $("#paySum").val();
+		document.order_info.good_mny.value = paySum;
+
+		if(jsf__pay( document.order_info )){
+			layer_open('layer04', 1500);
+			var frm = document.order_info;
+			frm.method = "POST";
+			frm.submit();
+		}
+	}
+
+	function  jsf__pay( form ){
+		var RetVal = false;
+		/* Payplus Plugin 실행 */
+		if ( MakePayMessage( form ) == true ){
+	    	RetVal = true ;
+		}else{
+	    	res_cd  = document.order_info.res_cd.value ;
+	      	res_msg = document.order_info.res_msg.value ;
+		}
+		return RetVal ;
+	}
+
+
+
+
+	/************************************ 중도 선납,완납!!! ***********************************************/
+
+
+	/************************************ 납부 방법 변경 ***********************************************/
+
+	//납부 방법 변경 신청 팝업 호출
+	function fn_payTypeChPop(){
+		//결제계좌변경, 중도선납/완납 구분 (2019-01-15 안지홍)
+		// at2일경우 중도선납/완납 탭 선택
+		$("#actType").val("at1");
+		$("input[name='atNum']").val("at1");
+		$("#modal-2").addClass("md-show");
+	}
+
+	//납부 방법 변경
+	function fn_payTypeCh(gbn){
+		if(gbn == "card"){
+			$("div[name='cardArea']").show();
+			$("div[name='bankArea']").hide();
+			$("#rtPayMtd").val("C");
+		}else if(gbn == "acc"){
+			$("div[name='cardArea']").hide();
+			$("div[name='bankArea']").show();
+			$("#rtPayMtd").val("A");
+		}
+	}
+
+	//납부방법 변경 유효성 체크
+	function valid_request() {
+		var rtCardPayDy = $("#rtCardPayDy").val();
+		var rtCardAgree = $("#rtCardAgree").val();
+		var rtCardCorp = $("#rtCardCorp").val();
+		var rtCardNo = $("#rtCardNo").val();
+		var limit = $("#limit").val();
+		var limit_m = $("#limit_m").val();
+		var bankselect = $("#rtAcctCorp").val();
+		var banknum = $("#rtAcctNo").val();
+		var actType = $("#actType").val();
+
+		if(actType == "at1"){ // 변경
+			//신용카드
+			if (rtCardPayDy == "") {
+				return "결제일을 선택하지 않으면 결제계좌를 변경할 수 없습니다";
+			}
+			if (rtCardAgree == "") {
+				return "자동이체 동의를 하지 않으면 결제계좌를 변경할 수 없습니다";
+			}
+
+			if ($("#pay1").is(":checked")) {
+				//마스터 비자의 경우 16자리 보다 많았던거 같은 기억이 있는데 나중에 확인 필요
+				if (rtCardNo.replace(/[^0-9]/gi, "") == "" || rtCardNo.replace(/[^0-9]/gi, "").length < 15) {
+					return "카드번호를 정확하게 입력하지 않으면 결제계좌를 변경할 수 없습니다";
+				}
+			} else {
+				if (bankselect == "") {
+					return "은행명을 선택하지 않으면 결제계좌를 변경할 수 없습니다";
+				}
+				//계좌번호 유효성 검사는 특정하기 어렵지 않을까 싶다(은행별 계좌번호 길이 구성이 다른 것으로 알고 있음)
+				if (banknum.replace(/[^0-9]/gi, "") == "" || banknum.replace(/[^0-9]/gi, "").length < 14) {
+					return "계좌번호를 정확하게 입력하지 않으면 결제계좌를 변경할 수 없습니다";
+				}
+			}
+
+		}
+
+		return "";
+	}
+
+	function validationChk() {
+
+		var rtCardPayDy = $("#rtCardPayDy").val();
+		var rtCardAgree = $("#rtCardAgree").val();
+		var rtCardCorp = $("#rtCardCorp").val();
+		var rtCardNo = $("#rtCardNo").val();
+		var rtCardOwner = $("#rtCardOwner").val();
+		var rtCardValYr = $("#rtCardValYr").val();
+		var rtCardValMn = $("#rtCardValMn").val();
+		var bankCd = $("#rtAcctCorp").val();		//은행 코드
+		var acctNumber = $("#rtAcctNo").val();		//계좌번호
+		var acctOwner = $("#rtAcctOwner").val();   	//계좌소지자명
+
+		if(rtCardPayDy == ""){
+			ComUtil.alert("결제일을 선택해주세요");
+			//frm.rtCardPayDy.focus();
+			return false;
+		}
+		if( $('input:checkbox[name=rtCardAgree]').is(':checked') == false ){
+			ComUtil.alert("자동이체 동의를 체크해주세요");
+			//frm.rtCardAgree.focus();
+			return false;
+		}
+
+		if(rtPayMtd == "C"){
+			if(rtCardCorp == ""){
+				ComUtil.alert("카드사명을 선택해주세요");
+				//frm.rtCardCorp.focus();
+				return false;
+			}
+			if(rtCardNo == ""){
+				ComUtil.alert("카드번호를 입력해주세요");
+				//frm.rtCardNo.focus();
+				return false;
+			}
+			if(rtCardOwner == ""){
+				ComUtil.alert("카드소유주를 입력해주세요");
+				//frm.rtCardOwner.focus();
+				return false;
+			}
+			if(rtCardValYr == "" || rtCardValMn == ""){
+				ComUtil.alert("유효기간을 입력해주세요");
+				//frm.rtCardValYr.focus();
+				return false;
+			}
+		}
+		if(rtPayMtd == "A"){
+			if(document.getElementById("ars_succ_yn").value == "0" ||
+			   document.getElementById("CUST_NM").value != acctOwner ||
+			   document.getElementById("ACCT_NO").value != acctNumber ||
+			   document.getElementById("BANK_CD").value != bankCd){
+				document.getElementById("ars_succ_yn").value = "0";
+				ComUtil.alert("출금이체동의 버튼을 클릭해주세요");
+				return false;
+			}
+		}
+
+		var payType = rtPayMtd;
+		if(payType=="C"){//카드
+			//frm.use_pay_method.value="100000000000";
+			//frm.escw_used.value = "N";
+			//frm.pay_mod.value = "N";
+		}else{//계좌 A
+			//frm.use_pay_method.value="010000000000";
+			//frm.escw_used.value = "Y";
+			//frm.pay_mod.value   = "Y";
+		}
+		return true;
+	}
+
+	//신청 - 결제 계좌 변경
+	function payChange() {
+		var url = "";
+		var valid_message = valid_request();
+		var actType = $("#actType").val();
+		var bayType = $("#bayType").val();
+		var prptMon = $("#prptMon").val();
+		var rtPayMtd = $("#rtPayMtd").val();
+
+		if(actType == 'at1'){
+			if (valid_message != "") {
+				ComUtil.alert(valid_message);
+				return false;
+			}
+
+			if (confirm("결제 정보를 변경 하시겠습니까?")) {
+				confirm_cardNAcct();
+			}
+
+			//임시 false return;
+			return false;
+		}
+	}
+	//결제하기(주문하기) 버튼 클릭 시 카드 또는 계좌정보 인증요청(1단계)
+	//고객유형이 사업자이고 개인사업자인 경우는
+	//개인의 결제정보를 인증할지
+	//회사의 결제정보로 인증할지 화면에서 선택가능
+	//<!-- 고객구분=개인:1/법인:2-->
+	//<!-- 법인회원구분=개인사업자:1/법인사업자:2-->
+	function confirm_cardNAcct(){
+		var payType = $("#rtPayMtd").val();
+		var custDivCd = '<c:out value="${clientVo.custDivCd}"/>';  //회원구분
+		var comDivCd = '<c:out value="${clientVo.comDivCd}"/>';    //법인회원구분(1:개인/2:법인)
+		var confirmDivcd = $("#confirmDivcd").val(); 	//계좌/카드 본인확인 대상
+
+		if(payType=="C"){ //렌탈결제가 카드이면
+			if(custDivCd=="1"){                            //개인회원
+				confirm_card("1");
+			}else if(custDivCd=="2"){                      //법인회원
+				if(comDivCd=="2"){                        //법인사업자
+					confirm_card("2");
+				}else if(comDivCd=="1"){                  //개인사업자
+					if(confirmDivcd=="1"){
+						confirm_card("1");
+					}else{
+						confirm_card("2");
+					}
+				}
+			}
+		}else{//렌탈결제가 계좌이면
+			if(custDivCd=="1"){            //개인회원
+				confirm_acct("1");
+			}else if(custDivCd=="2"){      //법인회원
+				if(comDivCd == "2"){       //법인사업자
+					confirm_acct("2");
+				}else if(comDivCd=="1"){   //개인사업자
+					if(confirmDivcd=="1"){
+						confirm_acct("1");
+					}else{
+						confirm_acct("2");
+					}
+				}
+			}
+		}
+	}
+
+	/************************************ 카드로 변경 시작  ***********************************************/
+	//카드번호 유효성 체크
+	function confirm_card(confirm_gb){
+		if(!validationChk()){
+			return;
+		}
+
+		var cardNum = $("#rtCardNo").val();        //카드번호
+		var cardValYr = $("#rtCardValYr").val();   //카드유효기간년
+		var cardValMn = $("#rtCardValMn").val();   //카드유효기간월
+		var cardOwner = $("#rtCardOwner").val();   //카드소지자명
+		var confirmGb = confirm_gb;                //사용자구분(개인:1 /법인:2)0
+		var birthd = "";                           //생년월일
+		var licenseNum = "";                       //사업자번호
+		var custNm = "${clientVo.custNm}"; 		   //고객명
+		var cardCd = $("#rtCardCorp").val();       //카드사코드
+
+		if(confirmGb=="1"){  		//개인명의로
+			confirmGb = "1";
+			birthd = "${clientVo.legalBrthYY}${clientVo.legalBrthMM}${clientVo.legalBrthDD}";                 //생년월일
+			birthd = birthd.substring(2, 8);
+		}else if(confirmGb=="2"){   //사업체명의로
+			confirmGb = "2";
+			licenseNum = "${clientVo.bizRegNo1}${clientVo.bizRegNo2}${clientVo.bizRegNo3}";
+		}
+
+		var param =   "pay_id=" + cardNum +          //카드번호
+			 	      "&pay_expiry_yy="+cardValYr+   //카드유효기간년
+			   	      "&pay_expiry_mm="+cardValMn+   //카드유효기간월
+			   	      "&pay_owner_nm="+cardOwner+    //카드소지자명
+			   	      "&cmbGubun="+confirmGb+        //사용자구분(개인:01 /법인:02)
+			   	      "&pay_cert_no="+birthd+        //생년월일
+			   	      "&busl_no="+licenseNum+        //사업자번호
+			   	      "&cust_name="+custNm+          //고객명
+			   	      "&cardcomCd="+cardCd;          //카드사코드
+
+		$.ajax({
+			type: "POST",
+		   	url:  "/order/kcphubBatch",
+		   	data: param,
+		   	success: function(data){
+			   if(data.resCd != "0000"){
+				   ComUtil.alert("계좌/카드 본인인증 결과 잘못된 정보입니다. 렌탈료 결제 정보를 확인해 주세요.")
+					return;
+				}else {
+						//var frm = document.order_info;
+						//frm.batchKey.value = data.batchKey;
+						//20200727 kstka 카드사코드 리턴
+					$("#rtCardCorp").val(data.cardcomCd);
+
+					var rdoOrdNo 	= '${detailMap.ordNo}';
+					var batchKey 	= data.batchKey;
+					var rtPayMtd 	= $("#rtPayMtd").val();
+					var rtCardPayDy = $("#rtCardPayDy").val();
+					var rtAcctCorp 	= $("#rtAcctCorp").val();
+					var rtAcctNo 	= $("#rtAcctNo").val();
+					var rtCardOwner = $("#rtCardOwner").val();
+					var rtCardCorp  = $("#rtCardCorp").val();
+					var rtCardNo 	= $("#rtCardNo").val();
+					var rtCardValYr = $("#rtCardValYr").val();
+					var rtCardValMn = $("#rtCardValMn").val();
+
+					//var frm = document.order_info;
+					//frm.rdoOrdNo.value = rdoOrdNo;
+					//frm.rtAcctCorp.value = '';
+					//frm.rtAcctNo.value = '';
+
+					var params =
+						{
+							rdoOrdNo : rdoOrdNo,
+							rtPayMtd : rtPayMtd,
+							rtCardPayDy : rtCardPayDy,
+							rtAcctCorp : rtAcctCorp,
+							rtAcctNo : rtAcctNo,
+							batchKey : batchKey,
+							rtCardOwner : rtCardOwner,
+							rtCardCorp : rtCardCorp,
+							rtCardNo : rtCardNo,
+							rtCardValYr : rtCardValYr,
+							rtCardValMn : rtCardValMn
+						};
+
+					console.log('params test::', params);
+
+					$.ajax({
+					    url: "/mypage/updatemyPayMytd",
+					    type: "POST",
+					    dataType: "json",
+					    data: params,
+				        //contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+					    success: function(data) {
+					    	console.log(data)
+					    	if(data.successCode == -1) {
+					    		ComUtil.alert(data.returnMessage);
+					    		return;
+					    	}
+
+					    	ComUtil.alert("성공 적으로 변경 되었습니다.");
+					    	$(".layPopClose").click();
+					    },
+					    error: function (request, status, error) {
+					    	console.log(error)
+						}
+					});
+				}
+		   },
+		  	error:function(request, status, error){
+		  		ComUtil.alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	                        //alert("카드번호 유효성 체크 처리중 오류가 발생했습니다.");
+		  	}
+		});
+	}
+
+
+	/************************************ 카드로 변경 끝  ***********************************************/
+
+	/************************************ 계좌이체로 변경 시작 ***********************************************/
+	//계좌번호 유효성 체크
+	function confirm_acct(confirm_gb){
+		if(!validationChk()){
+			return;
+		}
+
+		//var frm  = document.order_info;
+		var custDivCd = ""; 						//회원구분
+		var BLNo = "";								//생년월일 및 사업자번호
+		var bankCd = $("#rtAcctCorp").val();		//은행 코드
+		var acctNumber = $("#rtAcctNo").val();		//계좌번호
+		var acctOwner = $("#rtAcctOwner").val();   	//계좌소지자명
+		var custNm = '${clientVo.custNm}';
+
+		if(confirm_gb=="1"){                //개인명의로
+	        custDivCd="00";
+			var birthd = "${clientVo.legalBrthYY}${clientVo.legalBrthMM}${clientVo.legalBrthDD}";                 //생년월일
+			birthd = birthd.substring(2, 8);
+			BLNo = birthd;
+		}else if(confirm_gb=="2"){          //사업자명의로
+			custDivCd="01";
+			BLNo = "${clientVo.bizRegNo1}${clientVo.bizRegNo2}${clientVo.bizRegNo3}";
+		}
+
+		$.ajax({
+			type: "POST",
+		   	url:  "/order/kftcCmsDocInfo",
+		   	data: "userType="+ custDivCd +                      //회원구분
+		   	      "&bankCd=" + bankCd +
+		   	      "&acctCd=" + acctNumber +
+		   	      "&bizNo="  + BLNo +
+		   	      "&custNm="+ custNm +
+		   	      "&ownerNm="+ acctOwner,
+		   	success: function(data){
+		   		if(data.returnCode != "0000"){
+		   			ComUtil.alert("계좌/카드 본인인증 결과 잘못된 정보입니다. 렌탈료 결제 정보를 확인해 주세요.")
+					return;
+				}
+
+				var rdoOrdNo 	= '${detailMap.ordNo}';
+				var batchKey 	= data.batchKey;
+			  //var batchKey = $("#batchKey").val();
+				var rtPayMtd 	= $("#rtPayMtd").val();
+				var rtCardPayDy = $("#rtCardPayDy").val();
+				var rtAcctCorp 	= $("#rtAcctCorp").val();
+				var rtAcctNo 	= $("#rtAcctNo").val();
+				var rtCardOwner = $("#rtCardOwner").val();
+				var rtCardCorp  = $("#rtCardCorp").val();
+				var rtCardNo 	= $("#rtCardNo").val();
+				var rtCardValYr = $("#rtCardValYr").val();
+				var rtCardValMn = $("#rtCardValMn").val();
+
+				var params =
+				{
+					rdoOrdNo : rdoOrdNo,
+					rtPayMtd : rtPayMtd,
+					rtCardPayDy : rtCardPayDy,
+					rtAcctCorp : rtAcctCorp,
+					rtAcctNo : rtAcctNo,
+					batchKey : batchKey,
+					rtCardOwner : rtCardOwner,
+					rtCardCorp : rtCardCorp,
+					rtCardNo : rtCardNo,
+					rtCardValYr : rtCardValYr,
+					rtCardValMn : rtCardValMn
+				};
+
+				console.log('params test::', params);
+
+				/*
+				var frm = document.order_info;
+				frm.rdoOrdNo.value = rdoOrdNo;
+				frm.rtCardOwner.value = '';
+				frm.rtCardCorp.value = '';
+				frm.rtCardNo.value = '';
+				frm.rtCardValYr.value = '';
+				frm.rtCardValMn.value = '';
+				*/
+
+		   		$.ajax({
+				    url: "/mypage/updatemyPayMytd",
+				    type: "POST",
+				    dataType: "json",
+				    data: params,
+				    //data: $("#order_info").serialize(),
+				    success: function(data) {
+				    	console.log(data)
+				    	if(data.successCode == -1) {
+				    		ComUtil.alert(data.returnMessage);
+				    		return;
+				    	}
+
+				    	ComUtil.alert("성공 적으로 변경 되었습니다.");
+				    	$(".layPopClose").click();
+				    },
+				    error: function (request, status, error) {
+				    	console.log(error)
+					}
+				});
+
+		   	},
+		  	error:function(request, status, error){
+		  		ComUtil.alert("계좌번호 유효성 체크 처리중 오류가 발생했습니다.");
+		  	}
+		});
+	}
+
+	//ARS인증 기능 java로 대체
+	function fn_arsCallService(){
+	   	if(!account_check()){
+	   		return false;
+	   	}
+	   	$('#ars_button').html("<div class='btn ty6'>고객님의 등록된 휴대폰번호로 ARS인증 중입니다. 잠시만 기다려주세요.</div>");
+		var frm = document.ars_info;
+		$.ajax({
+			type: "POST",
+		   	url:  "/order/arsCallSvr",
+		   	data: "PHONE="+ $("#PHONE").val() +
+		   	      "&CUST_NM=" + $("#CUST_NM").val() +
+		   	      "&BANK_CD=" + $("#BANK_CD").val() +
+		   	      "&BANK_NM=" + $("#BANK_NM").val() +
+		   	      "&ACCT_NO="  + $("#ACCT_NO").val() +
+		   	      "&BUSL_NO="  + $("#BUSL_NO").val() +
+		   	      "&BIRTH_DAY="  + $("#BIRTH_DAY").val() +
+		   	      "&CUST_TP=" + $("#CUST_TP").val(),
+		   	success: function(result){
+		   		if(result.rtnCode != -1){
+					ComUtil.alert("출금이체동의 처리가 완료되었습니다.");
+					fn_setReadonly();
+				}else{
+					//alert("출금이체동의 처리중 오류가 발생했습니다.()");
+					$('#rtn').html(result);
+					fn_setWritecan();
+				}
+		   	},
+		  	error:function(request, status, error){
+		  		ComUtil.alert("출금이체동의 처리중 오류가 발생했습니다.");
+
+		  	}
+		});
+	}
+	function fn_setReadonly() {
+		var frm = document.order_info;
+		document.getElementById("ars_succ_yn").value = "1";
+		$('#ars_button').hide();
+	}
+	function fn_setWritecan() {
+		var frm = document.order_info;
+		document.getElementById("ars_succ_yn").value = "0";
+		$('#ars_button').show();
+	}
+
+	//출금 동의 신청 유효성 체크
+	function account_check(){
+		//var frm = document.order_info;
+		var rtAcctCorp = $("#rtAcctCorp").val();
+		var rtAcctNo = $("#rtAcctNo").val();
+		var rtAcctOwner = $("#rtAcctOwner").val();
+
+		if(rtAcctCorp == ""){
+			ComUtil.alert("은행명을 선택해주세요");
+			//frm.rtAcctCorp.focus();
+			return false;
+		}
+		if(rtAcctNo == ""){
+			ComUtil.alert("계좌번호를 입력해주세요");
+			//frm.rtAcctNo.focus();
+			return false;
+		}
+		//평생계좌 신청 불가
+		if((rtAcctNo.length==10 || rtAcctNo.length==11) && rtAcctCorp == "003"){
+			ComUtil.alert("평생계좌는 자동이체 신청이 불가능합니다.");
+			//frm.rtAcctNo.focus();
+			return false;
+		}
+		if(rtAcctNo.length>=10 && rtAcctNo.length<=14 && rtAcctCorp == "088" && rtAcctNo.substr(0,3)=="010"){
+			ComUtil.alert("평생계좌는 자동이체 신청이 불가능합니다.");
+			//frm.rtAcctNo.focus();
+			return false;
+		}
+		if(rtAcctOwner == ""){
+			ComUtil.alert("계좌소유주를 입력해주세요");
+			//frm.rtAcctOwner.focus();
+			return false;
+		}
+
+		document.getElementById("PHONE").value = '<c:out value="${clientVo.ordrHp1}"/>' + '<c:out value="${clientVo.ordrHp2}"/>' + '<c:out value="${clientVo.ordrHp3}"/>';
+		document.getElementById("DATE").value = getTimeStamp();
+		document.getElementById("CUST_NM").value = rtAcctOwner;
+		document.getElementById("ACCT_NO").value = rtAcctNo;
+		document.getElementById("BANK_CD").value = rtAcctCorp;
+		document.getElementById("CUST_TP").value = "0" + '<c:out value="${clientVo.custDivCd}"/>';
+
+		var authNo = (Math.floor(Math.random() * 100)) + "";	// 인증번호 랜덤
+		var bankNm = $("#rtAcctCorp option:selected").text();
+		document.getElementById("BANK_NM").value = bankNm;
+
+		if(authNo.length == 1) {
+			authNo = "0" + authNo;
+			document.getElementById("AUTH_NO").value = authNo;
+		}
+		if('<c:out value="${clientVo.legalBrthYY}"/>' != ''){
+			document.getElementById("BIRTH_DAY").value = '<c:out value="${clientVo.legalBrthYY}"/>' + '<c:out value="${clientVo.legalBrthMM}"/>' + '<c:out value="${clientVo.legalBrthDD}"/>';
+		}
+
+		if('<c:out value="${clientVo.bizRegNo1}"/>' != ''){
+			document.getElementById("BUSL_NO").value = '<c:out value="${clientVo.bizRegNo1}"/>' + '<c:out value="${clientVo.bizRegNo2}"/>' + '<c:out value="${clientVo.bizRegNo3}"/>';
+		}
+		if('<c:out value="${clientVo.legalBrthYY}"/>' != ''){
+		document.getElementById("AUTH_INQUERY").value = "안녕하세요 넥센타이어입니다. " + '<c:out value="${clientVo.legalBrthYY}"/>' + "년 " + '<c:out value="${clientVo.legalBrthMM}"/>' + "월 "
+		                                              + '<c:out value="${clientVo.legalBrthDD}"/>' + "일생 " + rtAcctOwner + " 고객님의 " + bankNm
+		                                              + "<digit>" + rtAcctNo + "</digit> 계좌에서 넥센타이어로 자동이체 출금에 대해 동의하시겠습니까?";
+		}
+		if('<c:out value="${clientVo.bizRegNo1}"/>' != ''){
+			document.getElementById("AUTH_INQUERY").value = "안녕하세요 넥센타이어입니다. 사업자번호 <digit>" + '<c:out value="${clientVo.bizRegNo1}"/>' + '<c:out value="${clientVo.bizRegNo2}"/>'
+			                                              + '<c:out value="${clientVo.bizRegNo3}"/>' + "</digit> " + rtAcctOwner + " 고객님의 " + bankNm
+			                                              + "<digit>" + rtAcctNo + "</digit> 계좌에서 넥센타이어로 자동이체 출금에 대해 동의하시겠습니까?";
+		}
+		return true;
+	}
+	/************************************ 계좌이체로 변경 ***********************************************/
+
+
+	//수납 조회
+	function myPayMonthListPage(pageNo) {
+
+		if(pageNo != null){
+			if(Number(pageNo)  == 0) {
+				$("#pageNo").val("1");
+			} else {
+				$("#pageNo").val(pageNo);
+			}
+		} else {
+			$("#pageNo").val("1");
+		}
+
+		var dateStart = $("#dateStart").val().replace(/[-]/gi,"");
+    	var dateEnd = $("#dateEnd").val().replace(/[-]/gi,"");
+
+		var param = {ordNo : '${detailMap.ordNo}' , dateStart : dateStart , dateEnd : dateEnd, pageNo : pageNo };
+
+		var date = new Date();
+	    var start = new Date();
+	    var today = new Date();
+/* 	    if(n < 10){
+	       start.setMonth(start.getMonth()-n);
+	    } */
+	    var yyyy = start.getFullYear();
+	    var mm = start.getMonth()+1;
+	    var dd = start.getDate();
+
+		$.ajax({
+	        type: "post",
+	        url: "/mypage/myPayMonthListPage",
+	        data: JSON.stringify(param),
+	        contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	        success: function (data) {
+	        	console.log(data)
+	        	if(data.rtnCode == -1) {
+	        		ComUtil.alert(data.rtnMsg);
+		    		return;
+		    	}
+
+	        	var sumArreAmt=0;
+	        	var sumRecpAmt=0;
+	        	var sumSaleAmt=0;
+	        	var AmtSt=0;
+
+	        	var html = "";
+	        	var list = data.rtnList;
+	        	if(list.length > 0) {
+		        	for(var i=0; i<list.length; i++) {
+			        	html += "<tr>";
+			        	html += "	<td class='tCenter'>";
+			        	var dis = ""
+			        	var gbn = ""
+
+			        	if(Number(list[i].arreAmt) < 1) {
+			        		dis = "disabled='disabled'"
+			        		gbn = "arre";
+			        	}
+			        	html += "    	<input type='checkbox' "+dis+" id='arreChk"+(i+1)+"' name='arreChk' recpAmt='"+list[i].recpAmt+"' arreAmt='"+list[i].arreAmt+"' onclick='fn_ckCheck(\""+(i+1)+"\");'  class='type01'><label for='arreChk"+(i+1)+"'><span></span></label>";
+			        	html += "	</td>";
+			        	html += "<td class='tCenter'>"+(i+1)+"</td>";
+			        	html += "<td class='tCenter'>"+list[i].zfbDay+"</td>";
+			        	html += "<td class='tRight'>"+NumUtil.setComma(list[i].saleAmt)+"원</td>";
+			        	html += "<td class='tRight'>"+NumUtil.setComma(list[i].saleAmt)+"원</td>";
+			        	html += "<td class='tRight'>"+NumUtil.setComma(list[i].arreAmt)+"원</td>";
+			        	if(list[i].rcDay != null) {
+				        	html += "<td class='tCenter'>"+list[i].rcDay+"</td>";
+			        	} else {
+			        		html += "<td class='tCenter'>&nbsp;</td>";
+			        	}
+			        	if(Number(list[i].recpAmt) > 0  ){
+			        		html += "<td class='tRight'>"+NumUtil.setComma(list[i].recpAmt)+"원</td>";
+			        	} else {
+			        		html += "<td class='tRight'>&nbsp;</td>";
+			        	}
+			        	html += "<td class='tCenter'>"+list[i].payMthdNm+"원</td>";
+			        	html += "</tr>";
+
+			        	if(yyyy + mm + dd > list[i].zfbDay){
+			        		sumArreAmt = sumArreAmt +  Number(list[i].arreAmt);
+			        	}
+			        	sumRecpAmt = sumRecpAmt +  Number(list[i].recpAmt);
+			        	sumSaleAmt = sumSaleAmt +  Number(list[i].saleAmt);
+
+		        	}
+
+		        	//전체 연체 금액
+		        	$("#sumArreAmtTxt").html("&#8361 " + NumUtil.setComma(sumArreAmt));
+		        	//현재 납부 금액
+		        	$("#sumRecpAmtSp").html("&#8361 " + NumUtil.setComma(sumRecpAmt));
+		        	//잔여 렌탈료
+		        	$("#AmtSt").html("&#8361 " + NumUtil.setComma(sumSaleAmt-sumRecpAmt));
+		        	$("#sunabArea").show();
+	        	} else {
+	        		html += "<tr>";
+		        	html += "<td colspan='9' class='noResult' style='text-align: center;'>";
+		        	html += "수납 내역이 없습니다.";
+		        	html += "</td>";
+		        	html += "</tr>";
+	        	}
+
+	        	$(".price.center").show();
+
+            	$("#myPayMonthList").html(html);
+
+	        },
+	        error: function(xhr,status,error){
+	        	//alert(support0014);
+	        }
+	    });
+	}
+
+	//체크박스 전체 선택
+	function fnarreChk(obj){
+		var id = $(obj).attr("id");
+
+		if(id == "arreChk0") {
+			if($(obj).is(":checked")) {
+				$("input[name='arreChk']").each(function(){
+					//미수금 있는 것만
+					//if($(this).attr("gbn") == "arre") {
+						$(this).prop("checked", true);
+					//}
+				});
+			} else {
+				$("input[name='arreChk']").prop("checked", false);
+			}
+		}
+
+		fn_ckAmt();
+	}
+	//개별 체크 박스
+	function fn_ckCheck(idx){
+	    if($("#arreChk"+idx).is(":checked")) {
+	    	for(var i=0; i< idx; i++) {
+	    		$("#arreChk"+ (idx-i)).prop("checked", true);
+	    	}
+	    } else {
+	    	var size = $("input[name='arreChk']").length + 1;
+	    	for(var i=0; i< size; i++) {
+	    		if(i > idx) {
+		    		$("#arreChk"+ i).prop("checked", false);
+	    		}
+	    	}
+	    }
+
+	    fn_ckAmt();
+	}
+	//연체금 세팅
+	function fn_ckAmt(){
+		var paySum = 0;
+		var sumArreAmt = Number($("#sumArreAmtTxt").text().replace(/[^0-9]/gi,""));
+		var overdueNum = 0;
+
+
+		$("input[name='arreChk']").each(function() {
+			if($(this).is(":checked")) {
+				overdueNum = overdueNum + 1;
+				paySum = paySum + Number($(this).attr("arreAmt"));
+
+				$("#recpAmt").val($(this).attr("arreAmt"));
+				$("#arreAmt").val($(this).attr("arreAmt"));
+			}
+		});
+
+
+		console.log()
+
+		$("input[name=good_mny]").val(paySum);		//결제 금액
+		$("#sumRecpAmt").val(paySum);
+		$("#overdueNum").val(overdueNum);	//신청 개수
+
+		$("#sumRecpAmtSp").html("&#8361 " + NumUtil.setComma(paySum));
+		$("#AmtSt").html("&#8361 " + NumUtil.setComma(sumArreAmt - paySum));
+	}
+	//연체금 납부 신청
+	function fnOverdue() {
+		var arreArr = [];
+
+		$("input[name='arreChk']").each(function(){
+			if($(this).attr("gbn") == "arre") {
+				arreArr.push($(this).val());
+			}
+		});
+
+		console.log(document.order_info);
+
+		if(jsf__pay( document.order_info )){
+			layer_open('layer04', 1500);
+			var frm = document.order_info;
+			frm.method = "POST";
+			frm.action = "/mypage/arre_pp_cli_hub";
+			frm.submit();
+
+			//document.order_info.submit();
+		}
+	}
+
+
+	//회원 수정 화면으로 이동
+	function goMemberUpdate(){
+		location.href = "/mypage/memberModify";
+	}
+
+	//날짜
+	function addzero(n){                        // 한자리가 되는 숫자에 "0"을 넣어주는 함수
+	    return n < 10 ? "0" + n: n;
+	}
+	function dateInput(n,m){
+	    $("#dateStart").val("");               // 우선 이미 들어가있는 값 초기화
+	    $("#dateEnd").val("");
+
+	    var date = new Date();
+	    var start = new Date();
+	    var today = new Date();
+	    if(n < 10){
+	       start.setMonth(start.getMonth()-n);
+	    }
+	    var yyyy = start.getFullYear();
+	    var mm = start.getMonth()+1;
+	    var dd = start.getDate();
+	    var t_yyyy = today.getFullYear();
+	    var t_mm = today.getMonth()+1;
+	    var t_dd = today.getDate();
+
+	    if(n == 0 ){
+		    $("#dateStart").val(startDt);
+		    $("#dateEnd").val(t_yyyy+'-'+addzero(t_mm)+'-'+addzero(t_dd));
+		} else {
+			$("#dateStart").val(yyyy+'-'+addzero(mm)+'-'+addzero(dd));
+		    $("#dateEnd").val(t_yyyy+'-'+addzero(t_mm)+'-'+addzero(t_dd));
+		}
+		myPayMonthListPage("1");
+
+	}
+
+	//팝업닫기
+	function popClose(){
+		$(".layPopClose").click();
+	}
+
+	//숫자만 입력
+	function number_filter(str_value){
+		return str_value.replace(/[^0-9]/gi, "");
+	}
+	//현재시간 구하기
+	function getTimeStamp() {
+		var d = new Date();
+
+		var s = leadingZeros(d.getFullYear(), 4) + leadingZeros(d.getMonth() + 1, 2) + leadingZeros(d.getDate(), 2);
+		s += leadingZeros(d.getHours(), 2) + leadingZeros(d.getMinutes(), 2) + leadingZeros(d.getSeconds(), 2);
+
+		return s;
+	}
+
+	function leadingZeros(n, digits) {
+		var zero = '';
+		n = n.toString();
+
+		if (n.length < digits) {
+			for (i = 0; i < digits - n.length; i++)
+				zero += '0';
+		}
+		return zero + n;
+	}
+
+
+	//지도 구현
+	function fnStore(agencyCd) {
+		$.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/mypage/searchAgencyInfo",
+            data: "agencyCd="+ agencyCd,
+            success: function (data) {
+            	console.log(data)
+
+            	if(data.resultMap == null) {
+            		ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+		    		return;
+		    	}
+            	if(data.successCode == -1) {
+            		ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+		    		return;
+		    	}
+
+
+            	//정보영역
+            	//대리점 명
+
+            	//아이콘
+            	var agencyNm = "";
+            	agencyNm += data.resultMap.agencyNm;
+            	agencyNm += "<span class='icoArea' id='agencyChYn'>";
+            	var icon = "";
+            	if(data.resultMap.chYn == "Y") {
+            		icon = "<img src='/img/common/state_big_ico01.png' alt='추천'>";
+            	}
+            	agencyNm += icon + " <img src='/img/common/state_big_ico02.png' alt='타이어'>";
+            	agencyNm += "</span>";
+   				agencyNm += "<a href='javascript:popClose();' class='layPopClose md-close'></a>";
+   				$("#agencyNm").html(agencyNm);
+
+            	$("#agencyChYn").html(icon + " <img src='/img/common/state_big_ico02.png' alt='타이어'>")
+            	//주소
+				$("#agencyAddr").text(data.resultMap.addr3);
+				//전화번호
+				$("#agencyTel").text(data.resultMap.telNo);
+            	//영업시간
+            	$("#agencyBizTime").text(data.resultMap.agencyBizTime)
+
+            	//취급품목
+            	var iconGroup = "";
+            	//타이어
+            	iconGroup += "<div class='state'>";
+            	iconGroup += "    <img src='/img/common/state_ico02.png' alt='타이어'>";
+            	iconGroup += "   <span>타이어</span>";
+            	iconGroup += "</div>";
+
+            	//추천
+            	if(data.resultMap.chYn == 'Y') {
+		           	iconGroup += "	<div class='state'>";
+		           	iconGroup += "   	<img src='/img/common/state_ico01.png' alt='추천'>";
+		           	iconGroup += "   	<span>추천</span>";
+		           	iconGroup += "</div>";
+            	}
+            	//세차
+            	else if(data.resultMap.cwYn == 'Y') {
+            		iconGroup += "	<div class='state'>";
+            		iconGroup += "        <img src='/img/common/state_ico05.png' alt='세차'>";
+            		iconGroup += "       <span>세차</span>";
+            		iconGroup += "	</div>";
+            	}
+            	//일급정비
+            	if(data.resultMap.fmYn == 'Y') {
+            		iconGroup += "	<div class='state'>";
+            		iconGroup += "       <img src='/img/common/state_ico05.png' alt='일급정비'>";
+            		iconGroup += "      <span>일급정비</span>";
+            		conGroup += "</div>";
+            	}
+            	//경정비
+            	if(data.resultMap.lmYn == 'Y') {
+            		iconGroup += "   <div class='state'>";
+            		iconGroup += "      <img src='/img/common/state_ico03.png' alt='경정비'>";
+            		iconGroup += "      <span>경정비</span>";
+            		iconGroup += "	</div>";
+				}
+            	//겨울용
+            	if(data.resultMap.seasonGbn == '02') {
+            		iconGroup += "   <div class='state'>";
+            		iconGroup += "        <img src='/img/common/state_ico04.png' alt='겨울용'>";
+            		iconGroup += "    <span>겨울용</span>";
+	                iconGroup += "	</div>";
+            	}
+            	$("#iconGroup").html(iconGroup);
+
+				//탈착기
+				$("#desorptNm").text(data.resultMap.desorptNm);
+
+				//얼라이언트
+				$("#alignNm").text(data.resultMap.alignNm);
+				//밸런스
+				$("#balanceNm").text(data.resultMap.balanceNm);
+
+				//대리점 이미지
+				var storeImg= "";
+				var fList = data.acyFileList;
+				if(fList > 0) {
+					for(var i=0; i<fList.length; i++) {
+						var path = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_RENTAL_URL)%>/<%= WebConstants.RENTAL_FILE_PATH_ATFILE_CMS %>";
+						storeImg += "<li>";
+						storeImg += "<a href='#'><img src='"+path+"/agency/"+fList[i].atflPathNm+"' alt='장착점' /></a>";
+						storeImg += "</li>";
+					}
+				}
+				$("#storeImg").html(storeImg)
+
+				//길찾기 이벤트
+				$("#findLoad").on("click", function() {
+					goFind(data.resultMap.agencyNm, data.resultMap.posX, data.resultMap.posY);
+				});
+
+            	//지도 영역
+            	var agencyLat 	= data.resultMap.posX; 	//대리점의 위도
+        		var agencyLon 	= data.resultMap.posY; 	//대리점의 경도
+        		var agencyBhfNm	= data.resultMap.agencyNm; 	//대리점의 경도
+
+                var mapContainer = document.getElementById('mapDiv'), // 지도를 표시할 div
+        	    mapOption = {
+        	        center: new daum.maps.LatLng(agencyLat, agencyLon), // 지도의 중심좌표
+        	        level: 5 // 지도의 확대 레벨
+        	    };
+        		map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                // 마커를 생성합니다
+        		var imageSrc = "/img/common/map_ico.png";
+                var imageSize = new daum.maps.Size(50, 65);
+
+                var marker = new kakao.maps.Marker({
+                    map: map, // 마커를 표시할 지도
+                    position: new daum.maps.LatLng(agencyLat, agencyLon), // 마커를 표시할 위치
+                    title : "", // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                    image : new daum.maps.MarkerImage(imageSrc, imageSize) // 마커 이미지
+                    //clickable: true
+                });
+                infoWindow(marker, '${resultMap.agencyNm}', '${resultMap.telNo}', '${resultMap.addr3}', '${resultMap.addr2}', '${resultMap.repNm}');
+
+        		//지도 리사이즈
+        		//지도 영역 리사이즈
+                $("#mapDiv").width("879px");
+                $("#mapDiv").height("362px");
+
+                $("#agency").addClass("md-show");
+            },
+            error: function(xhr,status,error){
+            	btn_change("-1");
+            	ComUtil.alert("고객 센터 1855-0100으로 문의를 바랍니다.");
+            }
+        });
+	}
+	function infoWindow(marker, agency_nm, tel_no, address, nAddr, rep_nm){
+		// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+	    var iwContent = '<div style="padding:2px;"><span style="font-weight:bold;">영업점명 </span> : '+agency_nm+'</div>'
+	    				+'<div style="padding:2px;"><span style="font-weight:bold;">전화번호 </span> : '+tel_no+'</div>'
+	    				+'<div style="padding:2px;"><span style="font-weight:bold;">주소 </span> : '+address+'('+nAddr+')</div>'
+	    				+'<div style="padding:2px;"><span style="font-weight:bold;">대표자 </span> : '+rep_nm+'</div>'
+	    				,iwRemoveable = true;// removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+	 	// 인포윈도우를 생성합니다
+	    var infowindow = new daum.maps.InfoWindow({
+	        content : iwContent,
+	        removable : iwRemoveable
+	    });
+
+	 	// 마커에 클릭이벤트를 등록합니다
+	    daum.maps.event.addListener(marker, 'mouseover', function() {
+	          // 마커 위에 인포윈도우를 표시합니다
+	          infowindow.open(map, marker);
+
+	    });
+
+	 	// 마커에 마우스아웃 이벤트를 등록합니다
+	    daum.maps.event.addListener(marker, 'mouseout', function() {
+	        // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+	        infowindow.close();
+	    });
+	}
+
+	$("#month").on('click',"li" ,function() {
+		$("#month").find("a").removeClass("active");
+		$(this).find("a").addClass("active");
+	})
+		     // sBtn 속에 (active) 클래스를 삭제 한다.
+	  // 클릭한 a에 (active)클래스를 넣는다.
+
+
+	$( document ).ready(function() {
+
+		//납부방법 변경 세팅
+		fn_payTypeCh("card");
+
+		var startDt = '${detailMap.procDay}';
+		var endDt = today();
+		if(startDt == "") {
+			startDt = today();
+		}
+
+		$('#dateStart').val(startDt);
+		$('#dateEnd').val(endDt);
+
+		//달력 세팅
+		$('#dateStart').datepicker({
+			showOn: "button",
+			buttonImage: "/img/common/calendar.png",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			yearRange: 'c-0:c+2',
+			maxDate: new Date(endDt),
+			weekHeader: 'Wk',
+			dateFormat: 'yy-mm-dd'
+	    });
+
+		//달력 세팅
+		$('#dateEnd').datepicker({
+			showOn: "button",
+			buttonImage: "/img/common/calendar.png",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			yearRange: 'c-0:c+2',
+			maxDate: new Date(endDt),
+			weekHeader: 'Wk',
+			dateFormat: 'yy-mm-dd'
+	    });
+
+		//연체금 영역 숨김
+		$(".price.center").hide();
+	});
+
+	function freeDmgSrvBtnCtl() {
+
+		console.log('servCd_h TEST::', servCd);
+		console.log('b00012UseCnt_h TEST::', b00012UseCnt);
+		console.log('b00011UseCnt_h TEST::', b00011UseCnt);
+		console.log('registIngYn_h TEST::', registIngYn);
+		console.log('applyIngYn_h TEST::', applyIngYn);
+
+		if(servCd == 'B00012' && b00012UseCnt < 0) {	//무상파손 가입
+			$('#freeDmgJoin').css("display", "inline");
+		}
+		if(servCd == 'B00011' && b00011UseCnt < 0) {	//조기마모 가입
+			$('#freeDmgEarlyJoin').css("display", "inline");
+		}
+		if(servCd == 'B00012' && b00012UseCnt >= 0) {	//무상파손 신청
+			$('#freeDmgReq').css("display", "inline");
+		}
+		if(servCd == 'B00011' && b00011UseCnt >= 0) {	//조기마모 신청
+			$('#freeDmgEarlyReq').css("display", "inline");
+		}
+	}
+
+	//무상 파손 보증 서비스 가입
+	function fn_damageServiceJoinGo(ordNo) {
+		if(servCd == 'B00012' && registIngYn == 'Y') {
+			ComUtil.alert("가입 심사중입니다.");
+		}else {
+			window.location.href="/mypage/freeDamageSrvJoin?ordNo="+ordNo;
+		}
+	}
+
+	//조기 마모 보증 서비스 가입
+	function fn_abrasionServiceJoinGo(ordNo) {
+		if(servCd == 'B00011' && registIngYn == 'Y') {
+			ComUtil.alert("가입 심사중입니다.");
+		}else {
+			window.location.href="/mypage/earlyAbrasionSrvJoin?ordNo="+ordNo;
+		}
+	}
+
+	//무상 파손 보증 서비스 신청
+	function fn_damageServiceReqGo(ordNo) {
+		if(servCd == 'B00012' && applyIngYn == 'Y') {
+			ComUtil.alert("신청 승인중입니다.");
+		}else {
+			window.location.href="/mypage/freeDamageSrvCreate?ordNo="+ordNo;
+		}
+	}
+
+	//조기 마모 보증 서비스 신청
+	function fn_abrasionServiceReqGo(ordNo) {
+		if(servCd == 'B00011' && applyIngYn == 'Y') {
+			ComUtil.alert("신청 승인중입니다.");
+		}else {
+			window.location.href="/mypage/earlyAbrasionSrvCreate?ordNo="+ordNo;
+		}
+	}
+
+	//걱정제로 서비스 신청
+	function fn_zeroServiceGo() {
+		window.location.href="/mypage/zeroServiceCreate";
+	}
+
+	//엔진오일 서비스 신청
+    function fn_engineServiceGo(){
+    	window.location.href="/mypage/engineServiceCreate";
+    }
+
+	//올해 마지막 날짜
+	function today(){
+		var now = new Date();
+		var year = now.getFullYear();
+		var mon = (now.getMonth() + 1)> 9? ''+ (now.getMonth() + 1) : '0'+ (now.getMonth() + 1);
+		var day = now.getDate() > 9? ''+ now.getDate() : '0'+ now.getDate();
+
+		return year+"-"+mon+"-"+day;
+	}
+
+	/* 길찾기 */
+	function goFind(agencyNm, posX, posY){
+		window.open("http://map.daum.net/link/to/"+agencyNm+","+posX+","+posY);
+	}
+
+
+    function sunabTabOpen () {
+    	$(".tabs").find("li:eq(1)").click();
+    }
+
+</script>
+

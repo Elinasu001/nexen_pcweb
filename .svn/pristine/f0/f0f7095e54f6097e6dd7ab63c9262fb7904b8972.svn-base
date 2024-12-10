@@ -1,0 +1,359 @@
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+		<!-- subContentsWrap -->
+		<div class="subContentsWrap">
+			<div class="subContents type01">
+				<div class="titleArea type03">
+					<h2 class="type03"><img src="/img/title/h2_b_17.png" alt="꼭! 필요해요."></h2>
+					<h3 class="type01">
+						<img src="/img/title/h2_step_01.png" alt="약관동의"/>
+					</h3>
+				</div>
+
+				<form id="agree_Form" name="agree_Form" method="post">
+				<!--memberWrap-->
+				<div class="memberBoxWrap">
+					<div class="termsAgree">
+						<input type="checkbox" name="agree" id="allChk" value="0" class="type02 allAgree"><label for="allChk"><span></span>모든 약관을 확인하고 전체 동의합니다.</label>
+
+						<div class="sAgree">
+							<ul>
+								<li><input type="checkbox" id="agree01" name="agree" gbn="necessary" value="1" class="type02 agree01"><label for="agree01"><span></span>[필수] 이용 약관</label>
+                                     <a href="#;" onClick="javascript:policyLayPopOpen('modal-termOfService');" class="agreeBtn"><span>[ 약관보기 ] <i class="ico12 po_06"></i></span></a>
+                                </li>
+								<li><input type="checkbox" id="agree02" name="agree" gbn="necessary" value="2" class="type02 agree02"><label for="agree02"><span></span>[필수] 개인(신용)정보 수집 및 이용동의</label>
+                                     <a href="#;" onClick="javascript:policyLayPopOpen('modal-privacyPolicy');" class="agreeBtn"><span>[ 이용동의 보기 ] <i class="ico12 po_06"></i></span></a>
+                                </li>
+								<li><input type="checkbox" id="agree03" name="agree" gbn="necessary" value="3" class="type02 agree03"><label for="agree03"><span></span>[필수] 개인 정보 제공 동의 </label>
+									 <a href="#;" onClick="javascript:policyLayPopOpen('modal-privacyPolicyAgree');" class="agreeBtn"><span>[ 상세보기 ] <i class="ico12 po_06"></i></span></a>
+								</li>
+								<li><input type="checkbox" id="agree04" name="agree" gbn="necessary" value="4" class="type02 agree03"><label for="agree04"><span></span>[필수] 개인정보 조회 동의 </label>
+									<a href="#;" onClick="javascript:policyLayPopOpen('modal-perInfoSearchAgree');" class="agreeBtn"><span>[ 상세보기 ] <i class="ico12 po_06"></i></span></a>
+								</li>
+								<li><input type="checkbox" id="agree05" name="agree" gbn="necessary" value="5" class="type02 agree03"><label for="agree05"><span></span>[필수] 개인정보 위탁 동의  </label>
+									<a href="#;" onClick="javascript:policyLayPopOpen('modal-consignment');" class="agreeBtn"><span>[ 상세보기 ] <i class="ico12 po_06"></i></span></a>
+								</li>
+								<li id="test"><input type="checkbox" id="maketingAgree" name="agree" gbn="notNecessary" value="6" class="type02 agree03"><label for="maketingAgree"><span></span>[선택] 마케팅 활용 목적의 개인 정보 수집 및 이용 동의</label>
+									<a href="#;" onClick="javascript:policyLayPopOpen('modal-marketingAgree', 'maketingAgree');" class="agreeBtn" id="test1"><span>[ 상세보기 ] <i class="ico12 po_06"></i></span></a>
+								</li>
+								<!-- <li>
+									<div class="sAgree conWrap">
+										<ul>
+											<li><input type="checkbox" id="maketingAgree01" name="maketingAgree" gbn="notNecessary" value="61" class="type02"><label for="maketingAgree01"><span></span>동의</label></li>
+											<li><input type="checkbox" id="maketingAgree02" name="maketingAgree" gbn="notNecessary" value="62" class="type02"><label for="maketingAgree02"><span></span>미동의</label></li>
+										</ul>
+									</div>
+								</li> -->
+								<!-- <div class="termsAgree marketingDescInfo">
+									<ul>
+		                                <li>ㆍ귀하는 넥스트레벨 서비스 가입 회원에게 다양한 편의 및 정보를 제공하기 위해 필요한 선택적 개인정보 수집 및 이용에 동의하지 않을 권리가 있으며,</li>
+		                                <li>ㆍ동의 거부시 넥스트레벨 계약의 체결 및 유지, 관리에는 영향이 없으나 거부한 내용에 대한 서비스가 제한될 수 있습니다.</li>
+		                            </ul>
+								</div> -->
+								<li><input type="checkbox" id="advertisementAgree" name="agree" gbn="notNecessary" value="7" class="type02 agree03"><label for="advertisementAgree"><span></span>[선택] 영리목적 광고성 정보 수신 동의</label>
+									<a href="#;" onClick="javascript:policyLayPopOpen('modal-advertisementAgree', 'advertisementAgree');" class="agreeBtn"><span>[ 상세보기 ] <i class="ico12 po_06"></i></span></a>
+								</li>
+
+							</ul>
+						</div>
+
+						<div class="ssAgree">
+							<ul>
+								<li><input type="checkbox" id="maketingAgree01" name="maketingAgree" gbn="notNecessary" value="61" class="type02"><label for="maketingAgree01"><span></span>SMS</label></li>
+								<li><input type="checkbox" id="maketingAgree02" name="maketingAgree" gbn="notNecessary" value="62" class="type02"><label for="maketingAgree02"><span></span>전화</label></li>
+								<li><input type="checkbox" id="maketingAgree03" name="maketingAgree" gbn="notNecessary" value="63" class="type02"><label for="maketingAgree03"><span></span>이메일</label></li>
+								<!-- <li><input type="checkbox" id="maketingAgree04" name="maketingAgree" gbn="notNecessary" value="64" class="type02"><label for="maketingAgree04"><span></span>전화</label></li> -->
+								<li><input type="checkbox" id="maketingAgree05" name="maketingAgree" gbn="notNecessary" value="65" class="type02"><label for="maketingAgree05"><span></span>카카오알림톡</label></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="btnArea type08">
+						<button type="button" class="type01 w400" id="bntAgree" disabled="disabled">약관에 동의합니다. <i class="ico01"></i></button>
+					</div>
+					<input type="hidden" id="receptionMarketingFirst"    name="receptionMarketingFirst"    value="N" />
+					<input type="hidden" id="receptionMarketingSecond"   name="receptionMarketingSecond"   value="N" />
+					<input type="hidden" id="receptionAll"    name="receptionAll"    value="N" />
+					<input type="hidden" id="receptionSms"    name="receptionSms"    value="N" />
+					<input type="hidden" id="receptionPhone"  name="receptionPhone"  value="N" />
+					<input type="hidden" id="receptionEmail"  name="receptionEmail"  value="N" />
+					<input type="hidden" id="receptionAdress" name="receptionAdress" value="N" />
+					<input type="hidden" id="receptionKakao"  name="receptionKakao"   value="N" />
+					<input type="hidden" name="snsGbn" id="snsGbn" value="${snsGbn}">
+					<input type="hidden" name="snsid" id="snsid" value="${snsid}">
+					<input type="hidden" name="viewGbn" id="viewGbn" value="${viewGbn}">
+					<input type="hidden" name="loginStatus" id="loginStatus" value="${loginStatus}">
+				</div>
+				<!--memberWrap-->
+				</form>
+
+			</div>
+		</div>
+		<!-- subContentsWrap -->
+
+
+
+		<!--  백그라운드 이미지 -->
+		<div class="allBgWrap">
+			<div class="memberBg bg05"></div>
+		</div>
+
+		<script type="text/javascript" src="/js/lib/classie.js"></script>
+    	<script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<script type="text/javascript">
+	//휴대폰 인증화면 에서 뒤로가기했을시 약관 모두 초기화 시키는 기능
+	window.onpageshow = function(event){
+		if (event.persited || (window.performance && window.performance.navigation.type == 2)){
+			$("#allChk").prop("checked" , false);
+			$("#agree01").prop("checked" , false);
+			$("#agree02").prop("checked" , false);
+			$("#agree03").prop("checked" , false);
+			$("#agree04").prop("checked" , false);
+			$("#agree05").prop("checked" , false);
+			$("#maketingAgree").prop("checked" , false);
+			$("#advertisementAgree").prop("checked" , false);
+			$("#maketingAgree01").prop("checked" , false);
+			$("#maketingAgree02").prop("checked" , false);
+			$("#maketingAgree03").prop("checked" , false);
+			$("#maketingAgree05").prop("checked" , false);
+			$("#chk_marketing_agree_first").prop("checked" , false);
+			$("#chk_marketing_agree_second").prop("checked" , false);
+		}
+	}
+
+	var evManager = {
+		viewGbn : "${viewGbn}"	//이전 화면 구분 > s:sns , m : 개인 , b : 사업
+		,
+		isChk : false	//필수 체크 박스 선택 여부
+		,
+		init : function(){
+			//약관 동의 하기 버튼 비 활성화
+			$("#bntAgree").attr("disabled" , true);
+		}
+		,
+		//유효성 체크
+		validation : function(){
+			if(!evManager.isChk) {
+				return false;
+			}
+			return true;
+		}
+		,
+		//체크박스 클릭 이벤트
+		chkClick : function(thisObj, e){
+			//전체 체크 박스
+			if(thisObj.attr("id") == "allChk") {
+				
+				if(thisObj.is(":checked")) {
+					$("input[gbn='necessary']").prop("checked" , true);			//전체 체크박스
+					//$("input[name='agree']").prop("checked" , true);			//전체 체크박스
+					//$("input[name='maketingAgree']").prop("checked" , true);	//마케팅 체크박스
+					//$("input[name^='reception']").val("Y");	//마케팅 체크박스
+					$("#bntAgree").attr("disabled" , false);					//약관 동의 버튼
+					evManager.isChk = true;										//필수 항목 체크
+				} else {
+					$("input[gbn='necessary']").prop("checked" , false);			//전체 체크박스
+					//$("input[name='agree']").prop("checked" , false);
+					//$("input[name='maketingAgree']").prop("checked" , false);
+					//$("input[name^='reception']").val("N");	//마케팅 체크박스
+					$("#bntAgree").attr("disabled" , true);
+					evManager.isChk = false;
+				}
+			}
+			//일반 체크 박스 > 필수 항목 모두 체크 시 전체 선택 아니면 해제
+			else {
+				
+				if(thisObj.attr("gbn") != "notNecessary") {
+					evManager.isChk = true;
+					$("input[name='agree']").each(function(){
+						if($(this).attr("gbn") == "necessary") {
+							if(!$(this).is(":checked")) {
+								evManager.isChk = false;
+							}
+						}
+					});
+
+					if(evManager.isChk) {
+						$("#allChk").prop("checked" , true);		//전체 체크박스
+						$("#bntAgree").attr("disabled" , false);	//약관 동의 버튼
+					} else {
+						$("#allChk").prop("checked" , false);
+						$("#bntAgree").attr("disabled" , true);
+					}
+				}
+				//선택 - 마케팅 활용 동의
+				else {
+					
+					if(thisObj.attr("id") == "advertisementAgree"){
+						if(thisObj.is(":checked")) {
+							$("input[name='maketingAgree']").prop("checked" , true);	//마케팅 체크박스
+							$("#receptionAll").val("Y");
+						} 
+						else {
+							$("input[name='maketingAgree']").prop("checked" , false);
+							$("#receptionAll").val("N");
+						}
+					} 
+					else {
+						e.preventDefault();
+						
+						alert("동의 내용을 확인 하시고 진행하세요.");
+					}
+				}
+
+			}
+		}
+		,
+		//선택 체크박스 - 마케팅 활요 동의
+		maketingChkClick : function(thisObj){
+			var ismaketingChk = true;
+			var ismaketingChkAll = false;
+			var id = thisObj.attr("id");
+
+			if(thisObj.is(":checked")) {
+				if(id == 'maketingAgree01'){$('#receptionSms').val('Y'); ismaketingChk = true;}
+				if(id == 'maketingAgree02'){$('#receptionPhone').val('Y');ismaketingChk = true;}
+				if(id == 'maketingAgree03'){$('#receptionEmail').val('Y');ismaketingChk = true;}
+				if(id == 'maketingAgree05'){$('#receptionKakao').val('Y');ismaketingChk = true;}
+			}else{
+				if(id == 'maketingAgree01'){$('#receptionSms').val('N');}
+				if(id == 'maketingAgree02'){$('#receptionPhone').val('N');}
+				if(id == 'maketingAgree03'){$('#receptionEmail').val('N');}
+				if(id == 'maketingAgree05'){$('#receptionKakao').val('N');}
+			}
+
+			if($("#maketingAgree01").is(":checked")==true||
+			   $("#maketingAgree02").is(":checked")==true||
+			   $("#maketingAgree03").is(":checked")==true||
+			   $("#maketingAgree05").is(":checked")==true){
+				ismaketingChk = true;
+			}
+			if($("#maketingAgree01").is(":checked")==false&&
+			   $("#maketingAgree02").is(":checked")==false&&
+			   $("#maketingAgree03").is(":checked")==false&&
+			   $("#maketingAgree05").is(":checked")==false){
+				ismaketingChk = false;
+			}
+			if( $("#maketingAgree01").is(":checked")==true &&
+			    $("#maketingAgree02").is(":checked")==true &&
+			    $("#maketingAgree03").is(":checked")==true &&
+			    $("#maketingAgree05").is(":checked")==true ){
+				   ismaketingChkAll = true;		//전체 체크박스
+			}
+			
+			if(ismaketingChk) {
+				$("#advertisementAgree").prop("checked" , true);		//전체 체크박스
+			} else {
+				$("#advertisementAgree").prop("checked" , false);
+			}
+			
+			if(ismaketingChkAll) {
+				$('#receptionAll').val('Y');		//전체 체크박스
+			} else {
+				$("#receptionAll").val('N');
+			}
+		}
+		,
+		//약관 스크롤 내렸는지 여부 확인
+		scrollHandler : function(thisObj){
+			var id = '#' + thisObj.attr("id");
+			var scrollAmount = document.querySelector(id).scrollTop;
+			var scrollRemain = document.querySelector(id).scrollHeight;
+			var scrollbarHeight = document.querySelector(id).clientHeight;
+			//console.log(scrollAmount + "::" + scrollRemain + "::" + scrollbarHeight);
+			if(scrollAmount + scrollbarHeight == scrollRemain){
+				thisObj.prop("checked", true);
+			}
+		}
+		,
+		afterOpenPopup : function(thisObj){
+			console.log("test");	
+		}
+		,
+		afterMarketingAgree : function(thisObj){
+			var id = thisObj.attr("id");
+			if(thisObj.is(":checked")) {
+				if(id == 'chk_marketing_agree_first'){$('#receptionMarketingFirst').val('Y');}
+				if(id == 'chk_marketing_agree_second'){$('#receptionMarketingSecond').val('Y');}
+			}else{
+				if(id == 'chk_marketing_agree_first'){$('#receptionMarketingFirst').val('N');}
+				if(id == 'chk_marketing_agree_second'){$('#receptionMarketingSecond').val('N');}
+			}
+			
+			$("#maketingAgree").prop("checked" , false);
+			$("input[name='chk_marketing_agree']").each(function() {
+				if( $(this).is(":checked") ){
+					$("#maketingAgree").prop("checked" , true);
+				}
+			} )
+		}
+		
+	}
+
+	
+	$(document).ready(function() {
+		//init
+		evManager.init();
+		
+		var viewGbn = "${viewGbn}";
+
+		if(viewGbn=='s'){
+			alert("해당 SNS 계정이 확인되었습니다. 약관동의 및 실명인증을 거치시면 연동이 완료됩니다.");
+		}
+		
+		// 약관 동의 버튼 area!!
+		$("#bntAgree").on("click" , function(){
+
+			var frm = document.agree_Form;
+			//유효성 체크
+			if(!evManager.validation()){
+				alert("필수 항목에 모두 동의해 주세요. ");
+				return;
+			}
+
+			if(viewGbn == 'b'){
+				//기업 회원가입
+				frm.action = "/member/businessAuth";
+				frm.submit();
+			}else if(viewGbn == 'm'){
+				//일반 회원가입
+				frm.action = "/member/customerAuth";
+				frm.submit();
+
+			}else if(viewGbn == 's'){
+				//sns 회원가입
+				frm.action = "/member/customerAuth";
+				frm.submit();
+			}
+
+		});
+		// 약관 동의 버튼  area end!!
+
+		//체크 박스 클릭 이벤트
+		$("input[name='agree']").on("click" , function(e) {
+			evManager.chkClick($(this), e);
+		});
+		// 체크 박스 클릭 이벤트  area end!!
+
+		//체크 박스 클릭 이벤트
+		$("input[name='maketingAgree']").on("click" , function(e) {
+			evManager.maketingChkClick($(this));
+		});
+		// 체크 박스 클릭 이벤트  area end!!
+		
+		//스크롤 이벤트
+		$("#agree_sector_person").on("scroll" , function(e) {
+			//evManager.scrollHandler($(this));
+		});
+		//스크롤 이벤트  area end!!
+		
+		//마케팅 동의 팝업내 체크박스 클릭
+		$("input[name='chk_marketing_agree']").on("click" , function(e) {
+			evManager.afterMarketingAgree($(this));
+		});
+		//마케팅 동의 팝업내 체크박스 클릭  area end!!
+	});
+
+</script>

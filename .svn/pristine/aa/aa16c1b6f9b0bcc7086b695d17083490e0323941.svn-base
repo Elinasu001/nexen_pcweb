@@ -1,0 +1,2165 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<link type="text/css" rel="stylesheet" href="/css/jquery.bxslider.css">
+<script type="text/javascript" src="/js/lib/jquery.bxslider.js"></script>
+<script type="text/javascript" src="/js/slider.js"></script>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<script type="text/javascript" src="/js/lib/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/lib/datepicker-ko.js"></script>
+<script type="text/javascript" src="/js/lib/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="/js/order.js"></script>
+
+<!--subContentsWrap-->
+<div class="subContentsWrap">
+	<div class="subContents type01">
+	    <div class="descInfoState">
+	        <p>고객님께서 주문내역을 확인하실 수 있습니다.</p>
+	    </div>
+		<c:choose>
+			<c:when test="${fn:length(myOrdDetail) > 0}">
+				<c:forEach var="data" items="${myOrdDetail}" varStatus="status">
+					<c:set var="setlCpnDcAmt" value="${data.setlCpnDcAmt}" />
+					<c:set var="optNm"        value="${data.patternCd}" />
+					<c:set var="optPrc"       value="${data.orderFinAmt}" />
+					<c:set var="sumCnt"       value="${data.sumCnt}" />
+					<c:set var="totSumCnt"    value="${data.totSumCnt}" />
+					<c:set var="optSumCnt"    value="${data.optSumCnt}" />
+					<c:set var="ordNoSn"      value="${data.ordNoSn}" />
+					<c:set var="dlvTyDtlCd1"  value="${data.dlvTyDtlCd1}" />
+					<c:if test="${data.ordNoSn == '1' && data.parntsItemCd eq null}">
+					       <!--주문내역 -->
+		                    <section>
+		                        <div class="proViewInfo type02">
+		                            <p>
+		                                <span>주문일자 <em>${data.regDtView}</em></span> <span>주문번호 <em>${data.ordNo}</em> </span>
+		                            </p>
+		                        </div>
+
+		                        <table class="tbl">
+		                            <caption>주문내역</caption>
+		                            <colgroup>
+		                                <col style="width:180px"/>
+		                                <col />
+		                                <col style="width:120px"/>
+		                                <col style="width:70px"/>
+		                                <col style="width:70px"/>
+		                                <col style="width:80px"/>
+		                            </colgroup>
+			                            <tbody>
+			                                <tr>
+			                                    <td class="tCenter">
+			                                        <div class="proViewWrap type03">
+			                                            <div class="proView">
+			                                                <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${data.listImg}" alt="타이어 사진">
+			                                            </div>
+			                                        </div>
+			                                    </td>
+			                                    <td>
+			                                        <!-- 상품정보 -->
+			                                        <div class="proViewInfo type04">
+			                                            <ul>
+			                                                <li>${data.patternCd}</li>
+			                                                <li>
+			                                                     <span>${data.classNm}</span><%--   <span>${data.seasonNm}</span> <span>${data.oeYnNm}</span>  --%><span>${data.dispSize}</span>
+			                                                </li>
+			                                                <li>
+			                                                     <span>${data.carInfo}</span>
+			                                                </li>
+			                                                <c:if test="${data.ordChnCd ne '17'}">
+				                                                <li>
+				                                                    <span>구매금액 </span>
+				                                                    <c:if test="${(data.orderBaseAmt * data.cntVal) ne data.orderFinAmt}">
+				                                                      	<span class="beforePrice02">
+					                                                      <fmt:formatNumber value="${data.orderBaseAmt * data.cntVal}" pattern="#,###" />원
+					                                                      <span class="arrow"></span>
+				                                                      	</span>
+				                                                    </c:if>
+			                                                      	<span class="price">
+			                                                      		<fmt:formatNumber value="${data.orderFinAmt}" pattern="#,###" />원
+			                                                      	</span>
+				                                                </li>
+			                                                </c:if>
+			                                            </ul>
+			                                        </div>
+			                                        <!-- 상품정보 -->
+			                                    </td>
+			                                    <td class="type03 tCenter vTop">
+			                                        <!-- 수량 -->
+			                                        <div class="quantity">
+			                                            <span>수량</span>
+			                                            <span class="circle02">${data.cntVal}</span>
+			                                        </div>
+			                                        <!-- 수량 -->
+			                                    </td>
+			                                    <td class="type03 tCenter vTop">
+				                                    <c:if test="${data.reviewCnt == 0}">
+				                                        <div class="btn w100">
+				                                        <!-- 장착완료일때만 후기작성를 쓸수 있다. -->
+				                                        <c:if test="${data.stat == '40'}">
+				                                            <button type="button" onclick="javascript:fn_Review('${fn:replace(data.patternCd, '\'', '_')}','O','${data.ordNo}','${data.dpPrNo}','${data.itemCd}');"  class="type11 w100">후기작성</button>
+				                                        </c:if>
+				                                        <!-- 아닐때는 걍 경고창 -->
+				                                        <c:if test="${data.stat != '40'}">
+				                                            <button type="button" onclick="javascript:fn_noReview();" class="type12 w100">후기작성</button>
+				                                        </c:if>
+
+				                                        </div>
+				                                    </c:if>
+				                                    <c:if test="${data.reviewCnt > 0}">
+				                                        <div class="btn w100">
+					                                        <button type="button" onclick="javascript:fn_reviewView('${fn:replace(data.patternCd, '\'', '_')}','O','${data.ordNo}','${data.dpPrNo}','${data.itemCd}');" class="type11 w100">후기보기</button>
+				                                        </div>
+				                                    </c:if>
+		                                    	</td>
+												<!-- 구매 단건일때 -->
+												<c:if test="${data.sumCnt == '1'}">
+				                                    <td class="tCenter vTop">
+					                                    <!-- 결제완료일때 -->
+					                                    <c:if test="${data.stat == '20'}">
+					                                        <!-- 결제완료일때 -->
+					                                        <button type="button" class="type06 w100">${data.statNm}</button>
+					                                        <!-- 결제완료일때 -->
+					                                    </c:if>
+					                                    <!-- 장착진행일때 -->
+					                                    <c:if test="${data.stat == '0'}">
+					                                        <!--장착진행-->
+					                                        <div class="btn w100">
+						                                        <button type="button" class="type13 w100">${data.statNm}</button>
+						                                        <c:if test="${data.condiGbn != '0'}">
+						                                        	<%-- <span class="info" onclick="javascript:fn_ConditionPop('${data.ordNo}','${data.condiGbn}');">진행현황 ></span> --%>
+						                                        	<a href="javascript:fn_ConditionPop('${data.ordNo}','${data.condiGbn}');" class="ingView mt10" title="진행현황"></a>
+																</c:if>
+															</div>
+					                                        <!--장착진행-->
+					                                    </c:if>
+					                                    <!-- 장착완료일때 -->
+					                                    <c:if test="${data.stat == '40'}">
+					                                        <button type="button" class="type11 w100">${data.statNm}</button>
+					                                        <c:if test="${data.condiGbn != '0'}">
+					                                        	<%-- <span class="info" onclick="javascript:fn_ConditionPop('${data.ordNo}','${data.condiGbn}');">진행현황 ></span> --%>
+					                                        	<a href="javascript:fn_ConditionPop('${data.ordNo}','${data.condiGbn}');" class="ingView mt10" title="진행현황"></a>
+															</c:if>
+					                                    </c:if>
+					                                    <!-- 주문취소일때 -->
+					                                    <c:if test="${data.stat == 'O99' or data.stat == 'I99' }">
+					                                        <button type="button" class="type12 w100">${data.statNm}</button>
+					                                    </c:if>
+				                                    </td>
+					                                    <td class="tCenter">
+						                                    <c:if test="${data.stat == '20'}">
+						                                    	<c:if test="${data.rcivMthCd == '32' || data.rcivMthCd == '33' || data.rcivMthCd == '34' || data.rcivMthCd == '35' || data.rcivMthCd == '37' || data.rcivMthCd == '38' || data.rcivMthCd == '39' || data.rcivMthCd == '40'}">
+						                                    		<a href="javascript:ordrO2oCancel('${data.rcivMthCd}','${data.ordNo}','${fn:replace(data.patternCd, '\'', '_')}','${data.orderFinAmt}','${carModelNm}','${data.dlvTyDtlCd1}')" class="deCancel" title="주문취소"></a>
+						                                    	</c:if>
+						                                    </c:if>
+					                                    </td>
+													</c:if>
+
+													<c:if test="${data.sumCnt != 1}">
+					                                    <td class="tCenter" rowspan="${data.sumCnt}">
+						                                    <!-- 결제완료일때 -->
+						                                    <c:if test="${data.stat == '20'}">
+						                                        <!--결제완료-->
+						                                        <button type="button" class="type06 w100">${data.statNm}</button>
+						                                        <!--결제완료-->
+						                                    </c:if>
+						                                    <!-- 장착진행일때 -->
+						                                    <c:if test="${data.stat == '0'}">
+						                                        <!--장착진행-->
+						                                        <button type="button" class="type13 w100">${data.statNm}</button>
+							                                        <c:if test="${data.condiGbn != '0'}">
+							                                        	<a href="javascript:fn_ConditionPop('${data.ordNo}','${data.condiGbn}');" class="ingView mt10" title="진행현황"></a>
+																	</c:if>
+						                                        <!--장착진행-->
+						                                    </c:if>
+						                                    <!-- 장착완료일때 -->
+						                                    <c:if test="${data.stat == '40'}">
+						                                        <button type="button" class="type11 w100">${data.statNm}</button>
+						                                        <c:if test="${data.condiGbn != '0'}">
+						                                        	<a href="javascript:fn_ConditionPop('${data.ordNo}','${data.condiGbn}');" class="ingView mt10" title="진행현황"></a>
+																</c:if>
+
+						                                    </c:if>
+						                                    <!-- 주문취소일때 -->
+						                                    <c:if test="${data.stat == 'O99' or data.stat == 'I99' }">
+						                                        <button type="button" class="type12 w100">${data.statNm}</button>
+						                                    </c:if>
+					                                    </td>
+					                                    <td class="tCenter" rowspan="${data.sumCnt}">
+					                                    	<c:if test="${data.stat == '20'}">
+						                                        <c:if test="${data.rcivMthCd == '32' || data.rcivMthCd == '33' || data.rcivMthCd == '34' || data.rcivMthCd == '35' || data.rcivMthCd == '37' || data.rcivMthCd == '38' || data.rcivMthCd == '39' || data.rcivMthCd == '40'}">
+						                                    		<a href="javascript:ordrO2oCancel('${data.rcivMthCd}','${data.ordNo}','${fn:replace(data.patternCd, '\'', '_')}','${data.orderFinAmt}','${carModelNm}','${data.dlvTyDtlCd1}')" class="deCancel" title="주문취소"></a>
+						                                    	</c:if>
+					                                        </c:if>
+					                                    </td>
+													</c:if>
+				                                </tr>
+											</c:if>
+
+							                <c:if test="${data.ordNoSn != '1' && data.parntsItemCd eq null}">
+			                                <tr>
+			                                    <td class="tCenter">
+			                                        <div class="proViewWrap type03">
+			                                            <div class="proView">
+			                                                <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${data.listImg}" alt="타이어 사진">
+			                                            </div>
+			                                        </div>
+			                                    </td>
+			                                    <td>
+			                                        <!-- 상품정보 -->
+			                                        <div class="proViewInfo type04">
+			                                            <ul>
+			                                                <li>${data.patternCd}</li>
+			                                                <li>
+			                                                     <%-- <span>${data.classNm}</span>  <span>${data.seasonNm}</span> <span>${data.oeYnNm}</span> <span>${data.dispSize}</span> --%>
+			                                                     <span>${data.classNm}</span>  <span>${data.dispSize}</span>
+			                                                </li>
+			                                                <li>
+			                                                     <span>${data.carInfo}</span>
+			                                                </li>
+			                                                <li>
+			                                                     <span>구매금액 </span>  <span class="beforePrice02"> <fmt:formatNumber value="${data.orderBaseAmt}" pattern="#,###" />원 <span class="arrow"></span></span> <span class="price"><fmt:formatNumber value="${data.orderFinAmt}" pattern="#,###" />원</span>
+			                                                </li>
+			                                            </ul>
+			                                        </div>
+			                                        <!-- 상품정보 -->
+			                                    </td>
+			                                    <td class="type03 tCenter vTop">
+			                                        <!-- 수량 -->
+			                                        <div class="quantity">
+			                                            <span>수량</span>
+			                                            <span class="circle02">${data.cntVal}</span>
+			                                        </div>
+			                                        <!-- 수량 -->
+			                                    </td>
+			                                    <td class="type03 tCenter vTop">
+<%-- 				                                    <c:if test="${data.reviewCnt == 0}"> --%>
+<!-- 				                                        <div class="btn w100"> -->
+<!-- 				                                        장착완료일때만 후기작성를 쓸수 있다. -->
+<%-- 				                                        <c:if test="${data.stat == '40'}"> --%>
+<%-- 				                                            <button type="button" onclick="javascript:fn_Review('${fn:replace(data.patternCd, '\'', '_')}','O','${data.ordNo}','${data.dpPrNo}','${data.itemCd}');"  class="type11 w100">후기작성</button> --%>
+<%-- 				                                        </c:if> --%>
+<!-- 				                                        아닐때는 걍 경고창 -->
+<%-- 				                                        <c:if test="${data.stat != '40'}"> --%>
+<!-- 				                                            	<button type="button" onclick="javascript:fn_noReview();" class="type12 w100">후기작성</button> -->
+<%-- 				                                        </c:if>							                                         --%>
+
+<!-- 				                                        </div> -->
+<%-- 				                                    </c:if>    --%>
+<%-- 				                                    <c:if test="${data.reviewCnt > 0}"> --%>
+<!-- 				                                        <div class="btn w100"> -->
+<%-- 															<button type="button" onclick="javascript:fn_reviewView('${fn:replace(data.patternCd, '\'', '_')}','O','${data.ordNo}','${data.dpPrNo}','${data.itemCd}');" class="type11 w100">후기보기</button>					                                        		                                        					                                         --%>
+<!-- 				                                        </div>  -->
+<%-- 				                                    </c:if>   					                                                                         --%>
+			                                    </td>
+			                                </tr>
+							        	</c:if>
+							        	<!-- 옵션 정보  -->
+						                <c:if test="${data.ordNoSn != '1'&& data.parntsItemCd ne null && data.ordChnCd ne '17'}">    <!-- 구매 옵션 -->
+							                <c:if test="${ (optSumCnt+ordNoSn-1) eq totSumCnt}" >
+							                	<tr>
+									                <td class="tCenter">
+									                    <div class="proViewWrap type03">
+									                        <div class="proView"> 옵션
+									                        </div>
+									                    </div>
+									                </td>
+								                    <td colspan="3">
+								                        <!-- 상품정보 -->
+								                        <div class="proViewInfo type04">
+					                                        <ul>
+					                                            <li></li>
+							                 </c:if>
+					                                            <li>
+					                                                <span>${data.patternCd}  ${data.alignYnDesc} </span>
+					                                                <c:if test="${(data.optBasePrc) ne data.orderFinAmt}">
+					                                                  	<span class="beforePrice02">
+					                                                   <fmt:formatNumber value="${data.optBasePrc}" pattern="#,###" />원
+					                                                   <span class="arrow"></span>
+					                                                  	</span>
+					                                                </c:if>
+				                                                 	<span class="price">
+				                                                 		<fmt:formatNumber value="${data.orderFinAmt}" pattern="#,###" />원
+				                                                 	</span>
+					                                            </li>
+					                       <c:if test="${totSumCnt == ordNoSn}" >
+					                                        </ul>
+					                                    </div>
+								                        <!-- 상품정보 -->
+								                    </td>
+								                    <td class="type03 tCenter vTop">
+								                        <!-- 수량 -->
+								                        <%-- <div class="quantity">
+								                            <span>수량</span>
+								                            <span class="circle02">${data.cntVal}</span>
+								                        </div> --%>
+								                        <!-- 수량 -->
+								                    </td>
+								                    <td class="type03 tCenter vTop">
+								                    	<%-- <c:if test="${data.reviewCnt == 0}">
+						                                    <div class="btn w100">
+						                                    	<!-- 장착완료일때만 후기작성를 쓸수 있다. -->
+						                                     	<c:if test="${data.stat == '40'}">
+						                                        	<button type="button" onclick="javascript:fn_Review('${fn:replace(data.patternCd, '\'', '_')}','O','${data.ordNo}','${data.dpPrNo}','${data.itemCd}');"  class="type11 w100">후기작성</button>
+						                                      	</c:if>
+						                                      	<!-- 아닐때는 걍 경고창 -->
+						                                      	<c:if test="${data.stat != '40'}">
+						                                        	<button type="button" onclick="javascript:fn_noReview();" class="type12 w100">후기작성</button>
+						                                      	</c:if>
+						                                    </div>
+						                                </c:if>
+								                        <c:if test="${data.reviewCnt > 0}">
+								                            <div class="btn w100">
+																<button type="button" onclick="javascript:fn_reviewView('${fn:replace(data.patternCd, '\'', '_')}','O','${data.ordNo}','${data.dpPrNo}','','','${data.itemCd}');" class="type11 w100">후기보기</button>
+								                            </div>
+								                        </c:if>
+								                        --%>
+								                    </td>
+								                </tr>
+								            </c:if>
+						                </c:if>
+						                <!-- 옵션 정보  -->
+									<%-- <c:if test="${data.ordNoSn == data.sumCnt}"> --%>
+									<c:if test="${totSumCnt == ordNoSn}">
+			                	</tbody>
+			            	</table>
+			        	</section>
+			            <!--주문내역 -->
+					</c:if>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				없습니다.
+			</c:otherwise>
+		</c:choose>
+        <div class="orderSubmitWrap">
+            <!-- 주문서 작성 -->
+            <div class="orderSubmit">
+
+                <div class="titleDesc type03">
+                    <h3 class="type02">상품 주문 정보입니다.</h3>
+                    <p>
+                         고객님의 개인정보가 보호받을 수 있도록 최선을 다하고 있습니다.
+                    </p>
+                </div>
+                <h3 class="type09">주문자 정보</h3>
+                <!-- 주문자 정보 -->
+                <div class="submitArea type04">
+                   <div class="submit">
+                        <label for="info01"><span class="essen black">주문자</span></label>
+                        <div class="conWrap">
+                            ${myOrdDetailInfo.custNm}
+                        </div>
+                    </div>
+
+                    <div class="submit">
+                        <label for="phone01"><span class="essen black">휴대폰 번호</span></label>
+                        <div class="conWrap">
+                            ${myOrdDetailInfo.mobNo}
+                        </div>
+                    </div>
+                </div>
+                <!-- 주문자 정보 -->
+
+                <h3 class="type10">장착서비스 정보</h3>
+
+                <!-- 장착서비스 정보-->
+                <div class="submitArea type04">
+                    <div class="submit">
+                        <label for="info01"><span class="black">장착 서비스</span></label>
+                        <div class="conWrap">
+                            ${myOrdDetailInfo.dlvTyDtlCd1}
+							<c:choose>
+	                            <c:when test="${myOrdDetailInfo.drvThCd eq '20'}">
+	                             	&nbsp;/&nbsp;Drive Thru 서비스
+	                            </c:when>
+	                            <c:when test="${myOrdDetailInfo.drvThCd eq '30'}">
+	                             	&nbsp;/&nbsp;Parking
+	                            </c:when>
+	                            <c:otherwise>
+	                            </c:otherwise>
+                            </c:choose>
+                            <c:choose>
+	                            <c:when test="${myOrdDetailInfo.alignYn eq 'Y'}">
+	                             	&nbsp;/&nbsp;휠 얼라인먼트 요청
+	                            </c:when>
+	                            <c:when test="${myOrdDetailInfo.alignYn eq 'N'}">
+	                             	<!-- <button type="button" onclick="javascript:fn_couponPage();" class="type10" style="margin-left:30px;">쿠폰</button> -->
+	                             	&nbsp;/&nbsp;쿠폰
+	                            </c:when>
+	                            <c:otherwise>
+	                            </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                    <!-- 전문점 방문장착일때 -->
+					<c:choose>
+			 			<c:when test="${myOrdDetailInfo.pickupBassAddr != '' && myOrdDetailInfo.pickupBassAddr != null}">
+				            <div class="submit">
+				                <label for="info03"><span class="black">픽업 주소</span></label>
+				                <div class="conWrap">${myOrdDetailInfo.pickupBassAddr} ${myOrdDetailInfo.pickupDtlAddr}</div>
+				            </div>
+				            <div class="submit">
+				                <label for="info03"><span class="black">딜리버리 주소</span></label>
+				                <div class="conWrap">${myOrdDetailInfo.iplAddr} ${myOrdDetailInfo.iplDtlAddr}</div>
+				            </div>
+			 			</c:when>
+		 				<c:otherwise>
+			                <div class="submit">
+			                    <label for="info03"><span class="black">장착 주소</span></label>
+			                    <div class="conWrap">${myOrdDetailInfo.iplAddr} ${myOrdDetailInfo.iplDtlAddr}</div>
+			                </div>
+		 				</c:otherwise>
+					</c:choose>
+                     <!-- 전문점 방문장착일때 -->
+		            <div class="submit">
+		                <label for="date"><span class="black">장착 희망일시</span></label>
+		                <div class="conWrap">
+		                    <form>
+		                        <div class="dateTime">
+		                           <input type="hidden" id="ordDe" value="${myOrdDetailInfo.ordDe}">
+		                           <div class="date" id="reqDtDiv">
+									${myOrdDetailInfo.istReqDe} &nbsp;&nbsp;&nbsp;  ${myOrdDetailInfo.istReqTime}
+		                           </div>
+		                           <c:if test="${myOrdDetailInfo.chgBtnYn == 'Y'}">
+		                            <div>
+		                                <button type="button" onclick="javascript:fn_changeDtPop('${myOrdDetailInfo.ordNo}','${data.mountCd}');" class="type10" style="margin-left:30px;">변경</button>
+		                            </div>
+		                           </c:if>
+		                        </div>
+		                    </form>
+		                </div>
+		            </div>
+
+		            <div class="submit">
+		                <label for="phone01"><span class="black">차량번호</span></label>
+		                <div class="conWrap">
+		                    ${myOrdDetailInfo.carNo}
+		                </div>
+		            </div>
+				</div>
+				<!-- 장착서비스 정보 -->
+        		<h3 class="type10">구매 결제 정보</h3>
+        		<!-- 구매 결제 정보 -->
+		        <div class="submitArea type04">
+		            <div class="submit">
+		                <label for="seller02"><span class="essen black">결제수단</span> </label>
+		                <div class="conWrap">
+		                    <c:choose>
+			                	<c:when test="${myOrdDetailInfo.ordChnCd eq '17'}">
+			                		쿠팡 사이트 참조
+			                	</c:when>
+			                	<c:otherwise>
+			                		${myOrdDetailInfo.payGbn}
+				                    <c:if test="${myOrdDetailInfo.ordMarketNo ne null}">
+				                    	(${myOrdDetailInfo.ordMarketNo})
+				                    </c:if>
+			                	</c:otherwise>
+			                </c:choose>
+		                </div>
+		            </div>
+		        </div>
+		        <!-- 구매 결제 정보 -->
+			</div>
+        	<!-- 주문서 작성 -->
+	        <!-- 결제정보-->
+	        <div class="orderBox detail" id="sidebar">
+	            <div class="contents">
+		            <c:choose>
+	                	<c:when test="${myOrdDetailInfo.ordChnCd eq '17'}">
+	                		<div class="titleDesc type04">
+				                <h3 class="type08">결제정보</h3>
+				                <p>결제 정보는 쿠팡 사이트를 참조 해주시기 바랍니다.</p>
+				            </div>
+	                	</c:when>
+	                	<c:otherwise>
+	                		<div class="titleDesc type04">
+				                <h3 class="type08">결제정보</h3>
+				                <p>고객님이 결제한 정보입니다.</p>
+				            </div>
+			                <!--totalPrice-->
+			                <div class="totalPrice type04">
+			                    <div class="price">
+			                        <dl>
+			                            <dt>총 주문금액</dt>
+			                            <dd>
+			                                <span>&#8361 <fmt:formatNumber value="${myOrdDetailInfo.ordAmt}" pattern="#,###" /></span>
+			                            </dd>
+			                        </dl>
+			                        <dl>
+			                            <dt>쿠폰할인</dt>
+			                            <dd>&#8361 <fmt:formatNumber value="${myOrdDetailInfo.setlCpnDcAmt}" pattern="#,###" /></dd>
+			                        </dl>
+
+			                        <c:forEach var="opt" items="${myOrdOptList}" varStatus="status">
+					                   <dl>
+					                       <dt>${opt.itemNm}</dt>
+					                       <dd>&#8361 <fmt:formatNumber value="${opt.saleAmt}" pattern="#,###" /></dd>
+					                   </dl>
+			                 		</c:forEach>
+
+			                        <ul class="last">
+			                            <li>총 결제금액</li>
+			                            <li>&#8361  <fmt:formatNumber value="${myOrdDetailInfo.setlAmt}" pattern="#,###" /></li>
+			                        </ul>
+			                    </div>
+			                </div>
+	                	</c:otherwise>
+	                </c:choose>
+	                <!--totalPrice-->
+	            </div>
+	        </div>
+	        <!-- 결제정보 -->
+    	</div>
+	</div>
+</div>
+<!--subContentsWrap-->
+
+<!-- layerPopup // -->
+
+<!-- 방문장착 진행현황 레이어 팝업 영역 -->
+<div class="popupWrap md-modal-4" id="visitLayer"> <!-- md-show -->
+	<header>
+		<h2> 방문장착 진행현황<a href="#" class="layPopClose md-close"></a></h2>
+	</header>
+	<!--contents-->
+	<div class="popContents">
+           <div class="mountProcess">
+               <ul id="visitIns">
+               	<!-- HTML 영역 -->
+               </ul>
+           </div>
+	</div>
+<!--contents-->
+</div>
+<!-- 방문장착 진행현황 레이어 팝업 영역 -->
+
+
+<!-- 픽업 앤 딜리버리 레이어 팝업 영역 -->
+<!-- layerPopup // -->
+<div class="popupWrap md-modal-4" id="pickDelLayer"> <!-- md-show -->
+	<header>
+		<h2> 픽업&딜리버리 장착 진행현황<a href="#" class="layPopClose md-close"></a></h2>
+	</header>
+	<!--contents-->
+	<div class="popContents">
+       <div class="scrollBox type03" id="scrollBox03">
+           <div class="mountProcess pickup">
+	           <ul id="PickAndDIns">
+	           	<!-- HTML 영역 -->
+	           </ul>
+       	   </div>
+		</div>
+	</div>
+	<!--contents-->
+</div>
+
+<!-- 픽업 앤 딜리버리 레이어 팝업 영역 -->
+
+<!-- 날짜변경 팝업 영역 -->
+<div class="popupWrap type03 md-modal-3" name="popChangeDt" id="modal-changeDt" style="height:600px;"> <!-- md-show -->
+	<header class="noLine">
+	    <a href="#" class="layPopClose md-close"></a>
+	</header>
+	<p class="desc"><!-- 예) 도로명 :마곡중앙로 177 더넥센유니버시티 /지번 : 마곡동 756-5  / 건물명 : 넥센유니버시티 --> </p>
+
+	<div class="numberSearch type02">
+		<label for="carNumber">장착일시 변경</label>
+	</div>
+    <!--contents-->
+	<div class="popContents">
+	    <!-- 주소 -->
+		<table class="tbl submit">
+			<caption>날짜변경</caption>
+            <colgroup>
+                <col style="width:150px">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="tit01"><span class="black">현재 장착일시</span></label>
+                    </th>
+                    <td>
+                        <p id="nowIstDt"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="tit01"><span class="black">최대변경 가능일</span></label>
+                    </th>
+                    <td style="padding-left:0px;">
+                        <p id="maxIstDt"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" class="vTop">
+                        <label for="newReqIstDt"><span class="essen black">장착일자</span></label>
+                    </th>
+                    <td class="type03">
+                        <div class="dateTime">
+							<div class="date2">
+                            	<input type="text" name="datepicker11" class="type031 w205" id="datepicker11" title="장착 희망일시 입력란" readonly="readonly">
+                           	</div>
+                        </div>
+                        <input type="radio" name="timeRd" id="am" value="AM" class="type06" title="오전 선택" ><label for="am"><span>오전</span></label>
+                     	<input type="radio" name="timeRd" id="pm" value="PM" class="type06" title="오후 선택"><label for="pm"><span>오후</span></label>
+                    </td>
+                </tr>
+                <tr>
+                	<th scope="row" class="vTop">
+                        <label for="timeSelect"><span class="essen black">장착시간</span></label>
+                    </th>
+                	<td class="type03 popArea">
+                		<ul class="timeCheck" id="noneArea">
+                			<li>
+                				<input type="text" name="" class="type03 w450" id="noneInput" readonly="readonly">
+                			</li>
+                		</ul>
+                    	<ul class="timeCheck" id="amArea" style="display:none;">
+                           	<li>
+                           		<span class="off" id="time0900" >09:00</span>
+                           		<span class="off" id="time0930" >09:30</span>
+                           		<span class="off" id="time1000" >10:00</span>
+                           		<span class="off" id="time1030" >10:30</span>
+                           		<span class="off" id="time1100" >11:00</span>
+                           		<span class="off" id="time1130" >11:30</span>
+                           	</li>
+                        </ul>
+                        <ul class="timeCheck" id="pmArea" style="display:none;">
+                        	<li>
+                           		<span class="off" id="time1300" >13:00</span>
+                           		<span class="off" id="time1330" >13:30</span>
+                           		<span class="off" id="time1400" >14:00</span>
+                           		<span class="off" id="time1430" >14:30</span>
+                           		<span class="off" id="time1500" >15:00</span>
+                           		<span class="off" id="time1530" >15:30</span>
+                           	</li>
+                           	<li>
+                           		<span class="off" id="time1600" >16:00</span>
+                           		<span class="off" id="time1630" >16:30</span>
+                           		<span class="off" id="time1700" >17:00</span>
+                           		<span class="off" id="time1730" >17:30</span>
+                           		<span class="off" id="time1800" >18:00</span>
+                          		<span class="off" id="time1830" >18:30</span>
+                           	</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                	<th style="border-bottom:1px solid #ffffff;"></th>
+	                <td style="color:#a0a0a0; font-size:12px; border-bottom:1px solid #ffffff; position:relative;">
+	                    <span id="jobEndTimeMsgSec" style="display:none; position:absolute; top:1px; color:#FF0000;"></span>
+	                </td>
+                </tr>
+            </tbody>
+        </table>
+            <!-- 주소 -->
+
+        <div class="btnArea">
+             <button type="button" class="type04 w50per" onclick="sendChildValueCancle();">취소<i class="ico01"></i></button>
+             <button type="button" class="type01 w50per" onclick="sendChangeDt();">변경<i class="ico01"></i></button>
+        </div>
+    </div>
+</div>
+<!-- //날짜변경 팝업 영역 -->
+
+
+<!-- layerPopup // -->
+<div class="md-overlay"></div>
+
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+<script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<input type="hidden" id="serverMode" value="<%=System.getProperty(CoreConstants.SERVER_MODE)%>"> <!-- 임시로 -->
+
+<form id="orderInfoFrm" name="orderInfoFrm" method="post" >
+	<input type="hidden" name="ordergbn"  		id="ordergbn" />   <!--  렌탈이냐 구매냐  -->
+	<input type="hidden" name="ordNo"  			id="ordNo" />      <!--  주문번호  -->
+	<input type="hidden" name="cancelType"  	id="cancelType" /> <!-- 취소타입  -->
+
+	<input type="hidden" name="ordrIdxx"  		id="ordrIdxx" />
+	<input type="hidden" name="good_name"  		id="good_name" />
+	<input type="hidden" name="good_mny"  		id="good_mny" />
+	<input type="hidden" name="good_car_name"  	id="good_car_name" />		<!-- 상세페이지에서 주문취소할때 차량정보 넘기기위한것 -->
+	<input type="hidden" name="cust_no"  		id="cust_no"  value="${custNo}"/>
+
+	<input type="hidden" name="itemCd"  		id="itemCd" value=""/>
+	<input type="hidden" name="dpNo"  			id="dpNo" value=""/>
+	<input type="hidden" name="patternCd"  		id="patternCd" value=""/>
+	<input type="hidden" name="systemGbn"  		id="systemGbn" value=""/>
+	<input type="hidden" name="dlvTyDtlCd1"     id="dlvTyDtlCd1" value=""/>	<!-- 배송 유형 상세 코드 -->
+
+</form>
+
+<input type="hidden" id="bpStockYn" />
+<input type="hidden" id="rdcStockYn" />
+<input type="hidden" id="bhfType" />
+<input type="hidden" id="tmsOrdNo" />
+<input type="hidden" id="amPmGbn" />
+<!-- <input type="hidden" id="mountCd" /> -->
+<input type="hidden" name="mountCd" 		id="mountCd" />			<!-- TMS2 장착점 구분 코드-->
+<input type="hidden" id="drvThCd" />
+<input type="hidden" id="orgzCd" />
+<input type="hidden" id="nowUseStock" />
+<input type="hidden" name="ordId"   id="ordId" />		                <!-- TMS2 채번한 주문번호 -->
+<input type="hidden" name="tmsOrderId"   id="tmsOrderId" />		                <!-- TMS2 채번한 주문번호 -->
+<input type="hidden" name="orderConfigType" id="orderConfigType" />		            <!-- TMS2 채번한 configType -->s
+<!-- <input type="hidden" id="orgReqDt" /> -->
+
+<form id="orderDetailFrm" name="orderDetailFrm" method="post" >
+	<input type="hidden" name="custNo"  			id="custNo"  value="${custNo}"/>
+	<input type="hidden" name="ordergbn"  			id="ordergbn" />   <!--  렌탈이냐 구매냐  -->
+	<input type="hidden" name="ordNo"  				id="ordNo" />      <!--  주문번호  -->
+</form>
+
+<form id="nonCustInfoFrm" name="nonCustInfoFrm" method="post" >
+	<input type="hidden" name="ordNo"  	/>      							<!--  주문번호  -->
+	<input type="hidden" name="custNm"  id="custNm" value="${custNm}"/>		<!-- 비회원 이름 -->
+	<input type="hidden" name="mobNo"  	id="mobNo" value="${mobNo}"/>		<!-- 비회원 휴대폰 번호 -->
+</form>
+
+<script type="text/javascript">
+	var resultDataBestObj = "";		//TMS2
+	var getMountTime = "";			//TMS2
+
+	//달력 한글화
+	$.datepicker.setDefaults($.datepicker.regional["ko"]);
+
+	var moveDate = "present";//present(현재),next(다음달)
+
+	function enterSchKey() {
+		var evt_code = (window.netscape) ? ev.which : event.keyCode;
+		if (evt_code == 13) {
+			event.keyCode = 0;
+			selectJuso();
+		}
+	}
+
+
+	function fn_noReview(){
+		alert("후기작성를 쓰실수 없습니다.(장착완료후 활성화 됩니다.)");
+		return false;
+	}
+
+	function ordrO2oCancel(rcivMthCd, ordNo, patternCd, orderFinAmt,carModelNm, dlvTyDtlCd1){
+		$('#ordrIdxx').val(ordNo);
+		$('#good_name').val(patternCd.replace('_','\''));
+		$('#good_mny').val(orderFinAmt);
+		$('#good_car_name').val(carModelNm);
+		$('#dlvTyDtlCd1').val(dlvTyDtlCd1);
+
+		if(rcivMthCd == '40') {
+			ComUtil.alert("고객님, 주문취소가 필요하신가요?<br><br> 오픈마켓에서 주문하신 경우 <br>	결제하신 오픈마켓에서 취소 가능해요. <br><br> 만약 직접 취소가 어려우시다면, <br> 저희 고객센터(1855-0100)로 연락해주시면  <br> 친절히 도와드리겠습니다.<br><br>※ 고객센터 운영 시간  <br>평일 09:00~18:00 / 토요일, 공휴일 휴무 ");
+		} else {
+			ComUtil.confirm("주문을 취소하시겠습니까?","",function(){
+				if(rcivMthCd == '32'  || rcivMthCd == '33'){
+					fnKcpOrderCncl();
+				}else if(rcivMthCd == '34' || rcivMthCd == '35'){
+					fnKcpOrderKkoCncl();
+				}else if(rcivMthCd == '37' || rcivMthCd == '38' || rcivMthCd == '39'){
+					fnNpayOrderCncl();
+				}else{
+					ComUtil.alert("온라인취소가 불가능한 주문입니다. 넥센 고객센터에 문의바랍니다.");
+				}
+			});
+		}
+	}
+
+
+
+	function fnKcpOrderCncl(){
+		var reqId = 'fnKcpOrderCncl';
+		//yjw serverMode 제거(20220225)
+		var url = '';
+		if($("#dlvTyDtlCd1").val() == "1030"){ //전문점장착
+			url = '/order/processOrdCncl';
+		}else { //방문장착, PnD
+			url = '/order/processOrdCnclTMS2';
+		}
+
+		var sendJson = {};
+		sendJson.ordrIdxx 	= $("#ordrIdxx").val();	//주문번호
+		sendJson.mobYn	  	= "";
+		sendJson.goodName 	= $("#good_name").val();	//상품명이겠고
+		sendJson.amount	  	= $("#good_mny").val();		//상품가격에 수량
+		sendJson.buyrName 	= "";
+		sendJson.buyrMail 	= "";
+		sendJson.buyrTel1 	= "";
+		sendJson.buyrTel2 	= "";
+		sendJson.custNo	  	= $("#cust_no").val();
+		sendJson.moduleDesc = "";
+		sendJson.carModelNm = $("#good_car_name").val();
+
+		$("#loadingWrap").show();
+		/* 리퀘스트 함수 */
+		AjaxUtil.call(
+				url,
+				JSON.stringify(sendJson),
+				function(result){
+					ComUtil.unloading();
+			    	console.log('success callback : ' + reqId, result);
+			    	cfnRequestSuccessCallback(reqId, result);
+				},
+				{
+					contentType:"application/json;charset=UTF-8",
+					dataType:"text",
+				    fcb: function (request, status, error) {
+
+						console.log('error callback : ' + reqId, status);
+						cfnRequestErrorCallback(reqId, status);
+					}
+				}
+		);
+	}
+
+	function fnKcpOrderKkoCncl(){
+		var reqId = 'fnKcpOrderCncl';
+		//yjw serverMode 제거(20220225)
+		var url = '';
+		if($("#dlvTyDtlCd1").val() == "1030"){ //전문점장착
+			url = '/order/processOrdKkoCncl';
+		}else { //방문장착, PnD
+			url = '/order/processOrdKkoCnclTMS2';
+		}
+
+		var sendJson = {};
+		sendJson.ordrIdxx 	= $("#ordrIdxx").val();	//주문번호
+		sendJson.mobYn	  	= "";
+		sendJson.goodName 	= $("#good_name").val();	//상품명이겠고
+		sendJson.amount	  	= $("#good_mny").val();		//상품가격에 수량
+		sendJson.buyrName 	= "";
+		sendJson.buyrMail 	= "";
+		sendJson.buyrTel1 	= "";
+		sendJson.buyrTel2 	= "";
+		sendJson.custNo	  	= $("#cust_no").val();
+		sendJson.moduleDesc = "";
+		sendJson.carModelNm = $("#good_car_name").val();
+
+		/* 리퀘스트 함수 */
+		AjaxUtil.call(
+				url,
+				JSON.stringify(sendJson),
+				function(result){
+					ComUtil.unloading();
+			    	console.log('success callback : ' + reqId, result);
+			    	cfnRequestSuccessCallback(reqId, result);
+				},
+				{
+					contentType:"application/json;charset=UTF-8",
+					dataType:"text",
+				    fcb: function (request, status, error) {
+						ComUtil.unloading();
+						console.log('error callback : ' + reqId, status);
+						cfnRequestErrorCallback(reqId, status);
+					}
+				}
+		);
+	}
+
+	/*
+	 * 리퀘스트 후처리 함수 - SUCCESS
+	 */
+	function cfnRequestSuccessCallback(callback, result) {
+		$("#loadingWrap").hide();
+		if(result.result == "error"){//왜 나눠졌는지는 모르겠다.
+			if(callback == "fnKcpOrderCncl"){
+				ComUtil.alert("실패: " + result.Message);
+			}else if(callback == "fnKkoOrder"){
+				ComUtil.alert("실패: " + result.Message);
+			}else if(callback == "fnNpayOrderCncl"){
+				ComUtil.alert("실패: " + result.Message);
+			}
+		}else{
+			if(callback == "fnKcpOrderCncl"){
+				ComUtil.alert("완료되었습니다.");
+			}else if(callback == "fnKkoOrder"){
+				$.popModalCenter({
+					url       : result,
+					scroll    : "yes",
+					width     : "940",
+					resizable : "yes"
+				});
+			}else if(callback == "fnNpayOrderCncl"){
+				ComUtil.alert("완료되었습니다.");
+			}
+		}
+
+		if(!ValidUtil.isEmpty($("#mobNo").val())) {//비회원
+			var frm = document.nonCustInfoFrm;
+			frm.action = "/mypage/orderList";
+			frm.ordNo.value = $('#ordrIdxx').val();
+			frm.submit();
+		} else {//회원
+			window.location.href="/mypage/orderList";
+		}
+	}
+
+	//fnNpayOrderCncl by JO
+	function fnNpayOrderCncl(){
+		//yjw serverMode 제거(20220225)
+		var url = '';
+		if($("#dlvTyDtlCd1").val() == "1030"){ //전문점장착
+			url = '/order/processOrdNPayCncl';
+		}else { //방문장착, PnD
+			url = '/order/processOrdNPayCnclTMS2';
+		}
+		//var url = '/order/processOrdNPayCncl';
+		var reqId = 'fnNpayOrderCncl';
+
+		var sendJson = {};
+		sendJson.merchantPayKey	= $("#ordrIdxx").val();		//주문번호
+		sendJson.productName 	= $("#good_name").val();	//상품명
+		sendJson.productCount	= $("#cntCdNm").val();		//수량
+		sendJson.custNo	  		= $("#cust_no").val();
+		sendJson.carModelNm 	= $("#good_car_name").val();
+		sendJson.bhfType 		= $("#bhfType").val();
+
+		$("#loadingWrap").show();
+		/* 리퀘스트 함수 */
+		AjaxUtil.call(
+			url,
+			JSON.stringify(sendJson),
+			function(result){
+				console.log(result.result);
+		    	cfnRequestSuccessCallback(reqId, result);
+			},
+			{
+				contentType:"application/json;charset=UTF-8",
+			    fcb: function (request, status, error) {
+			    	$("#loadingWrap").hide();
+					console.log('error callback : ' + reqId, status);
+					cfnRequestErrorCallback(reqId, status);
+				}
+			}
+		);
+	}
+	// End by JO
+
+	function fn_ConditionPop(ordNo,condiGbn){
+ 		if(condiGbn == '1'){//방문장착
+			fn_visitCondition(ordNo);
+		}else if(condiGbn != '1'){//픽업 앤 딜리버리
+			fn_pickUpAnddelivery(ordNo);
+		}else{
+			alert("진행현황을 조회하실 수 없습니다.");
+		}
+	}
+
+	$('#question').on('click', function(e){
+		window.location.href="/mypage/questionRegister";
+    });
+	/* 방문장착 현황 불러오기 */
+	function fn_visitCondition(ordNo){
+
+		var pUrl = "/mypage/selectVisitCondition";
+		var pSendData = {ordNo : ordNo};
+			pSendData = JSON.stringify(pSendData);
+			$("#loadingWrap").show();
+		$.ajax({
+		    url: pUrl,
+		    type: "POST",
+		    cache:false,
+		    data: pSendData,
+		    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+		    success: function(data) {
+		    	$("#loadingWrap").hide();
+		    	fn_createVisitCondition(data);
+		    },
+		    error: function (e) {
+		    	$("#loadingWrap").hide();
+				console.log(e);
+			}
+		});
+	}
+
+	/* 방문장착 영역 생성 */
+	/* 방문장착 영역 생성 */
+	function fn_createVisitCondition(data){
+		var innerHtml = '';
+		$('#visitIns').children().remove();
+
+		innerHtml += '<li class="on">';
+		innerHtml += '<div class="pInfoView">';
+		innerHtml += '<div class="process">';
+		innerHtml += '<span class="pState">진행</span>';
+		innerHtml += '</div>';
+		innerHtml += '<div class="processCon">';
+		innerHtml += '<ul class="pTit">';
+		innerHtml += '<li>01</li>';
+		innerHtml += '<li>매니저 픽업</li>';
+		innerHtml += '</ul>';
+		innerHtml += '<dl>';
+
+		innerHtml += '<dt>희망일시</dt>';
+		innerHtml += '<dd>'+ data.visitCond.dueDe +' '+ data.visitCond.dueTime +'</dd>';
+
+		innerHtml += '</dl>';
+		innerHtml += '<dl>';
+
+		innerHtml += '<dt>방문일시</dt>';
+		innerHtml += '<dd>'+ data.visitCond.dueDe +' '+ data.visitCond.appnTime +'</dd>';
+
+		innerHtml += '</dl>';
+		innerHtml += '</div>';
+		innerHtml += '</div>';
+		innerHtml += '</li>';
+		if(data.visitCond.arvlTime != '' && data.visitCond.arvlTime != null){
+			innerHtml += '<li class="on">';
+		}else{
+			innerHtml += '<li>';
+		}
+
+		innerHtml += '<div class="pInfoView">';
+		innerHtml += '<div class="process">';
+		innerHtml += '<span class="pState">진행</span>';
+		innerHtml += '</div>';
+		innerHtml += '<div class="processCon">';
+		innerHtml += '<ul class="pTit">';
+		innerHtml += '<li>02</li>';
+		innerHtml += '<li>도착 및 작업시작</li>';
+		innerHtml += '</ul>';
+		innerHtml += '<dl>';
+		innerHtml += '<dt>방문완료</dt>';
+		if(data.visitCond.arvlTime != '' && data.visitCond.arvlTime != null){
+			innerHtml += '<dd>'+ data.visitCond.dueDe +' '+ data.visitCond.arvlTime +'</dd>';
+		}else{
+			innerHtml += '<dd></dd>';
+		}
+		innerHtml += '</dl>';
+		innerHtml += '</div>';
+		innerHtml += '</div>';
+		innerHtml += '</li>';
+
+
+		if(data.visitCond.endTime != '' && data.visitCond.endTime != null){
+			innerHtml += '<li class="mSlider on">';
+		}else{
+			innerHtml += '<li class="mSlider">';
+		}
+
+		innerHtml += '<div class="pInfoView">';
+		innerHtml += '<div class="process">';
+		innerHtml += '<span class="pState">진행</span>';
+		innerHtml += '</div>';
+		innerHtml += '<div class="processCon">';
+		innerHtml += '<ul class="pTit">';
+		innerHtml += '<li>03</li>';
+		innerHtml += '<li>장착 작업완료</li>';
+		innerHtml += '</ul>';
+		innerHtml += '<dl>';
+
+		if(data.visitCond.endTime != '' && data.visitCond.endTime != null){
+			innerHtml += '<dt>장착완료</dt>';
+			innerHtml += '<dd>'+ data.visitCond.dueDe +' '+ data.visitCond.endTime +'</dd>';
+		}else{
+			innerHtml += '<dd></dd>';
+		}
+		innerHtml += '</dl>';
+		innerHtml += '<p class="mResult">';
+		if(data.visitAttFList.length > 0 ){
+			innerHtml += '<a href="javascript:return false;" class="moShow">장착결과확인</a>';
+		}
+		innerHtml += '</p>';
+		innerHtml += '</div>';
+		innerHtml += '</div>';
+
+		innerHtml += '<div class="addView">';
+		innerHtml += '<ul class="bxslider2">';
+
+		for(var i=0; i < data.visitAttFList.length; i++) {
+			innerHtml += '<li>';
+			innerHtml += '<div>';
+			var imgurl = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>";
+			innerHtml += '<img src="'+imgurl+''+ data.visitAttFList[i].afilePath +'/'+ data.visitAttFList[i].regFileNm +'" alt="장착이미지" /> <span>'+ data.visitAttFList[i].cmCdNm +'</span>';
+			innerHtml += '</div>';
+			innerHtml += '</li>';
+		}
+
+		innerHtml += '</ul>';
+		innerHtml += '</div>';
+		innerHtml += '</li>';
+
+		console.log("innerHtml   : "+innerHtml);
+
+		$('#visitIns').html(innerHtml);
+
+
+		var bx2 = $('.bxslider2').bxSlider({
+			 slideWidth: 210,
+			 slideMargin: 1,
+			 minSlides: 1,
+			 maxSlides: 3,
+			 moveSlides: 1,
+			 pager:false
+	    });
+
+	    //toggle show hide
+	    $(".moShow").on("click", function(e){
+	        var target = $(this).parent().parent().parent().next('.addView');
+	        $(this).toggleClass("expanded");
+	        target.slideToggle();
+	        $('.addView').not(target).slideUp();
+
+/* 	        $(this).reloadSlider = function(settings) {
+	            if (settings !== undefined) { options = settings; }
+	            el.destroySlider();
+	            init();
+	            //store reference to self in order to access public functions later
+	            $(el).data('bxSlider', this);
+	          };
+	         */
+	        bx2.reloadSlider();
+	    });
+		$("#visitLayer").addClass("md-show");
+	}
+
+	function fn_pickUpAnddelivery(ordNo){
+
+		var pUrl = "/mypage/selectPickAndDel";
+		var pSendData = {ordNo : ordNo};
+			pSendData = JSON.stringify(pSendData);
+		$.ajax({
+		    url: pUrl,
+		    type: "POST",
+		    cache:false,
+		    data: pSendData,
+		    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+		    success: function(data) {
+		    	fn_createPickUpAnddelivery(data);
+		    },
+		    error: function (e) {
+				console.log(e);
+			}
+		});
+	}
+
+	function fn_createPickUpAnddelivery(data){
+		var innerHtml = '';
+			$('#PickAndDIns').children().remove();
+
+		    innerHtml += '<li class="on">';
+			innerHtml += '<div class="pInfoView">';
+			innerHtml += '<div class="process">';
+			innerHtml += '<span class="pState">진행</span>';
+			innerHtml += '</div>';
+			innerHtml += '<div class="processCon">';
+			innerHtml += '<ul class="pTit">';
+			innerHtml += '<li>01</li>';
+			innerHtml += '<li>매니저 픽업</li>';
+			innerHtml += '</ul>';
+
+
+			innerHtml += '<dl>';
+			innerHtml += '<dt>희망일시</dt>';
+			innerHtml += '<dd>'+ data.pickDel.dueDe1 +' '+ data.pickDel.dueTime1 +'</dd>';
+			innerHtml += '</dl>'
+
+
+			if(data.pickDel.appnTime1 != null && data.pickDel.appnTime1 != ''){
+				innerHtml += '<dl>';
+				innerHtml += '<dt>방문일시</dt>';
+				innerHtml += '<dd>'+ data.pickDel.dueDe1 +' '+ data.pickDel.appnTime1 +'</dd>';
+				innerHtml += '</dl>';
+			}
+
+			innerHtml += '</div>';
+			innerHtml += '</div>';
+			innerHtml += '</li>';
+
+
+
+			if(data.pickDel.arvlTime1 != null && data.pickDel.arvlTime1 != ''){
+				innerHtml += '<li class="on">';
+			}else{
+				innerHtml += '<li>';
+			}
+
+			innerHtml += '<div class="pInfoView">';
+			innerHtml += '<div class="process">';
+			innerHtml += '<span class="pState">진행</span>';
+			innerHtml += '</div>';
+
+			innerHtml += '<div class="processCon">';
+			innerHtml += '<ul class="pTit">';
+			innerHtml += '<li>02</li>';
+			innerHtml += '<li>도착 및 차량 키 전달받음</li>';
+			innerHtml += '</ul>';
+
+			if(data.pickDel.arvlTime1 != null && data.pickDel.arvlTime1 != ''){
+				innerHtml += '<dl>';
+				innerHtml += '<dt>픽업완료</dt>';
+				innerHtml += '<dd>'+ data.pickDel.dueDe1 +' '+ data.pickDel.arvlTime1 +'</dd>';
+				innerHtml += '</dl>';
+			}
+
+			innerHtml += '</div>';
+			innerHtml += '</div>';
+			innerHtml += '</li>';
+
+			if(data.pickDel.endTime1 != null && data.pickDel.endTime1 != ''){
+				innerHtml += '<li class="on">';
+			}else{
+				innerHtml += '<li>';
+			}
+			innerHtml += '<div class="pInfoView">';
+			innerHtml += '<div class="process">';
+			innerHtml += '<span class="pState">진행</span>';
+			innerHtml += '</div>';
+
+			innerHtml += '<div class="processCon">';
+			innerHtml += '<ul class="pTit">';
+			innerHtml += '<li>03</li>';
+			innerHtml += '<li>장착 전 상태 체크 및 전문점 도착</li>';
+			innerHtml += '</ul>';
+
+			if(data.pickDel.endTime1 != null && data.pickDel.endTime1 != ''){
+
+			innerHtml += '<dl>';
+			innerHtml += '<dt>전문점 도착 일시</dt>';
+			innerHtml += '<dd>'+ data.pickDel.dueDe2 +' '+ data.pickDel.endTime1 +'</dd>';
+			innerHtml += '</dl>';
+
+			innerHtml += '<p class="mResult">';
+			innerHtml += '<a href="javascript:return false;" class="moShow">장착 전 상태</a>';
+			innerHtml += '</p>';
+			innerHtml += '</div>';
+			innerHtml += '</div>';
+
+			innerHtml += '<div class="addView">';
+			innerHtml += '<ul class="bxslider">';
+
+			if(data.pickDelAttFList.length > 0 ){
+				for(var i=0; i < data.pickDelAttFList.length; i++) {
+					if(data.pickDel.acptNo1 == data.pickDelAttFList[i].acptNo && data.pickDelAttFList[i].refCd1 == 'P'){
+						console.log(data.pickDel.acptNo1+"::::11::::"+data.pickDelAttFList[i].acptNo+"::::11::::"+data.pickDelAttFList[i].refCd1);
+						innerHtml += '<li>';
+						innerHtml += '<div>';
+						var imgurl = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>";
+						innerHtml += '<img src="'+imgurl+''+ data.pickDelAttFList[i].afilePath +'/'+ data.pickDelAttFList[i].regFileNm +'" alt="장착이미지" /> <span>'+ data.pickDelAttFList[i].cmCdNm +'</span>';
+						innerHtml += '</div>';
+						innerHtml += '</li>';
+					}
+				}
+			}
+			innerHtml += '</ul>';
+			innerHtml += '</div>';
+			}
+			innerHtml += '</li>';
+
+			if(data.pickDel.endTime2 != null && data.pickDel.endTime2 != ''){
+				innerHtml += '<li class="on">';
+			}else{
+				innerHtml += '<li>';
+			}
+
+			innerHtml += '<div class="pInfoView">';
+			innerHtml += '<div class="process">';
+			innerHtml += '<span class="pState">진행</span>';
+			innerHtml += '</div>';
+
+			innerHtml += '<div class="processCon">';
+			innerHtml += '<ul class="pTit">';
+			innerHtml += '<li>04</li>';
+			innerHtml += '<li>장착 작업완료</li>';
+			innerHtml += '</ul>';
+
+			if(data.pickDel.endTime2 != null && data.pickDel.endTime2 != ''){
+				innerHtml += '<dl>';
+				innerHtml += '<dt>장착완료</dt>';
+				innerHtml += '<dd>'+ data.pickDel.dueDe2 +' '+ data.pickDel.endTime2 +'</dd>';
+				innerHtml += '</dl>';
+				innerHtml += '</div>';
+				innerHtml += '</div>';
+			}
+
+			innerHtml += '</li>';
+
+
+			if(data.pickDel.arvlTime3 != null && data.pickDel.arvlTime3 != ''){
+				innerHtml += '<li class="on">';
+			}else{
+				innerHtml += '<li>';
+			}
+			innerHtml += '<div class="pInfoView">';
+			innerHtml += '<div class="process">';
+			innerHtml += '<span class="pState">진행</span>';
+			innerHtml += '</div>';
+			innerHtml += '<div class="processCon">';
+			innerHtml += '<ul class="pTit">';
+			innerHtml += '<li>05</li>';
+			innerHtml += '<li>서비스 매니저 딜리버리</li>';
+			innerHtml += '</ul>';
+
+
+			if(data.pickDel.arvlTime3 != null && data.pickDel.arvlTime3 != ''){
+				innerHtml += '<dl>';
+				innerHtml += '<dt>딜리버리 일시</dt>';
+				innerHtml += '<dd>'+ data.pickDel.dueDe3 +' '+ data.pickDel.arvlTime3 +'</dd>';
+				innerHtml += '</dl>';
+			}
+
+			innerHtml += '</div>';
+			innerHtml += '</div>';
+			innerHtml += '</li>';
+
+			if(data.pickDel.endTime3 != null && data.pickDel.endTime3 != ''){
+				innerHtml += '<li class="on">';
+			}else{
+				innerHtml += '<li>';
+			}
+
+			innerHtml += '<div class="pInfoView">';
+			innerHtml += '<div class="process">';
+			innerHtml += '<span class="pState">진행</span>';
+			innerHtml += '</div>';
+
+			innerHtml += '<div class="processCon">';
+			innerHtml += '<ul class="pTit">';
+			innerHtml += '<li>06</li>';
+			innerHtml += '<li>고객님 차량 키 전달완료</li>';
+			innerHtml += '</ul>';
+
+			if(data.pickDel.endTime3 != null && data.pickDel.endTime3 != ''){
+				innerHtml += '<dl>';
+				innerHtml += '<dt>딜리버리 완료</dt>';
+				innerHtml += '<dd>'+ data.pickDel.dueDe3 +' '+ data.pickDel.endTime3 +'</dd>';
+				innerHtml += '</dl>';
+				innerHtml += '<p class="mResult">';
+				innerHtml += '<a href="javascript:return false;" class="moShow">장착 후 상태</a>';
+				innerHtml += '</p>';
+				innerHtml += '</div>';
+				innerHtml += '</div>';
+				innerHtml += '<div class="addView">';
+				innerHtml += '<ul class="bxslider3">';
+
+				if(data.pickDelAttFList.length > 0 ){
+					for(var i=0; i < data.pickDelAttFList.length; i++) {
+						if(data.pickDel.acptNo3 == data.pickDelAttFList[i].acptNo && data.pickDelAttFList[i].refCd1 == 'D'){
+						console.log(data.pickDel.acptNo1+"::::22::::"+data.pickDelAttFList[i].acptNo+"::::22::::"+data.pickDelAttFList[i].refCd1);
+							innerHtml += '<li>';
+							innerHtml += '<div>';
+							var imgurl = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>";
+							innerHtml += '<img src="'+imgurl+''+ data.pickDelAttFList[i].afilePath +'/'+ data.pickDelAttFList[i].regFileNm +'" alt="장착이미지" /> <span>'+ data.pickDelAttFList[i].cmCdNm +'</span>';
+							innerHtml += '</div>';
+							innerHtml += '</li>';
+						}
+					}
+				}
+				innerHtml += '</ul>';
+				innerHtml += '</div>';
+
+			}
+
+			innerHtml += '</li>';
+
+		//console.log("innerHtml   : "+innerHtml);
+
+		$('#PickAndDIns').html(innerHtml);
+
+
+		var bx = $('.bxslider').bxSlider({
+			 slideWidth: 210,
+			 slideMargin: 1,
+			 minSlides: 1,
+			 maxSlides: 3,
+			 moveSlides: 1,
+			 pager:false
+	    });
+
+
+		var bx3 = $('.bxslider3').bxSlider({
+			 slideWidth: 210,
+			 slideMargin: 1,
+			 minSlides: 1,
+			 maxSlides: 3,
+			 moveSlides: 1,
+			 pager:false
+	    });
+
+
+	    //toggle show hide
+	    $(".moShow").on("click", function(e){
+	        var target = $(this).parent().parent().parent().next('.addView');
+	        $(this).toggleClass("expanded");
+	        target.slideToggle();
+	        $('.addView').not(target).slideUp();
+
+
+	        bx.reloadSlider();
+	        bx3.reloadSlider();
+	    });
+		$("#pickDelLayer").addClass("md-show");
+		$("#scrollBox03").css("display","");
+
+	}
+
+
+	//1대1문의로 넘긴다.
+	function fn_questionList(){
+		window.location.href="/mypage/questionRegister";
+	}
+
+	//후기작성로 넘어간다.
+	function fn_Review(pt,gbn,ordn,dpn,itc){
+		window.location.href="/mypage/orderRivew?pattenCd="+pt.replace('_','\'')+"&reviewGbn="+gbn+"&ordNo="+ordn+"&dpNo="+dpn+"&itemCd="+itc;
+	}
+
+	function fn_reviewView(pt,gbn,ordn,dpn,itc){
+		var frm = document.orderInfoFrm;
+			frm.ordNo.value = ordn;
+			frm.dpNo.value = dpn;
+			frm.patternCd.value = pt.replace('_','\'');
+			frm.systemGbn.value = gbn;
+			frm.itemCd.value = itc;
+
+			frm.action = "/mypage/orderRivewView";
+			frm.submit();
+	}
+
+	function sendChildValueCancle(){
+		$(".layPopClose").click();
+	}
+
+	//장착 희망일시 변경  팝업이 나타난다.
+	function fn_changeDtPop(ordNo, mountCd){
+		//var currentDate = $("#reqDtDiv").text().replaceAll("/","-");	//현재예약한 날짜
+		var currentDate = '${myOrdDetailInfo.istReqDe}'.replaceAll('/','');
+
+		var param = {};
+		param["ordNo"] = ordNo;
+		param["mountCd"] = mountCd;
+		param["currentDate"] = currentDate;
+		$("#tmsOrdNo").val(ordNo);
+		$("#mountCd").val(mountCd);
+		//$("#currentDate").val(currentDate);
+
+		$("#nowIstDt").text($("#reqDtDiv").text());
+		fn_calcMaxChgDt($("#ordDe").val());
+		$("#loadingWrap").show();
+
+		$.ajax({
+	        type: "post",
+	        url: "/mypage/selectChangableDate",
+	        data: JSON.stringify(param),
+	        contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	        success: function (data) {
+	        	if(data.rtnCode == "0") {
+	        		fn_setDatePicker(data.bpStockYn, data.rdcStockYn, data.hDayList, data.reqDe, data.nowUseStock, data.mountCd);
+	        		$("#bpStockYn").val(data.bpStockYn);
+	        		$("#rdcStockYn").val(data.rdcStockYn);
+	        		$("#mountCd").val(data.mountCd);
+	        		if(data.drvProcDueBay > 0){
+						$("#drvThCd").val("20");
+	        		}
+	        		$("#orgzCd").val(data.orgzCd);
+	        		$("#nowUseStock").val(data.nowUseStock);
+	        		//$("#orgReqDt").val(data.reqDe);
+	        		$("#modal-changeDt").addClass("md-show");
+	        	}else{
+	        		ComUtil.alert(data.rtnMsg);
+	        	}
+	        },
+	        error: function(xhr,status,error){
+	        	console.log("error:",error);
+	        	$("#loadingWrap").hide();
+	        },
+        	complete:function() {
+        		$("#loadingWrap").hide();
+        	}
+	    });
+	}
+
+	var storechkDay = [];
+	function fn_setDatePicker(bpStockYn, rdcStockYn, hDayList, reqDe, nowUseStock, mountCd) {
+		//휴일목록
+		var deleteRdcDtList = [];
+		$.each(hDayList, function(idx, item) {
+			storechkDay.push(item.hDate);
+		});
+
+		//RDC발주를 한경우 RDC발주 선택 가능한 날짜는 요청날짜보다 빠를 수 없다.
+		if(nowUseStock == "RDC") {
+			deleteRdcDtList = fn_deleteRdcDt(reqDe);
+			$.each(deleteRdcDtList, function(idx, item) {
+				storechkDay.push(item);
+			});
+		}
+
+		//달력 세팅
+		//거점이 재고를 가지고 있을경우 : 오늘 , 오늘+1, 오늘+2
+		//거점이 재고를 가지고 있지 않은 경우 + RDC 재고 있는경우(기존) : 오늘 + 3~ 오늘 + 13
+		//거점 재고 없고, RDC 재고 없으면 : 메세지 문구 빨간색(위에서 이미 처리됨)
+		var tmpToday = new Date();
+		var bhfLastDay = '';
+		if(tmpToday.getDay() == 5) {
+			bhfLastDay = '+4d';
+		} else {
+			bhfLastDay = '+3d';
+		}
+
+		var mDate = bpStockYn == "Y" ? '+0d': bhfLastDay;
+
+		/*
+		 * 1. 지금 내가 거점재고를 쓰는지 RDC발주를 냈는지 확인한다.
+		 * 2. 발주를 낸 경우 거점재고 사용 날짜 범위까지 다가 왔는데 첫 발주날짜 이후라면 재고 체크없이 이후날짜 선택가능.
+		 * 수정일 : 2020.08.26
+		 */
+		if(nowUseStock == "RDC" && bpStockYn == "N") {
+			var tdayDt = new Date();
+			var tdayStr = chgFormatDate(tdayDt);
+			var tdayDtTrs = new Date(tdayStr.substring(0,4),Number(tdayStr.substring(4,6))-1,tdayStr.substring(6,8));
+			var orgReqDt = new Date(reqDe.substring(0,4),Number(reqDe.substring(4,6))-1,reqDe.substring(6,8));
+
+			var diff = (orgReqDt.getTime() - tdayDtTrs.getTime()) / (1000*60*60*24);
+			mDate = '+'+diff+'d';
+		}
+
+		$('#datepicker11').datepicker({
+			showOn: "button",
+			buttonImage: "/img/common/calendar.png",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			yearRange: 'c-0:c+2',
+			minDate: mDate,
+			maxDate: '+13d',
+			weekHeader: 'Wk',
+			dateFormat: 'yy-mm-dd',
+			beforeShowDay : function(day) {
+				var m = day.getMonth()+1 > 9 ? day.getMonth()+1 : "0"+(day.getMonth()+1);
+	      		var d = day.getDate() > 9 ? day.getDate() : "0"+day.getDate();
+	      		var y = day.getFullYear();
+
+	      		//일요일
+	      		if(day.getDay() == 0) {
+	      			storechkDay.push(y+""+m+""+d);
+	      		}
+
+	      		//1013 휴무추가 2020-10-05
+	      		storechkDay.push("20201013");
+
+			    for (i = 0; i < storechkDay.length; i++) {
+			        if($.inArray((y+""+m+""+d) , storechkDay) != -1) {
+						if(mountCd == "40" && ((y+""+m+""+d) == "20200930")) {
+			        		return [true];
+			        	} else {
+			        		return [false];
+			        	}
+			        }
+			    }
+			    return [true];
+			},
+		 	onSelect: function (date) {
+		 		$("input[name='timeRd']").prop('checked', false);
+		 		$("#amArea").hide();
+				$("#pmArea").hide();
+				$("#noneInput").show();
+
+				//종료예정시간 hidden처리
+		    	$("#jobEndTimeMsgSec").css("display","none");
+		 	},
+		 	onChangeMonthYear: function(year, month, datepicker) {
+                var today = new Date();
+                var nowMonth = today.getMonth()+1;
+                if(nowMonth == month) {
+                	moveDate = "present";
+                } else {
+                	moveDate = "next";
+                }
+            }
+	    });
+		$('#datepicker11').datepicker( "option" , {minDate: mDate,maxDate: '+13d'} );
+		$('#datepicker11').val("");
+		$("input[name='timeRd']").prop('checked', false);
+
+		$("#amArea").hide();
+		$("#pmArea").hide();
+		$("#noneInput").show();
+
+		// 시간선택
+	    $('.timeCheck li span').click(function(){
+	        $('span.on').removeClass('on');
+	        $(this).addClass('on');
+	    });
+
+	  	//종료예정시간 hidden처리
+    	$("#jobEndTimeMsgSec").css("display","none");
+	}
+
+	function fn_deleteRdcDt(reqDe) {
+		var rdcStartDt = new Date();
+		var chkSunday = false;
+
+		//거점재고일 중 일요일이 있으면 +1일을 더해준다. 오늘, 오늘+첫번째, 오늘 + 두번째 날 = 거점재고일
+		for(var j=0; j<3; j++) {
+			var chkDay = new Date();
+			chkDay.setDate(chkDay.getDate() + j);
+
+			if(chkDay.getDay() == 0) {
+				chkSunday = true;
+			}
+		}
+
+		if(chkSunday) {
+			rdcStartDt.setDate(rdcStartDt.getDate() + 4);
+		} else {
+			rdcStartDt.setDate(rdcStartDt.getDate() + 3);
+		}
+
+		var rdcStartDtStr = chgFormatDate(rdcStartDt);//RDC 시작일자 (String)
+		var rtnDeleteList = [];
+
+		for(var i=0; i<15; i++) {
+			if(rdcStartDtStr == reqDe) {
+				break;
+			} else if(rdcStartDtStr < reqDe) {
+				rtnDeleteList.push(rdcStartDtStr);
+				var addDt = new Date(rdcStartDtStr.substring(0,4),Number(rdcStartDtStr.substring(4,6))-1,rdcStartDtStr.substring(6,8));
+				addDt.setDate(addDt.getDate() + 1);
+				rdcStartDtStr = chgFormatDate(addDt);
+			}
+		}
+
+		return rtnDeleteList;
+	}
+
+	function chgFormatDate(date, pType){
+	    var year = date.getFullYear();              //yyyy
+	    var month = (1 + date.getMonth());          //M
+	    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+	    var day = date.getDate();                   //d
+	    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+
+	    if(!ValidUtil.isEmpty(pType))
+	    	return  year + '/' + month + '/' + day;
+	    else
+	    	return  year + '' + month + '' + day;
+	}
+
+	//예약가능시간 가져오기 함수
+	//1. 날짜선택되어있고 오전,오후 클릭시
+	//2. 오전,오후 클릭 되어있고 날짜 변경시
+	function getTimeList() {
+		//param : 날짜 + 오전,오후 + 해당날짜 거점
+		//return : 시간List (어느거점, 어느차 정보 포함)
+		//여기서 색칠해야함.
+		$("#loadingWrap").show();
+		var param = {};
+		var pBhfType = "";
+
+		if($("#bpStockYn").val() == "Y" && $("#rdcStockYn").val() == "Y") {
+			var selectedDay = new Date($("#datepicker11").val()).getDate();
+
+			//활성화된 날짜 목록을 가져온다.
+			//선택된 날짜가 오늘로부터 몇 번째이냐에 따라 BHF, RDC인지 정해진다.(오늘부터 3번째 후의 날짜부터 RDC)
+			if(moveDate == "present") {
+				var enableCnt = $('[data-handler=selectDay] a.ui-state-default').length;
+				var clickNum = 0;
+				for(var i=0; i<enableCnt; i++) {
+					if(Number($('[data-handler=selectDay] a.ui-state-default')[i].innerText) == selectedDay) {
+						clickNum = i;
+					}
+				}
+
+				if(clickNum >= 3) {
+					pBhfType = "RDC";
+				} else {
+					pBhfType = "BHF";
+				}
+			} else {
+				var sDaySplit = $("#datepicker11").val().split('-');
+				var sDay = new Date(sDaySplit[0],Number(sDaySplit[1])-1,sDaySplit[2]);
+				var today = new Date();
+				today = new Date(today.getFullYear(),today.getMonth(),today.getDate());
+
+				var diff = Math.abs(sDay.getTime() - today.getTime());
+				diff = Math.ceil(diff / (1000*60*60*24));
+
+				//오늘부터 +2일까지 배열에 담는다.
+				var chkDayArr = [];
+				for(var i=0; i<=2; i++) {
+					var tDay = new Date();
+					tDay.setDate(today.getDate() + i);
+
+					var m = tDay.getMonth() > 9 ? tDay.getMonth()+1 : "0"+(tDay.getMonth()+1);
+		      		var d = tDay.getDate() > 9 ? tDay.getDate() : "0"+tDay.getDate();
+		      		var y = tDay.getFullYear();
+
+		      		chkDayArr.push(y+m+d);
+				}
+
+				//휴일 중복값 제거
+				var delDupStorechkDay = storechkDay.filter(function(item, idx) {
+					if(storechkDay.indexOf(item) == idx) return item;
+				});
+
+				//휴일 목록에 있는지 확인한다.
+				var chkHday = 0;
+				$.each(delDupStorechkDay, function (idx, item){
+					$.each(chkDayArr, function (idx2, item2) {
+						if(item == item2) {
+							chkHday++;
+						}
+					});
+				});
+
+				if(diff >= (3+chkHday)) {
+					pBhfType = "RDC";
+				} else {
+					pBhfType = "BHF";
+				}
+			}
+		} else if($("#bpStockYn").val() == "Y" && $("#rdcStockYn").val() == "N") {
+			pBhfType = "BHF";
+		} else if($("#bpStockYn").val() == "N" && $("#rdcStockYn").val() == "Y") {
+			pBhfType = "RDC";
+		} else {
+			pBhfType = "BHF";
+		}
+
+		//현재 내가 발주를 넣은 상태이고, 거점의 재고가 없는 상태에서 거점날짜까지 다가왔을때
+		//그대로 RDC발주로 진행시킨다.
+		//2020.08.26
+		/* if($("#nowUseStock").val() == "RDC" && $("#bpStockYn").val() == "N") {
+			var selectDay = $("#datepicker11").val().replace(/-/gi, "");
+			var orgReqStr = $("#orgReqDt").val();
+			var selectDayDt = new Date(selectDay.substring(0,4),Number(selectDay.substring(4,6))-1,selectDay.substring(6,8));
+			var orgReqDt = new Date(orgReqStr.substring(0,4),Number(orgReqStr.substring(4,6))-1,orgReqStr.substring(6,8));
+			var diff = (selectDayDt.getTime() - orgReqDt.getTime()) / (1000*60*60*24);
+
+			if(diff >= 0) {
+				pBhfType = "RDC";
+			}
+		} */
+		//어차피 BHF든 RDC든 거점 재고 체크 하지 않음.
+
+		//선택한 날짜의 재고 유형(RDC, BHF)
+		$("#bhfType").val(pBhfType);
+
+		param["mountDt"] = $("#datepicker11").val();
+		param["bhfType"] = pBhfType;
+		param["amPmGbn"] = $("#amPmGbn").val();
+		param["ordNo"] = $("#tmsOrdNo").val();
+		param["currentDate"] = '${myOrdDetailInfo.istReqDe}'.replaceAll('/','');
+
+
+		//yjw serverMode 제거(20220225)
+		var changeSaveSvcTMS2 = "";
+		if($("#mountCd").val() == "10") {//방문장착으로 변경시
+			changeSaveSvcTMS2 = "/mypage/selectChangeSaveAllocationTMS2";
+		} else if($("#mountCd").val() == "20"){//PnD로 변경시
+			changeSaveSvcTMS2 = "/mypage/selectChangeSavePndAllocationTMS2";
+		}else{//전문점 장착
+			changeSaveSvcTMS2 = "/mypage/selectChangeTmsSetTime"
+		}
+
+	   	$.ajax({
+	        type: "post",
+	        url: changeSaveSvcTMS2,
+	        data: JSON.stringify(param),
+	        contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	        success: function (data) {
+	        	if(data.rtnCode == "0") {
+	        		if(data.rtnVo == null || data.rtnVo.resultDataBest == null){
+	        			return;
+	        		}
+
+	        		resultDataBestObj = JSON.stringify(data.rtnVo.resultDataBest);
+	        		var resultData = data.rtnVo.resultDataBest;
+	        		var dt = new Date(param.mountDt);
+	        		var ordId = data.rtnVo.orderId;
+	        		var orderConfigType = data.rtnVo.orderConfigType;
+	        		$("#ordId").val(ordId);
+	        		$("#tmsOrderId").val(ordId);
+	        		$("#orderConfigType").val(orderConfigType);
+
+	        		$.each(resultData, function(idx, item) {
+	        			//if(item.selectedTime != "0900"){
+		        			$("#time"+item.selectedTime).removeClass("off");
+				        	$("#time"+item.selectedTime).removeClass("on");
+				        	if(item.vehicleScheduleList.length > 0) {
+				        		$("#time"+item.selectedTime).attr("schedule",JSON.stringify(item.vehicleScheduleList));
+				        	}else{
+				        		$("#time"+item.selectedTime).addClass("off")
+				        	}
+				        	//yjw serverMode 제거(20220225)
+	        		});
+	        	}
+	        },
+	        error: function(xhr,status,error){
+	        	console.log("error:",error);
+	        	$("#loadingWrap").hide();
+	        },
+        	complete:function() {
+        		$("#loadingWrap").hide();
+        	}
+	    });
+
+	  	//종료예정시간 hidden처리
+    	$("#jobEndTimeMsgSec").css("display","none");
+	}
+
+	//전문점 장착시 보여지는 시간 목록
+	function getShopTimeList() {
+		//여기서 색칠해야함.
+		$("#loadingWrap").show();
+
+		var param = {};
+
+		param["ordNo"] = $("#tmsOrdNo").val();
+		param["orgzCd"] = $("#orgzCd").val();
+		param["mountDt"] = $("#datepicker11").val().replace(/-/gi, "");
+		param["mountCd"] = $("#mountCd").val();
+		param["drvThCd"] = $("#drvThCd").val();
+
+		$.ajax({
+	        type: "post",
+	        url: "/mypage/selectChgShopTimeList",
+	        data: JSON.stringify(param),
+	        contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	        success: function (data) {
+	        	if(data.rtnCode == "200") {
+	        		var result = data.shopTimeList;
+
+	        		$.each(result.resultData, function(idx, item) {
+	        			$("#time"+item.TIME).removeClass("off");
+			        	$("#time"+item.TIME).removeClass("on");
+	        		});
+	        	} else {
+	        		ComUtil.alert(data.rtnMsg);
+	        	}
+	        },
+	        error: function(xhr,status,error){
+	        	console.log("error:",error);
+	        	$("#loadingWrap").hide();
+	        },
+        	complete:function() {
+        		$("#loadingWrap").hide();
+        	}
+	    });
+	}
+
+	function sendChangeDt() {
+		if(ValidUtil.isEmpty($("#datepicker11").val())) {
+			ComUtil.alert("장착일자를 입력해 주세요");
+			return false;
+		} else if(ValidUtil.isEmpty($("#amArea span.on, #pmArea span.on").text())) {
+			ComUtil.alert("장착시간을 입력해 주세요");
+			return false;
+		}
+
+		var strDt = $("#nowIstDt").text();		//현재예약한 날짜
+		//var currentDate = strDt.substring(17,27);	//날짜
+		//var currentTime = strDt.substring(33,38);	//시간
+		var currentDate = strDt.substring(10,20);	//날짜
+		var currentTime = strDt.substring(26,31);	//시간
+
+		var currentTime2 = currentTime.replace(":","")+"00";
+		if(currentTime2 > 000000 && currentTime2 < 115959){
+			currentTime = ("오전 "+currentTime);
+		}else{
+			currentTime = ("오후 "+currentTime);
+		}
+
+		$("#loadingWrap").show();
+		var param = {};
+
+		param["istReqDe"] = $("#datepicker11").val().replace(/-/gi, "");
+		param["mountDt"] = $("#datepicker11").val();
+		param["istDueDe"] = $("#amArea span.on, #pmArea span.on").text().replace(":","")+"00";
+		param["currentDate"] = currentDate.replace(/\//gi, ".");		//바뀌기 전 날짜
+		param["currentTime"] = currentTime;	//바뀌기 전 시간
+		param["carModelNm"]	 = "${carModelNm}";
+
+		//조직 코드 = 거점코드
+		if($("#mountCd").val() == "40") {
+			//전문점 장착의 경우 기존 거점 그대로 전달.
+			param["orgzCd"] = $("#orgzCd").val();
+		} else {
+			var iplAddr = '${myOrdDetailInfo.iplAddr}';
+
+			//TMS의 경우 스케줄에서 내려온 거점으로 전달.
+			param["tmsSchduleTMS2"] = JSON.parse($("#amArea span.on, #pmArea span.on").attr("schedule"));//선택한 시간의 스케줄 정보 서버에서 parsing 함.
+			param["orgzCd"] = $("#orgzCd").val();
+			param["iplAddr"] = iplAddr;
+			//방문장착이 아니면 = 픽업이면
+			//yjw serverMode 제거(20220225)
+		}
+
+		param["amPmGbn"] = $("#amPmGbn").val();
+		param["ordNo"] = $("#tmsOrdNo").val();
+		param["orderConfigType"] = $("#orderConfigType").val();
+		param["mountCd"] = $("#mountCd").val();
+		param["drvThCd"] = $("#drvThCd").val();
+		param["tmsOrderId"] = $("#tmsOrderId").val();
+
+		if($("#bpStockYn").val() == "Y" && $("#rdcStockYn").val() == "Y") {
+			var selectedDay = new Date($("#datepicker11").val()).getDate();
+
+			//활성화된 날짜 목록을 가져온다.
+			//선택된 날짜가 오늘로부터 몇 번째이냐에 따라 BHF, RDC인지 정해진다.(오늘부터 3번째 후의 날짜부터 RDC)
+			if(moveDate == "present") {
+				var enableCnt = $('[data-handler=selectDay] a.ui-state-default').length;
+				var clickNum = 0;
+				for(var i=0; i<enableCnt; i++) {
+					if(Number($('[data-handler=selectDay] a.ui-state-default')[i].innerText) == selectedDay) {
+						clickNum = i;
+					}
+				}
+
+				if(clickNum >= 3) {
+					pBhfType = "RDC";
+				} else {
+					pBhfType = "BHF";
+				}
+			} else {
+				var sDaySplit = $("#datepicker11").val().split('-');
+				var sDay = new Date(sDaySplit[0],Number(sDaySplit[1])-1,sDaySplit[2]);
+				var today = new Date();
+				today = new Date(today.getFullYear(),today.getMonth(),today.getDate());
+
+				var diff = Math.abs(sDay.getTime() - today.getTime());
+				diff = Math.ceil(diff / (1000*60*60*24));
+
+				//오늘부터 +2일까지 배열에 담는다.
+				var chkDayArr = [];
+				for(var i=0; i<=2; i++) {
+					var tDay = new Date();
+					tDay.setDate(today.getDate() + i);
+
+					var m = tDay.getMonth() > 9 ? tDay.getMonth()+1 : "0"+(tDay.getMonth()+1);
+		      		var d = tDay.getDate() > 9 ? tDay.getDate() : "0"+tDay.getDate();
+		      		var y = tDay.getFullYear();
+
+		      		chkDayArr.push(y+m+d);
+				}
+
+				//휴일 중복값 제거
+				var delDupStorechkDay = storechkDay.filter(function(item, idx) {
+					if(storechkDay.indexOf(item) == idx) return item;
+				});
+
+				//휴일 목록에 있는지 확인한다.
+				var chkHday = 0;
+				$.each(delDupStorechkDay, function (idx, item){
+					$.each(chkDayArr, function (idx2, item2) {
+						if(item == item2) {
+							chkHday++;
+						}
+					});
+				});
+
+				if(diff >= (3+chkHday)) {
+					pBhfType = "RDC";
+				} else {
+					pBhfType = "BHF";
+				}
+			}
+		} else if($("#bpStockYn").val() == "Y" && $("#rdcStockYn").val() == "N") {
+			pBhfType = "BHF";
+		} else if($("#bpStockYn").val() == "N" && $("#rdcStockYn").val() == "Y") {
+			pBhfType = "RDC";
+		} else {
+			pBhfType = "BHF";
+		}
+
+		param["bhfType"] = pBhfType;
+
+		//yjw serverMode 제거(20220225)
+		var saveIstChangeDtTMS2 = "";
+		if($("#mountCd").val() == "40") {//전문점 장착
+			saveIstChangeDtTMS2 = "/mypage/saveIstChangeDt";
+		} else {//방문, PnD
+			saveIstChangeDtTMS2 = "/mypage/saveIstChangeDtTMS2";
+		}
+
+		$.ajax({
+	        type: "post",
+	        url:  saveIstChangeDtTMS2,
+	        data: JSON.stringify(param),
+	        contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+	        success: function (data) {
+	        	console.log(data);
+	        	if(data.rtnCode == '0') {
+	        		$(".layPopClose").click();
+	        		//$("#reqDtDiv").html(data.rtnDe.substring(0,4)+"/"+data.rtnDe.substring(4,6)+"/"+data.rtnDe.substring(6,8)+"&nbsp;&nbsp;&nbsp;"+data.rtnTime.substring(0,2)+":"+data.rtnTime.substring(2,4));
+	        		$("#datepicker11").datepicker("destroy");
+	        		fn_orderDetail();
+	        	} else if(data.rtnCode == '-2'){
+	        		ComUtil.alert("현재 시스템 점검중 입니다. 08시에 진행 부탁 드립니다.");
+	        	} else {
+	        		ComUtil.alert("날짜 변경이 실패하였습니다. 다시 진행 바랍니다.");
+	        	}
+	        },
+	        error: function(xhr,status,error){
+	        	console.log("error:",error);
+	        	$("#loadingWrap").hide();
+	        },
+        	complete:function() {
+        		$("#loadingWrap").hide();
+        		//$("#datepicker11").datepicker("destroy");
+        	}
+	    });
+	}
+
+	$("input[name='timeRd']").on("click" , function(){
+    	//function 호출 - 시간을 뿌려주는 function
+    	if(ValidUtil.isEmpty($("#datepicker11").val())) {
+    		ComUtil.alert("장착희망일을 선택해 주세요.");
+    		return false;
+    	}
+
+    	//오전 오후를 선택하면 전체 시간을 닫고 시작한다.
+    	$("#amArea span, #pmArea span").addClass("off");
+    	$("#amArea span, #pmArea span").removeClass("on");
+
+    	if($(this).val() == "AM") {
+    		$("#amArea").show();
+    		$("#pmArea").hide();
+    		$("#noneInput").hide();
+    	} else {
+    		$("#pmArea").show();
+    		$("#amArea").hide();
+    		$("#noneInput").hide();
+    	}
+		$("#amPmGbn").val($(this).val());
+
+		if(!fn_validMaxChgDt($("#datepicker11").val().replace(/-/gi, ""))) {
+			ComUtil.alert("주문일 기준 50일 이후로는 일정변경이 불가합니다.");
+			return false;
+		} else {
+			if($("#mountCd").val() == "40") {
+				getShopTimeList();//전문점 장착용
+			} else {
+				getTimeList();
+			}
+		}
+    });
+
+
+
+
+	//상세페이지로 이동
+	function fn_orderDetail(){
+		//yjw serverMode 제거(20220225)
+		var frm = document.orderDetailFrm;
+		frm.ordergbn.value = 'O';
+		frm.ordNo.value = $("#tmsOrdNo").val();
+		frm.action = "/mypage/orderDetailTMS2";
+		frm.submit();
+
+		/* var frm = document.orderDetailFrm;
+			frm.ordergbn.value = 'O';
+			frm.ordNo.value = $("#tmsOrdNo").val();
+			//frm.action = "/mypage/orderDetail";
+			frm.submit();	 */
+	}
+
+	//쿠폰페이지로 이동
+	function fn_couponPage(){
+		location.href = "/mypage/couponList";
+	}
+
+	//작업종료시간을 구한다.
+	var getJobEndTime = function(scheduleObjStr){
+		var mountTime = getMountTime;
+		var resultDataBestList = JSON.parse(resultDataBestObj);
+		var SltTourJStr = "";						//선택한 시간 스케쥴
+		var SvcTp = $("#mountCd").val();			//장착코드
+		var SvcTpCd = "";							//장착코드
+		var TrgTMSOrdID = $("#ordId").val();		//채번한 주문아이디
+		var selectedTime = "";
+		var scheduleObjList = null;
+		var jobEndTime = "";
+			if(resultDataBestList != undefined){
+	        	for(var idx in resultDataBestList){
+	        		if(resultDataBestList[idx].selectedTime == mountTime){
+	        			SltTourJStr = JSON.stringify(resultDataBestList[idx].vehicleScheduleList);
+	        			SltTourJStr='{\"vehicleScheduleList\":' + SltTourJStr + '}';
+	        		}
+	        	}
+	      	}
+
+ 	   		if($("#mountCd").val() == "10"){
+	   			SvcTpCd = "Visit";
+	    	}else{
+	     		SvcTpCd = "PnD";
+	     	}
+
+		var param = {"SvcTpCd": SvcTpCd, "SltTourJStr": SltTourJStr, "TrgTMSOrdID": TrgTMSOrdID};
+
+
+		//yjw serverMode 제거(20220225)
+		var JobEndTimeTMS2 = "/order/JobEndTimeTMS2";
+
+		$.ajax({
+	        type: "post",
+	        url: JobEndTimeTMS2, //"/order/JobEndTimeTMS2",
+	        data: param,
+	        async:false,
+	        //contentType:"application/json;charset=UTF-8",
+	        success: function (data){
+	        	if(data.eptWtkTm != null){
+	        		jobEndTime = data.eptWtkTm.slice(data.eptWtkTm.length-5, data.eptWtkTm.length);
+	        	}else{
+	        		console.error("데이터 없음");
+	        	}
+	        },
+	        error: function(error){
+	        	console.log("error:",error);
+	        }
+	    });
+
+		return jobEndTime;
+	}
+
+ 	$("#amArea span, #pmArea span").on("click" , function(e){
+    	if($("#mountCd").val() == "40") return false;
+    	getMountTime = ($(e.target).attr("id").replace("time",""));
+    	var jobEndTime = getJobEndTime($(e.target).attr("schedule"));
+
+    	//종료예정시간 높이조절
+    	$("#jobEndTimeMsgSec").css("display","");
+    	$("#jobEndTimeMsgSec").html("<i class='ico11' style='position:relative; top:6px; margin-right:6px;'></i>종료예정시간: "+jobEndTime);
+    });
+
+	function cfnRequestErrorCallback(callback, status) {
+		if(callback == 'fnKcpOrderCncl'){
+			ComUtil.alert("취소되었습니다.");
+			location.href = "/mypage/orderList";
+		}else if(callback == 'fnNpayOrderCncl'){
+			ComUtil.alert("취소되었습니다.");
+			location.href = "/mypage/orderList";
+		}
+	}
+
+	function fn_calcMaxChgDt(pOrdDe) {
+		var ordDe = new Date(pOrdDe.substring(0,4), Number(pOrdDe.substring(4,6))-1, pOrdDe.substring(6,8));
+
+		ordDe.setDate(ordDe.getDate() + 50);
+		$("#maxIstDt").text(chgFormatDate(ordDe, "C"));
+	}
+
+	function fn_validMaxChgDt(pSelectDt) {
+		var selcetDt = new Date(pSelectDt.substring(0,4), Number(pSelectDt.substring(4,6))-1, pSelectDt.substring(6,8));
+		var ordDt = new Date($("#ordDe").val().substring(0,4), Number($("#ordDe").val().substring(4,6))-1, $("#ordDe").val().substring(6,8));
+
+		ordDt.setDate(ordDt.getDate() + 50);
+
+		if(selcetDt.getTime() > ordDt.getTime()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+</script>
+

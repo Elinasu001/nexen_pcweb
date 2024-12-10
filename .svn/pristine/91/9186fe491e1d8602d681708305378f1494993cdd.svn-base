@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<title>주문취소 관련 안내</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link type="text/css" rel="stylesheet" href="/css/common.css" media="all">
+	<link type="text/css" rel="stylesheet" href="/css/contents.css" media="all">
+	<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="/js/ui.js"></script>
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="../js/html5Shiv.js"></script>
+		<script type="text/javascript" src="../js/IE9.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<!-- width:600px, height:550px; -->
+	<div id="pop_contents">
+		<h1>주문취소 관련 안내</h1>
+		<div class="pop_conts">
+			<p class="cancelTxt_top">렌탈 등록비를 계좌이체(에스크로)로 결제하신<br />고객님이 주문 취소를 원하실 경우<br />아래와 같은 과정을 진행해 주시기 바랍니다.</p>
+			<div class="cancelInfo_box">
+				<h2>[안내사항]</h2>
+				<ol>
+					<li>주문/결제가 완료되면 결제시스템회사 KCP에서 결제 시 입력한 메일로 구매확인 <br />메일이 발송됩니다.</li>
+					<li>수신된 “KCP - 넥센타이어의 배송안내 메일입니다” 메일을 선택하여 <br />[반품요청] 버튼을 클릭합니다.</li>
+					<li>NEXT LEVEL 사이트 접속 > 나의정보 > 주문배송조회 > 주문취소 버튼 클릭하면 <br />주문취소가 완료됩니다.</li>
+				</ol>
+				<p class="cancelInfo_txt">※ 이메일 주소를 잘못 입력하시거나 본인 이메일 주소가 아니라 메일 수신을 못할 경우는<br />고객센터로 문의해 주시기 바랍니다.</p>
+			</div>
+			<div class="btn_group ac">
+				<a href="#" class="btn_yellow fl_no" onClick="self.close();">닫기</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

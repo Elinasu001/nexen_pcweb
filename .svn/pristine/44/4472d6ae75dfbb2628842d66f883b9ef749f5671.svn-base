@@ -1,0 +1,752 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+
+<link type="text/css" rel="stylesheet" href="/css/jquery.bxslider.css">
+<script type="text/javascript" src="/js/lib/jquery.bxslider.js"></script>
+<script type="text/javascript" src="/js/slider.js"></script>
+
+<script src="/js/lib/clipboard.min.js"></script>
+
+
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+
+<!--subContentsWrap-->
+<div class="subContentsWrap myrecommend"> 
+	<div class="subContents type01">
+		<div class="descInfoState">
+			<p>고객님의 추천 활동 내역을 확인하실 수 있습니다.</p>
+		</div>
+		
+		<c:if test="${empty recNum}">
+			<div class="notics-box">
+				<img src="/img/mypage/myrecommend/notics_no_order.png"  alt="아직 나의 추천인 코드가 생성되지 않았어요"/>
+			</div>
+		</c:if>
+		
+		<c:if test="${not empty recNum}">
+			<c:choose>
+				<c:when test="${fn:length(selectEvtList) > 0}">
+					<div class="user-info type01">
+						<div class="info-item">
+							<div class="info-title">추천인 코드</div>
+							<div class="info-data"><span>${recNum}</span> <a class="btn-copy-code" data-clipboard-text="${recNum}">복사하기</a> </div>
+						</div>
+						<div class="info-item">
+							<div class="info-title">가입 회원</div>
+							<div class="info-data"> 이번 주 <span> ${thisWeekRecCnt}</span>명  /  총 <span> ${totalRecCnt}</span>명 </div>
+						</div>
+					</div>
+					
+					<div class="user-info type02">
+						<div class="info-item">
+							<div class="info-title">구매 타이어</div>
+							<div class="info-data">	<span>${totalOrdQy}</span>개 </div>
+						</div>
+						<div class="info-item">
+							<div class="info-title">선물 신청</div>
+							<div class="info-data">	<span>${usedPt}</span>개 </div>
+						</div>
+						<div class="info-item">
+							<div class="info-title">잔여 타이어</div>
+							<div class="info-data" >
+								<span>${leftPt}</span>개 
+							</div>
+						</div>
+					</div>
+				
+					<div class="user-info type03">
+						<div class="info-item">
+							<div class="info-title">경품 신청하기</div>
+							
+							<ul class="gift-list">
+								<c:forEach var="data" items="${selectEvtList}" varStatus="status">
+									<li>
+										<div class="cnt"><span class="tire-cnt">${data.recPt}</span></div>
+										<div class="thumb"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${data.imgUrl}" ></div>
+										<div class="btn-wrap"><a class='btn btn-apply on' data-value="${data.recPt}" onclick="open_gift_form('<c:out value="${data.recPrTp}"/>','<c:out value="${data.dtlSeq}"/>','<c:out value="${data.recPt}"/>','<c:out value="${data.recPrNm}"/>');">신청하기</a></div>
+										<input type="hidden" name="imgUrl_${data.dtlSeq}" id="imgUrl_${data.dtlSeq}" value="${data.imgUrl}" />
+									</li>
+								</c:forEach>
+							</ul> 
+						</div>
+					</div>
+					
+					<div class="gift-apply-form">
+						<div class="gift-title"><span>경품 신청</span></div>
+						<div class="gift-info">
+							<div class="gift-image" id="giftImg">
+								<img src=""/>
+							</div>
+							<div class="input-group-wrap">
+								<div class="input-group">
+									<label for="inp001"><span class="black">이름 </span></label>
+									<input type="text" id="in_recipNm" name="in_recipNm" placeholder="이름을 입력해주세요." maxlength="20" onkeyup="characterCheck(this)" onkeydown="characterCheck(this)"/>
+								</div>
+								<div class="input-group">
+									<label for="inp002"><span class="black">휴대전화 </span></label>
+									<input type="text" id="in_hpNo" name="in_hpNo" placeholder="휴대폰번호를 입력해주세요." maxlength="11" onkeyup="validNumberCheck.keyUp(event);"/>
+								</div>
+								<div class="input-group" id="addrDiv">
+									<label for="inp003"><span class="black">주소 </span></label>
+									
+									<div class="addr-input">
+										<a href="#" name="selectAddr" val="P1" class="searchBtn03 md-trigger" onclick="return false" tabindex="-1" data-modal="modal-22"></a>
+										<input type="text" name="addrFull" id="addrFull" readonly="readonly" title="주소 입력란" placeholder="주소를 검색하세요">
+										<input type="hidden" id="addr" name="addr" data-json-obj="true" value="">
+										<input type="hidden" id="detlAddr" name="detlAddr" data-json-obj="true" value="">
+										<input type="hidden" id="posNo" name="posNo" data-json-obj="true" value="">
+										<input type="hidden" id="bldMngNo" name="bldMngNo" data-json-obj="true" value="">
+									</div>
+								</div>
+								
+								<div class="desc" id="desc"></div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="precautions">
+						<div class="precautions-title">유의 사항</div>
+						<div class="precautions-text">
+							1) 넥스트레벨 회원만 참여가 가능합니다.<br/>
+							2) 넥스트레벨 회원 정보 마케팅 활용 동의하지 않은 회원은 경품 발송이 불가합니다.<br/>
+							3) 경품 신청 시 각 경품의 필요 타이어 수량 만큼 경품 신청 가능 타이어 수량에서 차감됩니다.<br/>
+							4) 경품의 액수가 총 5만원을 초과하는 경우 제세공과금은 본인 부담됩니다.<br/>
+							5) 경품 신청 후 취소 및 변경은 불가합니다.<br/>
+							6) 잘못된 회원 정보 제공으로 경품 미발송 및 오발송은 당사에서 책임지지 않으며, 재발송되지 않습니다.
+						</div>
+					</div>
+					
+					<div class="btn-gift-apply-wrap">
+						<a class='btn-gift-apply apply-cancel' href="javascript:;" onclick="gift_cancel();"> 취소</a>
+						<a class='btn-gift-apply apply-submit' href="javascript:;" onclick="gift_apply();"> 신청하기</a>
+					</div>
+				
+					<c:choose>
+						<c:when test="${fn:length(selectOrdEvtList) > 0}">
+							<div class="order-wrap">
+								<div class="order-title">나의 경품 신청 내역</div>
+								<ul class="order-list">
+									<c:forEach var="item" items="${selectOrdEvtList}" varStatus="status">
+									<li>
+										<div class="order-item">${item.recPrNm}</div>
+										<div class="order-point"><div class="tire-cnt">${item.usedPt}</div></div>
+										<div class="order-status"><a href="javascript:;" class="status ready" data-value="${item.ordStsCd}" onclick="check_delivery('<c:out value="${item.recOrdNo}"/>')">${item.ordStsNm}</a></div>
+									</li>
+									</c:forEach>
+								</ul>
+							</div>
+						</c:when>    
+						<c:otherwise>
+						</c:otherwise>
+					</c:choose>
+				</c:when>    
+				<c:otherwise>
+					<!--  
+					<div class="user-info type01">
+						<div class="info-item">
+							<div class="info-title">추천인 코드</div>
+							<div class="info-data"><span>${recNum}</span> <a class="btn-copy-code" data-clipboard-text="${recNum}">복사하기</a> </div>
+						</div>
+					</div>
+					-->
+					<div class="notics-box">
+						<img src="/img/mypage/myrecommend/notics_wait_event.png"  alt="지금은 추천인 이벤트 기간이 아닙니다."/>
+					</div>
+				</c:otherwise>					                
+	        </c:choose>
+		</c:if> 
+	</div>
+</div>
+<!--subContentsWrap-->
+
+
+<!-- layerPopup // -->
+
+<!-- 방문장착 진행현황 레이어 팝업 영역 -->
+<div class="popupWrap myrecommend md-modal-4" id="visitLayer"> <!-- md-show -->
+	<header>
+		<h2> 방문장착 진행현황<a href="#" class="layPopClose md-close"></a></h2>			
+	</header>
+	<!--contents-->
+	<div class="popContents">
+		<div class="mountProcess">
+			<ul id="visitIns">
+				<!-- HTML 영역 -->   
+			</ul>
+		</div>
+	</div>
+	<!--contents-->
+</div>
+
+<div class="popupWrap myrecommend md-modal-4" id="copyCodeResult"> <!-- md-show -->
+	<header> <a href="#" class="layPopClose md-close"></a> </header>
+	<!--contents-->
+	<div class="popContents">
+		나의 추천인 코드가 클립보드에 복사되었습니다.<br/>
+		추천드릴 분께 붙여넣기 후 전송해주세요.
+		<div class="btn-wrap">
+			<a onclick="close_popup()">확&nbsp;&nbsp;&nbsp;&nbsp;인</a>
+		</div>
+	</div>
+	<!--contents-->
+</div>
+
+<div class="popupWrap myrecommend md-modal-4" id="giftApplicationCompleted"> <!-- md-show -->
+	<header>
+		<h2> 신청 완료<a href="#" class="layPopClose md-close"></a></h2>			
+	</header>
+	<!--contents-->
+	<div class="popContents">
+		<div class="text-center" id="complete_desc"></div>
+		<div class="gift-info">
+			<div class="item-name" id="complete_recPrNm"></div>
+			<div class="tire-cnt" id="complete_usedPt"></div>
+		</div>
+		<div class="gift-image" id="complete_image">
+			<img src=""/>
+		</div>
+		
+		<div class="text-center">
+			나의 추천인 코드에서 배송 정보를 확인해 주세요.<br/>
+			경품 신청 후 변경 및 취소는 불가합니다.
+		</div>
+		
+		<div class="btn-wrap">
+			<a onclick="close_popup_select()">확&nbsp;&nbsp;&nbsp;&nbsp;인</a>
+		</div>
+	</div>
+	<!--contents-->
+</div>
+
+<div class="popupWrap myrecommend md-modal-4" id="checkDelivery"> <!-- md-show -->
+	<header>
+		<h2> 배송 정보 조회 <a href="#" class="layPopClose md-close"></a></h2>			
+	</header>
+	<!--contents-->
+	<div class="popContents">
+		
+		<div class="gift-info">
+			<div class="item-name" id="dlv_recPrNm"></div>
+			<div class="tire-cnt" id="dlv_recPt"></div>
+		</div>
+		<div class="gift-image" id="dlv_imgUrl">
+			<img src=""/>
+		</div>
+		<div class="user-info">
+			<div class="info-item">
+				<div class="info-title">이름</div>
+				<div class="info-data" id="dlv_recipNm"><span></span> </div>
+			</div>
+			<div class="info-item">
+				<div class="info-title">휴대전화</div>
+				<div class="info-data" id="dlv_hpNo">	<span>010-1234-1234</span> </div>
+			</div>
+			<div class="info-item" id="dlv_divAddr">
+				<div class="info-title">주소</div>
+				<div class="info-data" id="dlv_addr">	<span>서울특별시 강서구 마곡중앙로 177 501호</span> </div>
+			</div>
+		</div>
+		
+		<div class="text-center" id="dlv_desc">
+			고객님의 경품이‘상품 준비 중’입니다.<br/>
+			상품의 준비가 끝나는 대로 발송 처리 될 예정입니다.
+		</div>
+		
+		<div class="btn-wrap">
+			<a onclick="close_popup()">확&nbsp;&nbsp;&nbsp;&nbsp;인</a>
+		</div>
+	</div>
+	<!--contents-->
+</div>
+
+
+
+
+		 <!-- layerPopup // -->
+		 <div class="popupWrap type03 md-modal-3" name="popAddr" id="modal-22"> <!-- md-show -->
+	        <header class="noLine">
+	            <a href="#" class="layPopClose md-close"></a>
+	        </header>
+
+			<p class="desc">예) 도로명 :마곡중앙로 177 더넥센유니버시티 /지번 : 마곡동 756-5  / 건물명 : 넥센유니버시티 </p>
+
+	        <div class="numberSearch type02">
+				<label for="carNumber">우편번호 검색</label>
+	            <input type="text" name="jusoTxt" id="jusoTxt" class="type04" onkeydown="enterSchKey('juso');" placeholder="도로명/지번/건물명 주소 입력"> <a href="javascript:selectJuso('1');" class="searchBtn"></a>
+	        </div>
+
+
+	        <!--contents-->
+	        <div class="popContents">
+				<div class="zipCode">
+					<div class="total">total<span id="totalCount"></span></div>
+
+					<table class="tbl type02">
+						<caption>검색완료</caption>
+						<colgroup>
+							<col style="width:70px"/>
+							<col />
+							<col style="width:120px"/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">
+									주소
+								</th>
+								<th scope="col"></th>
+								<th scope="col">
+									우편번호
+								</th>
+							</tr>
+						</thead>
+						<tbody id="jusoList">
+						</tbody>
+					</table>
+	            </div>
+
+	            <!--paging-->
+	            <div class="paging type02" id="paging" style="display:none;"></div>
+				<!--paging-->
+
+	        </div>
+	        <!--contents-->
+
+	    </div>
+		<!-- layerPopup // -->
+
+		
+		<!-- layerPopup // -->
+		<div class="popupWrap hAuto md-modal" id="modal-33" name="popAddrDetail"> <!-- md-modal-33 md-effect-1 md-show -->
+	        <header class="noLine">
+	            <a href="#" class="layPopClose md-close"></a>
+	        </header>
+
+			<p class="desc"><!-- 예) 도로명 :마곡중앙로 177 더넥센유니버시티 /지번 : 마곡동 756-5  / 건물명 : 넥센유니버시티 --> </p>
+
+	        <div class="numberSearch type02">
+				<label for="carNumber">우편번호 검색</label>
+	            <input type="text" name="" id="" disabled="disabled" class="type04" >
+	            <!--  <a href="#" class="searchBtn"></a> -->
+	        </div>
+
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <!-- 주소 -->
+	            <table class="tbl submit">
+	                <caption>주소</caption>
+	                <colgroup>
+	                    <col style="width:150px">
+	                    <col>
+	                </colgroup>
+	                <tbody>
+	                    <tr>
+	                        <th scope="row">
+	                            <label for="tit01"><span class="black">우편번호</span></label>
+	                        </th>
+	                        <td>
+	                            <p id="popZipCode"></p>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <th scope="row" class="vTop">
+	                            <label for="tit01"><span class="essen black">주소</span></label>
+	                        </th>
+	                        <td class="type02">
+	                            <!-- 주소 -->
+	                            <div class="address">
+	                                <ul>
+	                                    <li>
+	                                        <span class="addTit">도로명</span>
+	                                        <span id="popLoadAddr"></span>
+	                                    </li>
+	                                    <li>
+	                                        <span class="addTit">지번</span>
+	                                        <span  id="popJibunAddr"></span>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                            <!-- 주소 -->
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <th scope="row" class="vTop">
+	                            <label for="popDetailAddr"><span class="essen black">상세주소</span></label>
+	                        </th>
+	                        <td class="type03">
+	                            <input type="text" name="popDetailAddr" class="type03 w450" id="popDetailAddr" title="상세주소 입력란" maxlength="20" placeholder="예)넥센아파트 1동 1101호 지하2층 주차장 N8)">
+	                        </td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	            <!-- 주소 -->
+
+	            <div class="btnArea type03">
+	                 <button type="button" class="type04 w50per" onclick="sendChildValueCancle();">취소<i class="ico01"></i></button>
+	                 <button type="button" class="type01 w50per" onclick="sendChildValueFix();">적용<i class="ico01"></i></button>
+	             </div>
+
+	        </div>
+	        <!--contents-->
+
+	    </div>
+		<!-- layerPopup // -->
+
+
+		<form name="jusoFrm" id="jusoFrm" method="post" >
+			<input type="hidden" name="currentPage" id="currentPage" value="1"/>
+			<input type="hidden" name="countPerPage" id="countPerPage" value="4"/>
+			<input type="hidden" name="confmKey" id="confmKey" value="<%= AppContext.getString("zipcd.service.key") %>"/>
+			<input type="hidden" name="connectTimeout" id="connectTimeout" value="<%= AppContext.getString("zipcd.connect.ConnectTimeout") %>"/>
+			<input type="hidden" name="readTimeout" id="readTimeout" value="<%= AppContext.getString("zipcd.connect.ReadTimeout") %>"/>
+			<input type="hidden" name="keyword" id="keyword" />
+		</form>
+
+<form id="frm" name="frm" method="post">
+	<input type="hidden" name="recNum" id="recNum" value="${recNum}" />
+	<input type="hidden" name="evtSeq" id="evtSeq" value="${evtSeq}" />
+	<input type="hidden" name="dtlSeq" id="dtlSeq" value="" />
+	<input type="hidden" name="custNo" id="custNo" value="${custNo}" />
+	<input type="hidden" name="recipNm" id="recipNm" value="" />
+	<input type="hidden" name="dvlAddr" id="dvlAddr" value="" />
+	<input type="hidden" name="dvlAddrDtl" id="dvlAddrDtl" value="" />
+	<input type="hidden" name="postNo" id="postNo" value="" />
+	<input type="hidden" name="hpNo" id="hpNo" value="" />
+	<input type="hidden" name="usedPt" id="usedPt" value="" />
+	<input type="hidden" name="custId" id="custId" value="${custId}" />
+
+	<input type="hidden" name="recPrNm" id="recPrNm" value="" />
+	<input type="hidden" name="recPrTp" id="recPrTp" value="" />
+	<input type="hidden" name="leftPt" id="leftPt" value="${leftPt}" />
+</form>
+    
+<div class="md-overlay"></div>
+	<!-- layerPopup // -->		
+
+<script type="text/javascript">
+
+
+$( document ).ready(function() {
+	/* 1:1문의로 가기 */
+	$('#question').on('click', function(e){
+		window.location.href="/mypage/questionRegister";
+    });
+
+	var clipboard = new ClipboardJS('.btn-copy-code');
+	clipboard.on('success', function(e) {
+		$("#copyCodeResult").addClass("md-show");
+		e.clearSelection();
+	});
+	clipboard.on('error', function(e) {
+		alert("지원되지 않는 브라우져 입니다.\n직접 선택하여 복사해 주세요.");
+	});
+	  
+	$('.gift-list li div a').each(function(i, obj){  
+		if($(this).attr("data-value")<=$("#leftPt").val()){
+			$(this).attr('class','btn btn-apply on');
+		}else{
+			$(this).attr('class','btn btn-apply');
+			$(this).attr("onclick",  null);	//클릭 이벤트 안줄려면 적용
+		}
+	});
+	$('.order-list li div a').each(function(i, obj){
+		if($(this).attr("data-value") == "30"){
+			$(this).attr('class','status delivery');
+			$(this).attr("onclick",  null);
+		}else{
+			$(this).attr('class','status ready');
+		}
+	});
+});
+ 
+//특수문자 제거
+function characterCheck(obj){
+	  var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
+
+	  if( regExp.test(obj.value) ){
+	     obj.value = obj.value.substring( 0 , obj.value.length - 1 ); // 입력한 특수문자 한자리 지움
+	  }
+}
+
+//신청하기_조회
+function open_gift_form(recPrTp, dtlSeq, recPt, recPrNm){
+	var check_leftPt = Number($("#leftPt").val()) - Number(recPt);
+	if(check_leftPt < 0){
+		ComUtil.alert("포인트가 부족합니다.");
+		return;
+	}
+
+	var imgUrl = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>";
+	$(".gift-apply-form").show();
+	$(".btn-gift-apply-wrap").show();
+	$("#giftImg").find("img").attr('src', imgUrl+$("#imgUrl_"+dtlSeq).val());
+	if(recPrTp == 20){
+		$('#addrDiv').show();
+	}else{
+		$('#addrDiv').hide();
+	}
+	$("#desc").html("타이어 "+ recPt +"개가 소진되며<br/>신청 후 잔여 타이어는 "+ check_leftPt +"개 입니다.");
+	
+	$("#usedPt").val(recPt);
+	$("#recPrTp").val(recPrTp);
+	$("#dtlSeq").val(dtlSeq);
+	$("#recPrNm").val(recPrNm);
+	
+	//신청 후 팝업에 사용
+	$("#complete_image").find("img").attr('src', imgUrl+$("#imgUrl_"+dtlSeq).val());
+	$("#complete_desc").html("축하합니다.경품 신청 완료 되었습니다.<br/>경품 신청 후 잔여 타이어는 "+ check_leftPt +"개 입니다.");
+	$("#complete_usedPt").html(recPt);
+	$("#complete_recPrNm").html(recPrNm);
+}
+
+//취소 버튼 클릭
+function gift_cancel(){
+	// $("#giftApplicationCompleted").addClass("md-show");
+	//입력값 클리어
+	$(".gift-apply-form").hide();
+	$(".btn-gift-apply-wrap").hide();
+}
+//신청하기_저장
+function gift_apply(){
+	
+	if($("#in_recipNm").val() == "" || $("#in_recipNm").val() == null){
+		$("#in_recipNm").focus();
+		ComUtil.alert("이름을 입력하세요.");
+		return;
+	}
+	if($("#in_hpNo").val() == "" || $("#in_hpNo").val() == null){
+		$("#in_hpNo").focus();
+		ComUtil.alert("휴대전화를 입력하세요.");
+		return;
+	}
+	if($("#recPrTp").val() == "20" && ($("#in_hpNo").val() == "" || $("#in_hpNo").val() == null)){
+		ComUtil.alert("주소 입력하세요.");
+		return;
+	}
+	
+	$("#recipNm").val($("#in_recipNm").val());
+	$("#hpNo").val($("#in_hpNo").val());
+	var formData = $("#frm").serializeObject();
+
+	$.ajax({
+	    type: "POST",
+	    url: "/mypage/saveRecommendEvent",
+	    cache:false,
+	    data: JSON.stringify(formData),
+	    contentType:"application/json;charset=UTF-8",
+	    success: function(data) {
+	    	if(data.successCode == "S") {
+	    		$("#giftApplicationCompleted").addClass("md-show");
+	    	}else{
+		    	ComUtil.alert("신청중에 오류가 발생하였습니다. 고객센터에 문의 바랍니다.");
+	    	}
+	    },
+	    error: function (request, status, error) {
+	    	ComUtil.alert("신청중에 오류가 발생하였습니다. 고객센터에 문의 바랍니다.");
+	    	console.log(error)
+		}
+	});
+}
+//신청 완료 팝업
+function close_popup_select(){
+	$(".popupWrap").removeClass("md-show");
+	var frm = document.frm;
+	frm.action = '/mypage/myRecommend';
+	frm.submit();
+}
+//팝업 확인 버튼
+function close_popup(){
+	$(".popupWrap").removeClass("md-show");
+}
+//경품내역_배송조회
+function check_delivery(recOrdNo){
+	$.ajax({
+	    url: "/mypage/selectOrdEvtList",
+	    type: "GET",
+	    data: {param : recOrdNo},
+	    success: function(data) {
+	    	console.log(data);
+	    	$("#dlv_recPrNm").html(data.recPrNm);
+	    	$("#dlv_recPt").html(data.usedPt);
+	    	
+	    	var imgUrl = "<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>";
+	    	$("#dlv_imgUrl").find("img").attr('src', imgUrl+data.imgUrl);
+	    	
+	    	$("#dlv_recipNm").html("<span>"+data.recipNm+"</span>");
+	    	$("#dlv_hpNo").html("<span>"+data.hpNo+"</span>");
+	    	if(data.recPrTp == "20"){
+	    		$("#dlv_divAddr").show();
+		    	$("#dlv_addr").html("<span>"+data.dvlAddr + " " +data.dvlAddrDtl+"</span>");
+	    	}else{
+	    		$("#dlv_divAddr").hide();
+	    	}
+    		if(data.ordStsCd == "10"){
+	    		$("#dlv_desc").html("고객님의 경품이‘상품 준비 중’입니다.<br/> 상품의 준비가 끝나는 대로 발송 처리 될 예정입니다.");
+    		}else if (data.ordStsCd == "20"){
+	    		$("#dlv_desc").html("고객님의 경품이‘배송 중’입니다.조금만 기다려주세요!");
+    		}
+	    	$("#checkDelivery").addClass("md-show");
+	    },
+	    error: function (request, status, error) {
+	    	console.log(error)
+		}
+	});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//우편 번호 검색 - enterKey
+function enterSchKey(type) {
+
+	var evt_code = (window.netscape) ? ev.which : event.keyCode;
+	if (evt_code == 13) {
+		event.keyCode = 0;
+		if (type=='juso') {
+			selectJuso();
+		} else if (type=='carNumber') {
+			fn_searchCarNum();
+		}
+	}
+}
+ 
+//우편 번호 검색 - 검색 버튼 클릭
+function selectJuso(pageNo) {
+	if(pageNo != null){
+		if(Number(pageNo)  == 0) {
+			$("#currentPage").val("1");
+		} else {
+			$("#currentPage").val(pageNo);
+		}
+	} else {
+		$("#currentPage").val("1");
+	}
+
+	$("#keyword").val($("#jusoTxt").val());
+
+	$.ajax({
+		 url :"<%= AppContext.getString("zipcd.url") %>"  //인터넷망
+		,type:"post"
+		,data:$("#jusoFrm").serialize()
+		,dataType:"jsonp"
+		,crossDomain:true
+		,success:function(xmlStr){
+
+			if(navigator.appName.indexOf("Microsoft") > -1){
+				var xmlData = new ActiveXObject("Microsoft.XMLDOM");
+				xmlData.loadXML(xmlStr.returnXml)
+			}else{
+				var xmlData = xmlStr.returnXml;
+			}
+
+			var errCode = $(xmlData).find("errorCode").text();
+			var errDesc = $(xmlData).find("errorMessage").text();
+			if(errCode != "0"){
+				ComUtil.alert(errDesc);
+			}else{
+				if(xmlStr != null){
+					makeList(xmlData);
+				}
+			}
+		}
+	    ,error: function(xhr,status, error){
+	    	ComUtil.alert("에러발생");
+	    }
+	});
+}
+function makeList(xmlStr){
+	var totCnt = Number($(xmlStr).find("totalCount").text());
+	$("#totalCount").text(totCnt);
+
+	var htmlStr = "";
+	if(totCnt != 0){
+		$(xmlStr).find("juso").each(function(){
+			htmlStr += "<tr onClick=\"sendChildValue('"+$(this).find('zipNo').text()+"','"+$(this).find('bdMgtSn').text()+"','"+$(this).find('roadAddrPart1').text()+"','"+$(this).find('roadAddrPart2').text()+"','"+$(this).find('jibunAddr').text()+"')\">";
+			htmlStr += "	<td>";
+			htmlStr += "		<div class='addDiv'>";
+			htmlStr += "			<span class='roadName mb6'>도로명</span>";
+			htmlStr += "			<span class='nomination'>지명</span>";
+			htmlStr += "		</div>";
+			htmlStr += "	</td>";
+			htmlStr += "	<td>";
+			htmlStr += "		<div class='address'>";
+			htmlStr += "			<p>"+$(this).find('roadAddrPart1').text()+"</p>";
+			htmlStr += "			<p>"+$(this).find('jibunAddr').text()+" </p>";
+			htmlStr += "		</div>";
+			htmlStr += "	</td>";
+			htmlStr += "	<td class='tCenter'>";
+			htmlStr += "		<p class='zipNum'>"+$(this).find('zipNo').text()+"</p>";
+			htmlStr += "	</td>";
+			htmlStr += "</tr>";
+			htmlStr += "</tr>";
+		});
+
+		htmlStr += "	</tbody>"
+
+	}else{
+		htmlStr += "		<tr>"
+		htmlStr += "			<td colspan='3'>검색결과가 없습니다.</td>"
+		htmlStr += "		</tr>"
+	}
+
+	$("#jusoList").html(htmlStr);
+	var totCnt = Number($(xmlStr).find("totalCount").text());
+	$("#totalCount").text(totCnt);
+
+	//paging
+	PageUtil.fnPageMakeDisplay(totCnt, $("#currentPage").val() ,  $('#paging') , 'selectJuso', 4);
+}
+
+//상세 우편 번호
+function sendChildValue(zipCode, bdMgtSn, load1, load2, jibun) {
+	$("#modal-22").removeClass("md-show");
+	$("#popZipCode").text(zipCode);
+	//$("#popLoadAddr").text(load + " " + bdMgtSn);
+	$("#popLoadAddr").text(load1 + " " + load2);
+	$("#popJibunAddr").text(jibun);
+	$("#bldMngNo").val(bdMgtSn);	// 건물관리번호
+	$("#modal-33").addClass("md-show");
+}
+
+function sendChildValueCancle(){
+	$(".layPopClose").click();
+}
+
+//상세 주소 화면
+function sendChildValueFix() {
+	//해당 주소의 거점 체크
+	//var zipCode = $("#popZipCode").text();
+	//var addr1 = $("#popLoadAddr").text() + " " + $("#popDetailAddr").val();
+	// 상세주소 필수 체크
+	if (ValidUtil.isEmpty($("#popDetailAddr").val())){
+		ComUtil.alert('상세주소를 필수 입니다.');
+		return false;
+	}
+
+	$("#addrFull").val($("#popLoadAddr").text() + " " + $("#popDetailAddr").val());
+	$("#addr").val($("#popLoadAddr").text());
+	$("#detlAddr").val($("#popDetailAddr").val());
+	$("#posNo").val($("#popZipCode").text());
+	$(".layPopClose").click();
+	
+	$("#postNo").val($("#popZipCode").text());
+	$("#dvlAddr").val($("#popLoadAddr").text());
+	$("#dvlAddrDtl").val($("#popDetailAddr").val());
+}
+
+
+</script>

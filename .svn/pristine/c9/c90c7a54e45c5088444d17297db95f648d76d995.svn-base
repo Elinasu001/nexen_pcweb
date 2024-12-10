@@ -1,0 +1,809 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<link type="text/css" rel="stylesheet" href="/css/product_new.css">
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+
+<script type="text/javascript" src="/js/lib/jsrender.min.js"></script>
+
+<form id="frm" name="frm" method="post" >
+	<input type="hidden" name="searchGbn"		id="searchGbn" />		<!-- N : 차량번호 , C : 차종 , S : 사이즈 -->
+	<input type="hidden" name="carNo"			id="carNo" 			value="${prdSearchVo.carNo}"/>			<!-- 차량번호 -->
+	<input type="hidden" name="makerCd" 		id="makerCd" 		value="${prdSearchVo.makerCd}" />		<!-- 제조사 코드 -->
+	<input type="hidden" name="makerNm" 		id="makerNm" />			<!-- 제조사 명 -->
+	<input type="hidden" name="modelCd" 		id="modelCd"        value="${prdSearchVo.modelCd}" />		<!-- 차 모델 코드 -->
+	<input type="hidden" name="modelNm"       	id="modelNm"        value="${prdSearchVo.modelNm}"/>         <!-- 차 모델  명 -->
+	<input type="hidden" name="contentsCd" 		id="contentsCd"     value="${prdSearchVo.contentsCd}" />		<!-- 차 사양 코드 -->
+	<input type="hidden" name="sectionWidth" 	id="sectionWidth" 	value="${prdSearchVo.sectionWidth}" />	<!-- 단면폭 or sectionWidth -->
+	<input type="hidden" name="aspectRatio" 	id="aspectRatio" 	value="${prdSearchVo.aspectRatio}" />		<!-- 편평비 or aspectRatio -->
+	<input type="hidden" name="wheelInches" 	id="wheelInches" 	value="${prdSearchVo.wheelInches}" />		<!-- 인치    or wheelInches -->
+	<input type="hidden" name="tireSizeYn" 	    id="tireSizeYn" 	value="${prdSearchVo.tireSizeYn}" />		<!-- 후륜/전륜 동일  여부-->
+	<input type="hidden" name="TireSizeCd" 		id="TireSizeCd" 	value="${prdSearchVo.tireSizeCd}" />		<!-- 사이즈ㅡ > 단면폭 + 편평비 + 인치 -->
+	<input type="hidden" name="TireSizeNm" 		id="TireSizeNm" 	value="${prdSearchVo.tireSizeNm}" />		<!-- 사이즈ㅡ > 단면폭 + 편평비 + 인치 -->
+
+	<!-- 후륜사이트 추가 -->
+	<input type="hidden" name="sectionRwWidth" 	id="sectionRwWidth" value="${prdSearchVo.sectionRwWidth}" />	<!-- 후륜 단면폭 or sectionWidth -->
+	<input type="hidden" name="aspectRwRatio" 	id="aspectRwRatio" 	value="${prdSearchVo.aspectRwRatio}" />		<!-- 후륜 편평비 or aspectRatio -->
+	<input type="hidden" name="wheelRwInches" 	id="wheelRwInches" 	value="${prdSearchVo.wheelRwInches}" />		<!-- 후륜 인치    or wheelInches -->
+	<!-- 상세 화면 용 -->
+	<input type="hidden" name="dMakerCd" 		id="dMakerCd" />	<!-- 제조사 코드 -->
+	<input type="hidden" name="petternCd" 		id="petternCd" />	<!-- 패턴 코드 -->
+	<input type="hidden" name="frCd" 			id="frCd" />		<!-- 앞뒤 구분 -->
+	<input type="hidden" name="classCd" 		id="classCd" 	    value="${prdSearchVo.classCd}" />		<!-- 치종 구분 > 승용차 / SUV -->
+	<input type="hidden" name="classCdNew" 		id="classCdNew"     value="${prdSearchVo.classCdNew}" />		<!-- 치종 구분 > 승용차 / SUV -->
+	<input type="hidden" name="matCd" 			id="matCd" />		<!-- 상품코드 -->
+	<input type="hidden" name="plyRating" 		id="plyRating" 		value="${prdSearchVo.plyRating}"/>	<!-- 강도 -->
+	<input type="hidden" name="description" 	id="description" />
+	<input type="hidden" name="seasonCd" 		id="seasonCd" />		<!-- 계절 구분-->
+	<input type="hidden" name="seasonCdNm" 		id="seasonCdNm" />
+	<input type="hidden" name="labelType" 		id="labelType" />	<!-- 구매, 렌탈 구분  -->
+
+	<input type="hidden" name="otPay" 			id="otPay" />	<!-- 렌탈최저가  -->
+	<input type="hidden" name="minSaleFee" 		id="minSaleFee" />	<!-- 구매 최저가  -->
+	<input type="hidden" name="maxSaleFee" 		id="maxSaleFee" />	<!-- 구매 최고가  -->
+	<!-- 추가 쿠폰 최적가 적용로직 추가 : ITEM CD   -->
+	<input type="hidden" name="itemCd"          id="itemCd"          value='' /> <!-- 품목 코드  -->
+	<input type="hidden" name="dpPrNo"          id="dpPrNo"          value='' /> <!-- 선택한 전시 상품 번호 -->
+
+	<!-- 추가 전/후륜  적용로직 추가    -->
+	<input type="hidden" name="driveFwd"        id="driveFwd"        value='' /> <!-- 전륜사이즈  -->
+	<input type="hidden" name="driveRwd"        id="driveRwd"        value='' /> <!-- 후륜사이즈 -->
+	<input type="hidden" name="addDpPrNo"       id="addDpPrNo"       value='' /> <!-- 추가전시상품 -->
+	<input type="hidden" name="addItemCd"       id="addItemCd"       value='' /> <!-- 추가품목코드 -->
+	<input type="hidden" name="addMatCd"        id="addMatCd"       value='' /> <!-- 추가품목코드 -->
+	<input type="hidden" name="tireFrCd"        id="tireFrCd"        value='' />  <!-- 타이어 전후륜구분 -->
+
+	<!-- paging -->
+	<input type="hidden" name="pageNo"		    id="pageNo"	         value="${pageNo}"/>		<!-- 현재 페이지 -->
+	<input type="hidden" name="pageSize"	    id="pageSize" 	     value="6" />		<!-- 페이지에 표시할 수 -->
+	<input type="hidden" name="carSearchParam"	id="carSearchParam"  value='${prdSearchVo.carSearchParam}' />
+	<input type="hidden" name="niceGradeCd"     id="niceGradeCd"     value='${prdSearchVo.niceGradeCd}' />
+	<input type="hidden" name="reviewGrdPt"     id="reviewGrdPt"     value='' />
+	<input type="hidden" name="reviewCnt"       id="reviewCnt"       value='' />
+</form>
+
+<div class="header-choice-size">
+	<div class="choice-size-inner">
+		<ul id="carSearchParamView">
+
+		</ul>
+
+		<div class="btn-box">
+			<img onclick="openSizeFinder('num');" src="/img/product/btn_rescan.jpg" alt="다시 검색하기" style="cursor:pointer;"/>
+		</div>
+	</div>
+</div>
+
+<div class="step-nav">
+	<ul>
+		<li class="active">Step 1. 상품 선택</li>
+		<li>Step 2. 옵션 선택</li>
+		<li>Step3. 주문 및 결제</li>
+	</ul>
+</div>
+
+<div class="prdlist-wrap">
+
+	<div class="sidebar">
+	    <div class="sidebar-inner product-switch">
+		    <div class="product-switch-title"> 무엇이 필요하세요? </div>
+		    <div class = "product-switch-wrap">
+			    <button id = "product-tire-list-btn" class = "type10" style = "background-color: #a7a8ac">타이어</button>
+                <button class = "type10" style = "background-color: #812990" disabled>엔진오일</button>
+		    </div>
+		</div>
+
+        <br>
+
+		<div class="sidebar-inner">
+			<div class="result-cnt-wrap">
+				검색결과 총 <span class="result_cnt" id="totalCnt"></span>건
+			</div>
+			<div class="orderType-wrap">
+				<div class="order-item">
+					<input type="radio" id="order_pop" name="orderType" value="pop" checked ><label for="order_pop" class="order_type">인기순</label>
+				</div>
+				<div class="order-item">
+					<input type="radio" id="order_highFee" name="orderType" value="highFee"><label for="order_highFee" class="order_type">고가순</label>
+				</div>
+				<div class="order-item">
+					<input type="radio" id="order_lowFee" name="orderType" value="lowFee"><label for="order_lowFee" class="order_type">저가순</label>
+				</div>
+			</div>
+		</div>
+	</div> <!-- sidebar -->
+
+	   <input id="testBtn" type = "button" value="TEST">
+	<div class="product-list" id="prdList">
+		<div class="product-item"></div>
+		<div class="product-item"></div>
+		<div class="product-item"></div>
+		<div class="product-item"></div>
+	</div> <!-- product-list -->
+
+	<!-- 페이징 표시 -->
+	<div class="paging" id="paging" style="display:none;"></div>
+	<!-- 페이징 표시 -->
+
+</div>
+
+
+<!-- 추가 쿠폰 최적가 적용로직 추가 : ITEM CD   -->
+<script type="text/x-template" id="productItemTemplete">
+	<a class='product-item thumBox' dpPrNo='{{:dpPrNo||"null"}}' itemCd='{{:itemCd||"null"}}' tireSize='{{:tireSize||"null"}}' o2oYn={{:o2oYn}}
+                                    seasonCd='{{:seasonCd||"null"}}' classCd='{{:classCd||"null"}}' seasonCdNm='{{:seasonCdNm||"null"}}'
+                                    matCd='{{:matCd||"null"}}' petternCd='{{:petternCd||"null"}}' petternCdNm='{{:petternCdNm||"null"}}'
+                                    frCd='{{:frCd||"null"}}' tireFrCd='{{:tireFrCd||"null"}}' description='{{:description||"null"}}' isPurchase="{{:o2oYn}}"
+                                    isRental="{{:rentalYn}}" minSaleFee="{{:minSaleFee}}" maxSaleFee="{{:maxSaleFee}}" otPay="{{:otPay}}" tireSizeYn="{{:tireSizeYn}}">
+		<div class="item-inner">
+
+
+			<!-- <div class="product-wheel front"></div> --> <!-- 전륜 -->
+			<!-- <div class="product-wheel rear"></div> --> <!-- 후륜 -->
+
+			<!--{{if tireFrCd == "F" && o2oYn == "Y" }}<div class="product-wheel front"></div> {{/if}}-->
+			<!--{{if tireFrCd == "R" && o2oYn == "Y" }}<div class="product-wheel rear"></div>  {{/if}}-->
+			{{if tireFrCd == "F" && tireSizeYn == "N"  }}<div class="product-wheel front"></div> {{/if}}
+			{{if tireFrCd == "R" && tireSizeYn == "N"  }}<div class="product-wheel rear"></div>  {{/if}}
+
+			<div class="product-badge">
+				{{if hotYn == 'Y' }}<span class="badge-hot"></span>{{else}}<span class="badge-hot off"></span>{{/if}}
+				{{if bestYn == 'Y' }}<span class="badge-best"></span>{{else}}<span class="badge-best off"></span>{{/if}}
+
+				{{if o2oYn == 'Y' }}<i class="purchase hide"></i>{{/if}}
+				{{if rentalYn == 'Y' }}<i class="rental hide"></i>{{/if}}
+			</div>
+
+			<div class="product-slogan">{{:stpntCont}}</div>
+			{{if img_logo }}
+			<div class="product-logo"><img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>{{:img_logo}}" alt="{{:petternCdNm}}" /></div>
+			{{else}}
+			<div class="product-logo">{{:petternCdNm}}</div>
+			{{/if}}
+
+			<div class="product-type">
+				<div class='review'>
+					<span class="star point{{:reviewGrdPtImg*10}}"></span>
+					<span class='score'>{{:reviewGrdPt}}</span>
+					<span class='cnt'>({{:reviewCnt}})</span>
+				</div>
+
+	            {{:classCdNm}} · {{:seasonCdNm}}
+	            {{if frCd == "F"}} | 앞{{/if}}
+	            {{if frCd == "R"}} | 뒤{{/if}}
+	            {{if frCd == "Z"}} | 범용{{/if}}
+			</div>
+
+			<div class="product-spec">
+				<ul>
+					<li><label>{{:spec_vechicleMile[0] }}</label><div class="spec-wrap"><div class="spec-value"><div class="spec-bar" style="width:{{:spec_vechicleMile[1]*20}}%"></div></div></div></li>
+					<li><label>{{:spec_brake[0] }}</label><div class="spec-wrap"><div class="spec-value"><div class="spec-bar" style="width:{{:spec_brake[1]*20}}%"></div></div></div></li>
+					<li><label>{{:spec_comfortable[0] }}</label><div class="spec-wrap"><div class="spec-value"><div class="spec-bar" style="width:{{:spec_comfortable[1]*20}}%"></div></div></div></li>
+					<li><label>{{:spec_fuel[0] }}</label><div class="spec-wrap"><div class="spec-value"><div class="spec-bar" style="width:{{:spec_fuel[1]*20}}%"></div></div></div></li>
+				</ul>
+			</div>
+			<div class="product-image ">
+				<img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>{{:atflPathNm}}" alt="{{:petternCd}}" />
+			</div>
+
+			<div class="product-brand">
+				<div class="product-logo"><img src="/img/product/product_brand_logo_nexen.png" alt="NEXENTIRE"></div>
+			</div>
+
+
+
+			{{if ev_searchYn == "Y"}}
+				<div class="product-price  {{if o2oYn == "Y" && rentalYn != "Y" }}buy{{else o2oYn != "Y" && rentalYn == "Y" }}rantal{{else}}both{{/if}}">
+					{{if o2oYn == "Y"}}
+						{{if bassSaleFee != saleFee || bassSaleFee != stmemSaleAmt }}
+                        	<div class="buy-price">    <span class="price">￦{{:price_bassSaleFee}}</span> </div>
+						{{else officerCd == "" }}
+							<div class="buy-price"> <span class="label">구매가</span>   <span class="price">￦{{:price_saleFee}}</span> </div>
+						{{else officerCd != "" }}
+							<div class="buy-price"> <span class="label">구매가</span>   <span class="price">￦{{:price_stmemSaleAmt}}</span> </div>
+						{{/if}}
+
+						<!-- 할인가 일경우 -->
+						<!-- <div class="coupon-price"> <span class="label">할인가</span>
+							<span class="price">
+								<span class="org_price">￦500,000</span>   <span class="dc_price">￦{{:price_minSaleFee}}</span>
+							</span>
+						</div> -->
+
+					{{/if}}
+					{{if rentalYn == "Y" }}<div class="rantal-price"> <span class="label">월 렌탈 최저가</span> <span class="price">￦{{:price_otFee}}/{{:price_feeCnt}}개</span> </div>{{/if}}
+				</div>
+			 {{else}}
+				<div class="product-price   {{if o2oYn == "Y" && rentalYn != "Y" }}buy{{else o2oYn != "Y" && rentalYn == "Y" }}rantal{{else}}both{{/if}}">
+					{{if o2oYn == "Y"}}
+						<!-- 임직원 할인일 경우 (제휴코드X, 임직원코드O)-->
+						{{if grpPay != "Y" && officerCd != ""}}
+								<div class="coupon-price">
+									<span class="label">임직원가</span>
+									<span class="price">
+										<span class="org_price">￦{{:price_bassSaleFee}}</span> <span class="dc_price">￦{{:price_stmemSaleAmt}}</span>
+									</span>
+								</div>
+						{{else}}
+							{{if discountYn == "Y"}}
+								<!-- 할인가 일경우 -->
+								<div class="coupon-price">
+									<span class="label">{{:priceNm}}</span>
+									<span class="price">
+										<span class="org_price">￦{{:price_bassSaleFee}}</span> <span class="dc_price">￦{{:price_groupFee}}</span>
+									</span>
+<!--
+									{{if price_couponFee > "0" && cpnDpYn == "Y" }}
+									<span class="label">쿠폰가</span>
+									<span class="price">
+										<span class="org_price">￦{{:price_groupFee}}</span>   <span class="dc_price">￦{{:price_couponFee}}</span>
+									</span>
+            	                    {{/if}}
+ -->
+								</div>
+							{{else}}
+								<!-- 구매가 일경우 -->
+								<div class="buy-price"> <span class="label">구매가</span><span class="price">￦{{:price_minSaleFee}}</span> </div>
+							{{/if}}
+						{{/if}}
+					{{/if}}
+					{{if rentalYn == "Y"}}
+						<div class="rantal-price"> <span class="label">월 렌탈 최저가</span> <span class="price">￦{{:price_otPay}} ~</span> </div>
+					{{/if}}
+				</div>
+
+			 {{/if}}
+
+		</div>
+	</a>
+</script>
+
+
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+<script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script> -->
+
+<script type="text/javascript">
+	$(function() {
+		evManager.init();
+		//PageScope.init();
+		EventScope.init();
+	});
+
+	var evManager = {
+		//이전 화면 구분 값 : M : 메인  조회 , H : 헤더
+		viewGbn : "${viewGbn}",
+		loginName : "${userVo.getUsrName()}",
+		officerCd : "${userVo.getOfficerCd()}",
+		searchYn : false,	//조회 여부
+		driveDsp : "",		//조회 사이즈
+		fCarType : new Array(), //차구분 : 승용, SUV, VAN
+		init : function(){
+			//page
+
+			$("#pageNo").val("1");
+
+			//search navi
+			var carSearchParam = '${prdSearchVo.carSearchParam}';
+		    var fChoiceArr;
+		    var fChoiceArrR;
+
+			if(!ValidUtil.isEmpty(carSearchParam)){
+				$.each(JSON.parse(carSearchParam), function(key, value){
+					if(key != 'driveDsp') {
+						if(key == 'driveFwd'){
+
+						    fChoiceArr = value.split('/');
+						    fChoiceArrR = fChoiceArr[1].split('R');
+						    if (fChoiceArrR[0] == '-') {
+						    	value = fChoiceArr[0] + 'R'+ fChoiceArrR[1];
+						    }
+						    $("#driveFwd").val(value);
+							value = '(전륜)'+value;
+							$('#carSearchParamView').append('<li class="size">'+ value +'</li>');
+						}else if(key == 'driveRwd'){
+
+							fChoiceArr = value.split('/');
+						    fChoiceArrR = fChoiceArr[1].split('R');
+						    if (fChoiceArrR[0] == '-') {
+						    	value = fChoiceArr[0] + 'R'+ fChoiceArrR[1];
+						    }
+						    $("#driveRwd").val(value);
+							value = '(후륜)'+value;
+							$('#carSearchParamView').append('<li class="size">'+ value +'</li>');
+						}else{
+							if(!ValidUtil.isEmpty(value)) {
+								if(    key != 'sectionWidth'
+									&& key != 'aspectRatio'
+									&& key != 'wheelInches'
+									&& key != 'sectionRwWidth'
+									&& key != 'aspectRwRatio'
+									&& key != 'wheelRwInches'
+									&& key != 'tireSizeYn'
+								){
+								$('#carSearchParamView').append('<li>'+ value +'</li>');
+								}
+							}
+						}
+					}else if(key == 'driveDsp') {
+						evManager.driveDsp = value;
+					}
+				});
+			} else {
+				//alert 이후에 페이지 전환을 위해 jquery alert을 이용.
+				alert("올바른 경로가 아닙니다. 검색을 통해 진행해주세요.");
+				location.href = "/main";
+				return false;
+			}
+
+			var gbn = "I";
+			var sectionWidth = "";
+			var aspectRatio = "";
+			var wheelInches = "";
+			//후륜 사이즈 정보 추가
+			var sectionRwWidth = "";
+			var aspectRwRatio = "";
+			var wheelRwInches = "";
+			var tireSizeYn = "";
+
+			var searchType = "ALL";
+
+			//메인 검색으로 넘어온 경우
+			if(evManager.viewGbn == "MC") {
+				gbn = "M";
+				sectionWidth = "${prdSearchVo.getSectionWidth()}";
+				aspectRatio = "${prdSearchVo.getAspectRatio()}";
+				wheelInches = "${prdSearchVo.getWheelInches()}";
+				//후륜 사이즈 정보 추가
+				sectionRwWidth = "${prdSearchVo.getSectionRwWidth()}";
+				aspectRwRatio = "${prdSearchVo.getAspectRwRatio()}";
+				wheelRwInches = "${prdSearchVo.getWheelRwInches()}";
+				tireSizeYn    = "${prdSearchVo.getTireSizeYn()}";
+				searchType = "X";
+				evManager.searchYn = true;
+			}
+
+			//evManager.fCarType.push("${prdSearchVo.getClassCd()}");
+			evManager.fCarType.push("P1");
+			evManager.fCarType.push("S1");
+			evManager.fCarType.push("V1");
+
+			var fBrand = new Array();
+			fBrand.push("NXN");
+
+			var fSeason = new Array();
+			fSeason.push("03");
+			fSeason.push("01");
+			fSeason.push("02");
+
+			var fRentalYn = new Array();
+			fRentalYn.push("B");
+			fRentalYn.push("R");
+
+			//list 조회
+			var pUrl = "/product/selectPrdList";
+			var pSendData = {
+				modelCd 		: ""
+				, contentsCd	: ""
+				, classCd 		: ""
+				, sectionWidth 	: sectionWidth
+				, aspectRatio 	: aspectRatio
+				, wheelInches 	: wheelInches
+				, sectionRwWidth : sectionRwWidth
+				, aspectRwRatio : aspectRwRatio
+				, wheelRwInches : wheelRwInches
+				, tireSizeYn 	: tireSizeYn
+				, fCarType 		: evManager.fCarType
+				, fBrand		: fBrand
+				, fSeason		: fSeason
+				, fRentalYn		: fRentalYn
+				, pageNo		: $("#pageNo").val()
+				, pageSize		: '6'
+				, orderType		: "pop"
+				, searchType 	: searchType
+				, lifeStyle	: null
+				, orderSpec 	: ""
+				, buyMinFee     : Math.floor($("#buy_min").val()/10000) * 10000
+				, buyMaxFee     : Math.ceil($("#buy_max").val()/10000) * 10000
+				, rentMinFee    : Math.floor($("#rent_min").val()/10000) * 10000
+				, rentMaxFee    : Math.ceil($("#rent_max").val()/10000) * 10000
+			};
+			evManager.commonAjax(pUrl, pSendData, callBackManager.selectMakePrdList , gbn);
+
+		},
+
+		//공통 AJAX 호출
+		commonAjax : function(url, param, callback , gbn) {
+			$("#loadingWrap").show();
+			$.ajax({
+				url: url,
+				type: "POST",
+				cache:false,
+				data: JSON.stringify(param),
+				contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+				success: function(data) {
+					$("#loadingWrap").hide();
+					if(data != null) {
+						callback(data , gbn);
+					}
+				},
+				error: function (request, status, error) {
+					$("#loadingWrap").hide();
+					callBackManager.error(error);
+
+				}
+			});
+			// end tag -- common ajax call
+		},
+
+		//상품 리스트 호출 - 페이지용
+		selectPrdList : function (p) {
+			$("#pageNo").val(p);
+			$("#pageSize").val($("#pageSize").val());
+			var pUrl = "/product/selectPrdList";
+			//파라미터는 공통으로 사용 - evManager.listParam()
+			evManager.commonAjax(pUrl, evManager.listParam(), callBackManager.selectMakePrdList , "I");
+		},
+
+		listParam : function () {
+			//브랜드
+			var fBrand = new Array();
+			$("input[name='fBrand']").each(function(){
+				if($(this).is(":checked")) {
+					fBrand.push($(this).val());
+				}
+			});
+			//계절구분
+			var fSeason = new Array();
+			$("input[name='fSeason']").each(function(){
+				if($(this).is(":checked")) {
+					fSeason.push($(this).val());
+				}
+			});
+			//렌탈유무
+			var fRentalYn = new Array();
+			if(!$("input[name='fRentalYn']").is(":checked")) {
+				fRentalYn.push("R");
+				fRentalYn.push("B");
+			} else {
+				$("input[name='fRentalYn']").each(function(){
+					if($(this).is(":checked")) {
+						fRentalYn.push($(this).val());
+					}
+				});
+			}
+
+			var searchType = $("#wheelInches").val() == "" ? "ALL" : "X";
+
+			var pSendData = {
+				modelCd 		: $("#modelCd").val()
+				, contentsCd	: $("#contentsCd").val()
+				, classCd 		: $("#classCd").val()
+				, sectionWidth 	: $("#sectionWidth").val()
+				, aspectRatio 	: $("#aspectRatio").val()
+				, wheelInches 	: $("#wheelInches").val()
+				, sectionRwWidth : $("#sectionRwWidth").val()
+				, aspectRwRatio : $("#aspectRwRatio").val()
+				, wheelRwInches : $("#wheelRwInches").val()
+				, tireSizeYn 	: $("#tireSizeYn").val()
+				, rentalYn 		: $("#rentalYn").val()
+				, fCarType 		: evManager.fCarType
+				, fBrand		: fBrand
+				, fSeason		: fSeason
+				, fRentalYn		: fRentalYn
+				, pageNo		: $("#pageNo").val()
+				, pageSize		: $("#pageSize").val()
+				, orderType		: $("input:radio[name=orderType]:checked").val()
+				, orderSpec		: $("input:radio[name=orderSpec]:checked").val()
+				, o2oYn			: $("#o2oYn").val()
+				, searchType 	: searchType
+				, buyMinFee     : Math.floor($("#buy_min").val()/10000) * 10000
+				, buyMaxFee     : Math.ceil($("#buy_max").val()/10000) * 10000
+				, rentMinFee    : Math.floor($("#rent_min").val()/10000) * 10000
+				, rentMaxFee    : Math.ceil($("#rent_max").val()/10000) * 10000
+			}
+			//console(pSendData.toString());
+
+			return pSendData;
+		}
+	}
+
+	/* ################################# AJAX CALLBACK ARAR #################################  */
+	var callBackManager = {
+		//에러 처리
+		error : function() {
+			//console.log('error callback : ' + error);
+		},
+
+		//상품 리스트
+		selectMakePrdList : function(rs , gbn) {
+			$("#loadingWrap").hide();
+
+			var tmpl = $.templates("#productItemTemplete"); // Get compiled template
+
+			var data = rs.selectPrdList;
+
+ 			//console.log(data);
+			var pageCommon = rs.pageCommon;
+			if(data != null && data.length > 0 ) {
+				//화면 생성
+				var listHtml = "";
+				for(var i=0; i<data.length; i++){
+
+					data[i].ev_searchYn = evManager.searchYn;
+					data[i].ev_driveDsp = evManager.driveDsp;
+
+                    data[i].img_logo             = data[i].logoListImgUrl;
+					data[i].spec_brake           = data[i].brake.split("^");
+					data[i].spec_fuel            = data[i].fuel.split("^");
+					data[i].spec_comfortable     = data[i].comfortable.split("^");
+					data[i].spec_vechicleMile    = data[i].vechicleMile.split("^");
+
+					data[i].spec_brake[1]        = data[i].spec_brake[1] ;
+					data[i].spec_fuel[1]         = data[i].spec_fuel[1] ;
+					data[i].spec_comfortable[1]  = data[i].spec_comfortable[1] ;
+					data[i].spec_vechicleMile[1] = data[i].spec_vechicleMile[1] ;
+
+					data[i].price_bassSaleFee    = NumUtil.setComma( data[i].bassSaleFee ); //가격
+					data[i].price_saleFee        = NumUtil.setComma( data[i].saleFee ); //할인가격
+					data[i].price_stmemSaleAmt   = NumUtil.setComma( data[i].stmemSaleAmt );
+					data[i].price_otFee          = NumUtil.setComma( data[i].otFee );
+					data[i].price_feeCnt         = NumUtil.setComma( data[i].feeCnt );
+
+					data[i].officerCd = "${userVo.getOfficerCd()}";
+
+					if(data[i].grpPay == "Y"){
+						data[i].price_couponFee  = NumUtil.setComma( data[i].cpnSaleFee );  //쿠폰 적용 가격
+						data[i].price_groupFee   = NumUtil.setComma( data[i].saleFee );     //그룹 적용가격
+						data[i].price_minSaleFee = NumUtil.setComma( data[i].minSaleFee );
+						data[i].discountYn = 'Y';
+					}else{
+						var minSaleFee = 0;
+						if(data[i].minSaleFee > 0) {
+							minSaleFee = String(data[i].minSaleFee);
+						} else {
+							minSaleFee = 0;
+						}
+
+						data[i].price_couponFee  = NumUtil.setComma( data[i].cpnSaleFee ); //쿠폰 적용 가격
+						data[i].price_groupFee   = NumUtil.setComma( minSaleFee );          //그룹 적용가격
+						data[i].price_minSaleFee = NumUtil.setComma( data[i].minSaleFee );
+						data[i].discountYn = 'Y';
+					}
+
+				    var tmpGroupFree      = NumUtil.rmComma(data[i].price_groupFee );
+				    var tmpPriceCouponFee = NumUtil.rmComma(data[i].price_couponFee );
+				    var tmpPriceStmemSaleAmt = NumUtil.rmComma(data[i].price_stmemSaleAmt ); //임직원
+
+				    //그룹가격 > 쿠폰할인가격 일때 쿠폰할인가격을 노출시킨다
+					if(Number(tmpPriceCouponFee) != 0 && (Number(tmpGroupFree) > Number(tmpPriceCouponFee))){
+						data[i].price_groupFee = data[i].price_couponFee;
+						data[i].priceNm        = "쿠폰할인가";
+					}else{
+						data[i].priceNm        = "할인가";
+					}
+
+					data[i].price_maxSaleFee = NumUtil.setComma( data[i].maxSaleFee );
+					data[i].price_otPay      = NumUtil.setComma( data[i].otPay );
+					data[i].itemCd           = data[i].itemCd;
+					data[i].dpPrNo           = data[i].dpPrNo;
+					data[i].tireFrCd         = data[i].tireFrCd;
+					data[i].tireSize         = data[i].listTireSize;
+					data[i].tireSizeYn       = $("#tireSizeYn").val();
+
+					data[i].petternCd        = data[i].petternCd.replace('\'','_');
+					data[i].petternCdNm      = data[i].petternCdNm.replace('\'','_');
+					data[i].cpnDpYn          = (Number(data[i].minSaleFee) > Number(data[i].cpnSaleFee)) ? "Y" : "N";
+
+					listHtml += tmpl.render( data[i] );
+				}
+				$("#prdList").html(listHtml);
+
+				//전체 조회 데이터 개수
+				$("#totalCnt").html(pageCommon.totalCount);
+
+				//paging
+				PageUtil.fnPageMakeDisplay(pageCommon.totalCount, pageCommon.pageNo, $('#paging') , 'evManager.selectPrdList', pageCommon.pageSize);
+
+				//검색 결과 값
+				if(evManager.searchYn) {
+					var searchAreahtml = "";
+					if(gbn == "I"){
+						searchAreahtml +="<li>단면폭 - " + $("#sectionWidth").val() + "</li>";
+						searchAreahtml +="<li>편평비 - " + $("#aspectRatio").val() + "</li>";
+						searchAreahtml +="<li>인치 - " + $("#wheelInches").val() + "</li>";
+					} else {
+						if($("#carNo").val() != null) {
+							searchAreahtml +="<li>" + $("#carNo").val() + "</li>";
+						}
+						searchAreahtml +="<li>" + $("#makerNm").val() + "</li>";
+						searchAreahtml +="<li>" + $("#modelNm").val() + "</li>";
+						searchAreahtml +="<li>" + $("#wheelInches").val() + "인치</li>";
+						searchAreahtml +="<li>" + $("#TireSizeNm").val() + "</li>";
+					}
+				}
+
+			} else {
+				//상품이 없는 경우
+				var html1 = "";
+				html1 += "<div class='noDataArea'>";
+				html1 += "<p>등록된 상품이 없습니다</p>";
+				html1 += "</div>";
+				$("#prdList").html(html1);
+				//paging
+				$("#paging").find("a").remove();
+				$("#totalCnt").html(0);
+			}
+		}
+	};
+	/* ################################# AJAX CALLBACK ARAR #################################  */
+
+	var EventScope = {
+
+		init : function() {
+			this.clickEventListener();
+		},
+
+		clickEventListener : function() {
+
+			//검색조건1 - 인기순, 고가순, 저가순
+			$('[name="orderType"]').on('click', function() {
+				$("input[name='orderSpec']").prop("checked" , false);
+
+				var pUrl = "/product/selectPrdList";
+				//파라미터는 공통으로 사용 - evManager.listParam()
+				evManager.commonAjax(pUrl, evManager.listParam(), callBackManager.selectMakePrdList , "I");
+			});
+
+			//검색조건2 - 여름, 겨울, 사계절
+			$('[name="fSeason"]').on('click', function() {
+				var pUrl = "/product/selectPrdList";
+				//파라미터는 공통으로 사용 - evManager.listParam()
+				evManager.commonAjax(pUrl, evManager.listParam(), callBackManager.selectMakePrdList , "I");
+			});
+
+			//검색조건3 - 제동성능, 연비효율, 승차감/소음, 주행거리, 마모성능 우선
+			$('[name="orderSpec"]').on('click', function() {
+				$("input[name='orderType']").prop("checked" , false);
+
+				var pUrl = "/product/selectPrdList";
+				//파라미터는 공통으로 사용 - evManager.listParam()
+				evManager.commonAjax(pUrl, evManager.listParam(), callBackManager.selectMakePrdList , "I");
+			});
+
+			$('#tireTipGo').on('click', function () {
+				location.href = "/news/tireTipList";
+			});
+
+			$('#o2oServiceGo').on('click', function () {
+				location.href = "/contents/o2oServiceIntro";
+			});
+
+			$('#eventAlert').on('click', function () {
+				location.href = "/evt/evtList";
+			});
+
+			$('#btnReset').on('click', function () {
+				$("#order_pop").prop("checked" , true);
+				$("input[name='fSeason']").prop("checked" , true);
+				$("input[name='orderSpec']").prop("checked" , false);
+				document.getElementById('price-buy-range').noUiSlider.reset();
+				document.getElementById('price-rent-range').noUiSlider.reset();
+
+				var pUrl = "/product/selectPrdList";
+				//파라미터는 공통으로 사용 - evManager.listParam()
+				evManager.commonAjax(pUrl, evManager.listParam(), callBackManager.selectMakePrdList , "I");
+			});
+
+			//상품상세조회
+			$(document).on("click",".thumBox" , function(){
+				$("#matCd").val($(this).attr("matCd"));
+				$("#frCd").val($(this).attr("frCd"));
+				$("#tireFrCd").val($(this).attr("tireFrCd"));
+				$("#description").val($(this).attr("description"));
+				$("#seasonCd").val($(this).attr("seasonCd"));
+				$("#seasonCdNm").val($(this).attr("seasonCdNm"));
+				$("#classCd").val($(this).attr("classCd"));
+				$("#minSaleFee").val($(this).attr("minSaleFee"));
+				$("#maxSaleFee").val($(this).attr("maxSaleFee"));
+				$("#otPay").val($(this).attr("otPay"));
+				$("#itemCd").val($(this).attr("itemCd"));
+				$("#dpPrNo").val($(this).attr("dpPrNo"));
+
+				//전후륜 로직 추가
+				var selTireSize = $(this).attr("tireSize");
+				var selTireFrCd = $("#tireFrCd").val();
+				var selDpPrNo   = $("#dpPrNo").val();
+				var selItemCd   = $("#itemCd").val();
+				var driveFwd    = $("#driveFwd").val(); //전륜 사이즈
+				var driveRwd    = $("#driveRwd").val(); //후륜 사이즈
+
+
+				var addDpPrNo =""; //추가 전시상품 번호
+				var addItemCd =""; //추가 itemCd
+				var addMatCd  =""; //추가 matCd
+				var ptnDpPrNo ="";
+				var ptnItemCd ="";
+				var ptnMatCd  ="";
+				var sizeDpPrNo ="";
+				var sizeItemCd ="";
+				var sizeMatCd  ="";
+
+				$.each( $(".thumBox") , function(idx , obj){
+					// 선택한 사이즈가 전륜 일경우 후륜 타이어의 정보를 담는다.
+					// 1.동일 패턴
+					// 2.사이즈
+					var objItemCd   = $(obj).attr("itemCd");
+					var objMatCd    = $(obj).attr("matCd");
+					var objDpPrNo   = $(obj).attr("dpPrNo");
+					var objTireSize = $(obj).attr("tireSize");
+					var objO2oYn    = $(obj).attr("o2oYn");
+
+					if(objO2oYn == "Y" && selDpPrNo == objDpPrNo ){
+						if(selTireFrCd == "F"){ //전륜 일경우 후륜 사이즈 비교
+							if(objTireSize == driveRwd ){
+								ptnDpPrNo = objDpPrNo;
+								ptnItemCd = objItemCd;
+								ptnMatCd  = objMatCd;
+							}
+						}else{ //후륜
+							if((objTireSize == driveFwd)){
+								ptnDpPrNo = objDpPrNo;
+								ptnItemCd = objItemCd;
+								ptnMatCd  = objMatCd;
+							}
+						}
+					}
+				});
+				addDpPrNo = ValidUtil.isEmpty(ptnDpPrNo) ? sizeDpPrNo : ptnDpPrNo;
+				addItemCd = ValidUtil.isEmpty(ptnItemCd) ? sizeItemCd : ptnItemCd;
+				addMatCd  = ValidUtil.isEmpty(ptnMatCd)  ? sizeMatCd  : ptnMatCd;
+
+				$("#addDpPrNo").val(addDpPrNo);
+				$("#addItemCd").val(addItemCd);
+				$("#addMatCd").val(addMatCd);
+
+				$("#reviewGrdPt").val($(this).children('.item-inner').children('.product-type').children('.review').children('.score').text());//별점
+				$("#reviewCnt").val($(this).children('.item-inner').children('.product-type').children('.review').children('.cnt').text());//리뷰
+
+				//구매 , 렌탈 구분
+				var labelType1 = false;
+				var labelType2 = false;
+				var labelType = "";
+				if($(this).find(".purchase").length > 0) {
+					labelType1 = true;
+				}
+				if($(this).find(".rental").length > 0) {
+					labelType2 = true
+				}
+				if(labelType1 && !labelType2 ) {
+					labelType = "O";
+					$("#petternCd").val($(this).attr("petternCdNm").replace('_','\''));
+				} else if(!labelType1 && labelType2 ) {
+					labelType = "R";
+					$("#petternCd").val($(this).attr("petternCdNm").replace('_','\''));
+				} else if(labelType1 && labelType2 ) {
+					labelType = "C";
+					$("#petternCd").val($(this).attr("petternCdNm").replace('_','\''));
+				}
+				$("#labelType").val(labelType);
+
+				$("#frm").attr("action" , "/product/prdDetail").submit();
+			});
+			// -- end tag
+
+			$('#product-tire-list-btn').on('click', function() {
+				$('#frm').attr('action', "/product/prdList?viewGbn=MC").submit();   //viewGbn=MC, 메인 검색으로 진입
+            });
+
+			$('#testBtn').on('click', function() {
+				window.location.href="/product/svcDetail";
+			});
+		}
+	};
+</script>

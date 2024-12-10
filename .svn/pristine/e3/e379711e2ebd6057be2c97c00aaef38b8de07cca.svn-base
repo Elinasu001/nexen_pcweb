@@ -1,0 +1,129 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+
+<div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+<br/>
+
+<!-- 로그인 테스트 영역 시작 -->
+<div class="login">  
+	<form id="loginFrm" name="loginFrm" method="post" action="/loginProc">
+	<h2 class="type01">******* 로그인 테스트 *****</h2>         
+    <ul class="idpw">
+        <li>
+            <input type="text" name="usrId" id="usrId" value="" placeholder="아이디를 입력해 주세요." title="아이디 입력" class="type06 w100per"/>
+        </li>
+        <li>
+            <input type="password" name="password" id="password" value="" placeholder="비밀번호를 입력해 주세요." title="비밀번호 입력" class="type06 w100per"/>
+        </li>
+        <li>
+             <input type="checkbox" name="" id="idSave"><label for="idSave">아이디저장</label>
+        </li>
+        <li>
+            <button type="button" name="" class="type12 w100per" onClick="javascript:login();">로그인</button>
+        </li>
+        <li>
+            <button type="button" name="" class="type12 w100per" onClick="javascript:loginProcKakao();">Kakao Login</button>
+        </li>
+        <li>
+            <button type="button" name="" class="type12 w100per" onClick="javascript:loginProcNaver();">Naver Login</button>
+        </li>
+        <li>
+            <button type="button" name="" class="type12 w100per" onClick="javascript:loginProcGoogle();">GOOGLE Login</button>
+        </li>                
+        <li>
+            <button type="button" name="" class="type12 w100per" onClick="javascript:loginProcFaceb();">FaceBook Login</button>
+        </li>                
+    </ul>
+    </form>
+</div>
+<!-- 로그인 테스트 영역 종료 -->	      
+<br>
+<br>
+<br>
+<br>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+</div>
+
+<script type="text/javascript">
+
+/*
+ * 윈도우 팝업 오픈
+ */
+function fnWinPopOpen(sUrl){
+	$.popModalCenter({
+		url       : sUrl,
+		scroll    : "yes",
+		width     : "940",
+		resizable : "yes"
+	});
+}
+
+function loginProcKakao() {
+	
+	var sUrl = "https://kauth.kakao.com/oauth/authorize"
+		+ "?client_id=" + "8c639ea0511905bdd4f17ec930b1dd63"
+		+ "&redirect_uri=" + "http://localhost:18080/loginProcKakao"
+		+ "&response_type=code" 
+		+ "&state=/product/main"
+		+ "&encode_state=true"	
+	fnWinPopOpen(sUrl);
+	
+};
+
+function loginProcNaver() {
+
+	var sUrl = "https://nid.naver.com/oauth2.0/authorize"				
+		+ "?response_type=code"
+		+ "&client_id=5I6V4MAGLlZmKFguVf3q"
+		+ "&redirect_uri=http://localhost:18080/loginProcNaver"
+		+ "&state=/product/main"
+		;
+	fnWinPopOpen(sUrl);
+};
+
+function loginProcFaceb() {
+	
+	var sUrl = "https://www.facebook.com/v4.0/dialog/oauth"
+			 + "?client_id=825177314544734"
+			 + "&redirect_uri=http://localhost:18080/loginProcFaceb"
+			 + "&state=/product/main"
+			 + "&display=popup"
+	    	 + "&response_type=code"
+			 ;
+	fnWinPopOpen(sUrl);
+};
+
+
+function loginProcGoogle() {
+	
+	var sUrl = "https://accounts.google.com/signin/oauth/oauthchooseaccount"
+		     + "?client_id=557478524499-beu5ikgrgd2uubf1rft2bf1u6ol7e7b9.apps.googleusercontent.com"
+		     + "&code=test"
+		     + "&client_secret=K_GeMu8mpFJUmHCGSTlFtSe4"		    		
+		     + "&redirect_uri=http://localhost:18080/loginProcGoogle"
+		     + "&grant_type=authorization_code"
+		;
+	
+	fnWinPopOpen(sUrl);
+};
+
+
+function login() {
+	document.loginFrm.submit();
+}
+
+</script>

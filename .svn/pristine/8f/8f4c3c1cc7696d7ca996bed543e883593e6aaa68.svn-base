@@ -1,0 +1,166 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+
+		<form id="frm" name="frm" method="post" >
+			<!-- paging -->
+			<input type="hidden" name="pageNo"		id="pageNo"	value="${pageCommon.pageNo}"/>		<!-- 현재 페이지 -->
+			<input type="hidden" name="pageSize"	id="pageSize" 	value="10" />		<!-- 페이지에 표시할 수 -->
+		</form>
+
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+                <div class="subContents type01">
+                    <div class="myRentalInfo">
+                        <ul>
+                            <li>
+                                <!--나의 렌탈정보-->
+                                <div class="myRental">
+                                    <div>
+                                        <span class="mTitle">이번달 렌탈료 청구 금액</span> <span class="mInfo">&#8361;  <fmt:formatNumber value="${totRentAmt }" pattern="#,###" /></span>
+                                    </div>
+
+                                    <div>
+                                        <span class="mTitle">이용중인 렌탈</span> <span class="mInfo num">${fn:length(payList) }</span> <em>건</em>
+                                    </div>
+
+                                    <div>
+                                        <span class="mTitle">총 렌탈</span> <span class="mInfo num"> ${endCnt}</span>  <em>건</em>
+                                    </div>
+                                </div>
+                                <!--나의 렌탈정보-->
+                            </li>
+                            <li>
+                                <!--나의 렌탈정보-->
+                                <div class="myRental">
+                                    <div>
+                                        <span class="mTitle">연체금 청구 금액</span>
+                                        <span class="mInfo">&#8361;  <fmt:formatNumber value="${myOverdueMap.arreAmt }" pattern="#,###" /></span>
+                                         <!-- <span class="overdue">전체 연체금 납부안내  </span> -->
+                                    </div>
+
+                                    <div>
+                                        <span class="mTitle">납부 연체된 렌탈 </span>
+
+                                        <span class="mInfo num"> ${fn:length(myOverdueMapList) }</span>  <em>건</em>
+                                    </div>
+                                </div>
+                                <!--나의 렌탈정보-->
+                            </li>
+                        </ul>
+                    </div>
+
+					<!-- 리스트 -->
+                    <c:forEach var="list" items="${rentalList}" varStatus="status">
+                    	<c:if test="${list.osYn eq 'N' }">
+		                    <section id="listArea" onclick="goDetail('${list.ordNo}');">
+		                        <div class="proViewInfo type02">
+		                            <p>
+		                                <span>계약번호 <em>${list.ordNo}</em> </span>  <a class="deView"></a> <!-- 상세 -->
+		                            </p>
+		                        </div>
+
+		                        <table class="tbl list">
+		                            <caption>${list.saleNm}</caption>
+		                            <colgroup>
+		                                <col style="width:150px"/>
+		                                <col />
+		                                <col style="width:80px"/>
+		                                <col style="width:80px"/>
+		                            </colgroup>
+		                            <tbody>
+		                                <tr>
+		                                    <td class="tCenter">
+		                                         <div class="proViewWrap">
+		                                         	<div class="proView type02">
+			                                             <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>${list.atflPathNm}" alt="${list.saleNm}"/>
+		                                         	</div>
+		                                         </div>
+		                                    </td>
+		                                    <td>
+		                                        <!-- 상품정보 -->
+		                                        <div class="proViewInfo type03">
+		                                            <ul>
+		                                                <li>
+																<span class="name">${list.PETTERN_CD }</span>
+																<span >${list.saleNm }</span>
+
+		                                                </li>
+		                                                <li>
+		                                                    <p><span>렌탈기간</span>  <span class="con">${list.periodNm}<em>(${list.procDay} ~ ${list.osDay})</em> </span> </p>
+		                                                    <p><span>월 렌탈료</span> <span class="con"><fmt:formatNumber value="${list.MON_AMT }" pattern="#,###" />원 </span> </p>
+		                                                </li>
+		                                            </ul>
+		                                        </div>
+		                                        <!-- 상품정보 -->
+		                                    </td>
+		                                    <td class="tCenter vTop">
+		                                        <div class="btn w100">
+		                                        	<button type="button" class="type11 w100">상세페이지</button>
+		                                        </div>
+		                                    </td>
+		                                    <td class="tCenter vTop">
+		                                        <div class="btn w100">
+		                                            <button type="button" class="type11 w100">${list.STAT_NM}</button>
+													<fmt:parseNumber var="arreCnt" type="number" value="${list.arreCnt}" />
+		                                            <c:if test="${arreCnt > 0}">
+			                                            <span class="info">${list.arreCnt}개월 연체</span>
+		                                            </c:if>
+		                                        </div>
+		                                    </td>
+		                                </tr>
+		                            </tbody>
+		                        </table>
+		                    </section>
+	                    </c:if>
+                    </c:forEach>
+
+
+                    <!--paging-->
+                    <div class="paging" id="paging">
+                   </div>
+                    <!--paging-->
+
+            </div>
+
+
+		</div>
+		<!--subContentsWrap-->
+
+
+	<script type="text/javascript" src="/js/lib/classie.js"></script>
+    <script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<script type="text/javascript">
+	var evManager = {
+
+	}
+
+	function selectMyRentalList(pageNo) {
+		location.href = "/mypage/myRentalList?pageNo="+pageNo;
+	}
+
+
+	function goDetail(ordNo) {
+		location.href= "/mypage/myRentalDetail?ordNo="+ordNo;
+	}
+
+	$( document ).ready(function() {
+		//init 함수 호출
+
+		//paging
+   		PageUtil.fnPageMakeDisplay("${pageCommon.totalCount}", $("#pageNo").val() ,  $('#paging') , 'selectMyRentalList', 10);
+	});
+</script>
+

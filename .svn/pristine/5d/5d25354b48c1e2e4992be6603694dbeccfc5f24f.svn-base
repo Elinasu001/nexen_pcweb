@@ -1,0 +1,149 @@
+package com.nexwrms.pcweb.cash.ctl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.nexwrms.cfo.util.JsPrinter;
+import com.nexwrms.core.session.SessionInfoUtil;
+import com.nexwrms.core.util.SessionUtil;
+import com.nexwrms.nextlevel.com.cash.svc.RentalCashSvc;
+import com.nexwrms.nextlevel.com.login.vo.ReRentalVo;
+import com.nexwrms.nextlevel.to.cash.vo.RentalCashToVo;
+
+
+/**
+ * @class Name : CashCtl.java
+ * @Description : FO cash
+ * @RequestMapping 
+ * @Modification Informat ion
+ * @
+ * @ Date            Author       Description
+ * @ -------------  -----------  -------------
+ * @ 2019. 11. 14.       		  최초 생성
+ * 
+ */
+@RequestMapping("/cash")
+@Controller
+public class CashCtl {
+	private static final Logger logger = LoggerFactory.getLogger(CashCtl.class);
+	
+	@Autowired
+	@Qualifier("com.nexwrms.nextlevel.com.cash.svc.RentalCashSvc")
+	RentalCashSvc rentalCashSvc;	
+	/**
+	 * 주문배송에서 결제 취소 처리 후 취소정보 저장
+	 * @param model
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/cashReceiptsRegister" , method={RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> cashReceiptsRegister(HttpServletRequest request, HttpServletResponse res, Model modeㅣ, @RequestBody RentalCashToVo vo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		try{
+			ReRentalVo clientVo = SessionUtil.getAttribute(SessionInfoUtil.SESSION_INFO_CLIENT_VO);		
+			Map result = rentalCashSvc.cashReceiptsRegister(clientVo, vo);
+			
+				logger.debug("[Start]RTRECashReceiptMngController==================================");
+				logger.debug("작업구분(C:발행,D:취소) 		: "+(String)result.get("jobGb"));			
+				logger.debug("수납거래번호 					: "+result.get("recvSeq")+"");			
+				logger.debug("등록자 ID 					: "+(String)result.get("regId"));		
+				logger.debug("현금영수증 발행 일련번호 		: "+result.get("cashSeq")+"");				
+				logger.debug("현금영수증 이력번호 			: "+result.get("cashIseq")+"");				
+				logger.debug("주문구분번호 					: "+(String)result.get("ordrIdxx"));		
+				logger.debug("상품명 						: "+(String)result.get("goodNm"));	
+				logger.debug("주문자명 						: "+(String)result.get("buyrNm"));	
+				logger.debug("주문자 전화번호 				: "+(String)result.get("buyrTel"));			
+				logger.debug("요청 종류 					: "+(String)result.get("reqTx"));		
+				logger.debug("사업장 구분 					: "+(String)result.get("coType"));		
+				logger.debug("과세/면세 구분 				: "+(String)result.get("CtaxType"));		
+				logger.debug("발행 사업자번호 				: "+(String)result.get("ctaxNo"));			
+				logger.debug("상호			 				: "+(String)result.get("coNm"));			
+				logger.debug("대표자명						: "+(String)result.get("cownerNm"));	
+				logger.debug("사업장 주소 					: "+(String)result.get("coAdd"));	
+				logger.debug("사업장 대표 연락처 			: "+(String)result.get("coTel"));		
+				logger.debug("원 거래시각 					: "+(String)result.get("tradTm"));			
+				logger.debug("발행용도 						: "+(String)result.get("trCode"));		
+				logger.debug("신분확인 ID					: "+(String)result.get("idInfo"));	
+				logger.debug("거래금액 총 합				: "+(String)result.get("amtTot"));		
+				logger.debug("공급가액 						: "+(String)result.get("amtSup"));			
+				logger.debug("봉사료 						: "+(String)result.get("amtSvc"));	
+				logger.debug("부가가치세					: "+(String)result.get("amtTax"));	
+				logger.debug("변경 타입 					: "+(String)result.get("modType"));			
+				logger.debug("변경요청 거래번호 구분 		: "+(String)result.get("modGb"));		
+				logger.debug("변경요청 거래번호 			: "+(String)result.get("modVal"));			
+				logger.debug("변경요청 금액cashReceiptsRegister					: "+(String)result.get("modMny"));			
+				logger.debug("변경처리 이전 금액 			: "+(String)result.get("remMny"));			
+				logger.debug("successCode 					: "+result.get("successCode")+"");			
+				logger.debug("returnMessage 				: "+(String)result.get("returnMessage"));
+				logger.debug("errorText 					: "+(String)result.get("errorText"));
+				
+				logger.debug("cashOrdNo request값					: "+vo.getCashOrdNo());
+				logger.debug("cashModType 	request값				: "+vo.getCashModType());
+			    logger.debug("[END]RTRECashReceiptMngController==================================");
+			    
+			    int inertFlag = Integer.parseInt((String.valueOf(result.get("successCode")) + ""));
+			    
+				if( inertFlag == 0 ){
+					Map cashResult = rentalCashSvc.ppCliHubCash(clientVo, result, request);
+					map.put("cashResult", cashResult);
+				}else{
+					StringBuilder returnPath = new StringBuilder();
+					returnPath.append("/mypage/orderList");
+					JsPrinter.replace(res, returnPath.toString(), String.valueOf(result.get("returnMessage")));					
+				}			    
+			    
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			
+			}
+		return map;
+	}	
+	
+	/**
+	 * 수납내역결과 저장 
+	 * @param model
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/cashReceiptsRegisterOut" , method={RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> cashReceiptsRegisterOut(HttpServletRequest request, HttpServletResponse res, Model modeㅣ, @RequestBody RentalCashToVo vo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> rtmap = new HashMap<String, Object>();
+	
+		try{
+			ReRentalVo clientVo = SessionUtil.getAttribute(SessionInfoUtil.SESSION_INFO_CLIENT_VO);		
+				map = rentalCashSvc.cashReceiptsRegisterOut(clientVo, vo);
+				int inertFlag = Integer.parseInt((String.valueOf(map.get("successCode")) + ""));
+				if( inertFlag == 0 ){
+					rtmap.put("cashOrdNo",   vo.getCashOrdNo());
+					rtmap.put("cashModType", vo.getCashModType());
+				}else{
+					StringBuilder returnPath = new StringBuilder();
+					returnPath.append("/mypage/orderList");
+					JsPrinter.replace(res, returnPath.toString(), String.valueOf(map.get("returnMessage")));
+				}
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+		return rtmap;
+	}		
+		
+	
+}

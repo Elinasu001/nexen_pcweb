@@ -1,0 +1,462 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+		<form id="frm" name="frm" method="post" >
+			<!-- paging -->
+			<input type="hidden" name="pageNo"	id="pageNo"	value="${pageNo}"/>		<!-- 현재 페이지 -->
+			<input type="hidden" name="pageSize"	id="pageSize" 	value="9" />		<!-- 페이지에 표시할 수 -->
+		</form>
+
+
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+                <div class="subContents">
+                <c:if test="${empty mobNo}">
+					<div class="descInfo type05">
+                        <p>쿠폰 이용 참고사항</p>
+
+                        <div class="proViewInfo">
+                            <p class="desc type09">
+                                주문취소 시 쿠폰은 유효기간 내에 다시 이용하실 수 있으며, 발급된 쿠폰은 주문 시 1회 사용 가능합니다.<br/>
+                                상품 쿠폰의 경우 쿠폰에 따라서 최대 2개까지, 결제 쿠폰의 경우 최대 1개만 적용 가능합니다.
+                            </p>
+                        </div>
+                    </div>
+
+					<div class="addcoupon-section">
+						<form>
+						<input type="text" id="cpnPlcNo" name="cpnPlcNo" maxlength="5" placeholder="쿠폰번호를 입력해주세요" >
+						<button type="button" id="btnCpnReg" >쿠폰등록</button>
+						</form>
+					</div>
+				</c:if>
+				<c:if test="${not empty mobNo}">
+				<div class="descInfo type05">
+                        <p>쿠폰 이용 참고사항</p>
+
+                        <div class="proViewInfo">
+                            <p class="desc type09">
+                                비회원 주문 시 휠 얼라인먼트 등의 정비 옵션을 함께 결제하신 경우 정비 쿠폰 조회가 가능합니다.<br/>
+			     정비 쿠폰은 넥센타이어 직영점에 한하여 이용 가능하며, 사전 유선 예약이 필요합니다.
+                            </p>
+                        </div>
+                    </div>
+				</c:if>
+
+                    <div id="couponListDiv" class="couponList">
+                        <!--coupon-->
+<!-- 
+<div class="couponBox">
+	<div class="conView">
+		<ul>
+			<li class="maintenance">휠 얼라이먼트<span>1</span>회</li>
+			<li><a href="/bbs/o2oSearchList">넥센 직영점 찾기 <span class="goView"></span></a></li>
+			<li>2021.01.07~2021.01.14</li>
+			<li>(8일 남음)</li>
+		</ul>
+	</div>
+	<div class="conSale maintenance">
+		<div class="titName">
+			<img src="../img/mypage/coupon_tit_03.png" alt="차량정비">
+		</div>
+		<a href="javascript:void(0);" ></a>
+	</div>
+</div>
+-->
+
+                        <!--coupon-->
+                    </div>
+
+
+	                <!--paging-->
+					<div class="paging" id="paging" style="display:none;"></div>
+	                <!--paging-->
+
+            </div>
+
+		</div>
+		<!--subContentsWrap-->
+
+		<!-- layerPopup // 적용 상품보기 , 적용 카테고리보기 -->
+		<div class="popupWrap type06 md-modal" id="detailPop"> <!-- md-show -->
+
+	    </div>
+		<div class="md-overlay"></div>
+		<!-- layerPopup // -->
+<form id="nonCustInfoFrm" name="nonCustInfoFrm" method="post" >
+	<input type="hidden" name="ordNo"  	id="ordNo" value="${ordNo}"/>     <!--  주문번호  -->
+	<input type="hidden" name="custNm"  id="custNm" value="${custNm}"/>		<!-- 비회원 이름 -->
+	<input type="hidden" name="mobNo"  	id="mobNo" value="${mobNo}"/>		<!-- 비회원 휴대폰 번호 -->
+</form>
+	<script type="text/javascript" src="/js/lib/classie.js"></script>
+    <script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<script type="text/javascript">
+	var evManager = {
+		loginName : "${userVo.getUsrName()}"
+		,
+		officerCd : "${userVo.getOfficerCd()}"
+		,
+		//조회 여부
+		searchYn : false
+		,
+		//필터 선택 수
+		filterCnt : 0
+		,
+		//lifeStyle
+		lifeStyleArray : new Array()
+		,
+		lifeStyleNmArray : new Array()
+		,
+		//검색 여부
+		searchYn : false
+		,
+		niceGradeCd : new Array()
+		,
+		init : function(){
+			ComUtil.loading();
+
+			//list 조회
+			var pUrl = "/mypage/selectMyCouponList";
+			var pSendData = {};
+			cfnSendRequest(pUrl,pSendData,'selectMyCouponList');
+		}
+		,
+		//상품 리스트 호출 - 페이지용
+		selectMyCouponList : function (p) {
+			var pUrl = "/mypage/selectMyCouponList";
+			var pSendData = {};
+			cfnSendRequest(pUrl,pSendData,'selectMyCouponList');
+		}//쿠폰 다운로드
+		,selectMyCpnDownLoad : function(p){
+			//console.log("selectMyCpnDownLoad");
+			var pUrl = "/mypage/selectMyCpnDownLoad";
+			var pSendData = p;
+			cfnSendRequest(pUrl,pSendData,'selectMyCpnDownLoad');
+		}
+		
+	}
+
+	/* ################################# AJAX CALLBACK ARAR #################################  */
+	/*
+	 * 리퀘스트 후처리 함수 - SUCCESS
+	 */
+	function cfnRequestSuccessCallback(callback, result) {
+		//console.log("result.rtnCode : " + result.rtnCode);
+		//console.log("result.rtnMsg : " + result.rtnMsg);
+
+		if(result.rtnCode == 0) {
+			if(callback == 'selectMyCouponList') {
+				ComUtil.unloading();
+
+				var data = result.selectMyCouponList;
+				
+				fnCouponListHtml(data);
+				
+			} else if(callback == 'selectMyCouponDispList') {
+				var itemList = result.selectMyCouponDispList;
+				var categoryHtml = "";
+
+				categoryHtml += "<header>";
+				categoryHtml += "	<h2>적용 상품보기	<a href='javascript:fn_closePopup();' class='layPopClose md-close'></a></h2>";
+				categoryHtml += "</header>";
+
+				categoryHtml += "<div class='popContents'>";
+				categoryHtml += "	<div class='cApply'>";
+				categoryHtml += "		<ul>";
+				if(itemList != null && itemList.length > 0) {
+					for(var i=0; i<itemList.length; i++) {
+						categoryHtml += "			<li>" + itemList[i].ptrnNm + "</li>";
+					}
+				} else {
+					categoryHtml += "			<li>적용 가능 품목 없음</li>";
+				}
+				categoryHtml += "       </ul>";
+				categoryHtml += "	</div>";
+				categoryHtml += "</div>";
+
+				$("#detailPop").html(categoryHtml);
+			} else if(callback == 'selectMyCouponDispList') {
+				ComUtil.unloading();
+				var data = result.selectMyCouponList;
+				fnCouponListHtml(data);
+			} else if(callback == 'selectMyCpnDownLoad') {
+				ComUtil.unloading();
+				var data = result.selectMyCouponList;
+				if(data != null && data.length > 0 ) {
+					ComUtil.alert("정상적으로 쿠폰다운 완료 했습니다. ");
+				}
+				fnCouponListHtml(data);
+			} else if(callback == 'selectNonCustCouponList') {
+				ComUtil.unloading();
+				var data = result.selectNonCustCouponList;
+				fnCouponListHtml(data);
+			}
+		}else if(result.rtnCode == -1){
+			ComUtil.alert(result.rtnMsg);
+			return false;
+		}
+	}
+	
+	function fnCouponListHtml (data){
+		
+		if(data != null && data.length > 0 ) {
+			$("#couponListDiv").html("");
+			 
+			//화면 생성
+			var listHtml = "";
+
+			for(var i=0; i<data.length; i++){
+				if(data[i].dcSeCd == "10") {//상품할인
+					listHtml += "<div class='couponBox'>";
+					listHtml += "	<div class='conView'>";
+					listHtml += "		<ul>";
+					if(data[i].dcUnitCd == "10") {//정액
+						listHtml += "			<li>&#92; <span>" + data[i].dcUnitVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span> 할인</li>";
+					} else if(data[i].dcUnitCd == "20"){//정율
+						listHtml += "			<li><span>" + data[i].dcUnitVal + "%</span> 할인</li>";
+					}
+					listHtml += "			<li>" + data[i].cpnNm + "</li>";
+					listHtml += "			<li>" + data[i].startDe.substring(0,4) + "." + data[i].startDe.substring(4,6) + "." + data[i].startDe.substring(6,8) + "~" + data[i].endDe.substring(0,4) + "." + data[i].endDe.substring(4,6) + "." + data[i].endDe.substring(6,8) + "</li>";
+					listHtml += "			<li>(" + data[i].remainDay + "일 남음)</li>";
+					listHtml += "		</ul>";
+					listHtml += "	</div>";
+
+					listHtml += "	<div class='conSale'>";
+					listHtml += "		<div class='titName'>";
+					listHtml += "			<img src='../img/mypage/coupon_tit.png' alt='쿠폰상품할인'/>";
+					listHtml += "		</div>";
+					if(data[i].dcCndSeCd == "10") {//전시상품
+//							listHtml += "		<a href='javascript:fn_ItemPopup(\""+data[i].dpPrNo+"\");'>";
+//							listHtml += "		<a href='javascript:fn_ItemPopup(\""+data[i].itemCd+"\");'>";
+						listHtml += "		<a href='javascript:fn_ItemPopup(\""+data[i].cpnPlcNo+"\");'>";
+						listHtml += "			<img src='../img/mypage/coupon_btn.png' alt='적용상품보기'/>";
+						listHtml += "		</a>";
+					} else if(data[i].dcCndSeCd == "20") {//품목유형
+						listHtml += "		<a href='javascript:fn_CategoryPopup("+JSON.stringify(data[i])+");'>";
+						//listHtml += "			<img src='../img/mypage/coupon_btn.png' alt='적용카테고리보기'/>";
+						listHtml += "		</a>";
+					}
+					
+					// 조건 안내 문구 있을 경우 추가
+					if(data[i].condText !== null) {
+						listHtml += "<h3 class='type16'>"+data[i].condText+"</h3>";
+					}
+										
+					listHtml += "	</div>";
+					listHtml += "</div>";
+				}
+
+				if(data[i].dcSeCd == "20") {//결제할인
+					listHtml += "<div class='couponBox'>";
+					listHtml += "	<div class='conView'>";
+					listHtml += "		<ul>";
+					if(data[i].dcUnitCd == "10") {//정액
+						listHtml += "			<li class='pay'>&#92; <span>" + data[i].dcUnitVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span> 할인</li>";
+					} else if(data[i].dcUnitCd == "20"){//정율
+						if(data[i].cpnPlcNo == "CP0000000000081") {
+							listHtml += "			<li class='pay'><span>5%</span> 할인</li>";
+						} else {
+							listHtml += "			<li class='pay'><span>" + data[i].dcUnitVal + "%</span> 할인</li>";
+						}
+					}
+					listHtml += "			<li>" + data[i].cpnNm + "</li>";
+					listHtml += "			<li>" + data[i].startDe.substring(0,4) + "." + data[i].startDe.substring(4,6) + "." + data[i].startDe.substring(6,8) + "~" + data[i].endDe.substring(0,4) + "." + data[i].endDe.substring(4,6) + "." + data[i].endDe.substring(6,8) + "</li>";
+					listHtml += "			<li>(" + data[i].remainDay + "일 남음)</li>";
+					listHtml += "		</ul>";
+					listHtml += "	</div>";
+
+					listHtml += "	<div class='conSale payment'>";
+					listHtml += "		<div class='titName'>";
+					listHtml += "			<img src='../img/mypage/coupon_tit_02.png' alt='쿠폰결제할인'/>";
+					listHtml += "		</div>";
+					if(data[i].dcCndSeCd == "10") {//전시상품
+//							listHtml += "		<a href='javascript:fn_ItemPopup(\""+data[i].dpPrNo+"\");'>";
+//							listHtml += "		<a href='javascript:fn_ItemPopup(\""+data[i].itemCd+"\");'>";
+						listHtml += "		<a href='javascript:fn_ItemPopup(\""+data[i].cpnPlcNo+"\");'>";
+						listHtml += "			<img src='../img/mypage/coupon_btn.png' alt='적용상품보기'/>";
+						listHtml += "		</a>";
+					} else if(data[i].dcCndSeCd == "20") {//품목유형
+						listHtml += "		<a href='javascript:void(0);' onclick='fn_CategoryPopup("+JSON.stringify(data[i])+");'>";
+						//listHtml += "			<img src='../img/mypage/coupon_btn.png' alt='적용카테고리보기'/>";
+						listHtml += "		</a>";
+					}
+					
+					// 조건 안내 문구 있을 경우 추가
+					if(data[i].condText !== null) {
+						listHtml += "<h3 class='type16'>"+data[i].condText+"</h3>";
+					}
+					
+					listHtml += "	</div>";
+					listHtml += "</div>";
+				}
+				if(data[i].dcSeCd == "30") { //차량정비
+					listHtml += "<div class='couponBox'>";
+					listHtml += "	<div class='conView'>";
+					listHtml += "		<ul>";
+					listHtml += "			<li class='maintenance'>" + data[i].cpnNm + "</li>";
+					listHtml += "			<li><a href='/bbs/o2oSearchList' target='_self'>넥센 직영점 찾기 <span class='goView'></span></a></li>";
+					//listHtml += "			<li>쿠폰번호: " + data[i].cpnNo + "</li>";
+					listHtml += "			<li>" + data[i].startDe.substring(0,4) + "." + data[i].startDe.substring(4,6) + "." + data[i].startDe.substring(6,8) + "~" + data[i].endDe.substring(0,4) + "." + data[i].endDe.substring(4,6) + "." + data[i].endDe.substring(6,8) + "</li>";
+					listHtml += "			<li>(" + data[i].remainDay + "일 남음)</li>";
+					listHtml += "		</ul>";
+					listHtml += "	</div>";
+					listHtml += "	<div class='conSale maintenance'>";
+					listHtml += "		<div class='titName'>";
+					listHtml += "			<img src='../img/mypage/coupon_tit_03.png' alt='차량정비'>";
+					listHtml += "			<ul>";
+					listHtml += "				<li style='margin-top:50px;margin-bottom:7px;'>쿠폰번호</li>";
+					listHtml += "				<li>" + data[i].cpnNo + "</li>";
+					listHtml += "			</ul>";
+					listHtml += "		</div>";
+					listHtml += "	</div>";
+					listHtml += "</div>";
+				}
+			}
+			$("#couponListDiv").append(listHtml);
+		} else {
+			var listHtml = "";
+			listHtml += "<div class='noDataArea type02'><p>쿠폰이 없습니다.</p></div>";
+
+			$("#couponListDiv").html(listHtml);
+		}
+	}
+
+	/*
+	 * 리퀘스트 후처리 함수 - ERROR
+	 */
+	function cfnRequestErrorCallback(callback, status) {
+
+		if(callback == 'selectMyCouponList'){
+			alert(status);
+		} else if(callback == 'selectMyCouponList'){
+			alert(status);
+		}
+
+	}
+	/* ################################# AJAX CALLBACK ARAR #################################  */
+
+	//적용 카테고리 팝업
+	function fn_CategoryPopup(pVal) {
+		$("#detailPop").addClass("md-show");
+		$("#detailPop").html("");
+
+		var categoryHtml = "";
+
+		categoryHtml += "<header>";
+		categoryHtml += "	<h2>적용 카테고리보기	<a href='javascript:fn_closePopup();' class='layPopClose md-close'></a></h2>";
+		categoryHtml += "</header>";
+
+		categoryHtml += "<div class='popContents'>";
+		categoryHtml += "	<div class='cApply'>";
+		categoryHtml += "		<ul>";
+		categoryHtml += "			<li>";
+		categoryHtml += "				<span>"+ValidUtil.nvl(pVal.itemGrpNm,"")+"</span>";
+		if(!ValidUtil.isEmpty(pVal.itemTyCd)) {
+			categoryHtml += "		   		&gt; <span>"+pVal.itemTyNm+"</span>";
+		}
+		if(!ValidUtil.isEmpty(pVal.itemTyDtlCd)) {
+			categoryHtml += "		   		&gt; <span>"+pVal.itemTyDtlNm+"</span>";
+		}
+		categoryHtml += "			</li>";
+		categoryHtml += "       </ul>";
+		categoryHtml += "	</div>";
+		categoryHtml += "</div>";
+
+		$("#detailPop").html(categoryHtml);
+	}
+
+	//적용 상품 팝업
+	function fn_ItemPopup(pVal) {
+		$("#detailPop").addClass("md-show");
+		$("#detailPop").html("");
+
+		getDispList(pVal);
+	}
+
+	//전시품목 가져오기
+	function getDispList(pDpPrNo) {
+		var resultVal = {};
+		var param = {};
+// 		param["dpPrNo"] = pDpPrNo;
+// 		param["itemCd"] = pDpPrNo;
+		param["cpnPlcNo"] = pDpPrNo;
+
+		cfnSendRequest("/mypage/selectMyCouponDispList",param,'selectMyCouponDispList');
+
+		return resultVal;
+	}
+
+	function fn_closePopup() {
+		$("#detailPop").removeClass("md-show");
+	}
+
+	$( document ).ready(function() {
+		if(!ValidUtil.isEmpty($("#mobNo").val())) {//비회원
+			var mobNo = $("#mobNo").val();
+			var custNm = $("#custNm").val();
+			var ordNo = $("#ordNo").val();
+			
+			var pUrl = "/mypage/selectNonCustCouponList";
+			var pSendData = {"mobNo": mobNo, "custNm" : custNm, "ordNo" : ordNo };
+			cfnSendRequest(pUrl,pSendData,'selectNonCustCouponList');
+		} else {
+			//init 함수 호출
+			evManager.init();
+		}
+		
+		$("#cpnPlcNo").bind("keydown",function(){
+			var plcNo = $(this).val();
+			plcNo = fnChkValid(plcNo);
+			$(this).val(plcNo);
+		});
+		
+		$("#cpnPlcNo").bind("keyup",function(){
+			var plcNo = $(this).val();
+			plcNo = fnChkValid(plcNo);
+			$(this).val(plcNo);
+		});
+		
+		fnChkValid = function(plcNo){
+			var strLen = plcNo.length;
+			var strTmp = plcNo.substr(strLen-1 , strLen);
+			
+			if(!ValidUtil.isOnlyNumAlphabet(strTmp)){
+				plcNo = plcNo.replace(strTmp,"");
+			}
+			return plcNo.toUpperCase();
+		}
+		
+		//쿠폰 다운로드 추가(2020.11.19)
+		$("#btnCpnReg").on("click",function(){
+			var cpnPlcNo = $("#cpnPlcNo").val();
+			if(ValidUtil.replaceChar(cpnPlcNo," ","") == ""){
+				ComUtil.alert("쿠폰번호를 입력해 주세요.");
+				return false;
+			}
+			if(!ValidUtil.isOnlyNumAlphabet(cpnPlcNo)){
+				ComUtil.alert("알파벳과 숫자만 입력해 주세요.");
+				return false;
+			}
+			if(cpnPlcNo.length != 5){
+				ComUtil.alert("쿠폰번호는 5자리 입니다. 다시 확인후 주세요.");
+				return false;
+			}
+			
+			var pSendData = {"cpnPlcNo": cpnPlcNo }
+			
+			evManager.selectMyCpnDownLoad(pSendData);
+		});
+		
+
+	});
+</script>
+

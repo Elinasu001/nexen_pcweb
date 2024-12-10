@@ -1,0 +1,129 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+   <script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<!--subContentsWrap-->
+        <div class="subContentsWrap"> 
+                <div class="subContents">
+                    
+                    <!-- 공지사항 -->
+                    <table class="tbl view mt80">
+                        <caption>공지사항 보기</caption>
+                        <colgroup>
+                            <col >
+                            <col style="width:100px">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <div class="title">
+                                        <p>안내</p>
+                                        <p class="f_ell w1000">${noticeDetailVo.getTitle()}</p>
+                                    </div>
+                                </th>
+                                <%--class="tCenter" --%>
+                                <th scope="col" id="nWritYmd"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <!-- <p id="nCont"></p> --> 
+                                   ${noticeDetailVo.nCont}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- 공지사항 -->
+                    
+                    <!-- 이전글 / 다음글 -->
+                    <table class="tbl view preNext" id="prePost">
+                        <caption>이전글 / 다음글</caption>
+                        <colgroup>
+                            <col style="width:150px">
+                            <col >                            
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="tLeft type02" >이전글</th>
+                                <td id ="preClick">
+                                    <span style="cursor : pointer">${noticePreVo.getTitle()}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th  scope="row" class="tLeft type02">다음글</th>
+                                <td id ="postClick">
+                                    <span style="cursor : pointer">${noticePostVo.getTitle()}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- 이전글 / 다음글 -->
+
+                    <div class="btnArea type01 center">
+                         <button id="goBackList" type="button" class="type01 center w387">목록</button>
+                    </div>
+            </div>
+
+		</div>
+		<!--subContentsWrap-->
+		
+<script type ="text/javascript">
+var bdojSeq = "${noticeDetailVo.getBdojSeq()}";
+var prebdojSeq= "${noticePreVo.getBdojSeq()}";
+var postbdojSeq= "${noticePostVo.getBdojSeq()}";
+
+
+
+function initPage() {
+	$("#nWritYmd").text("${noticeDetailVo.getWritYmd()}");
+}
+
+/*
+ * 리퀘스트 후처리 함수 - SUCCESS
+ */
+function cfnRequestSuccessCallback(callback, result) {
+	console.log("result.rtnCode : " + result.rtnCode);
+	console.log("result.rtnMsg : " + result.rtnMsg);
+	
+}
+
+
+$( document ).ready(function() {
+	
+	$("#goBackList").on("click", function() {
+		location.href = '/bbs/noticeList';
+	});
+	
+	if(!ValidUtil.isEmpty(prebdojSeq)){
+		$("#preClick").on("click", function() {
+			//var preBdojSeq = "${noticePreVo.getBdojSeq()}";
+			
+			location.href = '/bbs/noticeDetail?bdojSeq='+prebdojSeq;
+		});
+	}
+	if(!ValidUtil.isEmpty(postbdojSeq)){
+		$("#postClick").on("click", function() {
+			//var postBdojSeq = "${noticePostVo.getBdojSeq()}";
+			
+			location.href = '/bbs/noticeDetail?bdojSeq='+postbdojSeq;
+		});
+	} 
+	
+	
+	
+	initPage();
+	
+	
+});
+
+</script>

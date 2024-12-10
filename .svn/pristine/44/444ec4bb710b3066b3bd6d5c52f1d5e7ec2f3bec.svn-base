@@ -1,0 +1,113 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+   <script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<!--subContentsWrap-->
+        <div class="subContentsWrap"> 
+            <div class="subContents">
+                <table class="tbl view mt80">
+                    <caption>뉴스 보기</caption>
+                    <colgroup>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <div class="title">
+                                    <p>운전수칙</p>
+                                    <p class="f_ell w1000">${tireTipDetailVo.getTitle()}</p>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                            <img src="<%=AppContext.getString(WebConstants.FileDir.IMGFILE_RENTAL_URL)%>/atfile_cms/${tireTipDetailVo.atflPathNm}" alt=""/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- 이전글 / 다음글-->
+                <table class="tbl view preNext">
+                    <caption>이전글 / 다음글</caption>
+                    <colgroup>
+                        <col style="width:150px">
+                        <col>                            
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="tLeft type02">이전글</th>
+                            <td id ="preClick">
+                                <a style="cursor : pointer">${tireTipPreVo.getTitle()}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="tLeft type02">다음글</th>
+                            <td id ="postClick">
+                                <a style="cursor : pointer">${tireTipPostVo.getTitle()}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- 이전글 / 다음글-->
+                
+                <div class="btnArea type01 center">
+                     <button type="button" id="goBackList" class="type01 center w387">목록</button>
+                </div>
+            </div>
+            <!-- subContents-->
+		</div>
+		<!--subContentsWrap-->
+		
+<script type ="text/javascript">
+var bdojSeq = "${tireTipDetailVo.getBdojSeq()}";
+var prebdojSeq= "${tireTipPreVo.getBdojSeq()}";
+var postbdojSeq= "${tireTipPostVo.getBdojSeq()}";
+
+
+
+/*
+ * 리퀘스트 후처리 함수 - SUCCESS
+ */
+function cfnRequestSuccessCallback(callback, result) {
+	console.log("result.rtnCode : " + result.rtnCode);
+	console.log("result.rtnMsg : " + result.rtnMsg);
+	
+}
+
+
+$( document ).ready(function() {
+	
+	$("#goBackList").on("click", function() {
+		location.href = '/news/tireTipList';
+	});
+	
+	if(!ValidUtil.isEmpty(prebdojSeq)){
+		$("#preClick").on("click", function() {
+			
+			location.href = '/news/tireTipDetail?bdojSeq='+prebdojSeq;
+		});
+	}
+	if(!ValidUtil.isEmpty(postbdojSeq)){
+		$("#postClick").on("click", function() {
+			
+			location.href = '/news/tireTipDetail?bdojSeq='+postbdojSeq;
+		});
+	} 
+	
+	
+	
+});
+
+</script>		

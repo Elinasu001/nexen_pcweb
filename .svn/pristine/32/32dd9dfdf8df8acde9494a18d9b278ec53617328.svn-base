@@ -1,0 +1,254 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+<%
+	request.setCharacterEncoding ( "euc-kr" ) ;
+%>
+<!DOCTYPE html>
+
+<script type="text/javascript">
+		/****************************************************************/
+        /* m_Completepayment  설명                                      */
+        /****************************************************************/
+        /* 인증완료시 재귀 함수                                         */
+        /* 해당 함수명은 절대 변경하면 안됩니다.                        */
+        /* 해당 함수의 위치는 payplus.js 보다먼저 선언되어여 합니다.    */
+        /* Web 방식의 경우 리턴 값이 form 으로 넘어옴                   */
+        /****************************************************************/
+		function m_Completepayment( FormOrJson, closeEvent )
+        {
+            var frm = document.order_info;
+
+            /********************************************************************/
+            /* FormOrJson은 가맹점 임의 활용 금지                               */
+            /* frm 값에 FormOrJson 값이 설정 됨 frm 값으로 활용 하셔야 됩니다.  */
+            /* FormOrJson 값을 활용 하시려면 기술지원팀으로 문의바랍니다.       */
+            /********************************************************************/
+            GetField( frm, FormOrJson );
+
+
+            if( frm.res_cd.value == "0000" )
+            {
+			    //alert("결제 승인 요청 전,\n\n반드시 결제창에서 고객님이 결제 인증 완료 후\n\n리턴 받은 ordr_chk 와 업체 측 주문정보를\n\n다시 한번 검증 후 결제 승인 요청하시기 바랍니다."); //업체 연동 시 필수 확인 사항.
+                /*
+                    가맹점 리턴값 처리 영역
+                */
+
+                frm.submit();
+            }
+            else
+            {
+                alert( "[" + frm.res_cd.value + "] " + frm.res_msg.value );
+                $("#loadingWrap", opener.document).hide();
+                window.self.close();
+                closeEvent();
+            }
+        }
+		
+		/*에스크로 결제시 필요한 장바구니*/
+        function create_goodInfo()
+        {
+            var chr30 = String.fromCharCode(30);	// ASCII 코드값 30
+            var chr31 = String.fromCharCode(31);	// ASCII 코드값 31
+
+            var ordr_idxx = document.order_info.Pordr_idxx.value;
+            var good_name = document.order_info.Pgood_name.value;
+            var good_cntx = document.order_info.Pquantity.value;
+            var good_amtx = document.order_info.Pgood_mny.value;
+            
+            var item_cd_arr = $("[name='itemCdArr']").val().split(',');
+            var item_cnt_arr = $("[name='itemCntArr']").val().split(',');
+            var item_cnt_tot = 0;
+            
+            //console.log(item_cd_arr.length);
+            //console.log(item_cnt_arr);
+            //console.log(item_cnt_arr.length);
+            /*
+            	seq : 상품개수 일련번호
+            	ordr_numb : 상품주문번호
+            	good_name : 상품이름
+            	good_cntx : 상품수량
+            	good_amtx : 상품금액
+            	
+            	Sample)
+                var good_info = "seq=1" + chr31 + "ordr_numb=20060310_0001" + chr31 + "good_name=양말" + chr31 + "good_cntx=2" + chr31 + "good_amtx=1000" + chr30 +
+                "seq=2" + chr31 + "ordr_numb=20060310_0001" + chr31 + "good_name=신발" + chr31 + "good_cntx=1" + chr31 + "good_amtx=1500" + chr30 +
+                "seq=3" + chr31 + "ordr_numb=20060310_0001" + chr31 + "good_name=바지" + chr31 + "good_cntx=1" + chr31 + "good_amtx=1000";
+            */
+            if (item_cd_arr.length > 1) {
+	            good_name = good_name + "외" + item_cd_arr.length;
+            }
+            if (item_cnt_arr.length > 0) {
+	            for(var i=0; i < item_cnt_arr.length; i++) {
+	            	item_cnt_tot = item_cnt_tot + Number(item_cnt_arr[i]);
+	            }            	
+            }
+            
+            var good_info = "seq=1" + chr31 + "ordr_numb="+ ordr_idxx + chr31 + "good_name=" + good_name + chr31 + "good_cntx=" + item_cnt_tot + chr31 + "good_amtx=" + good_amtx;
+          
+            console.log("good_info : " + good_info);
+            
+          	document.order_info.good_info.value = good_info;//장바구니 정보
+          
+          	document.order_info.deli_term.value = "03"; //배송 소요일
+//           	document.order_info.bask_cntx.value = document.order_info.Pquantity.value; //장바구니 개수
+          	document.order_info.bask_cntx.value = "1"; //장바구니 개수 품목개수와 관계없이 장바구니 품목이 1개이기때문에
+          	document.order_info.rcvr_name.value = document.order_info.buyr_name.value; //이름
+          	document.order_info.rcvr_tel1.value = document.order_info.buyr_tel1.value; //전번
+          	document.order_info.rcvr_tel2.value = document.order_info.buyr_tel2.value; //전번
+          	document.order_info.rcvr_add1.value = document.order_info.iplAddr.value; //주소1
+          	document.order_info.rcvr_add2.value = document.order_info.iplDtlAddr.value; //주소2
+          	document.order_info.rcvr_zipx.value = document.order_info.iplZip.value; //우편번호
+          	document.order_info.rcvr_mail.value = document.order_info.buyr_mail.value; //이메일주소
+          
+        }
+		
+</script>
+
+<!-- Kcp Javascript source Include
+	테스트 시 : src="https://testpay.kcp.co.kr/plugin/payplus_web.jsp"
+	실결제 시 : src="https://pay.kcp.co.kr/plugin/payplus_web.jsp"
+-->
+<script type="text/javascript" src="<%=AppContext.getString(CoreConstants.KCP_CONF_JS_URL)%>"></script>
+
+<form name="order_info" id="order_info" method="post" action="/order/getKcpPaymentResult" >
+
+<input type="hidden" name="pay_method" 	value=""/><!-- 결제 수단 정보 설정(신용카드 : 100000000000, 계좌이체 : 010000000000) 해당하는 값을 모두 더해주면 됩니다-->
+<input type="hidden" name="req_tx"  	value="pay" /><!-- 승인(pay)/취소,매입(mod)-->
+<input type="hidden" name="site_cd" 	value="<%=AppContext.getString(CoreConstants.KCP_SITE_CD)%>"/>
+<input type="hidden" name="site_name" 	value="${siteName}"/>
+<input type="hidden" name="quotaopt"    value="<%=AppContext.getString(CoreConstants.KCP_QUOTAOPT)%>"/><!-- 할부옵션 : 표준웹에서 카드결제시 최대로 표시할 할부개월 수를 설정합니다.(0 ~ 18 까지 설정 가능) 50000원 미만의 금액은 일시불로만 표기됩니다-->
+<input type="hidden" name="currency"    value="<%=AppContext.getString(CoreConstants.KCP_CURRENCY)%>"/><!-- 필수 항목 : 결제 금액/화폐단위 -->
+
+<!-- 표준웹 설정 정보입니다(변경 불가) START -->
+<input type="hidden" name="module_type" value="<%=AppContext.getString(CoreConstants.KCP_MODULE_TYPE)%>"/>
+<input type='hidden' name='skin_indx' 	value='2'/>
+
+<!-- 에스크로 설정 파라미터 -->
+<input type="hidden" name="escw_used" value="Y"/> <!-- 에스크로 사용 여부 : 반드시 Y 로 설정 -->
+<input type="hidden" name="pay_mod" value="Y"/> <!-- 에스크로 결제처리 모드 : 에스크로: Y, 일반: N, KCP 설정 조건: O  -->
+<input type="hidden" name="deli_term" value=""/> <!-- 배송 소요일 : 예상 배송 소요일을 입력 -->
+<input type="hidden" name="bask_cntx" value=""/><!-- 장바구니 상품 개수 : 장바구니에 담겨있는 상품의 개수를 입력(good_info의 seq값 참조) -->
+<input type="hidden" name="good_info" value=""/> <!-- 장바구니 상품 상세 정보 (자바 스크립트 create_goodInfo() 참조) -->
+<input type="hidden" name="rcvr_name" value=""/>
+<input type="hidden" name="rcvr_tel1" value=""/>
+<input type="hidden" name="rcvr_tel2" value=""/>
+<input type="hidden" name="rcvr_mail" value="" />
+<input type="hidden" name="rcvr_zipx" value=""/>
+<input type="hidden" name="rcvr_add1" value=""/>
+<input type="hidden" name="rcvr_add2" value=""/>
+<!-- 에스크로 설정 파라미터 끝-->
+
+<!--
+      ※ 필 수
+          필수 항목 : 표준웹에서 값을 설정하는 부분으로 반드시 포함되어야 합니다
+          값을 설정하지 마십시오
+-->
+<input type="hidden" name="res_cd"          value=""/>
+<input type="hidden" name="res_msg"         value=""/>
+<input type="hidden" name="enc_info"        value=""/>
+<input type="hidden" name="enc_data"        value=""/>
+<input type="hidden" name="ret_pay_method"  value=""/>
+<input type="hidden" name="tran_cd"         value=""/>
+<input type="hidden" name="use_pay_method"  value=""/>
+
+<!-- 주문정보 검증 관련 정보 : 표준웹 에서 설정하는 정보입니다 -->
+<input type="hidden" name="ordr_chk"        value=""/>
+
+   <!--  현금영수증 관련 정보 : 표준웹 에서 설정하는 정보입니다 -->
+<input type="hidden" name="cash_yn"         value=""/>
+<input type="hidden" name="cash_tr_code"    value=""/>
+<input type="hidden" name="cash_id_info"    value=""/>
+
+<!-- 2012년 8월 18일 전자상거래법 개정 관련 설정 부분 -->
+<!-- 제공 기간 설정 0:일회성 1:기간설정(ex 1:2012010120120131)  -->
+<input type="hidden" name="good_expr" value="0">
+
+<!-- 표준웹 설정 정보입니다(변경 불가) END -->
+
+
+<!-- 옵션 - 결제에 필요한 추가 옵션 정보 START -->
+
+<input type="hidden" name="kcp_pay_title"   value="${payTitle}"/>
+<input type="hidden" name="disp_tax_yn"   value="Y"/>
+
+<!-- 옵션 - 결제에 필요한 추가 옵션 정보 END -->
+
+
+<!-- 주문정보 부모창에서 받아와야 함 START-->
+<input type="hidden" name="ordr_idxx" class="w200" value="" maxlength="40"/>
+<input type="hidden" name="good_name" class="w100" value=""/>
+<input type="hidden" name="cust_no"   class="w100" value=""/>
+<input type="hidden" name="good_mny"  class="w100" value="" maxlength="9"/>
+<input type="hidden" name="buyr_name" class="w100" value=""/>
+<input type="hidden" name="buyr_mail" class="w200" value="" maxlength="30" />
+<input type="hidden" name="buyr_tel1" class="w100" value=""/>
+<input type="hidden" name="buyr_tel2" class="w100" value=""/>
+<input type="hidden" name="itemCdArr" class="w100" value=""/>
+<input type="hidden" name="itemCntArr" class="w100" value=""/>
+
+<!-- 주문정보 END-->
+</form>
+
+<script type="text/javascript">
+
+$( document ).ready(function() {
+
+	//부모 폼 복사
+	var oHtml = document.getElementById("order_info").innerHTML;
+	$("#frm input", opener.document).each(function(){
+		var dom = $("#"+$(this).attr("id"), opener.document).clone();
+		if(dom != "undefined" && dom != null && dom.length > 0){
+			oHtml += dom[0].outerHTML;
+		}
+	});
+	document.getElementById("order_info").innerHTML = oHtml;
+
+
+	$("[name='pay_method']").val(opener.document.getElementById("Ppay_method").value);
+	$("[name='ordr_idxx']").val(opener.document.getElementById("Pordr_idxx").value);
+	$("[name='good_name']").val(opener.document.getElementById("Pgood_name").value);
+	$("[name='good_mny']").val(opener.document.getElementById("Pgood_mny").value);
+	$("[name='buyr_name']").val(opener.document.getElementById("Pbuyr_name").value);
+	$("[name='buyr_mail']").val(opener.document.getElementById("Pbuyr_mail").value);
+	$("[name='buyr_tel1']").val(opener.document.getElementById("Pbuyr_tel1").value);
+	$("[name='buyr_tel2']").val(opener.document.getElementById("Pbuyr_tel2").value);
+	$("[name='cust_no']").val(opener.document.getElementById("Pcust_no").value);
+
+	$("[name='itemCdArr']").val(opener.document.getElementById("itemCdArr").value);
+	$("[name='itemCntArr']").val(opener.document.getElementById("itemCntArr").value);
+	
+	create_goodInfo(); //장바구니 상세정보 담기
+	
+	 var frm = document.order_info;
+
+	 try
+     {
+         KCP_Pay_Execute( frm );
+     }
+     catch (e)
+     {
+    	 /* IE 에서 결제 정상종료시 throw로 스크립트 종료 */
+     }
+});
+
+// 결제 중 새로고침 방지 샘플 스크립트
+function noRefresh()
+{
+    /* CTRL + N키 막음. */
+    if ((event.keyCode == 78) && (event.ctrlKey == true))
+    {
+        event.keyCode = 0;
+        return false;
+    }
+    /* F5 번키 막음. */
+    if(event.keyCode == 116)
+    {
+        event.keyCode = 0;
+        return false;
+    }
+}
+document.onkeydown = noRefresh ;
+
+</script>

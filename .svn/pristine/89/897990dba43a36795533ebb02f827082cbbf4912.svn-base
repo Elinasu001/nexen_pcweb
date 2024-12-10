@@ -1,0 +1,96 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+			<div class="subContents type02">
+				<div class="titleArea type02">
+					<h2 class="type01">
+                        <span id="msg"> </span>
+                    </h2>
+				</div>
+
+				<!--memberWrap-->
+				<div class="memberBoxWrap type02">
+					<!-- 사업자 -->
+					<div class="titleDesc">
+						<h3 class="type04">이용에 불편을 드려 죄송합니다. </h3>
+
+						<h3 id="cont" class="type15">
+							
+						</h3>
+					</div>
+					<!-- 사업자 -->
+
+					<div class="btnArea type03">
+						<button type="button" class="type01 w400" onclick="javascript:location.href='/main';">메인으로 바로가기 <i class="ico01"></i></button>
+					</div>
+				</div>
+				<!--memberWrap-->
+			</div>
+
+			<div class="allBgWrap">
+				<div class="memberBg bg07"></div>
+			</div>
+		</div>
+		<!--subContentsWrap-->
+
+
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+		var code = "${rtnCode}";
+		var msg = "${rtnMsg}";
+		//var error = "${error}";
+
+		console.log("-------------------");
+		//console.log("${error}");
+		console.log("${error.MESSAGE}");
+// 		console.log("${error.EXCEPTION}");
+// 		console.log("${error.messageVo}");
+// 		console.log("${error.smpsntMsg}");
+// 		console.log(code);
+		console.log("-------------------");
+		
+		if(code == "-1") {
+			//$("#loadingWrap", window.opener.document).hide();
+			//window. self.close();
+			ComUtil.alert(msg);
+		}
+		//카카오, kcp 결제 실패
+		else if(code == "-100") {
+			//$("#loadingWrap", window.opener.document).hide();
+			//window.self.close();
+			//window.opener.parent.errorAlert(msg);
+			//ComUtil.alert(msg);
+			var msg1 = msg.substring(0,5);
+			if(msg1 == "ERROR") {
+				var msg2 = msg.slice(-5);
+				if(msg2 == "00067") {
+					$("#cont").html("[E" + msg2 + "] - 주문에 실패하였습니다. <br> 계속 발생 시 에러코드와 함께 고객센터로 문의 바랍니다.");
+				} else if (msg2 == "00065") {
+					$("#cont").html("[E" + msg2 + "] - 재고 일시 품절로 주문을 진행할 수 없습니다. <br> 계속 발생 시 에러코드와 함께 관리자에게 문의 바랍니다.");
+				} else {
+					$("#cont").html("[E" + msg2 + "] - 결제 시 문제가 발생하였습니다. <br> 계속 발생 시 에러코드와 함께 관리자에게 문의 바랍니다.");
+				}
+			} else {
+				$("#cont").html(msg);
+			}
+			$("#orderCpltDiv").hide();
+			$("#orderErrorDiv").show();
+		}
+		else {
+			var exceptionMsg = "${error.MESSAGE}";
+			if(!ValidUtil.isEmpty(exceptionMsg)) {
+				$("#cont").html(exceptionMsg);
+			}
+			$("#orderCpltDiv").hide();
+			$("#orderErrorDiv").show();
+		}
+
+	});
+
+
+</script>
+

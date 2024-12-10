@@ -1,0 +1,191 @@
+package com.nexwrms.pcweb.order.ctl;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public class PCISocketProcess {
+
+	protected Log logger = LogFactory.getLog(this.getClass());
+
+	private Socket sock;
+	private String host 			= "";
+	private int port 				= 0;
+	private String flag 			= "";
+	private DataInputStream 		in;
+	private DataOutputStream 		out;
+	private String message 			= "";
+	private byte[] head 			= new byte[2];
+	private String shead 			= "";
+	private byte[] body 			= null;
+	private String sbody 			= "";
+	private int sendDataLength 		= 0;
+	private String recvData 		= "";
+	private String strKey 	 		= "";
+	private String sendMsg			= "";
+	private String resultMsg		= "";
+	private String headerSize		= "";
+
+
+	public void init() {
+		try {
+			this.sock 	= new Socket(this.host, this.port);
+			this.in 	= new DataInputStream(new BufferedInputStream(this.sock.getInputStream()));
+			this.out 	= new DataOutputStream(new BufferedOutputStream(this.sock.getOutputStream()));
+		} catch (UnknownHostException e1) {
+			logger.debug("Unkown Host!!!");
+		} catch (Exception e) {
+			logger.debug("서버가 활성화되었는지 먼저 확인하십시요.!!!");
+		}
+
+		boolean flag = true;
+		flag = this.sendMsg();
+
+		if (!flag) {
+			logger.debug("#######################################################");
+			logger.debug("#      Sending DATA Error [데이타 전송실패] 				#");
+			logger.debug("#######################################################");
+		}
+
+		flag = this.receive();
+
+
+		if (!flag) {
+			logger.debug("Receiving DATA Error!!!");
+		}
+	}
+	synchronized public boolean sendMsg() {
+		boolean recv = true;
+		try {
+			this.out.write((this.headerSize + this.sendMsg).getBytes("KSC5601"));
+			this.out.flush();
+		}catch(Exception e) {
+			return false;
+		}
+		return recv;
+	}
+
+
+	// 서버로부터 데이터를 수신
+	synchronized public boolean receive() {
+		boolean flag = true;
+		String recvData = "";
+
+		try {
+			byte[] data = this.getSocketMessage();
+			byte[] decryptText = data;
+			System.out.write(decryptText);
+			logger.debug("\n");
+
+//			CharBuffer cbuffer = CharBuffer.wrap((new String(data, "KSC5601")).toCharArray());
+//			Charset utf8charset = Charset.forName("UTF-8");
+//			ByteBuffer bbuffer = utf8charset.encode(cbuffer);
+//			//변환된 UTF-8 문자열
+//			String tmpDecode = new String(bbuffer.array());
+
+			String byteToString = new String(decryptText, 0, decryptText.length);
+
+			logger.debug("========================================================================");
+			logger.debug(byteToString);
+			logger.debug("========================================================================");
+
+			this.resultMsg = byteToString;
+
+		} catch (IOException e) {
+			logger.debug("Read DATA Exception!!!");
+			e.printStackTrace();
+			return false;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+
+		try {
+			this.sock.close();
+		} catch (Exception e1) {
+		}
+
+		return flag;
+	}
+
+	public byte[] getSocketMessage() {
+
+		byte[] tempBuffer = new byte[1024];
+		byte[] buffer = null;
+		byte[] base64Buffer = null;
+
+		try {
+			int count = 0;
+
+			if (this.in.read(tempBuffer) != -1) {
+				for (int i = 0; i < tempBuffer.length; i++) {
+					if (tempBuffer[i] == 0x00)
+						break;
+					count++;
+				}
+			}
+			buffer = new byte[count];
+
+			for (int j = 0; j < count; j++) {
+				buffer[j] = tempBuffer[j];
+			}
+			base64Buffer = buffer;
+		} catch (Exception e) {
+			System.out.println("Socket Reading Exceptione!!1");
+			e.printStackTrace();
+		}
+		return base64Buffer;
+
+	}
+
+	private String convertAsciiToKor(String uni) {
+		String result = null;
+
+		try {
+			if (uni == null)
+				return null;
+			result = new String(uni.getBytes("8859_1"), "KSC5601");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return result;
+	}
+
+	public String getIRSafeKey(Map<String, Object> params) {
+		List list = null;
+		try {
+			list = (List)params.get("irDsList");
+
+			//String sendMsg = header + body + repeat01;
+
+			String sendMsg = "";
+
+			for(int i = 0; i<list.size(); i++) {
+				sendMsg += (String)list.get(i);
+			}
+
+
+			logger.debug("==============================================================");
+			logger.debug("입력 메시지 : [" + sendMsg + "]");
+			logger.debug("==============================================================");
+			this.host = (String)params.get("ip");
+			this.port = Integer.parseInt((String)params.get("port"));
+			this.headerSize = params.get("headerSize") == null ? "" : (String)params.get("headerSize") ;
+			this.sendMsg = sendMsg;
+			this.init();
+
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Usage : java  PCIClient  <server-ip>  <port>  <sample.txt> Y  <Key>");
+		}
+		return this.resultMsg;
+	}
+}

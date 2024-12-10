@@ -1,0 +1,469 @@
+package com.nexwrms.pcweb.support.ctl;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexwrms.cfo.com.cm.svc.SapRfcSvc;
+import com.nexwrms.cfo.com.cm.vo.UsrVo;
+import com.nexwrms.cfo.com.member.svc.MemberSvc;
+import com.nexwrms.cfo.com.order.svc.WmBoInnerInterfaceSvc;
+import com.nexwrms.cfo.com.tms.constants.TmsConstants;
+import com.nexwrms.cfo.com.tms.svc.TmsApiSvc;
+import com.nexwrms.cfo.com.tms.util.TmsApiUtil;
+import com.nexwrms.cfo.com.tms.vo.req.CenterInfo;
+import com.nexwrms.cfo.com.tms.vo.req.CenterRequest;
+import com.nexwrms.core.session.SessionInfoUtil;
+import com.nexwrms.core.util.SessionUtil;
+import com.nexwrms.core.util.StringUtil;
+import com.nexwrms.nextlevel.com.cm.svc.RentalFileService;
+import com.nexwrms.nextlevel.com.member.svc.RentalMemberSvc;
+
+
+/**
+ * @class Name : CounselCtl.java
+ * @Description : FO counsel
+ * @RequestMapping 
+ * @Modification Informat ion
+ * @
+ * @ Date            Author       Description
+ * @ -------------  -----------  -------------
+ * @ 2019. 11. 22.    박믿음		       최초 생성
+ * 
+ */
+@RequestMapping("/support")
+@Controller
+public class SupportCtl {
+	private static final Logger logger = LoggerFactory.getLogger(SupportCtl.class);
+	
+
+    @Autowired
+    private MemberSvc memberSvc;
+    
+    @Autowired
+    private RentalMemberSvc rentalMemberSvc;
+    
+    @Autowired
+    private SapRfcSvc sapRfcSvc;
+    
+    @Autowired
+    @Qualifier("com.nexwrms.cfo.com.order.svc.WmBoInnerInterfaceSvc")
+    private WmBoInnerInterfaceSvc wmBoInnerInterfaceSvc;
+    
+    @Autowired
+	@Qualifier("com.nexwrms.nextlevel.com.cm.svc.RentalFileService")
+	private RentalFileService rentalFileService;
+    
+    @Autowired
+    @Qualifier("com.nexwrms.cfo.com.tms.svc.TmsApiService")
+    private TmsApiSvc tmsApiService;
+	
+	/**
+	 * 마이페이지 > 문의 등록
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/counselRegister")
+	public String counselRegister(HttpServletRequest request, Model model) throws Exception {		
+		UsrVo userVo = SessionUtil.getAttribute(SessionInfoUtil.SESSION_INFO_USR_VO);
+		
+		if(userVo != null) {
+			model.addAttribute("userVo", userVo);
+		}
+		
+		return "/support/counselRegister";
+	}
+	
+	@RequestMapping("/test00")
+	public String test00(HttpServletRequest request, Model model) throws Exception {		
+		
+		List<Map<String, String>> paramList = new ArrayList<Map<String,String>>();
+		
+		String wrhCd = "0000110127";
+//		String wrhCd = "";
+		Map<String, String> map1 = new HashMap<String, String>();
+		map1.put("itemCd", "11575NX");
+		map1.put("reqQy", "1");
+		paramList.add(map1);
+		
+		Map<String, String> map2 = new HashMap<String, String>();
+		map2.put("itemCd", "2222222222222222");
+		map2.put("reqQy", "2");
+		paramList.add(map2);
+		
+		Map<String, String> map3 = new HashMap<String, String>();
+		map3.put("itemCd", "2222222222222222");
+		map3.put("reqQy11", "2");
+		paramList.add(map3);
+		
+		String result = sapRfcSvc.getSapCheckByOrderable(wrhCd, paramList);
+		
+		logger.debug("====================================================>");
+		logger.debug("======================================>" + result);
+		logger.debug("====================================================>");
+		
+		return "/support/index";
+	}
+	
+	@RequestMapping("/test11")
+	public String test11(HttpServletRequest request, Model model) throws Exception {		
+		
+		String ordNo = request.getParameter("ordNo");
+		String regUsrId = request.getParameter("id");
+		
+		wmBoInnerInterfaceSvc.savePoByOrder(ordNo, regUsrId);
+		
+		return "/support/index";
+	}
+	
+	@RequestMapping("/test22")
+	public String test22(HttpServletRequest request, Model model) throws Exception {		
+		
+		StringBuffer sb = new StringBuffer();
+		
+		String url = "C:/nexWrmsProject/workspace/nexwrms-cfo/src/main/java/com/nexwrms/cfo/com/tms/req.json";
+		File file = new File(url);
+		
+        FileReader filereader = new FileReader(file);
+        int singleCh = 0;
+        while((singleCh = filereader.read()) != -1){
+            sb.append((char)singleCh);
+        }
+        filereader.close();
+
+        String reqValue = sb.toString();		
+        
+        System.out.println("=======reqValue=======");
+        System.out.println(reqValue);
+        System.out.println("=======reqValue=======");
+		
+        TmsApiUtil api = new TmsApiUtil();
+        String resultValue = api.callApi(reqValue, TmsConstants.TMS_API.METHOD_POST, TmsConstants.TMS_API.ALLOCATION);
+		
+        System.out.println("=======resultValue=======");
+        System.out.println(resultValue);
+        System.out.println("=======resultValue=======");
+		
+		return "/support/index";
+	}
+	
+	@RequestMapping("/test33")
+	public String test33(HttpServletRequest request, Model model) throws Exception {		
+		
+		Map<String, Object> condMap = new HashMap<String, Object>();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("orderType", "visit");
+		map.put("reqDt", "2020-03-10");
+		map.put("period", "AM");
+		map.put("address", "서울특별시 서초구 서초동 12345");
+		map.put("city", "서울특별시");
+		map.put("county", "서초구");
+		map.put("dong", "서초동");
+		map.put("totQty", "2");
+		map.put("basementPsbYn", "Y");
+		map.put("wheelAlignment", "N");
+		List<Map<String, Object>> itemList = new ArrayList<Map<String,Object>>();
+		Map<String, Object> itemMap = new HashMap<String, Object>();
+		itemMap.put("itemCd", "15994NX");
+		itemMap.put("reqQy", "2");
+		itemList.add(itemMap);
+		
+		map.put("itemList", itemList);
+		map.put("bhfType", "BHF");
+		
+		condMap.put("cond", map);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		String jsonValue = mapper.writeValueAsString(condMap);
+		
+		String inputLine = null;
+		StringBuffer sb = new StringBuffer();
+		HttpURLConnection con = null;
+		InputStreamReader inputStreamReader = null;
+		String resultValue = null;
+		
+		Map<String, String> resultMap = new HashMap<String, String>();
+		
+		System.out.println("jsonValue :::::::::::" + jsonValue);
+		logger.debug("jsonValue :::::::::::", jsonValue);
+		
+		String urlPath = "http://dev-api.nexen-nextlevel.com:8888/rentalapi/tms/allocation.do";
+		
+		try {
+			
+			URL url = new URL(urlPath);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod(TmsConstants.TMS_API.METHOD_POST);
+			con.setRequestProperty("server_key", "DevRizmRqhFMwFQmbNexUvLlKIgNOnUFwslH");
+			con.setRequestProperty("Content-type", TmsConstants.TMS_API.CONTENT_TYPE);
+			con.setRequestProperty("charset", TmsConstants.TMS_API.CHARSET);
+			con.setConnectTimeout(3000);
+			
+			if(StringUtil.equals(TmsConstants.TMS_API.METHOD_POST, TmsConstants.TMS_API.METHOD_POST)){
+				con.setDoOutput(true);
+				OutputStream os = con.getOutputStream();
+				os.write(jsonValue.getBytes(TmsConstants.TMS_API.CHARSET));
+				os.flush();
+				os.close();
+			}
+			
+			int responseCode = con.getResponseCode();
+			resultMap.put("responseCode", String.valueOf(responseCode));
+			
+			System.out.println("responseCode :::::::::::::::::: " + responseCode);
+			logger.debug("responseCode :::::::::::::::::: ", responseCode);
+			
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				inputStreamReader = new InputStreamReader(con.getInputStream(), TmsConstants.TMS_API.CHARSET);
+			}else{
+				inputStreamReader = new InputStreamReader(con.getInputStream());
+			}
+			
+			BufferedReader in = new BufferedReader(inputStreamReader);
+			while((inputLine = in.readLine()) != null){
+				sb.append(inputLine);
+			}
+			
+			System.out.println("sb.toString() ::::::::::::: "+ sb.toString());
+			logger.debug("sb.toString() ::::::::::::: ", sb.toString());
+			
+			resultValue = sb.toString();
+			
+			con.disconnect();
+			
+		} catch (ConnectException e){
+			
+			con.disconnect();
+			
+		} catch (Exception e) {
+			
+			con.disconnect();
+			e.printStackTrace();
+		}
+		
+		System.out.println("=======resultValue=======");
+		System.out.println(resultValue);
+		System.out.println("=======resultValue=======");
+		
+		return "/support/index";
+	}
+	
+	@RequestMapping("/test44")
+	public String test44(HttpServletRequest request, Model model) throws Exception {		
+		
+        System.out.println("=======reqValue=======");
+		
+//        TmsApiUtil api = new TmsApiUtil();
+////        String resultValue = api.callCenter();
+//        String resultValue = api.callApi(null, TmsConstants.TMS_API.METHOD_GET, TmsConstants.TMS_API.CENTER_SELECT);
+		
+//        CenterResponse res = tmsApiService.newSelectTmsCenter();
+        
+//        System.out.println(res.getResultCode());
+//        System.out.println(res.getResultCount());
+//        System.out.println(res.getResultMessage());
+//        System.out.println(res.getResultData());
+//        System.out.println(res.getResultData().size());
+        
+//        System.out.println("=======resultValue=======");
+//        System.out.println(resultValue);
+//        System.out.println("=======resultValue=======");
+		
+		return "/support/index";
+	}
+	
+	@RequestMapping("/test55")
+	public String test55(HttpServletRequest request, Model model) throws Exception {		
+		
+		System.out.println("=======reqValue=======");
+		
+		TmsApiUtil api = new TmsApiUtil();
+
+		List<CenterRequest> list = new ArrayList<CenterRequest>();
+		
+		CenterRequest cr1 = new CenterRequest();
+		cr1.setCenterId("O41219106");
+		cr1.setX("127.11007152");
+		cr1.setY("37.32162386");
+		
+		CenterRequest cr2 = new CenterRequest();
+		cr2.setCenterId("O41219112");
+		cr2.setX("126.92730570");
+		cr2.setY("37.48729582");
+		
+		CenterRequest cr3 = new CenterRequest();
+		cr3.setCenterId("O41219115");
+		cr3.setX("126.88822570");
+		cr3.setY("37.49529419");
+		
+		CenterRequest cr4 = new CenterRequest();
+		cr4.setCenterId("O41219118");
+		cr4.setX("127.12375996");
+		cr4.setY("37.49013235");
+		
+		CenterRequest cr5 = new CenterRequest();
+		cr5.setCenterId("O41219131");
+		cr5.setX("127.11465559");
+		cr5.setY("37.28076756");
+		
+		CenterRequest cr6 = new CenterRequest();
+		cr6.setCenterId("O41219132");
+		cr6.setX("126.86508806");
+		cr6.setY("37.52601243");
+		
+		CenterRequest cr7 = new CenterRequest();
+		cr7.setCenterId("O41219133");
+		cr7.setX("128.34271694");
+		cr7.setY("36.11928423");
+		
+		list.add(cr1);
+		list.add(cr2);
+		list.add(cr3);
+		list.add(cr4);
+		list.add(cr5);
+		list.add(cr6);
+		list.add(cr7);
+		
+		CenterInfo centerInfo = new CenterInfo();
+		centerInfo.setCenterInfo(list);
+		
+		String resultValue = api.callApi(jsonToObject(centerInfo), TmsConstants.TMS_API.METHOD_POST, TmsConstants.TMS_API.CENTER_INSERT);
+		
+		System.out.println("=======resultValue=======");
+		System.out.println(resultValue);
+		System.out.println("=======resultValue=======");
+		
+		return "/support/index";
+	}	
+	
+	private String jsonToObject(CenterInfo vo) throws Exception{
+		
+		ObjectMapper jsonMapper = new ObjectMapper();
+		
+		String jsonValue = jsonMapper.writeValueAsString(vo);
+		
+		return jsonValue;
+	}
+	
+	@RequestMapping("/test66")
+	public String test66(HttpServletRequest request, Model model) throws Exception {		
+		
+        System.out.println("=======reqValue=======");
+		
+		String orderId = "C20200226_137";
+		List<String> orderList = new ArrayList<String>();
+		orderList.add(orderId);
+//		List<ResponseVo> resList = tmsApiService.newCancelAllocation(orderList);
+        
+        System.out.println("=======resultValue=======");
+//        System.out.println(resList);
+        System.out.println("=======resultValue=======");
+		
+		return "/support/index";
+	}
+	
+	/**
+	 * 마이페이지 > 신규 문의 등록
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws JsonMappingException 
+	 * @throws Exception 
+	 * @throws Exception
+	 */
+	/*@RequestMapping(value="/insertQuestion" , method={RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> insertQuestion(MultipartHttpServletRequest mRequest, Model model) throws Exception {		
+		Map<String, Object> rtn = new HashMap<String, Object>();
+		mRequest.setCharacterEncoding("UTF-8");
+		
+		try {
+			QuestionVo questionVo = new QuestionVo();
+			String title = mRequest.getParameter("title");
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			
+			String cont = mRequest.getParameter("cont");
+			cont = new String(cont.getBytes("8859_1"),"utf-8");
+
+			questionVo.setTitle(title);
+			questionVo.setqCont(cont);
+			questionVo.setQustClsCd(mRequest.getParameter("qustClsCd"));
+			
+			//첨부이미지
+			List<MultipartFile> mfl = mRequest.getFiles("bizFiles");
+			List<AttfileVo> list = new ArrayList<AttfileVo>();
+			
+			try {
+				list = rentalFileService.upload(mfl, WebConstants.RENTAL_FILE_PATH_ATFILE);
+			} catch (Exception e) {
+				rtn.put(WebConstants.Rtn.RETURN_CODE, WebConstants.Rtn.RETURN_CODE_BIZ_ERROR);
+				rtn.put(WebConstants.Rtn.RETURN_MESSEGE, WebConstants.Rtn.RETURN_MESSEGE_ERROR); 
+				return rtn;
+			}
+			
+			String rs = questionSvc.insertQuestion(list, questionVo);
+			if("S".equals(rs)) {
+				//성공일 때 리턴 형식
+				rtn.put(WebConstants.Rtn.RETURN_CODE, WebConstants.Rtn.RETURN_CODE_OK);
+				rtn.put(WebConstants.Rtn.RETURN_MESSEGE, WebConstants.Rtn.RETURN_MESSEGE_OK); 
+			}else {
+				rtn.put(WebConstants.Rtn.RETURN_CODE, WebConstants.Rtn.RETURN_CODE_BIZ_ERROR);
+				rtn.put(WebConstants.Rtn.RETURN_MESSEGE, WebConstants.Rtn.RETURN_MESSEGE_ERROR);
+			}
+		} catch(Exception e) {
+			//실패일 때 리턴 형식 
+			rtn.put(WebConstants.Rtn.RETURN_CODE, WebConstants.Rtn.RETURN_CODE_BIZ_ERROR);
+			rtn.put(WebConstants.Rtn.RETURN_MESSEGE, WebConstants.Rtn.RETURN_MESSEGE_ERROR); 
+		} 
+		
+		return rtn;
+	}*/
+	
+	public static void main(String[] args) throws Exception{
+		String value = "{cond={country=%EA%B0%95%EC%84%9C%EA%B5%AC, basementPsbYn=Y, orderType=visit, period=AM, address=%EC%84%9C%EC%9A%B8+%EA%B0%95%EC%84%9C%EA%B5%AC+%EB%A7%88%EA%B3%A1%EB%8F%99, city=%EC%84%9C%EC%9A%B8, reqDt=20200315, wheelAlignment=N, totQty=2, bhfType=BHF, itemList=%7BreqQy%3D2%2C+itemCd%3D15994NX%7D, dong=%EB%A7%88%EA%B3%A1%EB%8F%99}}";
+		System.out.println(value);
+		System.out.println(URLDecoder.decode(value, "UTF-8"));
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonData = mapper.writeValueAsString(URLDecoder.decode(value, "UTF-8")); 
+		
+		Map<String, Object> map = mapper.readValue(jsonData, new TypeReference<Map<String, Object>>(){});
+
+		System.out.println(map);
+		
+		
+	}
+	
+}

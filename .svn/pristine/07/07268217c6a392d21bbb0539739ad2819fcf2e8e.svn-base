@@ -1,0 +1,549 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>	
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+			<div class="subContents type02">
+				<div class="titleArea type03">
+					<h2 class="type03"><img src="/img/title/h2_b_17.png" alt="꼭! 필요해요."></h2>
+					<h3 class="type01">
+						<img src="../img/title/h2_step_04.png" alt="회원정보 개인"/>
+					</h3>               
+				</div>
+				
+				<!--memberWrap-->
+				<div class="memberBoxWrap">
+					<div class="certification">
+						<div class="business">
+							<h3 class="type04">개인회원 정보를 입력해 주세요.</h3>
+							<p>
+								회원님의 개인정보가 보호받을 수 있도록 최선을 다하고 있습니다.                     
+							</p>
+							
+							<form name="frm" id="frm" method="post">
+								<!-- 이전 화면에서(약관동의) 넘어온 값 -->
+								<input type="hidden" value="${diVal}" 		name ="diVal" />		<!-- 실명 인증 고유 값 -->
+								<input type="hidden" value="${ciVal}" 		name ="ciVal" />		<!-- 실명 인증 고유 값 -->
+								<input type="hidden" value="${vnVal}" 		name ="vnVal" />		<!-- 실명 인증 고유 값 -->
+								<input type="hidden" value="${legrBrthYmd}" name ="legrBrthYmd" />	<!-- 실명 인증 - 회원 생년월일 -->
+								<input type="hidden" value="${gendCd}" 		name ="gendCd" />		<!-- 실명 인증 - 회원 성별 -->
+								<input type="hidden" value="${frgnCd}"		name ="frgnCd" />		<!-- 실명 인증 - 내, 외국인 구분 -->
+								
+								<input type="hidden" value="${receptionSms}"	name ="receptionSms" />
+								<input type="hidden" value="${receptionPhone}"	name ="receptionPhone" />
+								<input type="hidden" value="${receptionEmail}"	name ="receptionEmail" />
+								<input type="hidden" value="${receptionAdress}"	name ="receptionAdress" />
+
+								<input type="hidden" id="viewGbn" name="viewGbn" value="${viewGbn}" />
+								<input type="hidden" name="snsGbn" id="snsGbn" value="${snsGbn}">
+								<input type="hidden" name="snsid" id="snsid" value="${snsid}">
+								<input type="hidden" id="joinPath" name="joinPath" value="WEB" />									
+								
+								<!-- 건물번호 -->
+								<input type="hidden" value=""	name ="bldMngNo" />
+								
+								
+								<!-- 가입정보 -->
+								<div class="submitAreaWrap">
+									<!-- left -->
+									<div class="submitLeft">
+										<div class="submitArea type02">
+												<div class="submit">
+													<label for="id01"><span class="essen">아이디</span></label>
+													<input type="text" name="custId" class="type02 w205" id="custId" title="아이디 입력란" maxlength="20" 
+														onkeyup="evManager.idValidation(); this.value=evManager.noKorean(this.value); evManager.btnDisabled();" tabindex="1"> 
+													<input type="hidden" id="idOverLapChk" name="idOverLapChk" value="0">	
+													<button type="button" class="type03 fr" id="btnIdOverLap" tabindex="0">중복확인</button>
+													
+													<p class="validation type02" style="display: none" id="custIdTxt1" btnChk="0">
+														<span id="custIdTxt2"></span>
+													</p>
+												</div>
+										</div>
+	
+										<div class="submitArea type02">
+												<div class="submit ">
+													<label for="buNumber01"><span class="essen">비밀번호</span></label>
+													<input type="password" name="custPwd" class="type02 w280" id="custPwd" title="비밀번호 입력란" 
+														onkeyup="evManager.pwdValidation(); evManager.btnDisabled();" onkeydown="evManager.pwdValidation()" maxlength="20" tabindex="2"> 
+													
+													<p class="validation type02" style="display: none" id="custPwdTxt1" btnChk="0">
+														<span><i class="ico07"></i>이미 사용중인 비밀번호입니다.</span>
+													</p>
+												</div>
+										</div>
+										
+										<div class="submitArea type02">
+											<div class="submit">
+												<input type="hidden" name="phone" id="phone">
+												<input type="hidden" name="mobNo" id="mobNo">
+												<label for="phone01"><span class="essen">휴대전화</span></label>
+												<select class="type02 w120"  title="휴대전화 선택" id="phone01" name="phone01" tabindex="0">
+														<option <c:if test="${phone01 == '010'}">selected="selected"</c:if>	value="010">010</option>
+														<option <c:if test="${phone01 == '011'}">selected="selected"</c:if> value="011">011</option>
+														<option <c:if test="${phone01 == '016'}">selected="selected"</c:if> value="016">016</option>
+														<option <c:if test="${phone01 == '017'}">selected="selected"</c:if> value="017">017</option>
+														<option <c:if test="${phone01 == '018'}">selected="selected"</c:if> value="018">018</option>
+														<option <c:if test="${phone01 == '019'}">selected="selected"</c:if> value="019">019</option>
+												</select> 
+												
+												<span class="divi po_m03"></span>
+												<input type="text" name="phone02" class="type02 w120" id="phone02" value="${phone02}" maxlength="4" onkeyup="evManager.btnDisabled(); return validNumberCheck.keyUp(event);" tabindex="4"><span class="divi po_m03"></span>
+												<input type="text" name="phone03" class="type02 w120" id="phone03" value="${phone03}" maxlength="4" onkeyup="evManager.btnDisabled(); return validNumberCheck.keyUp(event);" tabindex="5">
+												
+												<p class="validation type02" style="display: none" id="phoneTxt1">
+													<span><i class="ico07"></i>이미 사용중인 휴대전화번호입니다.</span>
+												</p>
+											</div>
+										</div>
+									</div>
+									<!-- left -->
+									
+									<!-- right -->
+									<div class="submitRight">
+										<div class="submitArea type02 blank"></div>
+										
+										<div class="submitArea type02">
+												<div class="submit">
+													<label for="buNumber02"><span class="essen">비밀번호 확인</span></label>
+													<input type="password" name="custPwd02" class="type02 w280" id="custPwd02" title="비밀번호확인 입력란" placeholder="비밀번호를 다시 한번 입력해 주세요." 
+														onkeyup="evManager.pwdValidation2(); evManager.btnDisabled();" onkeydown="evManager.pwdValidation2()" maxlength="20" tabindex="3">                                             
+												</div>
+	
+												<p class="validation type02" style="display: none" id="custPwdTxt2" btnChk="0">
+													<span><i class="ico07"></i>이미 사용중인 비밀번호입니다.</span>
+												</p>
+										</div>
+	
+										<div class="submitArea type02">
+												<div class="submit">
+													<label for="code"><span>임직원코드</span></label>
+													<input type="text" name="employeeCd" name="employeeCd" class="type02 w280" id="employeeCd" title="임직원코드 입력란" placeholder="임직원코드를 입력해 주세요." 
+														onkeyup="evManager.btnDisabled();" maxlength="20" tabindex="6"> 
+													<input type="hidden" id="employeeCdChk" name="employeeCdChk" >	
+													<button type="button" class="type03 fr" id="btnEmployeeCdCheck" tabindex="0">코드확인</button>
+												</div>
+												
+												<p class="validation type02" style="display: none" id="employeeCdTxt" btnChk="0">
+													<span><i class="ico07"></i></span>
+												</p>
+										</div>
+										
+										<div class="submitArea type02">
+											<div class="submit">
+													<label for="code"><span>추천인코드</span></label>
+													<input type="text" name="recNum" class="type02 w280" id="recNum" title="추천인코드 입력란" placeholder="추천인코드를 입력해 주세요." 
+														onkeyup="evManager.recNumValidation(); evManager.btnDisabled();" maxlength="20" tabindex="6"> 
+													<input type="hidden" id="recNumChk" name="recNumChk" >	
+													<input type="hidden" id="recCustNo" name="recCustNo" >	
+													<button type="button" class="type03 fr" id="btnRecNumChk" tabindex="0">인증하기</button>
+											</div>
+												
+												<p class="validation type02" style="display: none" id="recNumTxt" btnChk="0">
+													<span><i class="ico07"></i></span>
+												</p>
+										</div>
+									</div>
+									<!-- right -->
+								</div>
+								<!-- 가입정보 -->
+								
+							</form>
+							
+							<button type="button" class="type02 w400" id="btnJoin" disabled="disabled" tabindex="7">가입하기<i class="ico01"></i></button>
+						</div>
+					</div>
+				</div>
+				<!--memberWrap-->
+			</div>
+        </div>
+		<!--subContentsWrap-->
+		
+		<!--  백그라운드 이미지 -->
+		<div class="allBgWrap">
+			<div class="memberBg bg05"></div>
+		</div>
+
+<script type="text/javascript">
+	var evManager = {
+		//사업자 번호
+		businessNo : "${businessNo}"
+		,
+		init : function(){
+		}
+		,
+		//가입하기 버튼 활성화 - dialbed
+		btnDisabled : function() {
+			isBtnDisabled = true;
+			
+			//ID 중복 체크
+			if($('#idOverLapChk').val() == "0" && $("#custIdTxt1").attr("btnChk") == "0") {
+				isBtnDisabled = false;
+			}
+			
+			//비밀 번호 체크
+			if($('#custPwdTxt1').attr("btnChk") == "0" || $('#custPwdTxt2').attr("btnChk") == "0") {
+				isBtnDisabled = false;
+			}
+			
+			//전화번호 두번째 자리 체크 3자리 이상
+			if($("#phone02").val().length < 3) {
+				isBtnDisabled = false;
+			}
+			
+			//전화번호 두번째 자리 체크 4자리 이상
+			if($("#phone03").val().length < 4) {
+				isBtnDisabled = false;
+			}
+			
+			if(isBtnDisabled) {
+				$("#btnJoin").removeClass();
+				$("#btnJoin").addClass("type01 w400");
+				$("#btnJoin").removeAttr("disabled");
+			} else {
+				$("#btnJoin").removeClass();
+				$("#btnJoin").addClass("type02 w400");
+				$("#btnJoin").prop("disabled", true);
+			}
+		}
+		, 
+		//한글 입력 방지 
+		noKorean : function(str) {
+			return str.replace(/[^a-zA-Z0-9]/gi, "");
+		}
+		,
+		//id keyUpEvent
+		idValidation : function(){
+			$("#custId").val($("#custId").val().toLowerCase());
+			
+			var custId = $("#custId").val();
+			
+			// 아이디체크 번호('',0,1)
+			var idOverLapChk = $("#idOverLapChk").val();
+			
+			if( custId.length < 4  ){
+				$('#custIdTxt2').html('<i class="ico07" ></i>영문, 숫자를 포함하여 4 ~ 12자를 입력해 주세요.');
+			}
+			else if( /^[0-9+]*$/.test(custId) ){
+				$('#custIdTxt2').html('<i class="ico07" ></i>영문도 포함하여 입력해주세요.');
+			}
+			else if( /^[a-zA-Z+]*$/.test(custId) ){
+				$('#custIdTxt2').html('<i class="ico07" ></i>숫자도 포함하여 입력해주세요.');
+			}
+			else if( !/^[a-zA-Z0-9+]*$/.test(custId) ){
+				$('#custIdTxt2').html('<i class="ico07" ></i>영문, 숫자만 입력해주세요.');
+			}
+			else{
+				$('#custIdTxt2').html('<i class="ico07" ></i>중복확인을 해주세요.');
+			}			
+			$('#custIdTxt1').show();
+		}
+		,
+		//pass keyUpEvent
+		pwdValidation : function(){
+			$('#custPwdTxt1').attr("btnChk" , "0");
+			
+			// 비밀번호
+			var custPwd = $("#custPwd").val();
+
+			if(!ValidUtil.pwCheckNumAlpha(custPwd) && !ValidUtil.pwCheckNumFnAlpha(custPwd)){
+				$('#custPwdTxt1').html('<span><i class="ico07"></i>영문,숫자를 포함하여 10 ~ 20자 또는 특수문자,영문,숫자를 포함하여 8 ~ 20자를 입력해 주세요.</span>');
+			}
+			else{
+				$('#custPwdTxt1').html('<span><i class="ico07"></i>확인 되었습니다.</span>');
+				$('#custPwdTxt1').attr("btnChk" , "1");
+			}
+			$('#custPwdTxt1').show();
+		
+		}
+		,
+		//pass(비밀번호 확인) keyUpEvent
+		pwdValidation2 : function(){
+			$('#custPwdTxt2').attr("btnChk" , "0");
+			
+			// 비밀번호
+			var custPwd = $("#custPwd").val();
+			var custPwd2 = $("#custPwd02").val();
+			
+			if($('#custPwdTxt1').attr("btnChk") == "0") {
+				alert('비밀번호를 다시 입력해주세요.');
+				$('#custPwd').focus();
+				if(!ValidUtil.isEmpty($("#custPwd02").val())) {
+					$("#custPwd02").val("");
+				}
+			}
+			
+			if(custPwd == ""){
+				$('#custPwdTxt2').html('<span><i class="ico07"></i>비밀번호가 일치하지 않습니다.</span>');
+			}
+			else if(custPwd !="" && custPwd != custPwd2){
+				$('#custPwdTxt2').html('<span><i class="ico07"></i>비밀번호가 일치하지 않습니다.</span>');
+			}
+			else{
+				$('#custPwdTxt2').attr("btnChk" , "1");
+				$('#custPwdTxt2').html('<span><i class="ico07"></i>확인 되었습니다.</span>'); 
+			}
+			$('#custPwdTxt2').show();
+		
+		}
+		, 
+		
+		// 추천인 값 초기화 엄수현 매니저 추가 완료.
+		recNumValidation : function() {
+			
+			if($("#recNum").val() == '' ) {
+				
+				   $('#recNum').val('');
+				   $('#recCustNo').val('');
+				   $('#recNumTxt').val('0');
+		    	   $('#recNumTxt').html('');
+				}	
+		}		
+		,
+		//가입 버튼 클릭 시 입력 항목 유효성 체크
+		validation : function() {
+			if($('#custId').val() == ''){
+				alert("아이디를 확인해주세요.");
+				return false;
+			}	
+			if( $('#custPwd').val() == '' || $('#custPwd02').val() == '' ){ 
+				alert('비밀번호를 확인해주세요.'); 
+				return false;
+			}
+			if(($('#phone01').val()+""+$('#phone02').val()+$('#phone03').val()) == '' ){
+				alert('휴대폰번호를 확인해주세요.'); 
+				return false;
+			}
+			//추천인 가입 하기 버튼( 엄수현 매니저 추가 
+			if($("#recNum").val() != ""){
+				if($("#recNumTxt").val() != "1"){
+					alert('추천인코드 인증해주세요.'); 
+					return false;
+				}
+			}
+			
+			if ($('#employeeCd').val() != "" && $("#employeeCdTxt").val() == "0") {
+				if(confirm("올바른 임직원 코드가 아니므로 일반회원으로 가입이 진행됩니다.\n임직원코드는 일반회원 가입 후에도 입력이 가능합니다.\n진행하시겠습니까?")){
+					$("#employeeCd").val("");
+					return true;
+				}else{
+					$('#employeeCd').focus();
+					return false;	
+				}
+			}
+			return true;
+		}
+		,
+		//아이디 중복체크
+		idOverLapCheck : function () {
+			var custId = $("#custId").val();
+			if (custId == "") {                     
+				alert("아이디를 입력해주십시오.");                    
+				$("#custId").focus();                                    
+				return ;                                           
+			}
+			if( (/^[a-zA-Z0-9]{4,12}$/).test( custId ) == false ){  
+				alert("아이디는 반드시 영문,숫자의 조합으로 4-12자리내에서 입력하십시오.");
+				return ;
+			}
+			
+			if( custId.replace(/[a-z]/ig,'').length == 0 || custId.replace(/[0-9]/ig,'').length == 0  ){  
+				alert("아이디는 반드시 영어와 숫자의 조합으로 정해주세요");
+				return ;
+			}
+
+			//common ajax call
+			var pUrl = "/member/IdOverLapCheck";
+			var pSendData = { custId : $("#custId").val() };
+				pSendData = JSON.stringify(pSendData);
+			
+			$.ajax({
+			    url: pUrl,
+			    type: "POST",
+			    cache:false,
+			    data: pSendData,
+			    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+			    success: function(data) {
+			    	if(data.overLapYn == "Y") {
+			    		$('#custIdTxt2').html('<i class="ico07" ></i>이미 사용중인 아이디 입니다.');
+			    		return;
+			    	}
+			    	
+			    	$("#idOverLapChk").val("1");
+			    	$("#custIdTxt1").attr("btnChk" , "1");
+			    	$('#custIdTxt2').html('<i class="ico07" ></i>사용 가능한 아이디 입니다.');
+			    	
+			    	evManager.btnDisabled();
+			    },
+			    error: function (request, status, error) {
+					console.log('error callback : ' + error);
+				}
+			});	
+		}
+		,
+		//임직원 여부 조회
+		employeeCdCheck : function () {
+			if($("#employeeCd").val() == ""){
+				alert("임직원코드를 입력하세요.");
+				return false;
+			}
+			
+			//common ajax call
+			var pUrl = "/member/employeeCdCheck";
+			var pSendData = { employeeCd : $("#employeeCd").val() };
+				pSendData = JSON.stringify(pSendData);
+			
+			$.ajax({
+			    url: pUrl,
+			    type: "POST",
+			    cache:false,
+			    data: pSendData,
+			    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+			    success: function(data) {
+			    	if(data.employeeCdYn == "Y") {
+			    		$("#employeeCdTxt").val("1");
+				    	$('#employeeCdTxt').html('<i class="ico07" ></i>사용 가능한 코드 입니다.');
+			    	} else {
+			    		$("#employeeCd").val("");
+			    		$("#employeeCdTxt").val("0");
+			    		$('#employeeCdTxt').html('<i class="ico07" ></i>사용 할 수 없는 코드 입니다.');
+			    	}
+			    	
+			    	$('#employeeCdTxt').show();
+			    	evManager.btnDisabled();
+			    },
+			    error: function (request, status, error) {
+					console.log('error callback : ' + error);
+				}
+			});	
+		},
+		// 추천인 코드 인증   엄수현 매니저 추가 완료.
+		recNumCheck : function () {
+			if($("#recNum").val() == ""){
+				alert("추천인코드를 입력하세요.");
+				return false;
+			}
+			
+			//common ajax call
+			var pUrl = "/member/recNumCheck";
+			var pSendData = { recNum : $("#recNum").val() };
+				pSendData = JSON.stringify(pSendData);
+			
+			$.ajax({
+			    url: pUrl,
+			    type: "POST",
+			    cache:false,
+			    data: pSendData,
+			    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+			    success: function(data) {
+			    	if(data.recNumYn == "Y") {
+			    		$("#recNumTxt").val("1");
+				    	$('#recNumTxt').html('<i class="ico07" ></i>인증되었습니다.');
+				    	$("#recCustNo").val(data.recCustNo); // 추천인 고객번호
+			    	} else {
+			    		$("#recNum").val("");
+			    		$("#recNumTxt").val("0");
+			    		$('#recNumTxt').html('<i class="ico07" ></i>지금은 추천인 이벤트 기간이 아닙니다.');
+// 			    		$('#recNumTxt').html('<i class="ico07" ></i>존재하지 않는 추천인 코드 입니다.');
+			    	}
+			    	
+			    	$('#recNumTxt').show();
+			    	evManager.btnDisabled();
+			    },
+			    error: function (request, status, error) {
+					console.log('error callback : ' + error);
+				}
+			});	
+		}
+	}
+
+	$(document).ready(function() {
+		
+		//init
+		evManager.init();
+		
+		// 약관 동의 버튼 area!! 
+		$("#bntAuth").on("click" , function(){
+			//유효성 체크
+			if(!evManager.validation()){
+				return;
+			}
+			
+			//location.hre = "/member/"
+		});
+		// 약관 동의 버튼  area end!! 
+		
+		// 아이디 중복 확인 버튼 area!! 
+		$("#btnIdOverLap").on("click" , function(){
+			evManager.idOverLapCheck();
+		});
+		// 아이디 중복 확인   area end!! 
+		
+		// 임직원  확인 버튼 area!! 
+		$("#btnEmployeeCdCheck").on("click" , function(){
+			evManager.employeeCdCheck();
+		});
+		// 임직원  중복 확인   area end!!
+		
+		// 추천인코드 인증 버튼 area!! 엄수현 매니저 추가 
+		$("#btnRecNumChk").on("click" , function(){
+			evManager.recNumCheck();
+		});
+		// 추천인코드 인증    area end!!
+		// 가입하기 버튼 area!! 
+		$("#btnJoin").on("click" , function(){
+			//preventDefault 는 기본으로 정의된 이벤트를 작동하지 못하게 하는 메서드이다. submit을 막음
+			var custNm = "${custNm}";
+	        
+			// Loding Image
+			event.preventDefault();
+	        $("#loadingWrap").show();
+	        			//유효성 체크
+			if(!evManager.validation()){
+				$("#loadingWrap").hide();
+				return;
+			}
+			
+			//alert("가입 하기 .");
+
+	 
+			
+	      	//폼객체를 불러와서
+	        var form = $('form')[0];
+	        //FormData parameter에 담아줌
+	        var param = new FormData(form);
+	        //var param = $("#frm").serialize();
+	        
+			var frgnCd = $('[name="frgnCd"]').val();
+			if($.trim(frgnCd) == ""){
+				$('[name="frgnCd"]').val("0");
+			}
+			
+	        $("#phone").val($("#phone01").val()+"-"+$("#phone02").val()+"-"+$("#phone03").val());
+	        $("#mobNo").val($("#phone01").val()+"-"+$("#phone02").val()+"-"+$("#phone03").val());
+	       
+	        
+	        $.ajax({
+	            type: "POST",
+	            url: "/member/insertCust", 
+	            data: $("#frm").serialize(),
+	            cache: false,
+	            processData: false,
+	            success: function (data) {
+	             	var frm = document.frm;
+	        		frm.action = "/member/custInfoComp";
+	        		frm.submit(); 	                
+	            },
+	            error: function (e) {
+	            	$("#loadingWrap").hide();
+	            	//console.log("ERROR : ", e);
+	                alert("fail");
+	            }
+	        });
+		});
+		// 가입하기   area end!!
+	});	
+
+</script>
+

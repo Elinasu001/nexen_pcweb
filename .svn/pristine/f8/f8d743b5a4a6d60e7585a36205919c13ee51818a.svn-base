@@ -1,0 +1,270 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<link type="text/css" rel="stylesheet" href="/css/OverlayScrollbars.css">
+<script type="text/javascript" src="/js/lib/jquery.overlayScrollbars.js"></script>
+<script type="text/javascript" src="/js/scroll.js"></script>
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+<script type="text/javascript" src="/js/lib/modalEffects.js"></script>	
+	
+	<form id="frm" name="frm" method="post" >
+		<!-- paging -->
+		<input type="hidden" name="pageNo"	id="pageNo"	value="${pageNo}"/>		<!-- 현재 페이지 -->
+		<input type="hidden" name="pageSize"	id="pageSize" 	value="" />		<!-- 페이지에 표시할 수 -->
+	</form>
+	
+	
+<!--subContentsWrap-->
+        <div class="subContentsWrap"> 
+                <div class="subContents">
+                    <div class="orderInfo">           
+
+                        <!-- tabs -->
+                        <div class="tabsWrap type02">
+                            <ul class="tabs" id="optionTab">
+                                <li class="active" rel="tab1" value="8">타이어팁</li>
+                                <li class="" rel="tab2" value="9">서포터즈 소식</li>
+                            </ul>
+                        </div>
+                        <!-- tabs -->
+                        
+                        <!-- tab01-->
+                        <div id="tab1" class="tabContent">
+                            <div class="itemWrap">							
+		                        <div class="itemCont on">
+		                            <ul class="itemtList1" id="tireTipList">
+		                            </ul>
+		                        </div>     
+                            </div>
+                            
+                            <!-- paging -->
+                            <div class="paging" id="paging" style="display:none;"></div>
+							<!-- paging -->
+                        </div>
+                        <!-- tab01-->
+                        
+                        <!-- tab02-->
+                        <div id="tab2" class="tabContent">
+                            <div class="itemWrap">							
+		                        <div class="itemCont on">
+		                            <ul class="itemtList1"  id="tireTipList2">
+		                            </ul>
+		                        </div>     
+                            </div>
+                        
+                            <!-- paging -->
+                        	<div class="paging type02" id="paging2" style="display:none;"></div>
+							<!-- paging -->
+                        </div>
+                        <!-- tab02-->
+                    </div>             
+            </div>
+            <!-- 장바구니 Tab-->
+      
+		</div>
+		<!--subContentsWrap-->
+		
+<script type="text/javascript">
+/* var userLoginId = "${userLoginId}"; */
+
+var typeValue;
+
+
+var evManager = {
+		//이전 화면 구분 값 : M : 메인  조회 , H : 헤더
+		viewGbn : "${viewGbn}"
+		,
+		//조회 여부
+		searchYn : false
+		,
+		//필터 선택 수
+		filterCnt : 0
+		,
+		//lifeStyle
+		lifeStyleArray : new Array()
+		,
+		lifeStyleNmArray : new Array()
+		,
+		//검색 여부
+		searchYn : false
+		,
+		niceGradeCd : new Array()
+		,
+		init : function(){
+			//page
+			$("#pageNo").val("1");
+			//메인에서 검색 조회 시만 보여 주는 검색  영역
+			if(evManager.viewGbn == "M") {
+				
+			} else {
+				ComUtil.loading();
+				$("#pageNo").val("1");
+				$("#pageSize").val("9");
+				$("#classCd").val("P1");
+
+				//list 조회
+				var pUrl = "/news/selectTireTipList";
+				var pSendData = {
+					pageNo : $("#pageNo").val(),
+					pageSize : $("#pageSize").val(),
+					classCd : $("#classCd").val()
+				};
+				cfnSendRequest(pUrl,pSendData,'selectTireTipList');
+			}
+		}
+		,
+		selectTireTipList : function (nPage) {
+			ComUtil.loading();
+			$("#pageNo").val(nPage);
+			$("#pageSize").val();
+			$("#classCd").val("P1");
+
+			//list 조회
+			var pUrl = "/news/selectTireTipList";
+			var pSendData = {
+				searchTypeQna : typeValue,
+				pageNo : $("#pageNo").val(),
+				pageSize : $("#pageSize").val(),
+				classCd : $("#classCd").val(),
+			};
+			cfnSendRequest(pUrl,pSendData,'selectTireTipList');
+		}
+	}
+function goDetailPage(pSeq) {
+	location.href = '/news/tireTipDetail?bdojSeq='+String(pSeq);
+}
+
+function cfnRequestSuccessCallback(callback, result) {
+	console.log("result.rtnCode : " + result.rtnCode);
+	console.log("result.rtnMsg : " + result.rtnMsg);
+	
+	//alert("구분구분");
+	if(result.rtnCode == 0) {
+
+		if(callback == 'selectTireTipList') {
+
+			ComUtil.unloading();
+
+			var data = result.selectTireTipList;
+			var pageCommon = result.pageCommon;
+
+	
+			if(data != null && data.length > 0 ) {
+				//화면 생성
+				var listHtml = "";
+
+				if(data[0].brdDivCd == 8){
+					for(var i=0; i<data.length; i++){
+	                listHtml += "<li data-animation='fadeInUp' class='animated fadeInUp'>";
+	                listHtml += "<a onclick='goDetailPage(" + data[i].bdojSeq + ");'>";
+	                listHtml += "	<div class='thumb'>";
+	                listHtml += "			<img src='../img/news/img_null.jpg' alt=''> ";
+	                listHtml += "	</div>";
+	                listHtml += "	<div class='inner'>";
+	                listHtml += "		<p class='desc'>"+data[i].title+"</p>";
+	                listHtml += "	</div>";
+	                listHtml += "</a>";
+	                listHtml += "</li>";
+	                
+					}
+					$("#tireTipList").html(listHtml);
+					PageUtil.fnPageMakeDisplay(pageCommon.totalCount, pageCommon.pageNo, $('#paging') , 'evManager.selectTireTipList', pageCommon.pageSize);
+				}
+				if(data[0].brdDivCd == 9){
+					for(var i=0; i<data.length; i++){
+		                listHtml += "<li data-animation='fadeInUp' class='animated fadeInUp'>";
+		                listHtml += "<a onclick='fnVal("+ i +");'>";
+		                listHtml += "	<div class='thumb'>";
+		                listHtml += "		<img src='../img/news/img_null.jpg' alt=''>";
+		                listHtml += "	</div>";
+		                listHtml += "	<div class='inner'> ";
+		                listHtml += "		<p class='desc'>"+data[i].title+"</p>";
+		                listHtml += "	</div>";
+		                listHtml += "	</a>";
+		                listHtml += " <div id=contVal"+i+" style='display:none;'>" + data[i].cont;
+		                listHtml += " </div>";
+		                listHtml += " <div id=contVal2"+i+" style='display:none;'>" + data[i].title;
+		                listHtml += " </div>";
+		                listHtml += "</li>";
+						}
+					$("#tireTipList2").html(listHtml);
+					PageUtil.fnPageMakeDisplay(pageCommon.totalCount, pageCommon.pageNo, $('#paging2') , 'evManager.selectTireTipList', pageCommon.pageSize);
+				}
+
+			} else {
+				$("#tireTipList").html("등록된 글이 없습니다.");
+				$("#tireTipList2").html("등록된 글이 없습니다.");
+			}
+		}
+	} 
+	
+}
+
+
+/*
+ * 리퀘스트 후처리 함수 - ERROR
+ */
+function cfnRequestErrorCallback(callback, status) {
+	
+	
+	if(callback == 'selectTireTipList'){
+		alert(status);
+	}
+	
+	ComUtil.unloading();
+}
+/* ################################# AJAX CALLBACK ARAR #################################  */
+
+function fnVal(pVal) {
+
+	var cont = $("#contVal"+pVal).text();
+	var title = $("#contVal2"+pVal).text();
+
+	
+	var content = cont.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+	window.open(content,title,'height=' + screen.height + ',width=' + screen.width + 'fullscreen=yes' );
+}
+
+$(document).ready(function() {
+
+	
+	evManager.init();
+
+	
+	
+	$("#optionTab").on('click',"li" ,function() {
+		var pUrl = "/news/selectTireTipList";
+		
+		typeValue = $(this).val();
+	  
+ 	 	var pSendData = { 
+ 	 			searchTypeQna : typeValue,
+ 				pageNo : "1",
+				pageSize : $("#pageSize").val(),
+				classCd : $("#classCd").val()
+ 		};
+		pSendData = JSON.stringify(pSendData);
+		
+		$.ajax({ 
+ 			type: "POST" ,
+ 			url: pUrl,
+ 			cache:false,
+ 			data: pSendData,
+ 			 contentType:"application/json;charset=UTF-8",
+ 			success : function(data) {
+ 				//success
+ 				cfnRequestSuccessCallback("selectTireTipList", data);
+ 				},
+ 				 error:function(e){
+ 		           console.log(e);
+ 		        }
+ 		});
+   });
+	
+});
+
+
+</script>

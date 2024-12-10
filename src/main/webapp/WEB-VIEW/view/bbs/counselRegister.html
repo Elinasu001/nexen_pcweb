@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="../../img/common/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="../../css/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" href="../../css/layout.css">
+    <link type="text/css" rel="stylesheet" href="../../css/new_layout.css">
+    <link rel="stylesheet" type="text/css" href="../../css/nice-select.css">
+
+    <script type="text/javascript" src="../../js/lib/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../../js/common_ui.js"></script>
+    <script type="text/javascript" src="../../js/util.js"></script>
+    <script src="../../js/lib/jquery.nice-select.min.js"></script>
+    </script>
+    <title>상담하기 | NEXT LEVEL</title>
+</head>
+
+<body>
+    <div class="allWrap">
+        <!--subTitleArea-->
+
+        <!--subTitleArea-->
+
+        <!--subContentsWrap-->
+        <div class="subContentsWrap">
+            <div class="subContents">
+                <div class="orderInfo">
+                    <!-- tabs -->
+                    <!-- <div class="tabsWrap type02">
+                        <ul class="tabs">
+                            <li class="active" rel="tab01" id="ren">렌탈상담</li>
+                            <li class="" rel="tab03" id="o2o">구매상담</li>
+                        </ul>
+                    </div> [20241206 퍼블] 삭제-->
+                    <!-- tabs -->
+
+                    <!-- tab01-->
+                    <!-- [20241206 퍼블] 삭제 <div id="tab01" class="tabContent"> -->
+
+                    <div class="counselRegisterWrap"><!--[20241206 퍼블] 태그 추가-->
+                        <div class="inner"><!--[20241206 퍼블] 태그 추가-->
+
+                            <!--//[202411206 퍼블] 일괄 수정-->
+                            <div class="descInfo type07">
+                                <p>NEXT LEVEL 간편 상담 신청</p>
+                                <div class="proViewInfo">
+                                    <p class="desc"><!--[20241206 퍼블] .type08 클래스로 삭제-->
+                                        고객님께 딱 맞는 타이어 교체 방법을, 전문 상담사가 해피콜로 자세히 안내드립니다.
+                                    </p>
+                                    <p class="info">[넥센 타이어 고객센터 1855-0100]</p>
+                                </div>
+                            </div>
+                            <!--[202411206 퍼블] 일괄 수정//-->
+
+                            <div class="cAgree">
+                                <h3>개인정보 수집  및 이용 동의</h3><!--[20241206 퍼블] 추가-->
+                                <!--//[20241206 퍼블] 일괄 수정-->
+                                <div class="infoBox type03">
+                                    <ul>
+                                        <li>
+                                            <input type="checkbox" id="allAgree" name="" value="0" onchange="javascript:checkAgree()" checked class="type10">
+                                            <label for="allAgree">
+                                                <span>NEXT LEVEL 렌탈 가입 및 구매 상담을 위한 개인정보 수집 및 이용에 동의합니다.</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <span><em>이용 목적</em>타이어 렌탈 가입 상담 및 계약 체결, 타이어 구매 상담</span>
+                                            <span><em>항목</em>이름, 연락처 (핸드폰)</span>
+                                            <span><em>보유기간</em>상담 종료일로부터 90일 이내</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--[20241206 퍼블] 일괄 수정//-->
+                            </div>
+
+                            <h3>상담 신청 정보</h3><!--[20241206 퍼블] .type11 클래스 삭제-->
+
+                            <div class="inputWrap"><!--[20241206 퍼블] 태그 추가-->
+
+                                <div class="submitAreaWrap type02">
+                                    <!--submitLeft-->
+                                    <div class="submitLeft">
+                                        <div class="submitArea type04">
+                                            <div class="submit">
+                                                <label for="name"><span class="black">이름</span></label><!--[20241206 퍼블] .essen 클래스 삭제-->
+                                                <input type="text" name="" class="type03 w280" id="name" title="이름 입력란"
+                                                    placeholder="이름을 입력해주세요" maxlength="20">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--submitLeft-->
+
+                                    <!--submitRight-->
+                                    <div class="submitRight">
+                                        <div class="submitArea type04">
+                                            <div class="submit">
+                                                <label for="phone11"><span class="black">휴대전화</span></label><!--[20241206 퍼블] .essen 클래스 삭제-->
+                                                <select class="type04 w80 ml20" id="phone11" title="휴대전화 앞자리 선택">
+                                                    <option>010</option>
+                                                    <option>011</option>
+                                                    <option>016</option>
+                                                    <option>017</option>
+                                                    <option>018</option>
+                                                    <option>019</option>
+                                                </select>
+
+                                                <span class="divi type02"></span>
+                                                <input type="text" name="" class="type07 w80" id="phone12" title="휴대전화 중간번호 입력란"
+                                                    maxlength="4" onkeyup="return validNumberCheck.keyUp(event);">
+
+                                                <span class="divi type02"></span>
+                                                <input type="text" name="" class="type07 w80" id="phone13" title="휴대폰 끝번호 입력란"
+                                                    maxlength="4" onkeyup="return validNumberCheck.keyUp(event);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--submitRight-->
+                                </div>
+                                <!--// [20241206 퍼블] 추가 -->
+                                <div class="submitAreaWrap type02">
+                                    <div class="submitArea type04">
+                                        <div class="submit list">
+                                            <label for="message"><span class="black">상담 신청 내용</span></label>
+                                            <div class="conWrap">
+                                                <select class="type04" title="상담 지점 선택" id="">
+                                                    <option value="01">렌탈</option>
+                                                    <option value="02">넥센</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [20241206 퍼블] 추가 //-->
+                            </div>
+
+                            <!-- [20241206 퍼블] :: 차량정보 및 주소삭제 -->
+
+                            <!--// [20241206 퍼블] 추가 -->
+                            <div class="bannerWrap">
+                                <img src="../../img/product/sample_banner.png" alt="">
+                            </div>
+                            <!-- [20241206 퍼블] 추가 //-->
+                            
+                            <p class="desc">※ 콜센터 1855-0100 / 운영 시간 평일 09:00 ~ 18:00 (주말 및 공휴일 휴무) / 영업시간 기준 우선 접수 순으로 연락
+                                드리겠습니다.</p>
+
+                            <div class="btnArea type03 center">
+                                <button id="rentCounselReg" type="button" class="type01 center w100per">신청하기</button><!--[20241206 퍼블] .w100per 클래스로 변경 , 텍스트 변경-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--subContentsWrap-->
+
+        <!-- footer  -->
+        <footer>
+            <div class="footerWrap">
+                <div class="foTop">
+                    <ul class="foMenu">
+                        <li><a href="../../contents/termOfService">이용약관</a></li>
+                        <li><a href="../../contents/privacyPolicy"><span style="color:#A566FF">개인정보처리방침</span></a></li>
+                        <li><a href="http://www.nexentire.com/kr/" target="_blank">기업소개</a></li>
+                    </ul>
+                </div>
+                <address>
+                    경상남도 양산시 충렬로 355 넥센타이어 주식회사 <br />
+                    대표이사 강호찬 | 사업자등록번호 621-81-10769 | 통신판매업신고번호 제2015-경남양산-0139호<br />
+                </address>
+
+                <div class="customer">
+                    <ul>
+                        <li class="fn ls01">고객센터 <span>1855-0100</span></li>
+                        <li>평일 09:00 ~ 18:00 / 토요일, 공휴일 휴무</li>
+                    </ul>
+                </div>
+
+                <div class="foCopyright">
+                    <img src="../../img/common/footer_logo.png" class="foLogo" alt="넥센타이어" /> <span>Copyright ⓒ 2019
+                        NEXTLEVEL. all rights reserved</span>
+
+                    <ul class="boSnsGo">
+                        <li><a href="#;" class="sns01" title="페이스북 바로가기"
+                                onClick="javascript:window.open('https://www.facebook.com/NEXENTIRE.KOREA');"></a></li>
+                        <li><a href="#;" class="sns02" title="블로그 바로가기"
+                                onClick="javascript:window.open('https://blog.naver.com/nexen_tire');"></a></li>
+                        <li><a href="#;" class="sns03" title="유튜브 바로가기"
+                                onClick="javascript:window.open('https://www.youtube.com/user/nexentireglobal');"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </footer>
+        <!-- footer -->
+    </div>
+    <!-- allWrap 끝 -->
+</body>
+
+</html>

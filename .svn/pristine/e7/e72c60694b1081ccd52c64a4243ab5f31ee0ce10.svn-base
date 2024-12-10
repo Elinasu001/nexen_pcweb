@@ -1,0 +1,90 @@
+package com.nexwrms.pcweb.coupang.api.ctl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nexwrms.cfo.com.cp.svc.CoupangApiTestSvc;
+import com.nexwrms.cfo.com.sv.vo.SvcCpHldySndVo;
+import com.nexwrms.core.exception.BizExceptionFactoryBean;
+
+
+@RequestMapping("/vl/3pfl/holiday")
+@RestController // @ResponseBody(json반환)가 추가된 @Controller
+public class CoupangApiCtl {
+
+	@Autowired
+    @Qualifier("com.nexwrms.cfo.com.cp.svc.CoupangApiTestSvc")
+	CoupangApiTestSvc coupangApiTestSvc;
+	
+	private static final Logger logger = LoggerFactory.getLogger(CoupangApiCtl.class);
+	
+	@RequestMapping(value = "/postNo/check/{trnCd}/{date}/{serverCheck}/{levelCnt}", method = RequestMethod.GET, produces = "application/json")
+	public List<SvcCpHldySndVo> checkCoupangPostTotalList(@PathVariable String trnCd,@PathVariable String stndDt,@PathVariable String serverCheck, @PathVariable String levelCnt) throws Exception{
+		//@PathVariable : url에 변수명 추가
+		List<SvcCpHldySndVo> result = new ArrayList<SvcCpHldySndVo>();
+	
+	try {
+		logger.debug("trnCd , date, serverCheck, levelCnt", trnCd,stndDt,serverCheck,levelCnt);
+	} catch (Exception e){
+		e.printStackTrace();
+	}
+	logger.info("trnCd : ", trnCd); //debug > info
+	logger.info("date : ", stndDt);
+	logger.info("serverCheck : ", serverCheck);
+	logger.info("levelCnt : ", levelCnt);
+	
+	if(!serverCheck.equals("prd") && !serverCheck.equals("dev")){
+		BizExceptionFactoryBean.getInstance().createBizException("prd or dev로 입력해주세요.", new String[]{""});
+	} 
+	
+	if(trnCd.equals("add")){
+		result = coupangApiTestSvc.coupangAddList(stndDt,serverCheck,levelCnt);
+	} else if(trnCd.equals("del")){
+		result = coupangApiTestSvc.coupangDelList(stndDt,serverCheck,levelCnt);
+	} else{
+		BizExceptionFactoryBean.getInstance().createBizException("add or del로 입력해주세요.", new String[]{""});
+	}
+	return result;
+	}
+	
+	@RequestMapping(value = "/postNo/check/{trnCd}/{date}/{serverCheck}/{levelCnt}/{zipCode}", method = RequestMethod.GET, produces = "application/json")
+	public List<SvcCpHldySndVo> checkCoupangPostList(@PathVariable String trnCd,@PathVariable String stndDt,@PathVariable String serverCheck,
+													 @PathVariable String levelCnt, @PathVariable String zipCode) throws Exception{
+		List<SvcCpHldySndVo> result = new ArrayList<SvcCpHldySndVo>();
+		
+		try {
+			logger.debug("trnCd , date, serverCheck, levelCnt", trnCd,stndDt,serverCheck,levelCnt);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		logger.info("trnCd",trnCd);
+		logger.info("date",stndDt);
+		logger.info("serverCheck",serverCheck);
+		logger.info("levelCnt",levelCnt);
+		logger.info("zipCode",zipCode);
+		
+		if(!serverCheck.equals("prd") && !serverCheck.equals("dev")){
+			BizExceptionFactoryBean.getInstance().createBizException("prd or dev로 입력해주세요.", new String[]{""});
+		}
+		
+		if(trnCd.equals("add")){
+			result = coupangApiTestSvc.coupangAddList(stndDt,serverCheck,levelCnt); // mybatis 부분
+		} else if(trnCd.equals("del")){
+			result = coupangApiTestSvc.coupangDelList(stndDt, serverCheck, levelCnt);
+		} else{
+			BizExceptionFactoryBean.getInstance().createBizException("add or del로 입력해주세요.", new String[]{""});
+		}
+		//result = cpHoildaySvc.getFilterZipCode(result, zipCode);
+
+		return result;
+	}
+}

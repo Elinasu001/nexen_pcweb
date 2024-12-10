@@ -1,0 +1,3682 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" 	uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ page import="com.nexwrms.core.constants.CoreConstants" %>
+<%@ page import="com.nexwrms.cfo.com.constants.WebConstants" %>
+<%@ page import="com.nexwrms.core.context.AppContext" %>
+
+<link type="text/css" rel="stylesheet" href="/css/jquery-ui.css">
+<link type="text/css" rel="stylesheet" href="/css/fancy_fileupload.css">
+<%-- <link type="text/css" rel="stylesheet" href="/css/layout.css"> --%>
+
+<script type="text/javascript" src="/js/lib/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/js/lib/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/js/lib/jquery.fancy-fileupload.js"></script>
+<script type="text/javascript" src="/js/common_ui.js"></script>
+
+
+		<!--subContentsWrap-->
+        <div class="subContentsWrap">
+			<!--form frm Start -->
+			<form name="frm" id="frm" onsubmit="return false;" style="clear:both;">
+				<input type="hidden" value="${diVal}" 		name ="diVal" data-json-obj="true" />		<!-- 실명 인증 고유 값 -->
+				<input type="hidden" value="${ciVal}" 		name ="ciVal" data-json-obj="true" />		<!-- 실명 인증 고유 값 -->
+				<input type="hidden" value="${vnVal}" 		name ="vnVal" data-json-obj="true" />		<!-- 실명 인증 고유 값 -->
+				<input type="hidden" value="${legrBrthYmd}" name ="legrBrthYmd" data-json-obj="true" />	<!-- 실명 인증 - 회원 생년월일 -->
+				<input type="hidden" value="${gendCd}" 		name ="gendCd" data-json-obj="true" />		<!-- 실명 인증 - 회원 성별 -->
+				<input type="hidden" value="${frgnCd}"		name ="frgnCd" data-json-obj="true" />		<!-- 실명 인증 - 내, 외국인 구분 -->
+
+				<input type="hidden" value="${receptionSms}"	name ="receptionSms" data-json-obj="true" />
+				<input type="hidden" value="${receptionPhone}"	name ="receptionPhone" data-json-obj="true" />
+				<input type="hidden" value="${receptionEmail}"	name ="receptionEmail" data-json-obj="true" />
+				<input type="hidden" value="${receptionAdress}"	name ="receptionAdress" data-json-obj="true" />
+				<input type="hidden" value="${receptionKakao}"	name ="receptionKakao" data-json-obj="true" />
+				
+				<input type="hidden" value="${receptionMarketingFirst}"	name ="receptionMarketingFirst" data-json-obj="true" />
+				<input type="hidden" value="${receptionMarketingSecond}"	name ="receptionMarketingSecond" data-json-obj="true" />
+				
+				<input type="hidden" value="01"		id ="inputLglPath" name ="inputLglPath" data-json-obj="true" />
+				<input type="hidden" value="0104"	id ="inputMdlPath" name ="inputMdlPath" data-json-obj="true" />
+				
+				<input type="hidden" value="${safeKey}"	id="safeKey" name ="safeKey" data-json-obj="true" />
+				<input type="hidden" name ="custNo" id="custNo" data-json-obj="true" />
+				<input type="hidden" name ="custDivCd" id="custDivCd" data-json-obj="true" />
+
+				<input type="hidden" id="viewGbn" name="viewGbn" value="${viewGbn}" data-json-obj="true" />
+				<input type="hidden" name="snsGbn" id="snsGbn" value="${snsGbn}" data-json-obj="true" />
+				<input type="hidden" name="snsid" id="snsid" value="${snsid}" data-json-obj="true" />
+				<input type="hidden" id="issCert" name ="issCert" data-json-obj="true"/>		<!-- 제휴코드 인증 -->
+				<input type="hidden" id="indvCert" name ="indvCert" data-json-obj="true"/>		<!-- 개별코드 인증 -->
+<%-- 				<input type="hidden" id="serverMode" value="<%=System.getProperty(CoreConstants.SERVER_MODE)%>"> <!-- 임시로 --> --%>
+
+				<!-- 건물번호 -->
+            <div class="subContents">
+                <div class="descInfo type05">
+                    <p>회원님의 정보입니다.</p>
+
+                    <div class="proViewInfo">
+                        <p class="desc type09">
+                            넥센타이어 사이트는 회원님의 개인정보가 보호받을 수 있도록 최선을 다하고 있습니다.
+                        </p>
+                    </div>
+               </div>
+
+               <h3 class="type10">가입 정보</h3>
+               <!-- 일반회원인 경우 -->
+               <div class="submitAreaWrap type02" id="memberTp1">
+                    <!--submitLeft-->
+                    <div class="submitLeft">
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="id01"><span class="essen black">아이디</span></label>
+                                <input type="text" id="custId" name="custId" value="${userLoginId}"class="type03 w280" title="아이디 입력란" tabindex="-1" readonly="readonly" data-json-obj="true" />
+                                <button type="button" class="type09 po_10 fr" onclick="javascript:fn_dropCust();">회원탈퇴</button>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="nPassword"><span class="black">신규 비밀번호 </span></label>
+                                <input type="password" id="custNewPwd" name="custNewPwd" class="type03" id="nPassword" title="신규 비밀번호 입력란" placeholder="신규 비밀번호를 입력해주세요" onkeyup="evManager.pwdValidation(); evManager.btnDisabled();" onkeydown="evManager.pwdValidation()" maxlength="20" data-json-obj="true" />
+                            </div>
+                            <p class="validation type05" style="display: none" id="custPwdTxt1" btnChk="0">
+                                <span><i class="ico11"></i>영문(대/소문자), 숫자를 포함하여 8~20자 이내로 입력해주세요.</span>
+                            </p>
+                        </div>
+                     </div>
+                     <!--submitLeft-->
+
+                    <!--submitRight-->
+                    <div class="submitRight">
+                        <div class="submitArea type04">
+                            <div class="submit" >
+                                <label for="cPassword"><span class="black">현재 비밀번호 </span></label>
+                                <input type="password" id="custPwd" name="custPwd" class="type03" id="cPassword" title="현재 비밀번호 입력란" tabindex="-1" placeholder="현재 비밀번호를 입력해주세요"  readonly="readonly" data-json-obj="true" />
+                            </div>
+
+                            
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="nPassword02"><span class="black">신규 비밀번호 확인</span></label>
+                                <input type="password" id="custNewRePwd" name="custNewRePwd" class="type03" id="nPassword02" title="신규 비밀번호 확인 입력란" placeholder="신규 비밀번호를 입력해주세요" onkeyup="evManager.pwdValidation2();" onkeydown="evManager.pwdValidation2()" maxlength="20" data-json-obj="true" />
+                            </div>
+							<p class="validation type05" style="display: none" id="custPwdTxt2" btnChk="0">
+								<span><i class="ico11"></i>이미 사용중인 비밀번호입니다.</span>
+							</p>
+                        </div>
+                    </div>
+                    <!--submitRight-->
+               </div>
+               <!-- 일반회원인 경우 -->
+
+               <!-- SNS 가입 회원 회원정보 수정  경우 -->
+               <div class="submitAreaWrap type02" id="memberTp2">
+                   <div class="submitArea  type04 w100per">
+                       <div class="submit" id="snsCateCase2" style="margin-top: 30px;">
+
+                       </div>
+                   </div>
+               </div>
+               <!-- SNS 가입 회원 회원정보 수정  경우 -->
+			   <!-- 여러건의 SNS 가입 회원 회원정보 수정 -->
+               <div class="submitAreaWrap type02" id="memberTp3">
+                    <div class="submitArea type04 multi w100per">
+
+                        <div class="submit">
+                            <label for="coupon"><span style="margin-top: 30px;">SNS</span></label>
+
+                            <div class="conWrapAll" id="snsCateCase3" style="margin-top: 30px;">
+
+                            </div>
+
+                        </div>
+                    </div>
+               </div>
+               <!-- 여러건의 SNS 가입 회원 회원정보 수정 -->
+
+               <h3 class="type11">기본 정보</h3>
+
+                <div class="submitAreaWrap type02">
+                    <!--submitLeft-->
+                    <div class="submitLeft personalDiv">
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="name"><span>이름 *</span></label>
+                                <input type="text" name="custNm" value="${userLoingNm}" class="type03 w280" id="custNm" tabindex="-1" title="이름 입력란" readonly="readonly">
+                                <button type="button" class="type09 po_10 fr" id="safeKeyChk" style="display:none;">인증번호 발급</button>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="phone01"><span>휴대전화 *</span></label>
+                                <select id="phone01" name="phone01" class="type06 w80 po_04 ml20" title="휴대전화 앞자리 선택"  tabindex="-1" data-json-obj="true" >
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+                                </select>
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="phone02" class="type07 w80" id="phone02" maxlength="4" title="휴대전화 중간번호 입력란" maxlength="4" onkeyup="evManager.phoneChkYn(); return false; validNumberCheck.keyUp(event);" data-json-obj="true"  />
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="phone03" class="type07 w80" id="phone03" maxlength="4" title="휴대전화 끝번호 입력란" maxlength="4" onkeyup="evManager.phoneChkYn(); return false; validNumberCheck.keyUp(event);" data-json-obj="true" />
+
+								<p class="validation type02" style="display: none" id="phoneTxt1">
+									<span><i class="ico07"></i>이미 사용중인 휴대전화번호입니다.</span>
+								</p>
+								<input type="hidden" name="phoneChkYn" id="phoneChkYn" />
+                                <button type="button" class="type09 po_10 fr" onclick="javascript:fnCallPhone('phone');">본인인증</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--submitLeft-->
+
+                    <!--submitRight-->
+                    <div class="submitRight personalDiv">
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="phone11"><span>전화번호</span></label>
+                                <select class="type06 w80 po_04 ml20" title="전화번호 앞자리 선택" id="cPhone01" name="cPhone01" tabindex="-1" data-json-obj="true">
+									<option value="02">02</option>
+									<option value="031">031</option>
+									<option value="032">032</option>
+									<option value="033">033</option>
+									<option value="041">041</option>
+									<option value="042">042</option>
+									<option value="043">043</option>
+									<option value="051">051</option>
+									<option value="052">052</option>
+									<option value="053">053</option>
+									<option value="054">054</option>
+									<option value="055">055</option>
+									<option value="061">061</option>
+									<option value="062">062</option>
+									<option value="063">063</option>
+									<option value="064">064</option>
+									<option value="070">070</option>
+									<option value="0505">0505</option>
+                                </select>
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="cPhone02" class="type07 w80" id="cPhone02" maxlength="4" onkeyup="validNumberCheck.keyUp(event);" title="전화번호 중간번호 입력란" data-json-obj="true">
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="cPhone03" class="type07 w80" id="cPhone03" maxlength="4" onkeyup="validNumberCheck.keyUp(event);" title="휴대폰 끝번호 입력란" data-json-obj="true">
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="phone31"><span>실사용휴대전화</span></label>
+                                <select class="type06 w80 po_04 ml20" title="휴대전화 앞자리 선택" id="rPhone01" name="rPhone01" tabindex="-1" data-json-obj="true">
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+                                </select>
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="rPhone02" class="type07 w80" id="rPhone02" maxlength="4" onkeyup="evManager.rPhoneChkYn(); return false; validNumberCheck.keyUp(event);" title="전화번호 중간번호 입력란" data-json-obj="true">
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="rPhone03" class="type07 w80" id="rPhone03" maxlength="4" onkeyup="evManager.rPhoneChkYn(); return false; validNumberCheck.keyUp(event);" title="휴대폰 끝번호 입력란" data-json-obj="true">
+
+								<p class="validation type02" style="display: none" id="rPhoneTxt1">
+									<span><i class="ico07"></i>이미 사용중인 휴대전화번호입니다.</span>
+								</p>
+								<input type="hidden" name="rPhoneChkYn" id="rPhoneChkYn" />
+                                <button type="button" class="type09 po_10 fr btnPhoneCerti" certiTp="rPhone" >휴대폰인증</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--submitRight-->
+                    <!-- personalDiv -->
+                    <!-- CorpDiv Start -->
+<!--submitLeft-->
+                    <div class="submitLeft CorpDiv" style="display:none;">
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="buNum"><span>사업자등록번호 *</span></label>
+                                <div class="conWrap">
+									<input type="text" name="bizRegNo" id="bizRegNo" class="type03 w280" title="사업자등록번호" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="buNum"><span>법인명 *</span></label>
+                                <div class="conWrap">
+                                    <input type="text" name="bizRegNm" id="bizRegNm" class="type03 w280" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="buNum"><span>업종 *</span></label>
+                                <div class="conWrap">
+                                    <input type="text" name="bizType" id="bizType" class="type03 w280"  data-json-obj="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <input type="hidden" name="legrBrthYmd" id="legrBrthYmd">
+                                <label for="datebirth"><span>대표자 생년월일 *</span></label>
+                                <div class="conWrap">
+                                <!--
+                                     <input type="text" name="legalBrthYY" id="legalBrthYY" class="type03 w280" >-<input type="text" name="legalBrthMM" id="legalBrthMM" class="type03 w280" >-<input type="text" name="legalBrthDD" id="legalBrthDD" class="type03 w280" >
+                                 -->
+									<select class="type04 w100 ml20" title="년도 선택" name="legalBrthYY" id="legalBrthYY" onchange="evManager.btnDisabled()">
+									</select>
+
+									<span class="divi type02"></span>
+
+									<select class="type04 w80 ml20"  title="월 선택" name="legalBrthMM" id="legalBrthMM" onchange="evManager.btnDisabled()">
+									</select>
+
+									<span class="divi type02"></span>
+
+									<select class="type04 w80 ml20"  title="일 선택" name="legalBrthDD" id="legalBrthDD" onchange="evManager.btnDisabled()">
+									</select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="phone01"><span>대표자 휴대전화 *</span></label>
+                                <select class="type04 w80 ml20" title="전화번호 앞자리 선택" id="Cphone01" name="Cphone01" >
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+                                </select>
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="Cphone02" class="type07 w80" id="Cphone02" maxlength="4" onkeyup="validNumberCheck.keyUp(event);" title="전화번호 중간번호 입력란" >
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="Cphone03" class="type07 w80" id="Cphone03" maxlength="4" onkeyup="validNumberCheck.keyUp(event);" title="휴대폰 끝번호 입력란" >
+                                <!--
+                                <button type="button" class="type09 po_10 fr">본인인증</button> -->
+                            </div>
+                        </div>
+
+						<div class="submitArea type04 ">
+		                    <div class="submit">
+		                            <label for="address01"><span class="black">담당자명 *</span></label>
+
+		                            <div class="conWrap">
+		                                <input type="text" name="perCharge" class="type07 w80" id="perCharge" maxlength="25" data-json-obj="true">
+		                            </div>
+		                   </div>
+		               </div>
+
+                    </div>
+                    <!--submitLeft-->
+
+                    <!--submitRight-->
+                    <div class="submitRight CorpDiv" style="display:none;">
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="phone11"><span>사업자 구분</span></label>
+                                <div class="conWrap">
+                                    <input type="text" name="comDivCd" id="comDivCd" class="type03 w280" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="representative"><span>대표자명 *</span></label>
+
+                                <div class="conWrap">
+                                    <input type="text" name="CcustNm" id="CcustNm" class="type03 w280" >
+                                    <!-- <button type="button" class="type09 po_10 fr">인증번호발급</button> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="business"><span>업태 *</span></label>
+                                <div class="conWrap">
+                                    <input type="text" name="bizCondition" id="bizCondition" class="type03 w280" data-json-obj="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="gender"><span>대표자 성별 *</span></label>
+                                <div class="conWrap">
+                                	<input type="text" name="gendCd" id="gendCd" class="type03 w280" readonly="readonly" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="comphone01"><span>회사 번호 *</span></label>
+                                <select class="type04 w80 ml20" title="전화번호 앞자리 선택" id="CcPhone01" name="CcPhone01" >
+									<option value="02">02</option>
+									<option value="031">031</option>
+									<option value="032">032</option>
+									<option value="033">033</option>
+									<option value="041">041</option>
+									<option value="042">042</option>
+									<option value="043">043</option>
+									<option value="051">051</option>
+									<option value="052">052</option>
+									<option value="053">053</option>
+									<option value="054">054</option>
+									<option value="055">055</option>
+									<option value="061">061</option>
+									<option value="062">062</option>
+									<option value="063">063</option>
+									<option value="064">064</option>
+									<option value="070">070</option>
+									<option value="0505">0505</option>
+                                </select>
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="CcPhone02" class="type07 w80" id="CcPhone02" maxlength="4" onkeyup="validNumberCheck.keyUp(event);" title="전화번호 중간번호 입력란" >
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="CcPhone03" class="type07 w80" id="CcPhone03" maxlength="4" onkeyup="validNumberCheck.keyUp(event);" title="휴대폰 끝번호 입력란" >
+
+                            </div>
+                        </div>
+
+                        <div class="submitArea type04">
+                            <div class="submit">
+                                <label for="manager01"><span>담당자 휴대전화 *</span></label>
+                                <select class="type04 w80 ml20" title="휴대전화 앞자리 선택" id="CrPhone01" name="CrPhone01" >
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+                                </select>
+                                <span class="divi type02"></span>
+                                <input type="text" name="CrPhone02" class="type07 w80" id="CrPhone02" maxlength="4" onkeyup="evManager.rPhoneChkYn(); return false; validNumberCheck.keyUp(event);" title="전화번호 중간번호 입력란" >
+
+                                <span class="divi type02"></span>
+                                <input type="text" name="CrPhone03" class="type07 w80" id="CrPhone03" maxlength="4" onkeyup="evManager.rPhoneChkYn(); return false; validNumberCheck.keyUp(event);" title="휴대폰 끝번호 입력란" >
+
+                                <button type="button" class="type09 po_10 fr btnPhoneCerti" certiTp="CrPhone">휴대폰인증</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--submitRight-->
+					<!-- CorpDiv End -->
+                </div>
+
+                <div class="submitArea type06 w100per">
+                    <div class="submit">
+                        <label for="email01"><span class="black">이메일</span></label>
+						<input type="hidden" id="email" name="email" data-json-obj="true" />
+                        <input type="text" name="email01" class="type03 w145" id="email01" title="이메일 앞자리 입력란" onkeyup="this.value=evManager.noKorean(this.value); evManager.btnDisabled();" data-json-obj="true"><span class="f_point02">@</span>
+                        <input type="text" name="email02" class="type03 w300" id="email02" title="이메일 뒷자리 입력란" onkeyup="this.value=evManager.noKorean2(this.value); evManager.btnDisabled();" data-json-obj="true">
+
+                        <select class="type06 w200" id="email03" title="이메일 선택" tabindex="-1" data-json-obj="true">
+							<option value="">직접입력</option>
+	                        <option value="hanmail.net">hanmail.net</option>
+	                        <option value="naver.com">naver.com</option>
+	                        <option value="nate.com">nate.com</option>
+	                        <option value="gmail.com">gmail.com</option>
+	                        <option value="hotmail.com">hotmail.com</option>
+	                        <option value="paran.com">paran.com</option>
+	                        <option value="empal.com">empal.com</option>
+	                        <option value="korea.com">korea.com</option>
+	                        <option value="freechal.com">freechal.com</option>
+                        </select>
+                    </div>
+               </div>
+
+               <div class="submitArea type06 w100per">
+                    <div class="submit">
+	                    <label for="address01"><span class="black">주소</span></label>
+
+	                    <div class="conWrap type02">
+	                        <a href="#" name="selectAddr" val="P1" class="searchBtn03 md-trigger" onclick="return false" tabindex="-1" data-modal="modal-22"></a>
+	                        <input type="text" name="addrFull" id="addrFull" class="type03 w970" id="info02" readonly="readonly" title="주소 입력란" placeholder="주소를 검색하세요" >
+	                        <input type="hidden" id="addr" name="addr" data-json-obj="true" />
+	                        <input type="hidden" id="detlAddr" name="detlAddr" data-json-obj="true" />
+	                        <input type="hidden" id="posNo" name="posNo" data-json-obj="true" />
+	                        <input type="hidden" id="bldMngNo" name="bldMngNo" data-json-obj="true" />
+	                    </div>
+
+	                    <p class="validation type04">
+	                        <span><i class="ico11"></i>입력해주신 이메일/주소는 메일 또는 우편으로 계약서를 발송해드립니다.</span>
+	                    </p>
+                   </div>
+               </div>
+
+                <div class="submitArea type06 w100per">
+                    <div class="submit">
+	                    <label for="marketing01"><span class="black">마케팅 활용동의</span></label>
+                        <div class="conWrap type02">
+                            <input type="checkbox" id="cagYn1" name="cagYn1" class="type04" data-json-obj="true"><label for="cagYn1"><span></span><em class="w50">SMS</em></label>
+                            <input type="checkbox" id="cagYn2" name="cagYn2" class="type04" data-json-obj="true"><label for="cagYn2"><span></span><em class="w50">전화</em></label>
+                            <input type="checkbox" id="cagYn3" name="cagYn3" class="type04" data-json-obj="true"><label for="cagYn3"><span></span><em class="w50">E-MAIL</em></label>
+                            <!-- <input type="checkbox" id="cagYn4" name="cagYn4" class="type04" data-json-obj="true"><label for="cagYn4"><span></span><em class="w50">주소</em></label> -->
+                            <input type="checkbox" id="cagYn5" name="cagYn5" class="type04" data-json-obj="true"><label for="cagYn5"><span></span><em class="w50">알림톡</em></label>
+                        </div>
+                   </div>
+                   <div class="submit">
+	                    <label for="marketing01"><span class="black">영리성 광고 수신동의</span></label>
+                        <div class="conWrap type02">
+                            <input type="checkbox" id="magYn1" name="magYn1" class="type04" data-json-obj="true"><label for="magYn1"><span></span><em class="w300">마케팅 활용 정보 수집 및 이용 동의</em></label>
+                            <input type="checkbox" id="magYn2" name="magYn2" class="type04" data-json-obj="true"><label for="magYn2"><span></span><em class="w300">신규, 맞춤 서비스 제공을 위한 이용 동의</em></label>
+                        </div>
+                   </div>
+               </div>
+               </form>
+               <!--  frm End -->
+
+               <!--  attchFrm Start -->
+				<form name="attchFrm" id="attchFrm" onsubmit="return false;" style="clear:both;">
+					<input type="hidden" name="custNo" id="attchCustNo">
+					<input type="hidden" name="custId" id="attchCustId">
+				<!-- 증빙자료 Start -->
+				<h3 class="type11 CorpDiv" style="display:none;">증빙자료</h3>
+				<div class="fileAttachWrap type02 CorpDiv" style="display:none;">
+					<div class="fileAttachBox">
+						<h4 class="type02">사업자등록사본</h4>
+						<input type="hidden" name="fileFlag01" id="fileFlag01">
+						<input id="fileUp01" class="fileUp" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png" multiple >
+						<div class="savePreview" style="display:none;">
+                            <a href="#;" class="fDel" bizFile="fileFlag01" ></a>
+                            <img id="attachPath1" src="/img/customer/m_slider_01.jpg"  alt=""/>
+                        </div>
+					</div>
+
+					<div class="fileAttachBox">
+						<h4>통장사본 (개인사업자 or 법인)</h4>
+						<input type="hidden" name="fileFlag02" id="fileFlag02">
+						<input id="fileUp02" class="fileUp" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png" multiple>
+
+						<div class="savePreview" style="display:none;">
+                            <a href="#;" class="fDel" bizFile="fileFlag02"></a>
+                            <img id="attachPath2" src="../img/customer/m_slider_01.jpg"  alt=""/>
+                        </div>
+					</div>
+
+					<div class="fileAttachBox">
+						<h4>차량등록증사본 (개인사업자 or 법인)</h4>
+						<input type="hidden" name="fileFlag03" id="fileFlag03">
+						<input id="fileUp03" class="fileUp" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png" multiple>
+						<div class="savePreview" style="display:none;">
+                            <a href="#;" class="fDel" bizFile="fileFlag03"></a>
+                            <img id="attachPath3" src="../img/customer/m_slider_01.jpg"  alt=""/>
+                        </div>
+					</div>
+				</div>
+               <!-- 증빙자료 End -->
+               </form>
+               <!--  attchFrm End -->
+
+               <!--  subFrm Start -->
+               <form name="subFrm" id="subFrm" onsubmit="return false;" style="clear:both;">
+
+                <h3 class="type11">부가 정보</h3>
+
+<!--                 <div class="submitArea type04" id="affi" style="display:none"> -->
+                <div class="submitArea type04">
+                    <div class="submit">
+                        <label for="affiliateCd"><span class="black">제휴코드</span></label>
+<!--                         <input type="text" name="affiliateCd" id="affiliateCd" class="type03 w280"  maxlength="10" title="제휴코드 입력란" placeholder="제휴코드를 입력해주세요" data-json-obj="true" onkeyup="this.value=evManager.noKorean(this.value); evManager.affiliateCdChk();"> -->
+                        <input type="text" name="affiliateCd" id="affiliateCd" class="type03 w280"  maxlength="10" title="제휴코드 입력란" onchange="fn_affiliateCng()" placeholder="제휴코드를 입력해주세요">
+                        <input type="hidden" name="affiliateCdChkYn" id="affiliateCdChkYn">
+                        <button type="button" class="type09 po_10 fr" id="btnaffiliateCdCheck" onclick="fn_affiliateCodePop()">코드 확인</button>
+						<p class="validation type03 w754" style="display: none" id="affiliateCdTxt" btnChk="0">
+						</p>
+                    </div>
+                </div>
+
+
+                <div class="submitArea type04">
+                    <div class="submit">
+                        <label for="employeeCode"><span class="black">임직원 코드</span></label>
+                        <input type="text" name="officerCd" id="officerCd" class="type03 w280"  maxlength="10" title="임직원 코드 입력란" placeholder="임직원 코드를 입력해주세요" data-json-obj="true" onkeyup="this.value=evManager.noKorean(this.value); evManager.officerCdChk();">
+                        <input type="hidden" name="officerCdChkYn" id="officerCdChkYn">
+                        <button type="button" class="type09 po_10 fr" id="btnEmployeeCdCheck">코드 확인</button>
+						<p class="validation type03 w754" style="display: none" id="employeeCdTxt" btnChk="0">
+						</p>
+
+                    </div>
+                </div>
+
+                <div class="sList">
+                        <p class="validation type06">
+                            <span>
+                            <!--
+                                <i class="ico11"></i>
+                                <em>차량 정보를 입력하시면 넥센타이어 서비스 이용 시,  편리하게 이용할수 있습니다.</em>
+                                <em class="ml28">본인 소유 차량 기준 NICE 디앤알 빅데이터 기반 검색이 진행됩니다.</em>
+                                 -->
+                            </span>
+                        </p>
+                </div>
+                <!-- 차량번호입력 후 차종 -->
+
+                <div class="btnArea type01 center">
+                     <button type="button" class="type05 center w387" id="btnCancel">취소</button>
+                     <button type="button" class="type01 center w387" id="btnJoin">수정</button>
+                </div>
+				</form>
+            </div>
+		</div>
+		<!--subContentsWrap-->
+	<!--  subFrm End -->
+
+	<form name="form_chk" method="post">
+		<input type="hidden" name="m" value="checkplusSerivce">		<!-- 필수 데이타로, 누락하시면 안됩니다. -->
+		<input type="hidden" name="EncodeData" value="${sEncData}">		<!-- 위에서 업체정보를 암호화 한 데이타입니다. -->
+		<!-- 업체에서 응답받기 원하는 데이타를 설정하기 위해 사용할 수 있으며, 인증결과 응답시 해당 값을 그대로 송신합니다.
+			해당 파라미터는 추가하실 수 없습니다. -->
+		<input type="hidden" name="param_r1" value="">
+		<input type="hidden" name="param_r2" value="">
+		<input type="hidden" name="param_r3" value="">
+	</form>
+
+	<form id="userinfo_form" name="userinfo_form" method="post" accept-charset="UTF-8">
+
+		<!-- 약관동의 관련 데이터  -->
+		<input type="hidden" id="receptionSms" name="receptionSms" value="${receptionSms}"/>
+		<input type="hidden" id="receptionPhone" name="receptionPhone" value="${receptionPhone}"/>
+		<input type="hidden" id="receptionEmail" name="receptionEmail" value="${receptionEmail}"/>
+		<input type="hidden" id="receptionAdress" name="receptionAdress" value="${receptionAdress}"/>		
+		<input type="hidden" id="receptionKakao" name="receptionKakao" value="${receptionKakao}"/>
+		
+		<input type="hidden" id="receptionMarketingFirst" name="receptionMarketingFirst" value="${receptionMarketingFirst}"/>
+		<input type="hidden" id="receptionMarketingSecond" name="receptionMarketingSecond" value="${receptionMarketingSecond}"/>
+
+		<!-- 간편로그인 관련 데이터  -->
+		<input type="hidden" id="viewGbn" name="viewGbn" value="${viewGbn}" />
+		<input type="hidden" name="snsGbn" id="snsGbn" value="${snsGbn}">
+		<input type="hidden" name="snsid" id="snsid" value="${snsid}">
+
+		<!-- 실명인증 관련 관련 데이터  -->
+		<input type="hidden" name="diVal" 		id="diVal" value="">   			<!-- 실명인증 고유값 		-->
+		<input type="hidden" name="ciVal" 		id="ciVal" value="">   			<!-- 실명인증 고유값 		-->
+		<input type="hidden" name="vnVal" 		id="vnVal" value="">   			<!-- 실명인증 고유값		-->
+		<input type="hidden" name="custNm" 		id="custNm" value=""> 			<!-- 실명인증 이름    		-->
+		<input type="hidden" name="phone"  		id="phone" value="">			<!-- 실명인증 핸드폰번호 	-->
+		<input type="hidden" name="gendCd"  	id="gendCd" value=""> 			<!-- 실명인증 회원성별	-->
+		<input type="hidden" name="legrBrthYmd" id="legrBrthYmd" value="">  	<!-- 실명인증 회원생일 	-->
+		<input type="hidden" name="frgnCd" 		id="frgnCd" value="">  	<!-- 실명인증 회원생일 	-->
+		
+	</form>
+
+	<form name="jusoFrm" id="jusoFrm" method="post" >
+		<input type="hidden" name="currentPage" id="currentPage" value="1"/>
+		<input type="hidden" name="countPerPage" id="countPerPage" value="4"/>
+		<input type="hidden" name="confmKey" id="confmKey" value="<%= AppContext.getString("zipcd.service.key") %>"/>
+		<input type="hidden" name="connectTimeout" id="connectTimeout" value="<%= AppContext.getString("zipcd.connect.ConnectTimeout") %>"/>
+		<input type="hidden" name="readTimeout" id="readTimeout" value="<%= AppContext.getString("zipcd.connect.ReadTimeout") %>"/>
+		<input type="hidden" name="keyword" id="keyword" />
+	</form>
+
+
+<!-- layerPopup > 제휴코드 인증 // -->
+<div class="popupWrap type03 md-modal-3 md-effect-1" id="modal-affiliatecode">
+	<div class="modal-inner">
+		<!-- md-show -->
+		<header class="noLine">
+			<a onclick="javascript:fn_CancelCert();" class="layPopClose md-close"></a>
+		</header>
+
+		<div class="numberSearch">
+			<label for="nonCustOrder">개별코드 인증</label>
+		</div>
+
+		<!--contents-->
+		<div class="popContents">
+
+			<div class="input-item">
+				<input type="text" placeholder="인증코드(대소문자구분)를 입력해 주세요." id="indvAffiliateCode" maxlength="12">
+			</div>
+			<div class="btnArea">
+				<button type="button" class="type04 w100per" onclick="fn_indvCert()">인증하기</button>
+			</div>
+			<ul><!-- 
+				<li>주문 시, 입력하신 이름/휴대폰 번호와 <br/>주문을 완료 후 발급된 주문번호를 입력해 주세요.</li>
+				<li>주문번호를 잊으신 경우 넥스트레벨 고객센터 <br/> 1855-0100으로 문의해 주시기 바랍니다.</li>
+				 -->
+				 <li>개별인증코드를 대소문자 구분 후 <br>입력해 주세요.</li>
+				 <li>개별인증코드 인증 후 할인혜택이 자동 적용됩니다.</li>
+				 <!-- 
+				 <li>개별인증코드를 잊으신 경우, <br>NEXT LEVEL 홈페이지 內 1:1 문의를 남겨주세요.</li>
+				  -->
+			</ul>
+
+		</div>
+		<!--contents-->
+
+	</div>
+</div>
+
+
+	<!-- layerPopup // -->
+	<div class="popupWrap md-modal" id="modal-11"> <!-- md-show -->
+		<!-- phoneAccessFrm Start -->
+		<form name="phoneAccessFrm" method="post" >
+			<input type="hidden" id="resCd" name="resCd" />
+			<input type="hidden" id="resDetail" name="resDetail" />
+			<input type="hidden" id="resSeq" name="resSeq" data-json-obj="true" />
+			<input type="hidden" id="phnYn" name="phnYn" />
+
+		<header>
+			<h2>
+                휴대폰인증
+				<a href="#" class="layPopClose md-close"></a>
+			</h2>
+		</header>
+
+		<!--contents-->
+		<div class="popContents">
+            <p class="desc type01">
+                원활한 서비스 제공의 위한 휴대폰 인증을 진행하고 있습니다.<br/>
+                입력하신 휴대전화로 발송된 인증번호를 입력해주세요
+            </p>
+
+            <div class="submitArea type05">
+                <div class="submit">
+                    <label for="name01"><span class="black">인증번호</span></label>
+                    <input type="text" name="accessNum" id="accessNum" class="type03 w220" title="인증번호 입력란" placeholder="인증번호를 입력하세요" maxlength="10" onkeyup="validNumberCheck.keyUp(event);" data-json-obj="true">
+
+                    <button type="button" class="type09 po_10 fr" id="certiReSend">재전송</button>
+                </div>
+
+                <p class="validation type05">
+                    <span><i class="ico11"></i>인증번호 발급이 필요한 경우 재전송 버튼을 클릭해주세요.</span>
+                </p>
+            </div>
+
+             <div class="btnArea type03">
+                 <button type="button" class="type04 w50per" id="certiPhoneCancel">취소<i class="ico01"></i></button>
+                 <button type="button" class="type01 w50per" id="certiPhoneConfirm">확인<i class="ico01"></i></button>
+             </div>
+
+		</div>
+		<!--contents-->
+		</form>
+		<!-- phoneAccessFrm End -->
+    </div>
+	<!-- layerPopup // -->
+
+		 <!-- layerPopup // -->
+		<div class="popupWrap type03 md-modal-3" name="popAddr" id="modal-22"> <!-- md-show -->
+	        <header class="noLine">
+	            <a href="#" class="layPopClose md-close"></a>
+	        </header>
+
+			<p class="desc">예) 도로명 :마곡중앙로 177 더넥센유니버시티 /지번 : 마곡동 756-5  / 건물명 : 넥센유니버시티 </p>
+
+	        <div class="numberSearch type02">
+				<label for="carNumber">우편번호 검색</label>
+	            <input type="text" name="jusoTxt" id="jusoTxt" class="type04" onkeydown="enterSchKey('juso');" placeholder="도로명/지번/건물명 주소 입력"> <a href="javascript:selectJuso('1');" class="searchBtn"></a>
+	        </div>
+
+
+	        <!--contents-->
+	        <div class="popContents">
+				<div class="zipCode">
+					<div class="total">total<span id="totalCount"></span></div>
+
+					<table class="tbl type02">
+						<caption>검색완료</caption>
+						<colgroup>
+							<col style="width:70px"/>
+							<col />
+							<col style="width:120px"/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">
+									주소
+								</th>
+								<th scope="col"></th>
+								<th scope="col">
+									우편번호
+								</th>
+							</tr>
+						</thead>
+						<tbody id="jusoList">
+						</tbody>
+					</table>
+	            </div>
+
+	            <!--paging-->
+	            <div class="paging type02" id="paging" style="display:none;"></div>
+				<!--paging-->
+
+	        </div>
+	        <!--contents-->
+
+	    </div>
+		<!-- layerPopup // -->
+
+
+
+		<!-- layerPopup // -->
+		<div class="popupWrap hAuto md-modal" id="modal-33" name="popAddrDetail"> <!-- md-modal-33 md-effect-1 md-show -->
+	        <header class="noLine">
+	            <a href="#" class="layPopClose md-close"></a>
+	        </header>
+
+			<p class="desc"><!-- 예) 도로명 :마곡중앙로 177 더넥센유니버시티 /지번 : 마곡동 756-5  / 건물명 : 넥센유니버시티 --> </p>
+
+	        <div class="numberSearch type02">
+				<label for="carNumber">우편번호 검색</label>
+	            <input type="text" name="" id="" disabled="disabled" class="type04" >
+	            <!--  <a href="#" class="searchBtn"></a> -->
+	        </div>
+
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <!-- 주소 -->
+	            <table class="tbl submit">
+	                <caption>주소</caption>
+	                <colgroup>
+	                    <col style="width:150px">
+	                    <col>
+	                </colgroup>
+	                <tbody>
+	                    <tr>
+	                        <th scope="row">
+	                            <label for="tit01"><span class="black">우편번호</span></label>
+	                        </th>
+	                        <td>
+	                            <p id="popZipCode"></p>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <th scope="row" class="vTop">
+	                            <label for="tit01"><span class="essen black">주소</span></label>
+	                        </th>
+	                        <td class="type02">
+	                            <!-- 주소 -->
+	                            <div class="address">
+	                                <ul>
+	                                    <li>
+	                                        <span class="addTit">도로명</span>
+	                                        <span id="popLoadAddr"></span>
+	                                    </li>
+	                                    <li>
+	                                        <span class="addTit">지번</span>
+	                                        <span  id="popJibunAddr"></span>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                            <!-- 주소 -->
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <th scope="row" class="vTop">
+	                            <label for="popDetailAddr"><span class="essen black">상세주소</span></label>
+	                        </th>
+	                        <td class="type03">
+	                            <input type="text" name="popDetailAddr" class="type03 w450" id="popDetailAddr" title="상세주소 입력란" maxlength="20" placeholder="예)넥센아파트 1동 1101호 지하2층 주차장 N8)">
+	                        </td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	            <!-- 주소 -->
+
+	            <div class="btnArea type03">
+	                 <button type="button" class="type04 w50per" onclick="sendChildValueCancle();">취소<i class="ico01"></i></button>
+	                 <button type="button" class="type01 w50per" onclick="sendChildValueFix();">적용<i class="ico01"></i></button>
+	             </div>
+
+	        </div>
+	        <!--contents-->
+
+	    </div>
+		<!-- layerPopup // -->
+
+		<!-- layerPopup > 차량번호 검색 // -->
+		<div class="popupWrap type02 md-modal-3" id="modal-2" id="carNumberLayerArea"> <!-- md-show -->
+	        <header class="noLine">
+	        <!--
+				<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+	            <a href="#" class="layPopClose md-close"></a>
+	             -->
+	        </header>
+
+			<p class="desc">※ NICE디앤알 빅데이터 기반이며, 소유차량에 대해서 로그인 후 검색 가능합니다.</p>
+
+	        <div class="numberSearch">
+				<label for="carNumber">차량번호</label>
+	            <input type="text" name="carNumber" id="carNumber" class="type04" placeholder="차량번호를 입력해 주세요. " readonly="readonly">
+	            <a href="#" class="searchBtn" id="btnCarNumber"></a>
+	        </div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="descState">
+	                <img src="/img/product/desc_img_01.png"  alt=""/>
+	            </div>
+
+	            <div class="searchResult">
+	            </div>
+	        </div>
+	        <!--contents-->
+
+	    </div>
+		<!-- layerPopup > 차량번호 검색 // -->
+
+		<!-- layerPopup > 제조사 // -->
+		<div class="popupWrap type02 md-modal-3" id="modal-3"> <!-- md-show -->
+			<header>
+				<h2>
+					제조사
+					<!--
+					<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+					<a href="#" class="layPopClose md-close"></a>
+					 -->
+				</h2>
+			</header>
+
+			<div class="sizeSelectView">
+				<ul>
+				</ul>
+			</div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox" id="searchClCdArea">
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+
+	    </div>
+
+		<!-- layerPopup > 제조사  // -->
+
+
+		<!-- layerPopup > 모델명 // -->
+		<div class="popupWrap type02 md-modal-3" id="modal-4"> <!-- md-show -->
+			<header>
+				<h2>
+					모델명
+					<!--
+					<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+					<a href="#" class="layPopClose md-close"></a>
+					 -->
+				</h2>
+			</header>
+
+			 <div class="sizeSelectView">
+				<ul>
+				</ul>
+			</div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox" id="modelArea">
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+
+	    </div>
+
+		<!-- layerPopup > 모델명  // -->
+
+		<!-- layerPopup > 사이즈  // -->
+		<div class="popupWrap type02 md-modal-3" id="modal-5"> <!-- md-show -->
+			<header>
+				<h2>
+					사이즈
+					<!--
+					<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+					<a href="#" class="layPopClose md-close"></a>
+					 -->
+				</h2>
+			</header>
+
+			 <div class="sizeSelectView">
+				<ul>
+				</ul>
+			</div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox">
+					   <ul class="sizeSelect" id="sizeArea">
+					   </ul>
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+	    </div>
+
+		<!-- layerPopup > 사이즈 // -->
+
+
+		<!-- layerPopup > 사이즈(단면폭)// -->
+		<div class="popupWrap type02 md-modal-3" id="modal-6"> <!-- md-show -->
+			<header>
+				<h2>
+					단면폭
+					<!--
+					<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+					<a href="#" class="layPopClose md-close"></a>
+					 -->
+				</h2>
+			</header>
+
+			<div class="sizeSelectView">
+				<ul>
+				</ul>
+			</div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox">
+					   <ul class="sizeSelect" id="sectionWidthArea">
+					   </ul>
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+	    </div>
+
+		<!-- layerPopup > 사이즈(단면폭) // -->
+
+
+		<!-- layerPopup > 편평비  // -->
+		<div class="popupWrap type02 md-modal-3" id="modal-7"> <!-- md-show -->
+			<header>
+				<h2>
+					편평비
+					<!--
+					<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+					<a href="#" class="layPopClose md-close"></a>
+					 -->
+				</h2>
+			</header>
+
+			 <div class="sizeSelectView">
+				<ul>
+				</ul>
+			</div>
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox">
+					   <ul class="sizeSelect" id="aspectRatioArea">
+					   </ul>
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+	    </div>
+
+		<!-- layerPopup > 편평비 // -->
+
+
+		<!-- layerPopup > 인치 // -->
+		<div class="popupWrap type02 md-modal-3" id="modal-8"> <!-- md-show -->
+			<header>
+				<h2>
+					인치
+					<!--
+					<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+					<a href="#" class="layPopClose md-close"></a>
+					 -->
+				</h2>
+			</header>
+
+			<div class="sizeSelectView">
+				<ul>
+				</ul>
+			</div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox">
+					   <ul class="sizeSelect" id="wheelInchesArea">
+					   </ul>
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+	    </div>
+		<!-- layerPopup > 인치 // -->
+
+		<!-- layerPopup - 나이스 디엔알 검색 완료 // -->
+		<div class="popupWrap type02 md-modal-3" id="niceResult"> <!-- md-show -->
+	        <header class="noLine">
+	        <!--
+				<a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"/></a>
+				<a href="#" class="layPopClose md-close"></a>
+				 -->
+	        </header>
+
+	        <p class="desc">※ NICE디앤알 빅데이터 기반이며, 소유차량에 대해서 로그인 후 검색 가능합니다.</p>
+
+	        <div class="numberSearch">
+			  <label for="carNumber">차량번호</label>
+			  <input type="text" class="type04" placeholder="차량번호를 입력해 주세요." id="niceResultCarNo" disabled="disabled">
+	        </div>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="searchResult" id="niceResultArea">
+	            </div>
+	        </div>
+	        <!--contents-->
+	    </div>
+		<!-- layerPopup - 나이스 디엔알 검색 완료 // -->
+
+		<!-- layerPopup - 나이스 디엔알 사이즈 선택  // -->
+		<div class="popupWrap type02 md-modal-3" id="niceTireSize"> <!-- md-show -->
+	       <header class="type02">
+	            <div class="numberSearch type04">
+	                <label for="carNumber">차량번호</label>
+	                  <input type="text" id="niceSizeCarNo" class="type04" placeholder="차량번호를 입력해 주세요." disabled="disabled">
+	            </div>
+	            <!--
+	             <a href="#" class="size"><img src="/img/product/size_btn.png" alt="사이즈 확인"></a>
+	             <a href="#" class="layPopClose md-close"></a>
+	              -->
+	        </header>
+
+	        <!--contents-->
+	        <div class="popContents">
+	            <div class="alertView">
+	                <!-- sizeSelect-->
+	                <div class="scrollBox" id="niceTireSizeArea">
+	                </div>
+	                <!-- sizeSelect-->
+			    </div>
+	        </div>
+	        <!--contents-->
+	    </div>
+		<!-- layerPopup - 나이스 디엔알 사이즈 선택  // -->
+
+		<div class="md-overlay"></div>
+
+
+<script type="text/javascript" src="/js/lib/classie.js"></script>
+<script type="text/javascript" src="/js/lib/modalEffects.js"></script>
+
+<script type="text/javascript">
+var userLoginId = "${userLoginId}";
+var snsid = "${snsid}";
+var snsGbn = "${snsGbn}";
+var usrType = "${usrType}";
+var haveCarCnt =0;
+var carNoArr = new Array();
+var certList = new Array();
+/* evManager Start */
+var evManager = {
+		fileData01 : ""	//사업자등록사본
+		,
+		fileData02 : ""	//통장사본 (개인사업자 or 법인
+		,
+		fileData03 : ""	//차량등록증사본 (개인사업자 or 법인)
+		,
+		niceGradeCd : new Array()
+		,
+		init : function(){
+			ComUtil.loading();
+
+			if (usrType != "S") {
+				// 일반회원 로그인의 경우
+				$("#memberTp1").show();
+				$("#memberTp2").hide();
+				$("#memberTp3").hide();
+			} else {
+				// SNS 로그인의 경우 화면 변경
+				$("#memberTp1").hide();
+				$("#memberTp2").show();
+				$("#memberTp3").hide();
+			}
+
+			//대표생일
+			evManager.setBirth();
+			// 차량정보 년월
+			evManager.setYYYYMM();
+
+			// 조회 URL
+			var pUrl = "/mypage/selectMemberInfo";
+			// 법인 테스트 : vim789090
+			var pParams = {
+					sCustId 		: userLoginId
+					//sCustId 		: 'vim789090'
+			};
+			//console.log(pParams);
+			cfnSendRequest(pUrl,pParams,'selectMemberInfo');
+
+			//파일 업로드
+			$('#fileUp01').FancyFileUpload({
+				params : {
+					action : 'fileuploader' ,
+			  	},
+			  	//파일 저장
+			  	added : function(e, data) {
+			  		console.log("fileUp01::::");
+			  		console.log(data);
+			  		if(data.files[0].type == ""){
+			  			ComUtil.alert("[사업자등록증사본] 첨부파일은 이미지(jpg, png, gif, pdf, bmp) 파일만 가능합니다.")
+			  		} else {
+				  		$("#fileFlag01").val("C");
+			  			evManager.fileData01 = data.files;
+			  		}
+				}
+				,
+			  	maxfilesize : 1000000
+			});
+			$('#fileUp02').FancyFileUpload({
+				params : {
+					action : 'fileuploader' ,
+			  	},
+			  	//파일 저장
+			  	added : function(e, data) {
+			  		if(data.files[0].type == ""){
+			  			ComUtil.alert("[통장사본] 첨부파일은 이미지(jpg, png, gif, pdf, bmp) 파일만 가능합니다.")
+			  		} else {
+			  			$("#fileFlag02").val("C");
+			  			evManager.fileData02 = data.files;
+			  		}
+				}
+				,
+			  	maxfilesize : 1000000
+			});
+			$('#fileUp03').FancyFileUpload({
+				params : {
+					action : 'fileuploader' ,
+			  	},
+			  	//파일 저장
+			  	added : function(e, data) {
+			  		if(data.files[0].type == ""){
+			  			ComUtil.alert("[차량등록증사본] 첨부파일은 이미지(jpg, png, gif, pdf, bmp) 파일만 가능합니다.")
+			  		} else {
+			  			$("#fileFlag03").val("C");
+			  			evManager.fileData03 = data.files;
+			  		}
+				}
+				,
+			  	maxfilesize : 1000000
+			});
+		}
+		,
+		//공통 AJAX 호출
+		commonAjax : function(url, param, callback , gbn) {
+			$.ajax({
+			    url: url,
+			    type: "POST",
+			    cache:false,
+			    data: JSON.stringify(param),
+			    contentType:"application/json;charset=UTF-8",  // ajax 통신으로 보내는 타입
+			    success: function(data) {
+			    	console.log("success!!!");
+			    	console.log(data);
+			    	if(data != null) {
+			    		callback(data , gbn);
+			    	}
+			    },
+			    error: function (request, status, error) {
+			    	console.log("error!!!");
+			    	callBackManager.error(error)
+
+				}
+			});
+			// end tag -- common ajax call
+		}
+		,
+		listParam : function () {
+			var frm = document.frm;
+			var custDivCd = $('#custDivCd').val();
+
+			var param =	$("#frm").serializeObject(
+		            $("#frm").serializeArrayInSelector("[data-json-obj='true']")
+		    	);
+
+			if ($('input:checkbox[id="cagYn1"]').is(":checked")) {
+				param["cagYn1"] = "Y";
+			}
+			else {
+				param["cagYn1"] = "N";
+			}
+			if ($('input:checkbox[id="cagYn2"]').is(":checked")) {
+				param["cagYn2"] = "Y";
+			}
+			else {
+				param["cagYn2"] = "N";
+			}
+			if ($('input:checkbox[id="cagYn3"]').is(":checked")) {
+				param["cagYn3"] = "Y";
+			}
+			else {
+				param["cagYn3"] = "N";
+			}
+			if ($('input:checkbox[id="cagYn5"]').is(":checked")) {
+				param["cagYn5"] = "Y";
+			}
+			else {
+				param["cagYn5"] = "N";
+			}
+			
+			param["cagYn4"] = "N";
+			
+			// 전체 동의 선택
+			if( param["cagYn1"] == "Y" && param["cagYn2"] == "Y" 
+			  && param["cagYn3"] == "Y" && param["cagYn5"] == "Y" ) {
+				param["cagYn"] = "Y";
+			}
+			else {
+				param["cagYn"] = "N";
+			}
+			
+			if ($('input:checkbox[id="magYn1"]').is(":checked")) {
+				param["magYn1"] = "Y";
+			}
+			else {
+				param["magYn1"] = "N";
+			}
+			if ($('input:checkbox[id="magYn2"]').is(":checked")) {
+				param["magYn2"] = "Y";
+			}
+			else {
+				param["magYn2"] = "N";
+			}
+			
+			// diVal setting
+			param["diVal"] = $("#diVal").val();			
+			// 임직원확인코드
+			param["officerCd"] = $('#officerCd').val();
+
+			// 법인/사업자의 경우
+			if (custDivCd == '2') {
+				// 대표전화번호
+				param["phone01"] = $('#Cphone01').val();
+				param["phone02"] = $('#Cphone02').val();
+				param["phone03"] = $('#Cphone03').val();
+
+				// 회사전화
+				param["cPhone01"] = $('#CcPhone01').val();
+				param["cPhone02"] = $('#CcPhone02').val();
+				param["cPhone03"] = $('#CcPhone03').val();
+
+				// 담당자휴대전화
+				param["rPhone01"] = $('#CrPhone01').val();
+				param["rPhone02"] = $('#CrPhone02').val();
+				param["rPhone03"] = $('#CrPhone03').val();
+				param["custNm"] = $('#CcustNm').val();
+				
+				// 사업자번호 setting
+				param["bizRegNo"] = $("#bizRegNo").val();
+
+			}
+
+			return param;
+		}
+		,
+		// 임직원 코드 onkeyup
+		officerCdChk : function() {
+			$("#officerCdChkYn").val("");
+
+		}
+		,
+		// 본인휴대전화 코드 onkeyup
+		phoneChkYn : function() {
+			$("#phoneChkYn").val("N");
+		}
+		,
+		// 실사용효대전화 코드 onkeyup
+		rPhoneChkYn : function() {
+			$("#rPhoneChkYn").val("N");
+		}
+		,
+		//가입하기 버튼 활성화
+		btnDisabled : function() {
+			isBtnDisabled = true;
+
+			//ID 중복 체크
+			/*
+			if($('#idOverLapChk').val() == "0" && $("#custIdTxt1").attr("btnChk") == "0") {
+				isBtnDisabled = false;
+			}
+
+			//비밀 번호 체크
+			if($('#custPwdTxt1').attr("btnChk") == "0" || $('#custPwdTxt2').attr("btnChk") == "0") {
+				isBtnDisabled = false;
+			}
+			//법인명 , 대표자명, 업종, 업태, 담당자명 , email
+			if($("#bizRegNm").val() == ""     || $("#custNm").val() == ""    || $("#bizType").val() == "" ||
+			   $("#bizCondition").val() == "" || $("#perCharge").val() == "" || $("#email01").val() == "" || $("#email02").val() == "") {
+				isBtnDisabled = false;
+			}
+
+			//성별
+			if(!$("input[name='gendCd']").is(":checked")){
+				isBtnDisabled = false;
+			}
+
+			//대표자 전화번호 두번째 자리 체크 3자리 이상
+			if($("#phone02").val().length < 3) {
+				isBtnDisabled = false;
+			}
+
+			//대표자  전화번호 두번째 자리 체크 4자리 이상
+			if($("#phone03").val().length < 4) {
+				isBtnDisabled = false;
+			}
+
+			//담당자 전화번호 두번째 자리 체크 3자리 이상
+			if($("#mPhone02").val().length < 3) {
+				isBtnDisabled = false;
+			}
+
+			//대표자  전화번호 두번째 자리 체크 4자리 이상
+			if($("#mPhone03").val().length < 4) {
+				isBtnDisabled = false;
+			}
+
+			//회사 전화번호 두번째 자리 체크 3자리 이상
+			if($("#cPhone02").val().length < 3) {
+				isBtnDisabled = false;
+			}
+
+			//회사  전화번호 두번째 자리 체크 4자리 이상
+			if($("#cPhone02").val().length < 4) {
+				isBtnDisabled = false;
+			}
+
+			if(isBtnDisabled) {
+				$("#btnJoin").removeClass();
+				$("#btnJoin").addClass("type01 w400");
+				$("#btnJoin").removeAttr("disabled");
+			} else {
+				$("#btnJoin").removeClass();
+				$("#btnJoin").addClass("type02 w400");
+				$("#btnJoin").prop("disabled", true);
+			} */
+
+		}
+		,
+		//한글 입력 방지
+		noKorean : function(str) {
+// 			return str.replace(/[^a-zA-Z0-9]/gi, "");
+			return str.replace(/[^a-zA-Z0-9._-]/gi, "");
+		},
+		noKorean2 : function(str) {
+			return str.replace(/[^a-zA-Z.]/gi, "");
+		},
+		//pass keyUpEvent
+		pwdValidation : function(){
+			$('#custPwdTxt1').attr("btnChk" , "0");
+			// 비밀번호
+			var custNewPwd = $("#custNewPwd").val();
+
+			if(custNewPwd.length == 0){
+				$('#custPwdTxt1').html('<span><i class="ico11"></i></span>');
+			}
+			else if(!ValidUtil.pwCheckNumAlpha(custNewPwd) && !ValidUtil.pwCheckNumFnAlpha(custNewPwd)){
+				$('#custPwdTxt1').html('<span><i class="ico11"></i>영문,숫자를 포함하여 10 ~ 20자 또는 특수문자,영문,숫자를 포함하여 8 ~ 20자를 입력해 주세요.</span>');
+			}
+			else{
+				$('#custPwdTxt1').html('<span><i class="ico11"></i>확인 되었습니다.</span>');
+				$('#custPwdTxt1').attr("btnChk" , "1");
+			}
+			$('#custPwdTxt1').show();
+
+		}
+		,
+		//pass(비밀번호 확인) keyUpEvent
+		pwdValidation2 : function(){
+			$('#custPwdTxt2').attr("btnChk" , "0");
+			// 비밀번호
+			var custNewPwd = $("#custNewPwd").val();
+			var custPwd2 = $("#custNewRePwd").val();
+			
+			if($('#custPwdTxt1').attr("btnChk") == "0") {
+				alert('비밀번호를 다시 입력해주세요.');
+				$('#custNewPwd').focus();
+				if(!ValidUtil.isEmpty($("#custNewRePwd").val())) {
+					$("#custNewRePwd").val("");
+				}
+			}
+
+			if(custNewPwd == ""){
+				$('#custPwdTxt2').html('<span><i class="ico11"></i>비밀번호가 일치하지 않습니다.</span>');
+			}
+			else if(custNewPwd !="" && custNewPwd != custPwd2){
+				$('#custPwdTxt2').html('<span><i class="ico11"></i>비밀번호가 일치하지 않습니다.</span>');
+			}
+			else{
+				$('#custPwdTxt2').html('<span><i class="ico11"></i>확인 되었습니다.</span>');
+				$('#custPwdTxt2').attr("btnChk" , "1");
+			}
+			$('#custPwdTxt2').show();
+		}
+		,
+		validation : function() {
+
+			if (ValidUtil.isEmpty($('#custId').val())){
+				ComUtil.alert("아이디를 확인해주세요.");
+				return false;
+			}
+			// 개인 : 1 , 사업자 2
+			var custDivCd = $('#custDivCd').val();
+
+			//이메일
+			var email = $("#email01").val() + "@" + $("#email02").val();
+			$("#email").val(email);
+
+			if (custDivCd == "1") {
+				// 개인
+				var officerCd = $("#officerCd").val();
+				var officerCdChkYn = $("#officerCdChkYn").val();
+				var phone01 = $("#phone01").val();
+				var phone02 = $("#phone02").val();
+				var phone03 = $("#phone03").val();
+				var phoneChkYn = $("#phoneChkYn").val();
+				var rPhone01 = $("#rPhone01").val();
+				var rPhone02 = $("#rPhone02").val();
+				var rPhone03 = $("#rPhone03").val();
+				var rPhoneChkYn = $("#rPhoneChkYn").val();
+
+				if (!ValidUtil.isEmpty(officerCd)){
+					if (ValidUtil.isEmpty(officerCdChkYn)){
+						ComUtil.alert("임직원코드 확인을 하여 주십시요.");
+						return false;
+					}
+				}
+
+				// 본인인증 진행  
+				if (ValidUtil.isEmpty(phone01)
+						|| ValidUtil.isEmpty(phone02)
+						|| ValidUtil.isEmpty(phone03)
+						){
+					ComUtil.alert("본인 인증 번호는 필수 입니다.");
+					$("#phone01").focus();
+					return false;
+				}
+				if (!ValidUtil.isEmpty(phone01)
+						|| !ValidUtil.isEmpty(phone02)
+						|| !ValidUtil.isEmpty(phone03)
+						){
+					if (phoneChkYn != "Y") {
+						ComUtil.alert("본인 인증이 필요합니다.");
+						return false;
+					}
+				}
+
+				// 실사용번호 인증체크
+				if (!ValidUtil.isEmpty(rPhone02) || !ValidUtil.isEmpty(rPhone03)){
+					if (rPhoneChkYn != "Y") {
+						ComUtil.alert("실사용번호 인증이 필요합니다.");
+						return false;
+					}
+				}
+
+			} else {
+				// 사업자
+				//대표자 휴대전화
+				var phone = $("#Cphone01").val() + "-" + $("#Cphone02").val() + "-" + $("#Cphone03").val();
+				$("#phone").val(phone);
+				//회사번호
+				var cPhone = $("#CcPhone01").val() + "-" + $("#CcPhone02").val() + "-" + $("#CcPhone03").val();
+				$("#cPhone").val(cPhone);
+				//담당자 휴대 전화
+				var mPhone = $("#CrPhone01").val() + "-" + $("#CrPhone02").val() + "-" + $("#CrPhone03").val();
+				$("#mPhone").val(mPhone);
+				
+				var officerCd = $("#officerCd").val();
+				var officerCdChkYn = $("#officerCdChkYn").val();
+				
+				if (!ValidUtil.isEmpty(officerCd)){
+					if (ValidUtil.isEmpty(officerCdChkYn)){
+						ComUtil.alert("임직원코드 확인을 하여 주십시요.");
+						return false;
+					}
+				}
+
+				if( ValidUtil.isEmpty($('#bizRegNm').val()) ){
+					ComUtil.alert("법인명을 확인해주세요.");
+					//$("#bizRegNm").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#CcustNm').val()) ){
+					ComUtil.alert("대표자명을 확인해주세요.");
+					//$("#CcustNm").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#bizType').val()) ){
+					ComUtil.alert("업종을 확인해주세요.");
+					//$("#bizType").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#bizCondition').val()) ){
+					ComUtil.alert("업태를 확인해주세요.");
+					//$("#bizCondition").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#legalBrthYY').val())
+						|| ValidUtil.isEmpty($('#legalBrthMM').val())
+						|| ValidUtil.isEmpty($('#legalBrthDD').val())
+						) {
+					ComUtil.alert("대표자 생년월일을 확인해주세요.");
+					//$("#legalBrthYY").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#Cphone01').val())
+						|| ValidUtil.isEmpty($('#Cphone02').val())
+						|| ValidUtil.isEmpty($('#Cphone03').val())
+						) {
+					ComUtil.alert("대표자 휴대폰번호를 확인해주세요.");
+					//$("#phone01").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#CcPhone01').val())
+						|| ValidUtil.isEmpty($('#CcPhone02').val())
+						|| ValidUtil.isEmpty($('#CcPhone03').val())
+						) {
+					ComUtil.alert("회사번호를 확인해주세요.");
+					//$("#cPhone01").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#CrPhone01').val())
+						|| ValidUtil.isEmpty($('#CrPhone02').val())
+						|| ValidUtil.isEmpty($('#CrPhone03').val())
+						) {
+					ComUtil.alert("담당자 휴대폰번호를 확인해주세요.");
+					//$("#mPhone01").focus();
+					return false;
+				}
+				else if( ValidUtil.isEmpty($('#perCharge').val()) ){
+					ComUtil.alert("담당자명을 확인해주세요.");
+					//$("#perCharge").focus();
+					return false;
+				}
+				/*
+				else if(!$("input[name='gendCd']").is(":checked") ){
+					ComUtil.alert("대표자 성별을 확인해주세요.");
+					return false;
+				}
+				*/
+
+				//첨부 파일 유효성 - 사업자
+				//파일 사이즈 단위만 - 파일 사이즈에 따라 파일 정보 그려 주는게 틀리다.
+
+				var fileFlag01 = $("#fileFlag01").val();
+				var i=0;
+				if (fileFlag01 != "Y") {
+
+					var	fUnit01 = $(".ff_fileupload_fileinfo").eq(i).text().toUpperCase();
+					 	fUnit01 = fUnit01.substr(fUnit01.indexOf(" ")+1 , fUnit01.length);
+					var fSize01 = "";	//파일 사이즈
+					var fExt01  = "";	//파일 확장자
+					var fVal01  = "";	//파일 이름
+
+					if(fUnit01 == "MB") {
+						fVal01 = $(".ff_fileupload_filename").eq(i).text();
+						fSize01 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0, $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));
+						fExt01  = $(".ff_fileupload_filename").eq(i).text().substr($(".ff_fileupload_filename").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+					} else {
+						fVal01 = $(".ff_fileupload_filename").eq(i).children("input").val();
+						fSize01 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0 , $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));;
+						fExt01  = $(".ff_fileupload_fileinfo").eq(i).text().substr($(".ff_fileupload_fileinfo").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+
+						if($(".ff_fileupload_filename").eq(i).text() != "") {
+							fVal01 = $(".ff_fileupload_filename").eq(i).text();
+							fSize01 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0, $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));
+							fExt01  = $(".ff_fileupload_filename").eq(i).text().substr($(".ff_fileupload_filename").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+						}
+					}
+					console.log("fVal01 : " + fVal01);
+					if(fVal01 == undefined){
+						ComUtil.alert('사업자등록 사본을 첨부해 주세요.');
+						return false;
+					}  else {
+						if(!fileManager.chkAttFileExt(fExt01)) {
+							ComUtil.alert('[사업자등록증사본] 첨부파일은 이미지(jpg, png, gif, pdf, bmp) 파일만 가능합니다.');
+							return false;
+						}
+						//파일 사이즈 byte로 변환 후 확인
+						var convertFSize = fileManager.convertByte(fSize01 , fUnit01);
+						if(!fileManager.chkAttFileSize(convertFSize)) {
+							ComUtil.alert("[사업자등록증사본] 첨부파일 용량은 5M까지 가능합니다.");
+							return false;
+						}
+					}
+					i++;
+				}
+
+				var fileFlag02 = $("#fileFlag02").val();
+				if (fileFlag02 != "Y") {
+					console.log("통장 사본 첨부체크 fileFlag02 : " + i);
+					//첨부 파일 유효성 - 통장 사본
+					//파일 사이즈 단위만 - 파일 사이즈에 따라 파일 정보 그려 주는게 틀리다.
+					var	fUnit02 = $(".ff_fileupload_fileinfo").eq(i).text().toUpperCase();
+				 		fUnit02 = fUnit02.substr(fUnit02.indexOf(" ")+1 , fUnit02.length);
+					var fSize02 = "";	//파일 사이즈
+					var fExt02  = "";	//파일 확장자
+					var fVal02  = "";	//파일 이름
+					if(fUnit02 == "MB") {
+						fVal02 = $(".ff_fileupload_filename").eq(i).text();
+						fSize02 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0, $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));
+						fExt02  = $(".ff_fileupload_filename").eq(i).text().substr($(".ff_fileupload_filename").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+					} else {
+						fVal02 = $(".ff_fileupload_filename").eq(i).children("input").val();
+						fSize02 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0 , $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));;
+						fExt02  = $(".ff_fileupload_fileinfo").eq(i).text().substr($(".ff_fileupload_fileinfo").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+
+						if($(".ff_fileupload_filename").eq(i).text() != "") {
+							fVal02 = $(".ff_fileupload_filename").eq(i).text();
+							fSize02 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0, $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));
+							fExt02  = $(".ff_fileupload_filename").eq(i).text().substr($(".ff_fileupload_filename").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+						}
+					}
+					console.log("fVal02 : " + fVal02);
+					if(fVal02 == undefined){
+						ComUtil.alert('통장 사본을 첨부해 주세요.');
+						return false;
+					}  else {
+						if(!fileManager.chkAttFileExt(fExt02)) {
+							ComUtil.alert('[통장사본] 첨부파일은 이미지(jpg, png, gif, pdf, bmp) 파일만 가능합니다.');
+							return false;
+						}
+						//파일 사이즈 byte로 변환 후 확인
+						var convertFSize = fileManager.convertByte(fSize02 , fUnit02);
+						if(!fileManager.chkAttFileSize(convertFSize)) {
+							ComUtil.alert("[통장사본] 첨부파일 용량은 5M까지 가능합니다.");
+							return false;
+						}
+					}
+					i++;
+				}
+
+				var fileFlag03 = $("#fileFlag03").val();
+				if (fileFlag03 != "Y") {
+					console.log("차량등록증사본 첨부체크 fileFlag03");
+					//첨부 파일 유효성 - 차량등록증
+					//파일 사이즈 단위만 - 파일 사이즈에 따라 파일 정보 그려 주는게 틀리다.
+					var	fUnit03 = $(".ff_fileupload_fileinfo").eq(i).text().toUpperCase();
+				 		fUnit03 = fUnit03.substr(fUnit03.indexOf(" ")+1 , fUnit03.length);
+					var fSize03 = "";	//파일 사이즈
+					var fExt03  = "";	//파일 확장자
+					var fVal03  = "";	//파일 이름
+					if(fUnit03 == "MB") {
+						fVal03 = $(".ff_fileupload_filename").eq(i).text();
+						fSize03 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0, $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));
+						fExt03  = $(".ff_fileupload_filename").eq(i).text().substr($(".ff_fileupload_filename").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+					} else {
+						fVal03 = $(".ff_fileupload_filename").eq(i).children("input").val();
+						fSize03 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0 , $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));;
+						fExt03  = $(".ff_fileupload_fileinfo").eq(i).text().substr($(".ff_fileupload_fileinfo").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+
+						if($(".ff_fileupload_filename").eq(i).text() != "") {
+							fVal03 = $(".ff_fileupload_filename").eq(i).text();
+							fSize03 = $(".ff_fileupload_fileinfo").eq(i).text().substring(0, $(".ff_fileupload_fileinfo").eq(i).text().indexOf(" "));
+							fExt03  = $(".ff_fileupload_filename").eq(i).text().substr($(".ff_fileupload_filename").eq(i).text().lastIndexOf(".")+1).toLowerCase();
+						}
+					}
+					console.log("fVal03 : " + fVal03);
+					if(fVal03 == undefined){
+						ComUtil.alert('차량등록증사본을 첨부해 주세요.');
+						return false;
+					}  else {
+						if(!fileManager.chkAttFileExt(fExt03)) {
+							ComUtil.alert('[차량등록증사본] 첨부파일은 이미지(jpg, png, gif, pdf, bmp) 파일만 가능합니다.');
+							return false;
+						}
+						//파일 사이즈 byte로 변환 후 확인
+						var convertFSize = fileManager.convertByte(fSize03 , fUnit03);
+						if(!fileManager.chkAttFileSize(convertFSize)) {
+							ComUtil.alert("[차량등록증사본] 첨부파일 용량은 5M까지 가능합니다.");
+							return false;
+						}
+					}
+				}
+
+			}
+
+ 			/* if( ValidUtil.isEmpty($('#custNewPwd').val()) || ValidUtil.isEmpty($('#custNewRePwd').val()) ){
+				ComUtil.alert('비밀번호를 확인해주세요.');
+				return false;
+			} */
+ 			if($('#custNewPwd').val() != $('#custNewRePwd').val()){
+				ComUtil.alert('비밀번호를 확인해주세요.');
+				$('#custNewRePwd').val("");
+				$('#custPwdTxt2').html('<span><i class="ico11"></i>비밀번호가 일치하지 않습니다.</span>');
+				
+				return false;
+			}
+
+			if (ValidUtil.isEmpty($('#email01').val()) && ValidUtil.isEmpty($('#email02').val())){
+// 				ComUtil.alert('이메일을 확인해주세요.');
+// 				$("#email").focus();
+// 				return false;
+			} else {
+				if(!ValidUtil.mail($('#email').val())){
+					ComUtil.alert('이메일을 확인해주세요.');
+					$("#email").focus();
+					return false;
+				}
+			}
+
+			return true;
+		}
+		,
+		//대표자 생년 월일 세팅
+		setBirth : function() {
+			//오늘 날짜
+			var today = DateUtil.toYyyyMmDd(new Date());
+			var yyyy = today.substring(0,4);
+			var mm = today.substring(4,6);
+			var dd = today.substring(6,8);
+
+			//년도
+			var yyyyOption = "";
+			yyyyOption += "<option value='' selected>년도</option>";
+			for(i= (yyyy-90); i <= yyyy; i++) {
+				yyyyOption += "<option value='"+i+"'>"+i+" 년</option>";
+			}
+			$("#legalBrthYY").html(yyyyOption);
+
+			//월
+			var mmOption = "";
+			mmOption += "<option value='' selected>월</option>";
+			for(var i=1; i<13; i++) {
+				if(i > 9){
+					mmOption += "<option value='"+i+"'>"+i+" 월</option>";
+				} else {
+					mmOption += "<option value='0"+i+"'>0"+i+" 월</option>";
+				}
+			}
+			$("#legalBrthMM").html(mmOption);
+
+			// 일
+			var ddOption = "";
+			ddOption += "<option value='' selected> 일</option>";
+			for(var i=1; i<32; i++) {
+				if(i > 9){
+					ddOption += "<option value='"+i+"'>"+i+" 일</option>";
+
+				}else{
+					ddOption += "<option value='0"+i+"'>0"+i+" 일</option>";
+				}
+			}
+			$("#legalBrthDD").html(ddOption);
+		}
+		,
+		//차량 구매년월
+		setYYYYMM : function() {
+			//오늘 날짜
+			var today = DateUtil.toYyyyMmDd(new Date());
+			var yyyy = today.substring(0,4);
+			var mm = today.substring(4,6);
+			var dd = today.substring(6,8);
+
+			//년도
+			var yyyyOption = "";
+			yyyyOption += "<option value='' selected>년도</option>";
+			for(i= (yyyy-90); i <= yyyy; i++) {
+				yyyyOption += "<option value='"+i+"'>"+i+" 년</option>";
+			}
+			$("#year").html(yyyyOption);
+
+			//월
+			var mmOption = "";
+			mmOption += "<option value='' selected>월</option>";
+			for(var i=1; i<13; i++) {
+				if(i > 9){
+					mmOption += "<option value='"+i+"'>"+i+" 월</option>";
+				} else {
+					mmOption += "<option value='0"+i+"'>0"+i+" 월</option>";
+				}
+			}
+			$("#mon").html(mmOption);
+		}
+		,
+		//임직원 여부 조회
+		employeeCdCheck : function () {
+			if($("#officerCd").val() == ""){
+				ComUtil.alert("임직원코드를 입력하세요.");
+				return false;
+			}
+
+			//common ajax call
+			var pUrl = "/member/employeeCdCheck";
+			var pParams = { employeeCd : $("#officerCd").val() };
+
+			cfnSendRequest(pUrl,pParams,'employeeCdCheck');
+
+		}
+		,
+		selectEmail : function(){
+			if($("#email03").val() != "") {
+				$("#email02").val($("#email03").val());
+			} else {
+				$("#email02").val("");
+			}
+			evManager.btnDisabled();
+		}
+		,
+		bizCustSave : function(){
+
+			// 개인 : 1 , 사업자 2
+			var custDivCd = $('#custDivCd').val();
+
+			//폼객체를 불러와서
+	        //var form = $('form')[0];
+	        var pUrl = "/mypage/updateMemberInfo";
+	        var pParams = evManager.listParam();
+	        console.log(pParams);
+        	 cfnSendRequest(pUrl,pParams,'updateMemberInfo');
+
+        	 // 파일 업로드 custDivCd : 2인 경우
+        	 if (custDivCd == '2') {
+				$("#attchCustNo").val($("#custNo").val());
+				$("#attchCustId").val($("#custId").val());
+        		var form = $('form')[1];
+        		var param = new FormData(form);
+
+        		//파일 정보
+ 	        	param.append("bizFiles1", evManager.fileData01[0]);	//사업자
+ 	        	param.append("bizFiles2", evManager.fileData02[0]);	//통장
+ 	        	param.append("bizFiles3", evManager.fileData03[0]);	//차량 등록 증
+
+ 	        	console.log("bizFiles::::");
+ 	        	console.log(param);
+
+ 	        	$.ajax({
+ 		            type: "POST",
+ 		            enctype: false,
+ 		            url: "/mypage/updateMemberInfoFile",
+ 		            data: param,
+ 		            cache: false,
+ 		            processData: false,
+ 		            contentType: false,
+ 		            success: function (data) {
+ 		                console.log("updateMemberInfoFile Result:::");
+ 		                console.log(data);
+ 		               evManager.init();
+ 		            	/* if(data.rtnCode == "0" ) {
+ 		                	var frm = document.frm;
+ 				        		frm.action = "/member/custInfoComp";
+ 				        		frm.submit();
+ 		                } else {
+ 		                	ComUtil.alert(data.rtnMsg);
+ 		                	return;
+ 		                } */
+ 		            },
+ 		            error: function (e) {
+ 		                console.log("ERROR : ", e);
+ 		            }
+ 		        });
+
+        	 }
+		}
+	}
+	/* evManager End */
+
+
+	/* ################################# AJAX CALLBACK ARAR #################################  */
+	var callBackManager = {
+		//에러 처리
+		error : function(error) {
+			console.log('error callback : ' + error);
+		}
+		,
+		//나이스 dnr 모델 선택 팝업
+		niceGradeList : function(data){
+			console.log("niceGradeList:::");
+			console.log(data);
+
+			//완료 팝업 생성
+			$("#niceResultCarNo").val($("#carNumber").val().replace(/(\s*)/g, ""));	//타이틀
+			var htmlStr = "";
+				htmlStr +="	<div class='infoView'>";
+				htmlStr +="		<ul>";
+				htmlStr +="			<li>";
+				htmlStr +="				<span class='tit'>제조사/차종</span>";
+				htmlStr +="				<span class='info'>"+data.carInfo.BRAND_NM +"/"+data.carInfo.REP_CAR_CLASS_NM  +"</span>";
+				htmlStr +="			</li>";
+				htmlStr +="			<li>";
+				htmlStr +="				<span class='tit'>모델</span>";
+				htmlStr +="				<span class='info'>"+data.carInfo.CAR_CLASS_NM +"</span>";
+				htmlStr +="			</li>";
+				htmlStr +="			<li>";
+				htmlStr +="				<span class='tit'>엔진타입</span>";
+				htmlStr +="				<span class='info'>"+data.carInfo.ENGINE_FORM +"</span>";
+				htmlStr +="			</li>";
+				htmlStr +="			<li>";
+				htmlStr +="         	<button type='button' class='type10 w220' id='btnNiceTireSize' gradeCd="+data.carInfo.CAR_CLASS_NBR +">타이어 사이즈 선택<i class='ico01'></i></button>";
+				/* htmlStr +="         	<button type='button' class='type10 w220' id='btnNiceTireSize' gradeCd='42497'>타이어 사이즈 선택<i class='ico01'></i></button>"; */
+				htmlStr +="         </li>";
+				htmlStr +="		</ul>";
+				htmlStr +="	</div>";
+				htmlStr +="		<div class='productView'>";
+				htmlStr +="		<img src='"+data.carInfo.CAR_CLASS_REP_IMAGE+"' alt='상품사진'/>";
+				htmlStr +="	</div>";
+			$("#niceResultArea").html(htmlStr);
+
+			//화면 disabled
+			$("#modal-2").removeClass("md-show");
+			$("#niceResult").addClass("md-show");
+		}
+		,
+		//나이스 dnr 사이즈 선택 팝업 화면
+		selectNiceTireSizeList : function(data) {
+			console.log("selectNiceTireSizeList callbnck!!!");
+			console.log(data);
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+				if(i > 0 && (i % 5 == "0") ){
+					htmlStr	+= "</ul>";
+				}
+
+				if(i == "0" || i % 5 == "0"){
+					htmlStr	+= "<ul class='sizeSelect'>";
+				}
+				htmlStr	+= "<li>";
+				htmlStr	  += "   <input type='radio' name='sizeCd' id='sizeCd" + (i+1) + "' value='"+data[i].searchCd+"' sizeNm='"+data[i].description + " "+ data[i].searchCdNm+"' classCd='"+data[i].classCd+"' plyRating='"+data[i].plyRating+"' searchClCd='"+data[i].mcmpCd+"' modelCd='"+data[i].modelCd+"^"+data[i].contentsCd+"' class='type04'><label for='sizeCd"+(i+1)+"'><span>"+ data[i].searchCdNm + "</span></label>";
+				htmlStr	+= "</li>";
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+			$("#niceTireSizeArea").html();
+			$("#niceTireSizeArea").html(htmlStr);
+
+			$("#niceSizeCarNo").val($("#carNumber").val().replace(/(\s*)/g, ""));
+			$("#carNo").val($("#carNumber").val().replace(/(\s*)/g, ""))
+
+			$("#niceResult").removeClass("md-show");
+			$("#niceTireSize").addClass("md-show");
+			$("#niceTireSizeArea").show();
+		}
+		,
+		//제조사 선택 팝업
+		makerList : function(data){
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+			console.log(data[i].searchCd);
+				if(i > 0 && (i % 7 == "0") ){
+					htmlStr	+= "</ul>";
+				}
+				if(i == "0" || i % 7 == "0"){
+					htmlStr	+= "<ul class='sizeSelect type02'>";
+				}
+				htmlStr	+= "<li>";
+				htmlStr	  += "   <input type='radio' name='makerCd' id='makerCd" + (i+1) + "' value='"+data[i].searchCd+"' makerNm='"+data[i].searchCdNm+"' class='type05'><label for='makerCd" + (i+1) + "'><span><img src='<%=AppContext.getString(WebConstants.FileDir.IMGFILE_URL)%>/" + data[i].searchCd + ".png '  alt='"+data[i].searchCdNm+"'/></span></label>";
+				htmlStr	+= "</li>";
+
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+
+			$("#searchClCdArea").html(htmlStr);
+
+			//화면 disabled
+			$("#modal-1").removeClass("md-show");
+			$("#modal-3").addClass("md-show");
+			$(".scrollBox").eq(0).show();
+		}
+		,
+		//모델 선택 팝업
+		selectModelList : function(data) {
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+				if(i > 0 && (i % 5 == "0") ){
+					htmlStr	+= "</ul>";
+				}
+
+				if(i == "0" || i % 5 == "0"){
+					htmlStr	+= "<ul class='sizeSelect'>";
+				}
+				htmlStr	+= "<li>";
+				htmlStr	  += "   <input type='radio' name='modelCd' id='modelCd" + (i+1) + "' value='"+data[i].searchCd+"' modelNm='"+data[i].searchCdNm+"' classCd='"+data[i].classCd+"' class='type04 w300'><label for='modelCd"+(i+1)+"'><span>"+data[i].searchCdNm+"</span></label>";
+				htmlStr	+= "</li>";
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+
+			$("#modelArea").html();
+			$("#modelArea").html(htmlStr);
+
+			var titleHtmlStr = "";
+			titleHtmlStr += "<ul>";
+			titleHtmlStr += "<li>" + $("#makerNm").val() + "</li>";
+			titleHtmlStr += "<li></li>";
+			titleHtmlStr += "</ul>";
+			$("#modal-4").children(".sizeSelectView").html(titleHtmlStr);
+
+			$("#modal-3").removeClass("md-show");
+			$("#modal-4").addClass("md-show");
+			$(".scrollBox").eq(1).show();
+		}
+		,
+		//사이즈 선택 팝업
+		selectTireSizeList : function(data) {
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+				if(i > 0 && (i % 5 == "0") ){
+					htmlStr	+= "</ul>";
+				}
+
+				if(i == "0" || i % 5 == "0"){
+					htmlStr	+= "<ul class='sizeSelect'>";
+				}
+				htmlStr	+= "<li>";
+				htmlStr	  += "   <input type='radio' name='sizeCd' id='sizeCd" + (i+1) + "' value='"+data[i].searchCd+"' sizeNm='"+data[i].description + " "+ data[i].searchCdNm+"' classCd='"+data[i].classCd+"' plyRating='"+data[i].plyRating+"' class='type04'><label for='sizeCd"+(i+1)+"'><span>"+ data[i].description+ " " + data[i].searchCdNm + "</span></label>";
+				htmlStr	+= "</li>";
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+
+			$("#sizeArea").html();
+			$("#sizeArea").html(htmlStr);
+
+			var titleHtmlStr = "";
+			titleHtmlStr += "<ul>";
+			titleHtmlStr += "<li>" + $("#makerNm").val() + "</li>";
+			titleHtmlStr += "<li>" + $("#modelNm").val() + "</li>";
+			titleHtmlStr += "<li></li>";
+			titleHtmlStr += "</ul>";
+			$("#modal-5").children(".sizeSelectView").html(titleHtmlStr);
+
+			$("#modal-4").removeClass("md-show");
+			$("#modal-5").addClass("md-show");
+			$(".scrollBox").eq(2).show();
+		}
+		,
+		//단면폭
+		selectWidthList : function(data) {
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+				if(i > 0 && (i % 5 == "0") ){
+					htmlStr	+= "</ul>";
+				}
+
+				if(i == "0" || i % 5 == "0"){
+					htmlStr	+= "<ul class='sizeSelect'>";
+				}
+				htmlStr	+= "<li>";
+				htmlStr	  += "   <input type='radio' name='sectionWidth' id='sectionWidth" + (i+1) + "' value='"+data[i].searchCd+"' class='type04'><label for='sectionWidth"+(i+1)+"'><span>"+ data[i].searchCdNm + "</span></label>";
+				htmlStr	+= "</li>";
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+
+			$("#sectionWidthArea").html(htmlStr);
+
+			$("#modal-5").removeClass("md-show");
+			$("#modal-6").addClass("md-show");
+			$(".scrollBox").eq(3).show();
+		}
+		,
+		//편평비
+		selectFlatnessList : function(data) {
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+				if(data[i].searchCd != "Z") {
+					if(i > 0 && (i % 5 == "0") ){
+						htmlStr	+= "</ul>";
+					}
+
+					if(i == "0" || i % 5 == "0"){
+						htmlStr	+= "<ul class='sizeSelect'>";
+					}
+					htmlStr	+= "<li>";
+					htmlStr	  += "   <input type='radio' name='aspectRatio' id='aspectRatio" + (i+1) + "' value='"+data[i].searchCd+"' class='type04'><label for='aspectRatio"+(i+1)+"'><span>"+ data[i].searchCdNm + "</span></label>";
+					htmlStr	+= "</li>";
+				}
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+
+			$("#aspectRatioArea").html(htmlStr);
+
+			var titleHtmlStr = "";
+			titleHtmlStr += "<ul>";
+			titleHtmlStr += "<li>" + $("#sectionWidth").val() + "</li>";
+			titleHtmlStr += "<li></li>";
+			titleHtmlStr += "</ul>";
+			$("#modal-7").children(".sizeSelectView").html(titleHtmlStr);
+
+			$("#modal-6").removeClass("md-show");
+			$("#modal-7").addClass("md-show");
+			$(".scrollBox").eq(4).show();
+		}
+		,
+		//인치
+		selectInchList : function(data) {
+			var htmlStr = "";
+			htmlStr	+= "<div class='os-resize-observer-host'><div class='os-resize-observer observed' style='left: 0px; right: auto;'></div></div>";
+			htmlStr	+= "<div class='os-padding'>";
+			htmlStr	+= "<div class='os-viewport os-viewport-native-scrollbars-invisible' style='overflow-y: scroll; right: 0px; bottom: 0px;'>";
+			htmlStr	+= "<div class='os-content' style='padding: 38px 0px 38px 25px; height: 100%; width: 100%;'>";
+			for(var i=0; i < data.length; i++) {
+				if(data[i].searchCd != "Z") {
+					if(i > 0 && (i % 5 == "0") ){
+						htmlStr	+= "</ul>";
+					}
+
+					if(i == "0" || i % 5 == "0"){
+						htmlStr	+= "<ul class='sizeSelect'>";
+					}
+					htmlStr	+= "<li>";
+					htmlStr	  += "   <input type='radio' name='inches' id='wheelInches" + (i+1) + "' value='"+data[i].searchCd+"' plyRating='"+data[i].plyRating+"' searchClCd='"+data[i].searchClCd+"' modelCd='"+data[i].modelCd+"' class='type04'><label for='wheelInches"+(i+1)+"'><span>"+ data[i].searchCdNm + "</span></label>";
+					htmlStr	+= "</li>";
+				}
+			}
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "</div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='width: 100%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar os-scrollbar-vertical'><div class='os-scrollbar-track os-scrollbar-track-off'><div class='os-scrollbar-handle' style='height: 48.6692%; transform: translate(0px, 0px);'></div></div></div>";
+			htmlStr	+= "<div class='os-scrollbar-corner'></div>";
+
+			$("#wheelInchesArea").html(htmlStr);
+
+			var titleHtmlStr = "";
+			titleHtmlStr += "<ul>";
+			titleHtmlStr += "<li>" + $("#sectionWidth").val() + "</li>";
+			titleHtmlStr += "<li>" + $("#aspectRatio").val() + "</li>";
+			titleHtmlStr += "</ul>";
+			$("#modal-8").children(".sizeSelectView").html(titleHtmlStr);
+
+			$("#modal-7").removeClass("md-show");
+			$("#modal-8").addClass("md-show");
+			$(".scrollBox").eq(5).show();
+		}
+	}
+	/* ################################# AJAX CALLBACK ARAR #################################  */
+
+	// **************************** FILE  ****************************//
+	var fileManager = {
+		// 파일 업로드에서 이미지 파일만 올리기 (jpg,png,gif,pdf,bmp)
+		chkAttFileExt : function(fileExt){
+			if(fileExt != "jpg" && fileExt != "png" && fileExt != "gif" && fileExt != "pdf" && fileExt != "bmp" && fileExt != "jpeg"){
+				return false;
+			}
+		    return true;
+		}
+		,
+		// 파일 업로드에 5M 초과 방지
+		chkAttFileSize : function(size){
+			var maxSize = 5 * 1024 * 1000;
+			var fileSize =  size
+			if(maxSize < fileSize){
+				return false;
+			}
+			return true;
+		}
+		,
+		// byte 단위 변환
+		convertByte : function(size , unit){
+			var fSize = 0;
+			if(unit == "MB"){
+				fSize = size * 1024 * 1024;
+			} else {
+				if(unit.indexOf("KB") > -1) {
+					fSize = size * 1024;
+				} else
+				//5M 이상
+				fSize = 6000000;
+			}
+			return fSize;
+		}
+	}
+	// **************************** FILE  ****************************//
+
+$(document).ready(function() {
+
+// 	var serverMode = $("#serverMode").val();
+// 	if(serverMode != "prd"){
+// 		$("#affi").show();
+// 	}
+	
+	evManager.init();
+
+	// 임직원  확인 버튼 area!!
+	$("#btnEmployeeCdCheck").on("click" , function(){
+		evManager.employeeCdCheck();
+	});
+	// 임직원  중복 확인   area end!!
+
+	// email select box change event area!!
+	$("#email03").on("change" , function(){
+		evManager.selectEmail();
+	});
+	// email select box change event area end!!
+
+	// searchPtnCd select box change event area!!
+	$("#searchPtnCd").on("change" , function(){
+		$("#modelCd").val($(this).val());
+	});
+	// searchPtnCd select box change event area end!!
+
+	
+	  $(".savePreview").on('click',"img" , function(){
+		
+		var path = $(this).attr("src");
+		
+		var img = new Image();
+		img.src=path;
+		
+		var img_width=img.width;
+		var win_width = img.width+25;
+		var height = img.height+30;
+		
+		
+		var OpenWindow = window.open('','_blank','width='+img_width+', height='+height+', menubars=no, scrollbars=auto');
+		OpenWindow.document.write("<img src='"+path+"' width='"+win_width+"'>");
+		
+	});  
+	// 수정 버튼 area!!
+	$("#btnJoin").on("click" , function(){
+		//preventDefault 는 기본으로 정의된 이벤트를 작동하지 못하게 하는 메서드이다. submit을 막음
+        event.preventDefault();
+
+		//입력 항목 체크
+		if(!evManager.validation()) {
+			return;
+		}
+		
+		if($("#affiliateCd").val() != "" && $("#issCert").val() == ""){
+			ComUtil.alert("제휴코드 인증을 받아주시길 바랍니다.");
+			return false;
+		}
+		
+		//회원 정보 저장
+		evManager.bizCustSave();
+	});
+	// 수정   area end!!
+
+	// 취소 버튼 area!!
+	$("#btnCancel").on("click" , function(){
+		location.href = "/main";
+	});
+	// 취소   area end!!
+
+	// 첨부파일 닫기 버튼 area!!
+	$(".fDel").click(function(){
+		var bizFile = $(this).attr("bizFile");
+		$(this).parent().hide();
+		$('#'+bizFile).val('D');
+	});
+	// 첨부파일 닫기 버튼 area!! end!!
+
+	// 보유차량정보 버튼 area!!
+	$("[name='haveCarInfo']").click(function(){
+		var chkVal = $(this).val();
+
+		if (chkVal == '1') {
+			$(".carNumberInputDiv").show();
+			$(".carTypeInputDiv").hide();
+		} else {
+			$(".carNumberInputDiv").hide();
+			$(".carTypeInputDiv").show();
+		}
+	});
+	// 보유차량정보 버튼 area end!!
+
+	// 실사용자휴대전화 인증 area!!
+	$(".btnPhoneCerti").click(function(){
+		//검샘 레이어 팝업 오픈
+		var certiTp = $(this).attr("certiTp");
+		var rPhone01;
+		var rPhone02;
+		var rPhone03;
+
+		if (certiTp == "rPhone") {
+			rPhone01 = $('#rPhone01').val();
+			rPhone02 = $('#rPhone02').val();
+			rPhone03 = $('#rPhone03').val();
+		} else {
+			rPhone01 = $('#CrPhone01').val();
+			rPhone02 = $('#CrPhone02').val();
+			rPhone03 = $('#CrPhone03').val();
+		}
+
+		if(rPhone01 != '' && rPhone02.length >= 3 && rPhone03.length == 4){
+
+			$("#modal-11").addClass("md-show");
+
+			var pUrl = "/mypage/requestMobileAccess";
+			var pParams = {
+				rPhone01 : rPhone01
+				, rPhone02 : rPhone02
+				, rPhone03 : rPhone03
+			}
+
+			cfnSendRequest(pUrl,pParams,'requestMobileAccess');
+
+		}
+	});
+	// 실사용자휴대전화 인증 area end !!
+
+	// 실사용자휴대전화 재전송 area!!
+	$("#certiReSend").click(function(){
+
+	});
+	// 실사용자휴대전화 재전송 area end !!
+
+	// 실사용자휴대전화 취소 area!!
+	$("#certiPhoneCancel").click(function(){
+		$("#modal-11").removeClass("md-show");
+	});
+	// 실사용자휴대전화 취소 area end !!
+
+	// 실사용자휴대전화 확인 area!!
+	$("#certiPhoneConfirm").click(function(){
+		//검샘 레이어 팝업 오픈
+		var resSeq = $('#resSeq').val();
+		var accessNum = $('#accessNum').val();
+
+		if (ValidUtil.isEmpty(accessNum)){
+			ComUtil.alert('전송된 인증번호를 입력하십시오.');
+			return false;
+		} else {
+			var pUrl = "/mypage/setMobileAccess";
+			var pParams = {
+				resSeq : resSeq
+				, accessNum : accessNum
+			}
+
+			cfnSendRequest(pUrl,pParams,'setMobileAccess');
+		}
+
+	});
+	// 실사용자휴대전화 확인 area end !!
+
+  	//장착점
+    $("a[name='selectAddr']").on("click" , function(){
+    	mountCheck1 = $(this).attr("val");
+
+    });
+
+	//차량 번호 검색 버튼 클릭 이벤트 > 나이스 DNR 연동
+	$("#btnCarNumber").on("click" , function(){
+		ComUtil.loading();
+
+		var niceCarNo = $("#carNumber").val().replace(/(\s*)/g, "");
+
+		if(niceCarNo == "") {
+			ComUtil.alert("차량번호를 입력해 주세요.");
+			return;
+		} else {
+			//차량번호 패턴
+			var pattern1       	= /\d{2}[가-힣ㄱ-ㅎㅏ-ㅣ\x20]\d{4}/g; 				 			// 12저3456
+			var pattern2       	= /\d{3}[가-힣ㄱ-ㅎㅏ-ㅣ\x20]\d{4}/g; 				 			// 123저3456 - 신규 찰야 번호
+			var pattern3 	   	= /[가-힣ㄱ-ㅎㅏ-ㅣ\x20]{2}\d{2}[가-힣ㄱ-ㅎㅏ-ㅣ\x20]\d{4}/g; 		// 서울12치1234
+
+			if(niceCarNo.length == 7 ){
+				if( !pattern1.test(niceCarNo) ){
+					ComUtil.alert( "차량번호를 확인하세요.");
+					$("#carNumber").val("");
+					$("#carNumber").focus();
+					return false;
+				}
+			} else if( niceCarNo.length == 8 &&  ValidUtil.isNumeric( niceCarNo.substring(0,3))){
+				if( !pattern2.test(niceCarNo) ){
+					ComUtil.alert( "차량번호를 확인하세요.");
+					$("#carNumber").val("");
+					$("#carNumber").focus();
+					return false;
+				}
+			} else if( niceCarNo.length == 8 || niceCarNo.length == 9){
+				if( !pattern2.test(niceCarNo) ){
+					ComUtil.alert( "차량번호를 확인하세요.");
+					$("#carNumber").val("");
+					$("#carNumber").focus();
+					return false;
+				}
+			} else {
+				ComUtil.alert( "차량번호를 확인하세요.");
+				$("#carNumber").val("");
+				$("#carNumber").focus();
+				return false;
+			}
+		}
+
+		//나이스 DNR 통신
+		$.ajax({
+		    url: "/product/niceDnrApi",
+		    type: "POST",
+		    cache:false,
+		    data: {carNo:niceCarNo},
+		    success: function(data) {
+		    	ComUtil.unloading();
+
+		    	if(data.code == "000") {
+		    		console.log(data.carInfo)
+		    		console.log(data.gradeList)
+		    		for(var i=0; i<data.gradeList.length; i++) {
+			    		evManager.niceGradeCd.push(data.gradeList[i].CAR_GRADE_NBR);
+		    		}
+					callBackManager.niceGradeList(data);
+
+		    	} else if(data.code == "014") {
+		    		ComUtil.alert("로그인을 해주세요")
+		    	} else if(data.code == "014") {
+		    		ComUtil.alert("로그인이 필요합니다. 로그인 화면으로 이동 하시겠습니까?");
+			    	location.href = "/login/userLogin";
+			    	return;
+			    } else if(data.code == "022") {
+			    	ComUtil.alert("차량번호 또는 소유자명 불일치");
+			    	return;
+			    } else {
+			    	ComUtil.alert("시스템 오류");
+			    	return;
+			    }
+
+
+		    },
+		    error: function (request, status, error) {
+				ComUtil.unloading();
+		    	console.log('차량번호 조회!!!');
+		    	ComUtil.alert('에러 발생');
+		    	//callBackManager.error(error)
+
+			}
+		});
+	});
+	// -- end tag
+
+	//나이스 디엔알 검색 완료 화면 다음 버튼 - 사이즈 선택 화면 오픈
+	$(document).on("click","#btnNiceTireSize" , function(){
+		//사이즈 목록 조회
+		var pUrl = "/product/selectTireSizeList";
+		//var pSendData = {niceGradeCd:$(this).attr("gradeCd")};
+		var pSendData = {niceGradeCd:evManager.niceGradeCd, systemGbn:"R"};
+		console.log("btnNiceTireSize Call!!!");
+		console.log(pSendData);
+		evManager.commonAjax(pUrl, pSendData, callBackManager.selectNiceTireSizeList);
+	});
+	// -- end tag
+
+	//제조사 선택 이벤트 > 모델 선택 화면 오픈
+	$(document).on("click","input[name='makerCd']" , function(){
+		$("#makerCd").val($(this).val());
+		$("#makerNm").val($(this).attr("makerNm"));
+
+		//모델 목록 조회
+		var pUrl = "/product/selectModelList";
+		var pSendData = {classCd : "", recomYn : "" , makerCd : $("#makerCd").val() , systemGbn:"R"};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.selectModelList);
+	});
+	// -- end tag
+
+	//모델 선택 이벤트 > 사이즈 선택 화면 오픈
+	$(document).on("click","input[name='modelCd']" , function(){
+		$("#modelCd").val($(this).val().split("^")[0]);
+		$("#contentsCd").val($(this).val().split("^")[1]);
+		$("#modelNm").val($(this).attr("modelNm"));
+
+		//사이즈 목록 조회
+		var pUrl = "/product/selectTireSizeList";
+		var pSendData = {modelCd : $("#modelCd").val() , contentsCd : $("#contentsCd").val(), recomYn : "" , classCd : "", niceGradeCd:"" , systemGbn:"R"};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.selectTireSizeList);
+	});
+	// -- end tag
+
+	//단면폭 선택 이벤트 > 평편비 선택 화면 오픈
+	$(document).on("click","input[name='sectionWidth']" , function(){
+		$("#sectionWidth").val($(this).val());
+
+		//사이즈 목록 조회
+		var pUrl = "/product/selectFlatnessList";
+		var pSendData = {sectionWidth : $("#sectionWidth").val() , recomYn : "" , classCd : "" , systemGbn:"R"};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.selectFlatnessList);
+	});
+	// -- end tag
+
+	//평편비 선택 이벤트 > 인치 선택 화면 오픈
+	$(document).on("click","input[name='aspectRatio']" , function(){
+		$("#aspectRatio").val($(this).val());
+
+		//사이즈 목록 조회
+		var pUrl = "/product/selectInchList";
+		var pSendData = {sectionWidth : $("#sectionWidth").val() , aspectRatio : $("#aspectRatio").val() , recomYn : "" , classCd : "" , systemGbn:"R"};
+		evManager.commonAjax(pUrl, pSendData, callBackManager.selectInchList);
+	});
+	// -- end tag
+
+	//사이즈 , 인치 선택 이벤트 > 사이즈 , 인치 선택 화면 오픈
+	//$(document).on("click","input[name='sizeCd'] , input[name='inches'] " , function(){
+	$(document).on("click","input[name='sizeCd']" , function(){
+
+		$("#searchClCd").val($(this).attr("searchClCd"));
+		$("#modelCd").val($(this).attr("modelCd"));
+
+		$("#tireSizeD").val($(this).val().split("^")[0]);
+		$("#tireSizeP").val($(this).val().split("^")[1]);
+		$("#tireSizeI").val($(this).val().split("^")[2]);
+
+		$("#niceTireSize").removeClass("md-show");
+		// 차량추가
+		fn_insertCustCarInfo();
+/*
+		//사이즈
+		if($(this).attr("name") == "sizeCd") {
+			gbn = "S";
+			$("#TireSizeCd").val($(this).val());
+			$("#TireSizeNm").val($(this).attr("sizeNm"));
+			$("#sectionWidth").val($(this).val().split("^")[0]);
+			$("#aspectRatio").val($(this).val().split("^")[1]);
+			$("#wheelInches").val($(this).val().split("^")[2]);
+			$("#plyRating").val($(this).attr("plyRating"));
+		}
+		//인치
+		else {
+			gbn = "I";
+			$("#wheelInches").val($(this).val());
+			$("#plyRating").val($(this).attr("plyRating"));
+		}
+
+		//필터와 구분 하기 위해
+		evManager.searchYn = true;
+		$("span.filter").text(0);
+		$("span.filter").text(0);
+
+		//검색 여부
+		evManager.searchYn = true;
+
+		//팝업 닫고 리스트 조회
+		ComUtil.loading();
+		var pUrl = "/product/selectPrdList";
+		//파라미터는 공통으로 사용 - evManager.listParam()
+		evManager.commonAjax(pUrl, evManager.listParam(), callBackManager.selectMakePrdList , gbn);
+ */
+	});
+	// -- end tag
+
+});
+
+/*
+ * 리퀘스트 후처리 함수 - SUCCESS
+ * callback
+ */
+function cfnRequestSuccessCallback(callback, result) {
+	var nexenCd = "nexentire";
+	
+	console.log("result : ");
+	console.log(result);
+	console.log("result.rtnCode : " + result.rtnCode);
+	console.log("result.rtnMsg : " + result.rtnMsg);
+	/* 보유차량 모두 삭제하는 경우 */
+	if(callback == 'selectCustCarInfoList' && result.rtnCode == -1 && result.selectCustCarInfoList.length == 0){
+		$("#carInfoDiv").empty();
+	}
+
+	if(result.rtnCode == 0) {
+		if(callback == 'selectMemberInfo') {
+			/* selectMemberInfo Start */
+			var info = result.selectMemberInfo;
+			console.log(info);
+			if (info != null) {
+				// 개인회원 /법인회원 화면 분리
+				if (info.custDivCd == '1') {
+					$(".personalDiv").show();
+					$(".CorpDiv").hide();
+				} else {
+					$(".personalDiv").hide();
+					$(".CorpDiv").show();
+
+					$('#bizRegNo').val(info.bizRegNo);
+					$('#bizRegNm').val(info.bizRegNm);
+					$('#perCharge').val(info.perCharge);
+					$('#bizType').val(info.bizType);
+					$('#bizCondition').val(info.bizCondition);
+					$('#bizCondition').val(info.bizCondition);
+
+					// 대표 생일
+					$('#legalBrthYY').val(info.legalBrthYY);
+					$('#legalBrthMM').val(info.legalBrthMM);
+					$('#legalBrthDD').val(info.legalBrthDD);
+
+					// 성별
+					$('#gendCd').val(info.gendCd);
+
+					// 대표전화번호
+					$('#Cphone01').val(info.phone01);
+					$('#Cphone02').val(info.phone02);
+					$('#Cphone03').val(info.phone03);
+
+					// 회사전화
+					$('#CcPhone01').val(info.cPhone01);
+					$('#CcPhone02').val(info.cPhone02);
+					$('#CcPhone03').val(info.cPhone03);
+
+					// 담당자휴대전화
+					$('#CrPhone01').val(info.rPhone01);
+					$('#CrPhone02').val(info.rPhone02);
+					$('#CrPhone03').val(info.rPhone03);
+
+					// 대표자명
+					$('#CcustNm').val(info.custNm);
+				}
+
+				$('#custDivCd').val(info.custDivCd);  // 개인:1, 법인/사업자:2
+				// 일반회원과 SNS회원간의 화면 변경
+				$('#cPhone01').val(info.cPhone01);
+				$('#cPhone02').val(info.cPhone02);
+				$('#cPhone03').val(info.cPhone03);
+				$('#carNum').val(info.carNum);
+				$('#ciVal').val(info.ciVal);
+				$('#custNo').val(info.custNo);
+				$('#comDivCd').val(info.comDivCd);
+				$('#custId').val(info.custId);
+				$('#custNewPwd').val(info.custNewPwd);
+				$('#custNewRePwd').val(info.custNewRePwd);
+				$('#custNm').val(info.custNm);
+				$('#custPwd').val(info.custPwd);
+				$('#diVal').val(info.diVal);
+				$('#email').val(info.email);
+				$('#email01').val(info.email01);
+				$('#email02').val(info.email02);
+				$('#officerCd').val(info.officerCd);
+				if($('#officerCd').val() != null){
+					$('#officerCdChkYn').val("Y");
+				}
+				$('#frgnCd').val(info.frgnCd);
+				$('#gendCd').val(info.gendCd);
+				$('#haveCarInfo').val(info.haveCarInfo);
+				$('#legrBrthYmd').val(info.legrBrthYmd);
+
+				// 주소정보
+				
+				$("#addr").val(info.addr);
+				console.log("info.addr :: " + $("#addr").value);
+				$("#detlAddr").val(info.detlAddr);
+				$("#posNo").val(info.posNo);
+				$("#bldMngNo").val(info.bldMngNo);
+					
+				if(info.addr == null && info.detlAddr == null){
+					console.log("no address");
+				}
+				else{
+					$("#addrFull").val(info.addr + " " + info.detlAddr);
+				}
+				
+				if (info.cagYn1 == 'Y') {
+					$('input:checkbox[id="cagYn1"]').attr("checked", true);
+				} else {
+					$('input:checkbox[id="cagYn1"]').attr("checked", false);
+				}
+				if (info.cagYn2 == 'Y') {
+					$('input:checkbox[id="cagYn2"]').attr("checked", true);
+				} else {
+					$('input:checkbox[id="cagYn2"]').attr("checked", false);
+				}
+				if (info.cagYn3 == 'Y') {
+					$('input:checkbox[id="cagYn3"]').attr("checked", true);
+				} else {
+					$('input:checkbox[id="cagYn3"]').attr("checked", false);
+				}
+				if (info.cagYn5 == 'Y') {
+					$('input:checkbox[id="cagYn5"]').attr("checked", true);
+				} else {
+					$('input:checkbox[id="cagYn5"]').attr("checked", false);
+				}
+				
+				if (info.magYn1 == 'Y') {
+					$('input:checkbox[id="magYn1"]').attr("checked", true);
+				} 
+				else {
+					$('input:checkbox[id="magYn1"]').attr("checked", false);
+				}
+				if (info.magYn2 == 'Y') {
+					$('input:checkbox[id="magYn2"]').attr("checked", true);
+				} 
+				else {
+					$('input:checkbox[id="magYn2"]').attr("checked", false);
+				}
+
+				$('#mon').val(info.mon);
+				$('#phone01').val(info.phone01);
+				$('#phone02').val(info.phone02);
+				$('#phone03').val(info.phone03);
+				$('#rPhone01').val(info.rPhone01);
+				$('#rPhone02').val(info.rPhone02);
+				$('#rPhone03').val(info.rPhone03);
+				$('#receptionAll').val(info.receptionAll);
+				$('#receptionAdress').val(info.receptionAdress);
+				$('#receptionEmail').val(info.receptionEmail);
+				$('#receptionPhone').val(info.receptionPhone);
+				$('#receptionSms').val(info.receptionSms);
+				$('#receptionKakao').val(info.receptionKakao);
+				$('#receptionMarketingFirst').val(info.receptionMarketingFirst);
+				$('#receptionMarketingSecond').val(info.receptionMarketingSecond);
+				$('#safeKey').val(info.safeKey);
+				$('#searchClCd').val(info.searchClCd);
+				$('#searchPtnCd').val(info.searchPtnCd);
+				$('#modelCd').val(info.searchPtnCd);
+				$('#snsGbn').val(info.snsGbn);
+				$('#snsid').val(info.snsid);
+				$('#tireSizeD').val(info.tireSizeD);
+				$('#tireSizeI').val(info.tireSizeI);
+				$('#tireSizeP').val(info.tireSizeP);
+				$('#viewGbn').val(info.viewGbn);
+				$('#vnVal').val(info.vnVal);
+				$('#year').val(info.year);
+
+				if (ValidUtil.isEmpty(info.safeKey)){
+					$("#safeKeyChk").show();
+				}
+
+				// 본인인증 번호
+				if (!ValidUtil.isEmpty(info.phone01)
+						|| !ValidUtil.isEmpty(info.phone02)
+						|| !ValidUtil.isEmpty(info.phone03)
+						){
+					$("#phoneChkYn").val("Y");
+				}
+
+				// 실사용자번호
+				if (!ValidUtil.isEmpty(info.rPhone01)
+						|| !ValidUtil.isEmpty(info.rPhone02)
+						|| !ValidUtil.isEmpty(info.rPhone03)
+						){
+					$("#rPhoneChkYn").val("Y");
+				}
+
+				/* if (result.memberType =="S") { */
+				if (result.pageCommon.totalCount >= 1) {
+					// SNS 갯수에 따라 case가 다름
+					var inHtml;
+					var snsNm;
+
+					if (result.pageCommon.totalCount == 1){
+
+						if (result.selectSnsUsrInfoList[0].snsDiv == "KO"){
+							snsNm = '카카오';
+						} else if(result.selectSnsUsrInfoList[0].snsDiv == "NV"){
+							snsNm = '네이버';
+						} else if(result.selectSnsUsrInfoList[0].snsDiv == "FB"){
+							snsNm = '페이스북';
+						} else if(result.selectSnsUsrInfoList[0].snsDiv == "GG"){
+							snsNm = '구글';
+						}
+						
+						if (!ValidUtil.isEmpty(result.selectSnsUsrInfoList[0].snsId)){
+		                    inHtml = '<label for="sns01"><span class="essen black">SNS</span></label>';
+		                    inHtml += '<div class="conWrap">';
+		                    inHtml += snsNm;
+		                    inHtml += '</div>';
+		                    
+		                    if (usrType == 'S') {
+			                    inHtml += '<button type="button" class="type09 po_10 fr" onclick="javascript:fn_dropCust();">회원탈퇴</button>';
+		                    } else {
+		                    	// 일반회원가입자가 SNS 연동의 경우 (연동해지)
+		                    	inHtml += '<button type="button" class="type09 po_10 fr" onclick="javascript:fn_dropSns('+result.selectSnsUsrInfoList[0].snsId+');">연동해지</button>';
+		                    }
+		                    
+		                    $("#snsCateCase2").empty();
+		                    $("#snsCateCase2").html(inHtml);
+	
+							//$("#memberTp1").hide();
+							$("#memberTp2").show();
+							$("#memberTp3").hide();							
+						}
+						
+					} else {
+						// SNS 여러개 
+						var data = result.selectSnsUsrInfoList;
+
+						if (data != null && data.length > 0 ) {
+							inHtml = '';
+							for(var i=0; i<data.length; i++) {
+
+								if (result.selectSnsUsrInfoList[i].snsDiv == "KO"){
+									snsNm = '카카오';
+								} else if(result.selectSnsUsrInfoList[i].snsDiv == "NV"){
+									snsNm = '네이버';
+								} else if(result.selectSnsUsrInfoList[i].snsDiv == "FB"){
+									snsNm = '페이스북';
+								} else if(result.selectSnsUsrInfoList[i].snsDiv == "GG"){
+									snsNm = '구글';
+								}
+
+								inHtml += '<div class="conWrap">';
+								inHtml += snsNm;
+								inHtml += '<button type="button" class="type09 po_10 fr" onclick="javascript:fn_dropSns('+result.selectSnsUsrInfoList[i].snsId+');">연동해지</button>';
+								inHtml += '</div>';
+							}
+
+		                    $("#snsCateCase3").empty();
+		                    $("#snsCateCase3").html(inHtml);
+						}
+
+						//$("#memberTp1").hide();
+						$("#memberTp2").hide();
+						$("#memberTp3").show();
+					}
+				}
+				
+				// 보유차량정보 조회 Start
+				var carData = result.selectCustCarInfoList;
+				console.log("carData:::");
+				console.log(carData);
+				console.log("carData의 길이는 "+carData.length);
+				
+				if (carData != null && carData.length > 0 ) {
+					inHtml = '';
+					for(var j=0; j<carData.length; j++) {
+						carNoArr[j] = carData[j].carNo;
+
+						var tireSizedd = carData[j].tireSizeD;
+						var tireSizepp = carData[j].tireSizeP;
+						var tireSizeii = carData[j].tireSizeI;
+						haveCarCnt +=1;
+
+						inHtml += '<div class="sList">';
+		                inHtml += '    <div class="vehicle">';
+		                inHtml += '        <p>보유차량 '+(j+1)+'</p>';
+		                inHtml += '        <ul>';
+		                inHtml += '            <li id="carDataNo"'+j+'>'+carData[j].carNo+'</li>';
+		                inHtml += '            <li>'+carData[j].carMkerNm+'</li>';
+		                inHtml += '            <li>'+carData[j].carModelNm+'</li>';
+		                if(tireSizedd == null){
+		                	inHtml += '            <li> - </li>';
+						}else{
+							inHtml += '            <li>단면폭'+tireSizedd+'</li>';
+						}
+		                if(tireSizepp == null){
+		                	inHtml += '            <li> - </li>';
+						}else{
+							inHtml += '            <li>편방비'+tireSizepp+'</li>';
+						}
+		                if(tireSizeii == null){
+		                	inHtml += '            <li> - </li>';
+						}else{
+							inHtml += '            <li>인치'+tireSizeii+'</li>';
+						}
+		                inHtml += '        </ul>    ';
+		                inHtml += '        <a href="#;" onclick="javascript:fn_dropCustCar('+carData[j].custNo+','+carData[j].carSeq+');" class="tDel"></a>';
+		                inHtml += '    </div>';
+		                inHtml += '</div>';
+					}
+
+	                $("#carInfoDiv").empty();
+	                $("#carInfoDiv").html(inHtml);
+				}
+				else{
+					$("#carInfoDiv").empty();
+				}
+				// 보유차량정보 조회 End
+
+				// 첨부파일 Start
+				var attachData = result.selectCustAttachFileList;
+				var attachPath;
+				var realNm;
+				if (attachData != null && attachData.length > 0 ) {
+					//$(".ff_fileupload_wrap").hide();
+					for(var k=0; k<attachData.length; k++) {
+						attachPath = attachData[k].atflPathNm;
+						realNm = attachData[k].atflNm;
+						if (k==0){
+							// attachPath1
+							$("#attachPath1").parent().show();
+							$("#attachPath1").attr("src","${attachPath}" + attachPath);
+							$("#fileFlag01").val("Y");
+							//$("#attachPath1").attr("src","https://www.nexentire.com/kr/main_adm/04/__icsFiles/afieldfile/2019/11/08/main_page.png");
+						} else if (k==1){
+							// attachPath2
+							$("#attachPath2").parent().show();
+							$("#attachPath2").attr("src","${attachPath}" + attachPath);
+							$("#fileFlag02").val("Y");
+						} else if (k==2){
+							// attachPath3
+							$("#attachPath3").parent().show();
+							$("#attachPath3").attr("src","${attachPath}" + attachPath);
+							$("#fileFlag03").val("Y");
+						}
+					}
+				}
+				// 첨부파일 End
+				//인증코드 start
+				var selectIssInfo = result.selectIssInfo;
+				if(selectIssInfo != null){						
+					$("#affiliateCd").val(selectIssInfo.issCertCd);
+					$("#indvAffiliateCode").val(selectIssInfo.indvCertCd);
+					$("#issCert").val(selectIssInfo.issCertCd);
+					$("#indvCert").val(selectIssInfo.indvCertCd);
+				}				
+				//인증코드 end
+			}
+			 /* selectMemberInfo end */
+		} else if (callback == 'deleteSnsCust') {
+			/* deleteSnsCust start */
+			ComUtil.alert('SNS 정보가 해지 되었습니다.');
+			evManager.init();
+			/* deleteSnsCust end */
+		} else if (callback == 'deleteCustCarInfo') {
+			/* deleteCustCarInfo start */
+			//ComUtil.alert('차량정보가 삭제 되었습니다.');
+			fn_selectCustCarInfoList();
+			/* deleteCustCarInfo end */
+		} else if (callback == 'insertCustCarInfo') {
+			/* insertCustCarInfo start */
+			ComUtil.alert('차량정보가 저장 되었습니다.');
+			fn_selectCustCarInfoList();
+			/* insertCustCarInfo end */
+		} else if (callback == 'selectCustCarInfoList') {
+			/* selectCustCarInfoList start */
+			var carData = result.selectCustCarInfoList;
+			console.log("carData:");
+			console.log(carData);
+			console.log("carData의 길이는 "+carData.length);
+			if (carData != null && carData.length > 0 ) {
+				inHtml = '';
+				for(var j=0; j<carData.length; j++) {
+					var tireSizedd = carData[j].tireSizeD;
+					var tireSizepp = carData[j].tireSizeP;
+					var tireSizeii = carData[j].tireSizeI;
+
+
+					inHtml += '<div class="sList">';
+	                inHtml += '    <div class="vehicle">';
+	                inHtml += '        <p>보유차량 '+(j+1)+'</p>';
+	                inHtml += '        <ul>';
+	                inHtml += '            <li id="carDataNo"'+j+'>'+carData[j].carNo+'</li>';
+	                inHtml += '            <li>'+carData[j].carMkerNm+'</li>';
+	                inHtml += '            <li>'+carData[j].carModelNm+'</li>';
+	                if(tireSizedd == null){
+	                	inHtml += '            <li> - </li>';
+					}else{
+						inHtml += '            <li>단면폭'+tireSizedd+'</li>';
+					}
+	                if(tireSizepp == null){
+	                	inHtml += '            <li> - </li>';
+					}else{
+						inHtml += '            <li>편방비'+tireSizepp+'</li>';
+					}
+	                if(tireSizeii == null){
+	                	inHtml += '            <li> - </li>';
+					}else{
+						inHtml += '            <li>인치'+tireSizeii+'</li>';
+					}
+	                inHtml += '        </ul>    ';
+	                inHtml += '        <a href="#;" onclick="javascript:fn_dropCustCar('+carData[j].custNo+','+carData[j].carSeq+');" class="tDel"></a>';
+	                inHtml += '    </div>';
+	                inHtml += '</div>';
+				}
+
+                $("#carInfoDiv").empty();
+                $("#carInfoDiv").html(inHtml);
+			}
+			/* selectCustCarInfoList end */
+		} else if (callback == 'updateMemberInfo') {
+			/* updateMemberInfo start */
+			ComUtil.alert('저장되었습니다.');
+			evManager.init();
+			/* updateMemberInfo end */
+		} else if (callback == 'employeeCdCheck') {
+			/* employeeCdCheck start */
+
+			if(result.employeeCdYn == "Y") {
+	    		$('#employeeCdTxt').removeClass('validation type03');					
+				$('#employeeCdTxt').addClass('validation type04');
+	    		$("#employeeCdTxt").val("1");
+		    	$('#employeeCdTxt').html('<span><i class="ico11"></i>사용 가능한 코드 입니다.</span>');
+		    	$("#officerCdChkYn").val("Y");
+		    	
+		    	var pUrl = "/mypage/selectChkCd";
+				var pParams = {
+						custId 		: userLoginId,
+						issCertCd	: nexenCd
+				};
+				cfnSendRequest(pUrl,pParams,'selectChkCd');
+				$("#affiliateCd").val(nexenCd);
+	    	} else {
+	    		$("#employeeCdTxt").val("0");
+	    		$('#employeeCdTxt').html('<span><i class="ico08"></i>사용 할 수 없는 코드 입니다.</span>');
+	    		$("#officerCd").val("");
+	    		$("#officerCdChkYn").val("");
+	    		
+	    		if($("#affiliateCd").val() == nexenCd) {
+	    			$("#affiliateCd").val("");
+	    			$("#issCert").val("");
+	    		}
+	    	}
+
+	    	$('#employeeCdTxt').show();
+
+			/* employeeCdCheck end */
+		} else if (callback == 'requestMobileAccess') {
+			/* requestMobileAccess start */
+			$('#resSeq').val(result.resSeq);
+			/* requestMobileAccess end */
+		} else if (callback == 'setMobileAccess') {
+			/* setMobileAccess start */
+			ComUtil.alert('인증성공 하였습니다.');
+			$("#rPhoneChkYn").val("Y");
+			$("#modal-11").removeClass("md-show");
+			/* setMobileAccess end */
+		} else if (callback == 'selectMemCarModelList') {
+			/* selectMemCarModelList start */
+			var option;
+			$('#searchPtnCd').empty();
+			option = '<option value="">모델명</option>';
+			$('#searchPtnCd').append(option);
+			for(var i=0; i < result.modelList.length; i++) {
+				option = $('<option value="'+result.modelList[i].modelCd+'">'+result.modelList[i].modelNm+'</option>');
+		        $('#searchPtnCd').append(option);
+			}
+			/* selectMemCarModelList end */
+		} else if (callback == 'selectChkCd') {
+			/* selectChkCd start */
+			
+			var issCertList = result.modelList.issCertList;
+			if(issCertList.length > 0){
+				var plcYn = result.modelList.plcYn;
+				
+				if(plcYn == 'Y') {
+					certList = issCertList;
+				} else {
+					issCertList = [];
+				
+					$('#affiliateCdTxt').removeClass('validation type04');					
+					$('#affiliateCdTxt').addClass('validation type03');
+					$('#affiliateCdTxt').html('<span><i class="ico08"></i>제휴기간이 만료되어 등록이 불가합니다.</span>');
+					$("#issCert").val("");
+				}
+			}else{
+				//ComUtil.alert('존재하지 않는 발급코드 입니다.');
+				$('#affiliateCdTxt').removeClass('validation type04');					
+				$('#affiliateCdTxt').addClass('validation type03');
+				$('#affiliateCdTxt').html('<span><i class="ico08"></i>제휴코드가 잘못되었습니다.</span>');
+				$("#issCert").val("");
+			}
+			
+			for(var i = 0; i < issCertList.length; i++){
+				if(issCertList[i].INDVCERTCD != null){
+					$('#modal-affiliatecode').addClass('md-show');
+					break;
+				}else{
+					if(issCertList[i].GRPSECD == "20"){
+						if(issCertList[i].CUSTID == $("#custId").val()){
+							$("#issCert").val(issCertList[i].ISSCERTCD);
+							//ComUtil.alert('제휴코드 인증이 완료되었습니다.');
+							$('#affiliateCdTxt').removeClass('validation type03');					
+							$('#affiliateCdTxt').addClass('validation type04');
+							$('#affiliateCdTxt').html('<span><i class="ico11"></i>제휴코드 인증이 완료되었습니다.</span>');
+							break;
+						}else{
+							$('#affiliateCdTxt').removeClass('validation type04');					
+							$('#affiliateCdTxt').addClass('validation type03');
+							$('#affiliateCdTxt').html('<span><i class="ico08"></i>발급코드가 잘못되었습니다.</span>');
+							$("#issCert").val("");
+							break;
+						}
+					}else{
+						$("#issCert").val(issCertList[i].ISSCERTCD);
+						//ComUtil.alert('제휴코드 인증이 완료되었습니다.');
+						$('#affiliateCdTxt').removeClass('validation type03');					
+						$('#affiliateCdTxt').addClass('validation type04');
+						$('#affiliateCdTxt').html('<span><i class="ico11"></i>제휴코드 인증이 완료되었습니다.</span>');
+						break;
+					}
+				}
+			}
+			
+			$('#affiliateCdTxt').show();
+			
+			/* selectChkCd end */
+		}
+	}
+
+}
+
+/*
+ * 리퀘스트 후처리 함수 - ERROR
+ * callbackError
+ */
+function cfnRequestErrorCallback(callback, status) {
+
+	if(callback == 'selectMemberInfo'){
+		ComUtil.alert(status);
+	} else if (callback == 'deleteSnsCust') {
+		/* deleteSnsCust start */
+		ComUtil.alert('처리 실패 되었습니다.');
+		//evManager.init();
+		/* deleteSnsCust end */
+	} else if (callback == 'deleteCustCarInfo') {
+		/* deleteCustCarInfo start */
+		ComUtil.alert('처리 실패 되었습니다.');
+		//evManager.init();
+		/* deleteCustCarInfo end */
+	} else if (callback == 'updateMemberInfo') {
+		/* updateMemberInfo start */
+		ComUtil.alert('처리 실패 되었습니다.');
+		console.log(status);
+		//evManager.init();
+		/* updateMemberInfo end */
+	} else if (callback == 'employeeCdCheck') {
+		/* employeeCdCheck start */
+		ComUtil.alert('코드 조회에 실패 하였습니다.');
+		/* employeeCdCheck end */
+	} else if (callback == 'requestMobileAccess') {
+		/* requestMobileAccess start */
+		$('#resSeq').val('');
+		/* requestMobileAccess end */
+	} else if (callback == 'setMobileAccess') {
+		/* setMobileAccess start */
+		ComUtil.alert('인증 실패 하였습니다.');
+		$("#rPhoneChkYn").val("N");
+		/* setMobileAccess end */
+	} else if (callback == 'selectMemCarModelList') {
+		/* selectMemCarModelList start */
+		ComUtil.alert('실패 하였습니다.');
+		/* selectMemCarModelList end */
+	}
+
+	ComUtil.unloading();
+}
+
+/* 두번째 선택사항 차량정보 */
+var selectObj = null;
+function fn_getModel(){
+	var searchClCd =  $("#searchClCd").val();
+
+	// 조회 URL
+	var pUrl = "/mypage/selectMemCarModelList";
+	var pParams = {
+			sMakerCd 		: searchClCd
+			, sCdGrpCd 		: 'S002'
+			, sCdGrpCd2		: 'S003'
+	};
+	console.log(pParams);
+
+	cfnSendRequest(pUrl,pParams,'selectMemCarModelList');
+}
+
+function result2(msg){
+	$(selectObj).html(msg);
+}
+
+function fn_dropSns(snsid) {
+
+	ComUtil.confirm("삭제 하시겠습니까?"
+		,""
+		, function(){
+			// SNS 삭제 시작
+			var pUrl = "/mypage/deleteSnsCust";
+
+			var pParams = {
+					snsid 		: snsid
+			};
+			//console.log(pParams);
+			cfnSendRequest(pUrl,pParams,'deleteSnsCust');
+		}
+	);
+
+}
+
+function fn_dropCust() {
+	location.href = "/mypage/memberSecession";
+}
+
+function fn_dropCustCar(pCustNo, pCarSeq) {
+
+
+	ComUtil.confirm("삭제 하시겠습니까?"
+		,""
+		, function(){
+			// 보유차량 삭제
+			var pUrl = "/mypage/deleteCustCarInfo";
+
+			var pParams = {
+					custNo 		: pCustNo
+					,carSeq 		: pCarSeq
+			};
+			//console.log(pParams);
+			cfnSendRequest(pUrl,pParams,'deleteCustCarInfo');
+		}
+	);
+	
+}
+
+function fn_searchCarNum() {
+	var carNum = $('#carNum').val();
+	if (ValidUtil.isEmpty(carNum)){
+		ComUtil.alert('차량번호를 입력하세요.');
+		return false;
+	} else {
+		$('#carNumber').val($('#carNum').val());
+		$('#btnCarNumber').click();
+	}
+}
+
+function fn_insertCustCarInfo() {
+
+	var chkVal = $('input:radio[name="haveCarInfo"]:checked').val();
+	var pParams;
+
+	console.log("fn_insertCustCarInfo:::");
+	console.log(chkVal);
+
+	// 보유 차량 번호 중복시
+	for(i = 0; i < carNoArr.length; i++){
+		if($('#carNo').val() == carNoArr[i]){
+			alert("중복된 차량입니다.");
+			return;
+		}
+	}
+
+	if($('#carNo').val() == ""){
+		alert("보유차량 정보를 입력하시기 바랍니다.")
+	}
+	else{
+		if (chkVal == '1') {
+			pParams = {
+				custNo 			: $('#custNo').val()
+				,carMkerNm 		: $('#searchClCd').val()
+				,carModel 		: $('#modelCd').val()
+				,carNo 			: $('#carNo').val()
+				,tireSizeD 		: $('#tireSizeD').val()
+				,tireSizeP 		: $('#tireSizeP').val()
+				,tireSizeI 		: $('#tireSizeI').val()
+				,tireChgYm 		: $('#year').val()+$('#mon').val()
+				,tireGoodsNm 	: $('#tireName').val()
+			};
+		} else {
+			pParams = {
+				custNo 			: $('#custNo').val()
+				,carMkerNm 		: $('#searchClCd').val()
+				,carModel 		: $('#modelCd').val()
+				,carNo 			: $('#carNo').val()
+				,tireSizeD 		: $('#tireSizeD').val()
+				,tireSizeP 		: $('#tireSizeP').val()
+				,tireSizeI 		: $('#tireSizeI').val()
+				,tireChgYm 		: $('#year').val()+$('#mon').val()
+				,tireGoodsNm 	: $('#tireName').val()
+			};
+		}
+
+
+		// 보유차량 등록
+		var pUrl = "/mypage/insertCustCarInfo";
+		cfnSendRequest(pUrl,pParams,'insertCustCarInfo');
+	}
+
+
+}
+
+function fn_selectCustCarInfoList() {
+
+	// 보유차량 조회
+	var pUrl = "/mypage/selectCustCarInfoList";
+
+	var pParams = {
+			sCustId 		: userLoginId
+	};
+	cfnSendRequest(pUrl,pParams,'selectCustCarInfoList');
+
+}
+
+/* 입력 방지 */
+function check_key() {
+  var char_ASCII = event.keyCode;
+
+  //숫자
+ if (char_ASCII >= 48 && char_ASCII <= 57 )
+    return 1;
+ //영어
+ else if ((char_ASCII>=65 && char_ASCII<=90) || (char_ASCII>=97 && char_ASCII<=122))
+     return 2;
+ //특수기호
+ else if ((char_ASCII>=33 && char_ASCII<=47) || (char_ASCII>=58 && char_ASCII<=64)
+    || (char_ASCII>=91 && char_ASCII<=96) || (char_ASCII>=123 && char_ASCII<=126))
+     return 4;
+ //한글
+ else if ((char_ASCII >= 12592) || (char_ASCII <= 12687))
+     return 3;
+  else
+     return 0;
+}
+
+// 차량정보 숫자한글 (12가1234)
+function nonHangulSpecialKey() {
+
+	 if(check_key() != 1 && check_key() != 3) {
+	   event.returnValue = false;
+	   ComUtil.alert("숫자나 한글만 입력하세요!");
+	   return;
+	  }
+}
+
+//휴대전화 팝업
+function fnCallPhone(gubun){
+	window.open('', 'popupChk', 'width=520, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+	document.form_chk.target = "popupChk";
+	document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+	document.form_chk.submit();
+}
+
+//가입된 회원인지 확인하고 없으면 다음단계로 넘기고 아니면 로그인 이동
+function result(){
+	ComUtil.alert('인증 되었습니다.');
+	$("#phoneChkYn").val("Y");
+	/*
+	var frm = document.userinfo_form;
+		frm.action = "/member/custInput";
+		frm.submit();
+		 */
+}
+
+//우편 번호 검색 - enterKey
+function enterSchKey(type) {
+
+	var evt_code = (window.netscape) ? ev.which : event.keyCode;
+	if (evt_code == 13) {
+		event.keyCode = 0;
+		if (type=='juso') {
+			selectJuso();
+		} else if (type=='carNumber') {
+			fn_searchCarNum();
+		}
+	}
+}
+
+//우편 번호 검색 - 검색 버튼 클릭
+function selectJuso(pageNo) {
+	if(pageNo != null){
+		if(Number(pageNo)  == 0) {
+			$("#currentPage").val("1");
+		} else {
+			$("#currentPage").val(pageNo);
+		}
+	} else {
+		$("#currentPage").val("1");
+	}
+
+	$("#keyword").val($("#jusoTxt").val());
+
+	$.ajax({
+		 url :"<%= AppContext.getString("zipcd.url") %>"  //인터넷망
+		,type:"post"
+		,data:$("#jusoFrm").serialize()
+		,dataType:"jsonp"
+		,crossDomain:true
+		,success:function(xmlStr){
+
+			console.log(xmlStr)
+
+			if(navigator.appName.indexOf("Microsoft") > -1){
+				var xmlData = new ActiveXObject("Microsoft.XMLDOM");
+				xmlData.loadXML(xmlStr.returnXml)
+			}else{
+				var xmlData = xmlStr.returnXml;
+			}
+
+			var errCode = $(xmlData).find("errorCode").text();
+			var errDesc = $(xmlData).find("errorMessage").text();
+			if(errCode != "0"){
+				ComUtil.alert(errDesc);
+			}else{
+				if(xmlStr != null){
+					makeList(xmlData);
+				}
+			}
+		}
+	    ,error: function(xhr,status, error){
+	    	ComUtil.alert("에러발생");
+	    }
+	});
+}
+
+function makeList(xmlStr){
+	var totCnt = Number($(xmlStr).find("totalCount").text());
+	$("#totalCount").text(totCnt);
+
+	var htmlStr = "";
+	if(totCnt != 0){
+		$(xmlStr).find("juso").each(function(){
+			htmlStr += "<tr onClick=\"sendChildValue('"+$(this).find('zipNo').text()+"','"+$(this).find('bdMgtSn').text()+"','"+$(this).find('roadAddrPart1').text()+"','"+$(this).find('roadAddrPart2').text()+"','"+$(this).find('jibunAddr').text()+"')\">";
+			htmlStr += "	<td>";
+			htmlStr += "		<div class='addDiv'>";
+			htmlStr += "			<span class='roadName mb6'>도로명</span>";
+			htmlStr += "			<span class='nomination'>지명</span>";
+			htmlStr += "		</div>";
+			htmlStr += "	</td>";
+			htmlStr += "	<td>";
+			htmlStr += "		<div class='address'>";
+			htmlStr += "			<p>"+$(this).find('roadAddrPart1').text()+"</p>";
+			htmlStr += "			<p>"+$(this).find('jibunAddr').text()+" </p>";
+			htmlStr += "		</div>";
+			htmlStr += "	</td>";
+			htmlStr += "	<td class='tCenter'>";
+			htmlStr += "		<p class='zipNum'>"+$(this).find('zipNo').text()+"</p>";
+			htmlStr += "	</td>";
+			htmlStr += "</tr>";
+			htmlStr += "</tr>";
+		});
+
+		htmlStr += "	</tbody>"
+
+	}else{
+		htmlStr += "		<tr>"
+		htmlStr += "			<td colspan='3'>검색결과가 없습니다.</td>"
+		htmlStr += "		</tr>"
+	}
+
+	$("#jusoList").html(htmlStr);
+	var totCnt = Number($(xmlStr).find("totalCount").text());
+	$("#totalCount").text(totCnt);
+
+	//paging
+	PageUtil.fnPageMakeDisplay(totCnt, $("#currentPage").val() ,  $('#paging') , 'selectJuso', 4);
+}
+
+//상세 우편 번호
+function sendChildValue(zipCode, bdMgtSn, load1, load2, jibun) {
+	$("#modal-22").removeClass("md-show");
+	$("#popZipCode").text(zipCode);
+	//$("#popLoadAddr").text(load + " " + bdMgtSn);
+	$("#popLoadAddr").text(load1 + " " + load2);
+	$("#popJibunAddr").text(jibun);
+	$("#bldMngNo").val(bdMgtSn);	// 건물관리번호
+	$("#modal-33").addClass("md-show");
+}
+
+function sendChildValueCancle(){
+	$(".layPopClose").click();
+}
+
+//상세 주소 화면
+function sendChildValueFix() {
+	//해당 주소의 거점 체크
+	//var zipCode = $("#popZipCode").text();
+	//var addr1 = $("#popLoadAddr").text() + " " + $("#popDetailAddr").val();
+	// 상세주소 필수 체크
+	if (ValidUtil.isEmpty($("#popDetailAddr").val())){
+		ComUtil.alert('상세주소를 필수 입니다.');
+		return false;
+	}
+
+	$("#addrFull").val($("#popLoadAddr").text() + " " + $("#popDetailAddr").val());
+	$("#addr").val($("#popLoadAddr").text());
+	$("#detlAddr").val($("#popDetailAddr").val());
+	$("#posNo").val($("#popZipCode").text());
+	$(".layPopClose").click();
+
+}
+
+
+//제휴코드 인증 팝업
+function fn_affiliateCodePop() {
+// 	$('#modal-affiliatecode').addClass('md-show');
+	// 조회 URL
+// 	var serverMode = $("#serverMode").val();
+	
+// 	if(serverMode == "prd"){
+// 		ComUtil.alert('준비중입니다');
+// 		return false;
+// 	}else{
+		if($("#affiliateCd").val() == null || $("#affiliateCd").val() == ""){
+			//ComUtil.alert('제휴코드를 입력하여주세요');
+			$('#affiliateCdTxt').html('<span><i class="ico08"></i>제휴코드를 입력하여주세요.</span>');
+			$('#affiliateCdTxt').show();
+			return false;
+		}
+		
+		var pUrl = "/mypage/selectChkCd";
+		var pParams = {
+				custId 		: userLoginId,
+				issCertCd	: $("#affiliateCd").val()
+		};
+		cfnSendRequest(pUrl,pParams,'selectChkCd');
+// 	}
+}
+
+//제휴코드 input data 변경시
+function fn_affiliateCng(){
+	$('#affiliateCdTxt').removeClass('validation type04');					
+	$('#affiliateCdTxt').addClass('validation type03');	
+	$('#affiliateCdTxt').html('<span><i class="ico08"></i>제휴코드 인증을 진행하여 주시길 바랍니다.</span>');
+	$("#issCert").val("");
+	$("#indvCert").val("");
+	$("#indvAffiliateCode").val("");
+}
+
+//개별인증코드 확인
+function fn_indvCert(){
+	
+	var indvAffiliateCode = $("#indvAffiliateCode").val();
+	
+	if(indvAffiliateCode == null || indvAffiliateCode == ""){
+		ComUtil.alert('개별인증코드를 입력하여주세요');
+		return false;
+	}
+	var indvCertBool = false;
+	for(var i = 0; i < certList.length; i++){
+		if(certList[i].INDVCERTCD == indvAffiliateCode){
+			console.log(certList[i].CUSTID);
+			if(typeof certList[i].CUSTID != "undefined" && certList[i].CUSTID != null && certList[i].CUSTID != ""){
+				if(certList[i].CUSTID == $("#custId").val()){
+					indvCertBool = true;
+					break;
+				}
+			}else{
+				indvCertBool = true;
+				break;				
+			}
+		}
+	}
+	
+	if(!indvCertBool){		
+		$("#issCert").val("");
+		$("#indvCert").val("");
+		ComUtil.alert('이미 등록된 개별 인증 코드 입니다. <br>개별인증코드를 확인해 주세요.');
+	}else{
+		$("#issCert").val($("#affiliateCd").val());
+		$("#indvCert").val(certList[i].INDVCERTCD);
+		//ComUtil.alert('개별코드 인증이 완료되었습니다.');
+		$('#affiliateCdTxt').removeClass('validation type03');					
+		$('#affiliateCdTxt').addClass('validation type04');			
+		$('#affiliateCdTxt').html('<span><i class="ico11"></i>개별코드 인증이 완료되었습니다.</span>');
+		$("#modal-affiliatecode").removeClass("md-show");		
+	}
+}
+
+//개별인증코드  취소
+function fn_CancelCert(){
+	$("#issCert").val("");
+	$("#indvCert").val("");
+	$("#indvAffiliateCode").val("");
+	//ComUtil.alert('개별코드인증을 취소하셨습니다.');
+	$('#affiliateCdTxt').removeClass('validation type04');					
+	$('#affiliateCdTxt').addClass('validation type03');	
+	$('#affiliateCdTxt').html('<span><i class="ico08"></i>개별코드 인증을 취소하셨습니다.</span>');
+}
+
+</script>

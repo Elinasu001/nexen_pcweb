@@ -1,0 +1,49 @@
+package com.nexwrms.pcweb.com.interceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import com.nexwrms.core.util.StringUtil;
+
+public class MobileCheckInterceptor extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(MobileCheckInterceptor.class);
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    	String reqUrl = request.getRequestURL().toString();
+    	String searchString = request.getQueryString();
+    	String userAgent = request.getHeader("User-Agent").toLowerCase();
+    	
+    	//logger.debug("reqUrl:"+reqUrl+" / userAgent:"+userAgent);
+    	
+    	// 모바일 기기 일 경우, 모바일 도메인 전환
+    	if(userAgent.indexOf("mobi") != -1) {
+    		
+			// 모바일url 구성용, 기본값을 모바일 실서버로 잡음.
+			String mbUrl = "https://m.nexen-nextlevel.com";
+			
+			// 서버에 따른 returnUrl 주소 구성
+    		if(reqUrl.indexOf("localhost") != -1) {
+    			mbUrl = "http://localhost:18081";
+    		} else if(reqUrl.indexOf("dev-pc") != -1) {
+    			mbUrl = "http://dev-m.nexen-nextlevel.com:8888";
+    		} else {
+    			mbUrl = "https://m.nexen-nextlevel.com";
+    		}
+    		
+    		// 뒤에 쿼리스트링이 있다면 붙여주시고..
+			if(!StringUtil.isEmpty(searchString)) {
+				mbUrl += "/main/?" + searchString;
+			}
+			response.sendRedirect(mbUrl);
+    		
+    		return false;
+    	} else {
+    		return true;
+    	}
+    } 
+}
