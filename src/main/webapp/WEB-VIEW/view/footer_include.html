@@ -23,17 +23,17 @@
              */
             
             function handleScrollButtons() {
-                const $noUseBtnWrap = $(".mainWrap .action-buttons-wrap");//특정 페이지 제외
-                const $actionBtnWrap = $(".action-buttons-wrap");
-                const $footerWrap = $(".footerWrap");
+                var $noUseBtnWrap = $(".mainWrap .action-buttons-wrap");//특정 페이지 제외
+                var $actionBtnWrap = $(".action-buttons-wrap");
+                var $footerWrap = $(".footerWrap");
 
                 $actionBtnWrap.hide().removeClass("keyframes");
                 
                 function updateButtonPosition(){
-                    const scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
-                    const windowHeight = $(window).height(); // 창 높이
-                    const documentHeight = $(document).height(); // 문서 전체 높이
-                    const footerOffsetTop = $footerWrap.offset().top; // 푸터의 상단 위치
+                    var scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
+                    var windowHeight = $(window).height(); // 창 높이
+                    var documentHeight = $(document).height(); // 문서 전체 높이
+                    var footerOffsetTop = $footerWrap.offset().top; // 푸터의 상단 위치
 
                     if (scrollTop + windowHeight >= footerOffsetTop) {
                         $actionBtnWrap.css({
@@ -47,13 +47,11 @@
                         });
                     }
                 }
-
-                $(window).on("load", function () {
-                    $actionBtnWrap.show().addClass("keyframes");
-                    $noUseBtnWrap.hide();//특정 페이지 제외
-                    $(window).on("scroll resize", updateButtonPosition);
-                    updateButtonPosition();
-                });
+                
+                $actionBtnWrap.show().addClass("keyframes");
+                $noUseBtnWrap.hide();//특정 페이지 제외
+                $(window).on("scroll resize", updateButtonPosition);
+                updateButtonPosition();
                 
                 
             }
