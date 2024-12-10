@@ -1,0 +1,114 @@
+<footer id="footerWrap" class="footer-wrap">
+
+    <!--//[20241210 퍼블]-->
+    <div class="action-buttons-wrap">
+        <div class="quick-menu keyframes">
+            <button type="button" class="quick-btn">
+                <div class="icon-wrap">
+                    <img src="../../img/common/ico_quick.png" alt="">
+                </div>
+                <div class="text-wrap">
+                    <p class="line1">간편상담</p>
+                    <p class="line2">신청하기</p>
+                </div>
+            </button>
+        </div>
+    </div>
+    <script>
+        
+        $(document).ready(function () {
+            /**
+             * 퀵메뉴 버튼
+             * main.jsp 페이지에서는 제외
+             */
+            
+            function handleScrollButtons() {
+                const $noUseBtnWrap = $(".mainWrap .action-buttons-wrap");//특정 페이지 제외
+                const $actionBtnWrap = $(".action-buttons-wrap");
+                const $footerWrap = $(".footerWrap");
+
+                $actionBtnWrap.hide();
+                
+                function updateButtonPosition(){
+                    const scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
+                    const windowHeight = $(window).height(); // 창 높이
+                    const documentHeight = $(document).height(); // 문서 전체 높이
+                    const footerOffsetTop = $footerWrap.offset().top; // 푸터의 상단 위치
+
+                    if (scrollTop + windowHeight >= footerOffsetTop) {
+                        $actionBtnWrap.css({
+                            position: "absolute",
+                            bottom: documentHeight - footerOffsetTop + 30 + "px"
+                        });
+                    } else {
+                        $actionBtnWrap.css({
+                            position: "fixed",
+                            bottom: "30px"
+                        });
+                    }
+                }
+
+                $(window).on("load", function () {
+                    $actionBtnWrap.show();
+                    $noUseBtnWrap.hide();//특정 페이지 제외
+                    $(window).on("scroll resize", updateButtonPosition);
+                    updateButtonPosition();
+                });
+                
+                
+            }
+            handleScrollButtons();
+
+            // var currentPosition = parseInt($(".quickmenu").css("top"));
+            // $(window).scroll(function() {
+            // 	var position = $(window).scrollTop(); 
+            // 	$(".quickmenu").stop().animate({"top":position+currentPosition+"px"},1000);
+            // });
+
+        });
+
+    </script>
+    <!--[20241210 퍼블]//-->
+    
+    <div class="footerWrap">
+        <div class="foTop">
+            <ul class="foMenu">
+                <li><a href="./contents/termOfService">이용약관</a></li>
+                <li><a href="./contents/privacyPolicy"><span style="color:#A566FF">개인정보처리방침</span></a></li>
+                <li><a href="http://www.nexentire.com/kr/" target="_blank">기업소개</a></li>
+            </ul>
+        </div>
+        <address>
+            경상남도 양산시 충렬로 355 넥센타이어 주식회사 <br />
+            대표이사 강호찬 | 사업자등록번호 621-81-10769 | 통신판매업신고번호 제2015-경남양산-0139호<br />
+        </address>
+
+        <div class="customer">
+            <ul>
+                <li class="fn ls01">고객센터 <span>1855-0100</span></li>
+                <li>평일 09:00 ~ 18:00 / 토요일, 공휴일 휴무</li>
+            </ul>
+        </div>
+
+        <div class="foCopyright">
+            <img src="./img/common/footer_logo.png" class="foLogo" alt="넥센타이어" /> <span>Copyright ⓒ 2019
+                NEXTLEVEL. all rights reserved</span>
+
+            <ul class="boSnsGo">
+                <li>
+                    <a href="#;" class="sns01" title="페이스북 바로가기" onClick="javascript:window.open('
+                        https://www.facebook.com/NEXENTIRE.KOREA');"></a>
+                </li>
+                <li>
+                    <a href="#;" class="sns02" title="블로그 바로가기"
+                        onClick="javascript:window.open('https://blog.naver.com/nexen_tire');"></a>
+                </li>
+                <li>
+                    <a href="#;" class="sns03" title="유튜브 바로가기"
+                        onClick="javascript:window.open('https://www.youtube.com/user/nexentireglobal');"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+</footer>
