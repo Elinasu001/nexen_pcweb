@@ -1992,14 +1992,15 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox.type02 .totalBar > .total .num:before { content:""; position:absolute; left:0; width:1px; height:10px; top:49%; transform:translateY(-50%); background:#111111; }
 .mapInfoBox.type02 .totalBar > .total span { color:#333333; font-weight: 500; }
 /* 페이지네이션 */
-.mapInfoBox.type02 .pagingFooter { height:52px; }
-.mapInfoBox.type02 .pagingFooter .paging { margin:20px 20px 0; padding-bottom:20px; }
+.mapInfoBox.type02 .pagingFooter { height:52px; background: #fff;  padding:20px;  }
+.mapInfoBox.type02 .pagingFooter .paging { margin:0;}
 /* 하단 컨텐츠 */
-.mapInfoBox.type02 .mapInfoBottom { background:#fff; height:538px; overflow: auto; }
+.mapInfoBox.type02 .mapInfoBottom { background:#fff; height:448px; overflow: auto; }
 .mapInfoBox.type02 .scrollBox.type04 { height: 320px; }
 /* 하단 컨텐츠- 리스트 */
 .mapInfoBox.type02 .serResult_01{height:1060px; padding:0px 40px}
-.mapInfoBox.type02 .serResult_01 ul > li.storeItem + li { margin-top:13px; }
+.mapInfoBox.type02 .serResult_01 > ul { padding-bottom:100px; }
+.mapInfoBox.type02 .serResult_01 > ul > li.storeItem + li { margin-top:13px; }
 .mapInfoBox.type02 .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:25px 20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
 .mapInfoBox.type02 .serResult_01 .icoArea.ic-recom { display:inline-block; padding:6px 6px 6px 22px; font-size:11px; font-weight: 500; }
 .mapInfoBox.type02 .serResult_01 .icoArea.ic-recom::before { width:14px; height:12px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/15px auto; }
