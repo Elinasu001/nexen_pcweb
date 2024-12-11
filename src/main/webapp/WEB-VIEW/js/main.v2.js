@@ -109,4 +109,38 @@ $(document).ready(function(){
 		$('.txtArea').css({"padding-top":"0px","padding-bottom":"0px"});
 	});
 	
+
+
+	/**
+	 * 메인 fullpage.js 화면 :: 퀵메뉴 버튼 [20241210 퍼블]
+	 */
+	function handleScrollButtons() {
+
+		var $quickMenu = $(".action-buttons-wrap");
+		var $footer = $(".section.fp-auto-height");
+
+		$quickMenu.show().addClass("keyframes");
+
+		$(window).on("scroll", function() {
+			var footerOffsetTop = $footer.offset().top; // 푸터의 위치
+			var scrollTop = $(window).scrollTop();
+			var windowHeight = $(window).height();
+			var quickMenuHeight = $quickMenu.outerHeight();
+
+			var footerVisible = (scrollTop + windowHeight) > footerOffsetTop;
+
+			var newBottom;
+			if (footerVisible) {
+				newBottom = (scrollTop + windowHeight - footerOffsetTop) + 50;
+			} else {
+				newBottom = 100;
+			}
+
+			$quickMenu.stop().animate({
+				bottom: newBottom + "px"
+			}, 300);
+		});
+	}
+	handleScrollButtons()
+
 });

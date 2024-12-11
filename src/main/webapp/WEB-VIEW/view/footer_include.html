@@ -20,73 +20,34 @@
 				/**
 				 * [공통] :: 퀵메뉴 버튼
 				 */
-				function handleScrollButtons() {
+				 function handleScrollButtons() {
+					var $quickMenu = $(".action-buttons-wrap").not(".mainPullPage");
+					var $footer = $("footer");
 
-					var $actionBtnWrap = $(".action-buttons-wrap").not(".mainPullPage");
-					var $footerWrap = $(".footerWrap");
+					$quickMenu.show().addClass("keyframes");
 
-					if ($actionBtnWrap.length === 0) return;
+					$(window).on('scroll', function() {
+						var footerOffsetTop = $footer.offset().top; // 푸터의 위치
+						var scrollTop = $(window).scrollTop();
+						var windowHeight = $(window).height();
+						var quickMenuHeight = $quickMenu.outerHeight();
 
-					$actionBtnWrap.hide().removeClass("keyframes");
-					
-					function updateButtonPosition(){
-						var scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
-						var windowHeight = $(window).height(); // 창 높이
-						var documentHeight = $(document).height(); // 문서 전체 높이
-						var footerOffsetTop = $footerWrap.offset().top; // 푸터의 상단 위치
+						var footerVisible = (scrollTop + windowHeight) > footerOffsetTop;
 
-						if (scrollTop + windowHeight >= footerOffsetTop) {
-							$actionBtnWrap.css({
-								position: "absolute",
-								bottom: documentHeight - footerOffsetTop + 30 + "px"
-							});
+						var newBottom;
+						if (footerVisible) {
+							newBottom = (scrollTop + windowHeight - footerOffsetTop) + 50;
 						} else {
-							$actionBtnWrap.css({
-								position: "fixed",
-								bottom: "30px"
-							});
+							newBottom = 100;
 						}
-					}
-					
-					$actionBtnWrap.show().addClass("keyframes");
-					$(window).on("scroll resize", updateButtonPosition);
-					updateButtonPosition();
-					
+
+						$quickMenu.stop().animate({
+							bottom: newBottom + "px"
+						}, 300);
+					});
 				}
+
 				handleScrollButtons();
-
-
-				/**
-				 * 메인 fullpage.js 화면 :: 퀵메뉴 버튼
-				 */
-				function fullpageHandleQuickButtons() {
-					
-					var $actionBtnWrap = $(".action-buttons-wrap");
-
-					if (!$("body").hasClass("mainFullPage")) {
-						handleScrollButtons();
-					} else {
-						$actionBtnWrap.show().addClass("keyframes");
-						var buttonLayout = `
-							<div class="action-buttons-wrap keyframes">
-								<div class="quick-menu">
-									<button type="button" class="quick-btn">
-										<div class="icon-wrap">
-											<img src="../../img/common/ico_quick.png" alt="">
-										</div>
-										<div class="text-wrap">
-											<p class="line1">간편상담</p>
-											<p class="line2">신청하기</p>
-										</div>
-									</button>
-								</div>
-							</div>
-						`;
-						$('#fullpage').find("#section0, #section1, #section2, #section3, #section4").append(buttonLayout);
-
-						}
-					}
-				fullpageHandleQuickButtons();
 				
 			});
 			
