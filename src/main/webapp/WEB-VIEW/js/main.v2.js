@@ -114,10 +114,9 @@ $(document).ready(function(){
 	/**
 	 * 메인 fullpage.js 화면 :: 퀵메뉴 버튼 [20241210 퍼블]
 	 */
-	
 	function handleScrollButtons() {
-		var $quickMenu = $(".action-buttons-wrap").not(".mainPullPage");
-		var $footer = $("footer");
+		var $quickMenu = $(".action-buttons-wrap");
+		var $footer = $(".fp-auto-height");
 
 		$quickMenu.show().addClass("keyframes");
 
@@ -140,7 +139,7 @@ $(document).ready(function(){
 			}, 300);
 		});
 	}
-
 	handleScrollButtons();
+
 
 });
