@@ -2028,7 +2028,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .serResult .storeList{border-bottom:1px solid #999; padding:10px 0 20px 10px;}
 .conWrap .mStateIcon{line-height:20px; height:50px; position:relative; top:-10px;}
 .mStateIcon {display:flex; }
-.mStateIcon .state{margin:15px 0 12px; padding-right:10px}
+.mStateIcon .state{margin:15px 0 12px; padding-right:10px;}
 .mStateIcon span{display:block; text-align:center; padding-top:2px; font-size:11px;}
 
 /* popup */
@@ -3164,7 +3164,7 @@ span#imgFileNm {
 .popupWrap header.type04 a.layPopClose { top:50px; right:60px; }
 
 /* 팝업 스크롤 */
-.scrollBox.type07 { height:655px; margin-top:30px; padding:0px 25px 0 0; overflow-x:hidden; overflow-y: auto; border-top:0; }
+.scrollBox.type07 { height:655px; margin-top:30px; padding:0px 25px 60px 0; overflow-x:hidden; overflow-y: auto; border-top:0; }
 
 /* 팝업 라벨 */
 .icoArea.ic-recom { position:relative; padding:8px 10px 8px 34px; font-size:13px; background:var(--m-color); color:#fff; border-radius: 2px; }
@@ -3188,17 +3188,17 @@ span#imgFileNm {
 .map-detail-container .map-detail-item .submitArea.type04 .submit .conWrap,
 .map-detail-container .map-detail-item .submitArea.type04 .submit > label > span,
 .map-detail-container .map-detail-item .submitArea.type04 .submit { display:flex; align-items: center; }
-.map-detail-container .map-detail-item .submitArea.type04 .submit { margin-top:15px; height:57px; }
+.map-detail-container .map-detail-item .submitArea.type04 .submit { margin-top:15px; height:55px; }
 .map-detail-container .map-detail-item .submitArea.type04 .submit:nth-of-type(1) { margin-top:0px; }
 
 .map-detail-container .map-detail-item .submitArea.type04 .submit > .conWrap span { line-height:1.5; }
 .map-detail-container .map-detail-item .submitArea.type04 .submit > label > span { width:100px; }
 
-.map-detail-container .map-detail-item #agencyAddr button.type18 { position:absolute; right:0; top:50%; transform:translateY(-50%); min-width:75px; border-radius: 100px; text-align:right; background:#F3F3F3; color:var(--txt-color); }
+.map-detail-container .map-detail-item #agencyAddr button.type18 { position:absolute; right:0; top:50%; transform:translateY(-50%); min-width:75px; border-radius: 100px; font-size:13px; font-weight: 500; text-align:right; background:#F3F3F3; color:var(--sub-color); }
 .map-detail-container .map-detail-item #agencyAddr button.type18::before { content:""; position:absolute; left:12px; top:50%; transform:translateY(-50%); }
 .map-detail-container .map-detail-item #agencyAddr button.type18::before { width:10px; height:14px; background: var(--ic-map-pointer-gray) no-repeat 50%/10px auto; }
 
-.map-detail-container .map-detail-item .mStateIcon .state { margin:0; }
+.map-detail-container .map-detail-item .mStateIcon .state { margin:0; padding-right:0; }
 .map-detail-container .map-detail-item .conWrap .mStateIcon { top:0; height:initial; line-height: initial; }
 .state img { width:38px; height:38px; }
 
@@ -3217,6 +3217,7 @@ span#imgFileNm {
 	--ic-map-pointer-gray: url(../img/common/ico_map_gray.png);
 	--ic-map-pointer-white: url(../img/common/ico_map_white.png);
 	--ic-service-chk: url(../img/common/ico_service_chk.png);
+	--ic-star1: url(../img/common/ico_star_re.png);
 	--ic-star2: url(../img/common/ico_star02.png);
 	--ic-user: url(../img/common/ico_user.png);
 	--ic-convenient: url(../img/common/ico_convenient.png);
@@ -3259,7 +3260,8 @@ span#imgFileNm {
 
 /* 이용후기 박스 */
 .review-container { margin-top:60px; border-top:1px solid var(--border-color); }
-.review-container h3 { padding:47px 0 20px 36px; border-bottom:2px solid var(--txt-color); color:var(--txt-color); font-size:26px; font-weight:600; font-family: "Spoqa Han Sans","NanumBarunGothic"; }
+.review-container h3 { position: relative; padding:47px 0 20px 36px; border-bottom:2px solid var(--txt-color); color:var(--txt-color); font-size:26px; font-weight:600; font-family: "Spoqa Han Sans","NanumBarunGothic"; }
+.review-container h3::before { content:""; position: absolute; top:57px; transform: translateY(-50%); left:0; width:26px; height:25px; background: var(--ic-star1)no-repeat 100%/26px auto;}
 .review-container .review-box { display:flex; justify-content: space-between; margin:30px 0; padding:24px 59px; background:var(--bg-gray-2-color); }
 .review-container .review-box .review-num { position: relative; }
 .review-container .review-box .review-num::after { content: ""; position: absolute; width:1px; height:90px; background-color:var(--bg-sub-2-color); top:50%; right:-75px; transform: translateY(-50%); }
@@ -3335,7 +3337,7 @@ span#imgFileNm {
 .review-controls .review-item > ul > li > .review-area > .order-card.signature > .tit { background-color: var(--m-color);  }
 .review-controls .review-item > ul > li > .review-area > .order-card.premium > .tit { background-color: var(--review-msub-color);  }
 
-.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont { display:flex; gap:20px; padding:18px 25px 18px 18px;  }
+.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont { display:flex; align-items: center; gap:20px; padding:18px 25px 18px 18px;  }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > img { width:115px; height:115px; }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label { display:flex; gap:5px;}
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > em { line-height: 20px; width:54px; text-align: center; border-radius: 2px; font-size:10px; font-weight: 500; background:rgb(131, 32, 130, 0.1); color:var(--m-color); }
@@ -3355,28 +3357,28 @@ span#imgFileNm {
 /* 위치 확인하기 - 지도 */
 .map-container { margin-top:40px; display:flex; gap:36px; }
 .map-container .map-box { width:700px; }
-.map-container .map-box > p { position: relative; padding-left:50px; line-height: 40px; font-size:14px; color: #FFFFFF; background: var(--m-color); box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); }
+.map-container .map-box > p { position: relative; padding-left:50px; line-height: 45px; font-size:14px; color: #FFFFFF; background: var(--m-color); box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); }
 .map-container .map-box > p::before { content:""; position: absolute; top:50%; transform: translateY(-50%); left:20px; width:20px; height:20px; background: var(--ic-map-pointer-white) no-repeat 100%/20px auto; }
-.map-container .map-box > .map-view { width:700px; height:373px; background: #EFEFEF; }
-.map-container .map-box > .map-view { width:700px; height:373px; background: #EFEFEF; }
+.map-container .map-box > .map-view { width:700px; height:400px; background: #EFEFEF; }
 
 .map-container > .map-info { margin-top:40px; }
 .map-container > .map-info > img { width:200px; height:auto; }
 .map-container > .map-info > h3 { width:324px;  margin-top:22px; padding-left:22px; font-size:24px; line-height: 1.1; color:var(--tit-color); }
 .map-container > .map-info > h3::before { content: ""; position:absolute; top:1px; left:0; width:4px; height:28px; bottom:0; background: var(--m-color); }
-.map-container > .map-info > ul.cont { margin-top:40px; }
+.map-container > .map-info > ul.cont { margin-top:24px;  }
 .map-container > .map-info > ul.cont > li:first-of-type { margin-top:0; }
-.map-container > .map-info > ul.cont > li { position: relative; margin-top:15px; padding-left:31px; line-height:1.5; font-size:14px; }
+.map-container > .map-info > ul.cont > li { position: relative; margin-top:15px; padding-left:31px; line-height:1.7; font-size:14px; }
 .map-container > .map-info > ul.cont > li.icon::before { position:absolute; content: ""; width:16px; height:16px; left:0; top:10px; transform:translateY(-50%);  background-repeat: no-repeat; background-size: 16px; }
 .icon.ico-loacation::before { background: var(--ic-loacation); }
 .icon.ico-date::before { background: var(--ic-date); }
 .icon.ico-phone::before { background: var(--ic-phone); }
 .icon.ico-intro::before { background: var(--ic-intro); }
+.map-container > .map-info > .btnArea { margin-top:19px; }
 /*e:20241205*/
 
 /*s:20241206*/
 /* 2번째 전문점 상세보기 팝업 */
-.map-detail-container.type02 { gap:30px; }
+.map-detail-container.type02 { justify-content:initial; gap:30px; }
 .map-detail-container.type02 .map-detail-gallery { flex:417px 0 0; }
 .map-detail-container.type02 .map-detail-gallery > .thumb-detail { width:417px; height:270px; }
 .map-detail-container.type02 .map-detail-gallery > .thumbs { margin-top:26px; }
@@ -3384,7 +3386,7 @@ span#imgFileNm {
 .review-container.type02  { margin-top:0; border-top:0; }
 .review-container.type02 .review-controls .review-item > ul > li > .review-area > .review-info > .review-cont { margin-top:18px; }
 .review-container.type02 .review-controls .review-item > ul > li > .review-area > .review-info > .review-cont > b { font-size:22px; }
-.review-container.type02 .review-controls .review-item .map-detail-gallery > .thumbs > a.thumb-img { min-width:70px; height:70px; }
+.review-container.type02 .review-controls .review-item .map-detail-gallery > .thumbs > a.thumb-img { flex:70px 0 0; max-width:70px; height:70px; }
 .review-container.type02 .review-controls .review-item > ul > li:last-of-type { border-top:0; border-bottom: 0; padding:0; }
 .review-container.type02 .review-controls .review-item > ul > li > .review-area .review-info { width:100%; }
 .review-container.type02 .review-controls .review-item > ul > li > .review-area > .review-info > .review-cont > ul.review-txt { flex-wrap: wrap; margin-top:13px; }
