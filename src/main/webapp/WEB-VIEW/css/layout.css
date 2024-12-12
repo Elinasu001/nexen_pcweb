@@ -2018,7 +2018,6 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox.type02 .serResult_01 .storeList .mStateIcon > .state > img { width:45px; height:auto; }
 /*e:20241206 */
 
-
 .mapView{position:relative; overflow:hidden; background:#EFEFEF;}
 .mapArea{width:100%; height:1000px; overflow:hidden}
 .mapAreaWrap{display:flex; justify-content:space-between;  height:352px}
@@ -2611,6 +2610,7 @@ button.type19{background:#832082; height:28px; line-height:28px; color:#fff; fon
 /* s:20241206 */
 button.type20 { background:#F3E9F3; border:1px solid #DEC3DE; width:100%; height: 40px; line-height: 38px; font-size:14px; color:#832082; text-align: center; border-radius: 3px; transition: background 0.1s ease, color 0.1s ease; }/*전문점 찾기 리스트 버튼*/
 button.type20:hover { background:#832082;  border:1px solid #832082; color:#FFFFFF; }
+button.type21 { background: #832082; height:60px; width:100%; line-height: 60px; font-size:20px; text-align: center; border-radius: 100px; color:#fff; }/*매장 선택 버튼*/
 /* e:20241206 */
 button:disabled,button[disabled]{background:#a7a8ac; color:#fff; pointer-events:none}
 button i.ico01{float:right; position:relative; top:9px}
@@ -3182,7 +3182,6 @@ span#imgFileNm {
 .map-detail-gallery > .thumbs > a.thumb-img { opacity: 0.8; }
 .map-detail-gallery > .thumbs > a.thumb-img.on { opacity: 1; border: 2px solid var(--m-color); }
 
-
 /* 전문점 상세 */
 .map-detail-container .map-detail-item { width:100%; }
 
@@ -3211,7 +3210,7 @@ span#imgFileNm {
 .map-detail-container .map-detail-item .serviceState > ul > li.on::after { width:18px; height:18px; background: var(--ic-service-chk) no-repeat 50%/18px auto; }
 .map-detail-container .map-detail-item p.desc.type07 { padding:12px 0 0; }
 .map-detail-container .map-detail-item p.desc.type07  + p.desc.type07{ padding:7px 0 0; }
-
+.map-detail-container .map-detail-item .btnArea { margin-top:15px; }
 /* s:20241205 */
 :root{
 	--ic-recommend: url(../img/common/ico_recommend.png);
@@ -3373,12 +3372,12 @@ span#imgFileNm {
 .icon.ico-date::before { background: var(--ic-date); }
 .icon.ico-phone::before { background: var(--ic-phone); }
 .icon.ico-intro::before { background: var(--ic-intro); }
-
 /*e:20241205*/
 
 /*s:20241206*/
 /* 2번째 전문점 상세보기 팝업 */
 .map-detail-container.type02 { gap:30px; }
+.map-detail-container.type02 .map-detail-gallery { flex:417px 0 0; }
 .map-detail-container.type02 .map-detail-gallery > .thumb-detail { width:417px; height:270px; }
 .map-detail-container.type02 .map-detail-gallery > .thumbs { margin-top:26px; }
 
