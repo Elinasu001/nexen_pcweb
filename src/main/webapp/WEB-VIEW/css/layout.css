@@ -1967,7 +1967,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox .serResult_01 .storeList .btn-wrap { margin-top:13px; gap:7px; }
 .mapInfoBox .serResult_01 .storeList .mStateIcon { margin-top:13px; }
 .mapInfoBox .serResult_01 .storeList .mStateIcon > .state { margin:0; padding-right:0px; }
-.mapInfoBox .serResult_01 .storeList .mStateIcon > .state > img { width:45px; height:auto; }
+.mapInfoBox .serResult_01 .storeList .mStateIcon > .state > img { width:48px; height:auto; }
 
 /** 전문점 찾기 **/
 .mapInfoBox.type02 {position:absolute; right:0; top:0px; width:440px; height:800px; z-index:1900; }
