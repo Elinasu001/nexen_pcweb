@@ -27,7 +27,7 @@
     <!-- allWrap 끝 -->
 
     <!--//[20241205 - 퍼블]-->
-    <div class="popupWrap type09 md-modal" id="modal-1"><!--[20241205 - 퍼블] .type09로 변경-->
+    <div class="popupWrap type09 md-modal md-show" id="modal-1"><!--[20241205 - 퍼블] .type09로 변경-->
             
         <header class="type04" id="agencyHeader"><!--[20241205-퍼블] .type04로-->
             <em class="icoArea ic-recom">추천 렌탈 전문점</em>
@@ -493,7 +493,6 @@
         function fn_popupClose(){
             $("body").removeClass("bgFix");
             $(".popupWrap").removeClass("md-show");
-            popUpFocus.init();
         }
 
         /**
