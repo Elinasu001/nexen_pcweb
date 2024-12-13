@@ -1922,7 +1922,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 
 /*s:20241206 */
 /** 전문점 찾기 팝업 **/
-.mapInfoBox{position:absolute; left:0; top:0px; width:440px; height:800px;  z-index:1900; background:#fff;}
+.mapInfoBox{position:absolute; right:0; top:0px; width:440px; height:800px;  z-index:1900; background:#fff;}
 .mapInfoBox .searchArea{padding:40px 30px 0 30px;}
 .mapInfoBox .searchArea .tit { font-size:20px;  }
 .mapInfoBox .searchArea h3{ margin-top:0; margin-bottom:20px; font-size:30px; }
@@ -1956,8 +1956,8 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox .serResult_01{ height:1060px; padding:0px 20px 0px 30px;}
 .mapInfoBox .serResult_01 ul > li.storeItem + li { margin-top:13px; }
 .mapInfoBox .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:25px 20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
-.mapInfoBox .serResult_01 .icoArea.ic-recom { display:inline-block; padding:6px 6px 6px 22px; font-size:11px; font-weight: 500; }
-.mapInfoBox .serResult_01 .icoArea.ic-recom::before { width:14px; height:12px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/15px auto; }
+.mapInfoBox .serResult_01 .icoArea.ic-recom { display:inline-block; padding:8px 8px 8px 32px; font-size:14px; font-weight: 500; }
+.mapInfoBox .serResult_01 .icoArea.ic-recom::before { width:22px; height:20px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/22px auto; }
 .mapInfoBox .serResult_01 .storeList ul > li + li.tit { margin-top:15px; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit { font-size:18px; font-weight:600; color:var(--sub-2-color); line-height: 20px; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit > .num { padding-left:15px; font-size: 13px; font-weight: 600; color:var(--txt-color);}
@@ -2004,8 +2004,8 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox.type02 .serResult_01 > ul { padding-bottom:100px; }
 .mapInfoBox.type02 .serResult_01 > ul > li.storeItem + li { margin-top:13px; }
 .mapInfoBox.type02 .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:25px 20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
-.mapInfoBox.type02 .serResult_01 .icoArea.ic-recom { display:inline-block; padding:6px 6px 6px 22px; font-size:11px; font-weight: 500; }
-.mapInfoBox.type02 .serResult_01 .icoArea.ic-recom::before { width:14px; height:12px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/15px auto; }
+.mapInfoBox.type02 .serResult_01 .icoArea.ic-recom { display:inline-block; padding:8px 8px 8px 32px; font-size:14px; font-weight: 500; }
+.mapInfoBox.type02 .serResult_01 .icoArea.ic-recom::before { width:22px; height:20px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/22px auto; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li + li.tit { margin-top:15px; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li.tit { font-size:20px; font-weight:600; color:var(--sub-2-color); line-height: 20px; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li.tit > .num { padding-left:15px; font-size: 13px; font-weight: 600; color:var(--txt-color);}
@@ -2733,48 +2733,48 @@ span.nomination{display:block; width:50px; font-size:12px; background:#b5bbd1; c
 
 
 /* align */
-.ml10{margin-left:10px}
-.ml05{margin-left:5px}
-.ml20{margin-left:20px}
-.ml28{margin-left:28px}
-.mr5{margin-right:5px}
-.mr10{margin-right:10px}
-.mr15{margin-right:15px}
-.mb4{margin-bottom:4px}
-.mb6{margin-bottom:6px}
-.mb10{margin-bottom:10px}
+.ml10{margin-left:10px;}
+.ml05{margin-left:5px;}
+.ml20{margin-left:20px;}
+.ml28{margin-left:28px;}
+.mr5{margin-right:5px;}
+.mr10{margin-right:10px;}
+.mr15{margin-right:15px;}
+.mb4{margin-bottom:4px;}
+.mb6{margin-bottom:6px;}
+.mb10{margin-bottom:10px;}
 .mt10{margin-top:10px;}
-.mt20{margin-top:20px}
-.mt30{margin-top:30px}
-.mt40{margin-top:40px}
-.mt50{margin-top:50px}
-.mt80{margin-top:80px}
+.mt20{margin-top:20px;}
+.mt30{margin-top:30px;}
+.mt40{margin-top:40px;}
+.mt50{margin-top:50px;}
+.mt80{margin-top:80px !important;}
 
-.alCenter{text-align:center}
-.alRight{text-align:right}
+.alCenter{text-align:center;}
+.alRight{text-align:right;}
 
-.vtop{vertical-align:top}
-.vmid{vertical-align:middle}
-.vbottom{vertical-align:bottom}
+.vtop{vertical-align:top;}
+.vmid{vertical-align:middle;}
+.vbottom{vertical-align:bottom;}
 
-.po_m01{position:relative; top:-1px}
-.po_m03{position:relative; top:-3px}
-.po_m50{position:relative; top:-50px}
-.po_ml01{position:relative; top:5px; left:5px}
-.po_01{position:relative; top:1px}
-.po_02{position:relative; top:2px}
-.po_03{position:relative; top:3px}
-.po_04{position:relative; top:4px}
-.po_05{position:relative; top:5px}
-.po_06{position:relative; top:6px}
-.po_10{position:relative; top:10px}
-.po_55{position:relative; top:32px}
-.po_l01{position:relative; left:-20px}
-.po_l02{position:relative; left:-25px}
+.po_m01{position:relative; top:-1px;}
+.po_m03{position:relative; top:-3px;}
+.po_m50{position:relative; top:-50px;}
+.po_ml01{position:relative; top:5px; left:5px;}
+.po_01{position:relative; top:1px;}
+.po_02{position:relative; top:2px;}
+.po_03{position:relative; top:3px;}
+.po_04{position:relative; top:4px;}
+.po_05{position:relative; top:5px;}
+.po_06{position:relative; top:6px;}
+.po_10{position:relative; top:10px;}
+.po_55{position:relative; top:32px;}
+.po_l01{position:relative; left:-20px;}
+.po_l02{position:relative; left:-25px;}
 
 
-.po_ab{position:absolute}
-.cb{clear:both}
+.po_ab{position:absolute;}
+.cb{clear:both;}
 
 /* font */
 .fh{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;}
@@ -2835,7 +2835,7 @@ span.nomination{display:block; width:50px; font-size:12px; background:#b5bbd1; c
 .w100per{width:100%}
 
 .h200{height:200px}
-
+.h80 { height:80px !important; }
 
 /* 주문서 주문확인 레이아웃 사이즈 조정 추가  */
 .orderBox .proInfo2 {border-top:1px solid #999; border-bottom:1px solid #999; padding:12px 5px; margin-top:20px}
@@ -3167,15 +3167,15 @@ span#imgFileNm {
 .scrollBox.type07 { height:655px; margin-top:30px; padding:0px 25px 60px 0; overflow-x:hidden; overflow-y: auto; border-top:0; }
 
 /* 팝업 라벨 */
-.icoArea.ic-recom { position:relative; padding:8px 10px 8px 34px; font-size:13px; background:var(--m-color); color:#fff; border-radius: 2px; }
+.icoArea.ic-recom { position:relative; padding:10px 10px 10px 42px; font-size:16px; background:var(--m-color); color:#fff; border-radius: 2px; }
 .icoArea.ic-recom::before { content:""; position: absolute; top:50%; left:10px; transform:translateY(-50%); }
-.icoArea.ic-recom::before {  width:20px; height:16px; background: var(--ic-recommend) no-repeat 50%/20px auto; }
+.icoArea.ic-recom::before {  width:28px; height:24px; background: var(--ic-recommend) no-repeat 50%/24px auto; }
 
 /* 전문점 사진 */
 .map-detail-container { display:flex; gap:40px; justify-content: space-between; }
-.map-detail-gallery { width:calc(100%/2); }
+.map-detail-gallery {display:flex; flex-direction: column; justify-content: space-between; width:calc(100%/2); }
 .map-detail-gallery > .thumb-detail { width:500px; height:400px;}
-.map-detail-gallery > .thumbs { display:flex; gap:12px; margin-top:10px; }
+.map-detail-gallery > .thumbs { display:flex; gap:12px; margin-top:11px; }
 .map-detail-gallery > .thumbs > a.thumb-img { width:116px; height:116px; }
 .map-detail-gallery > .thumb-detail > img,
 .map-detail-gallery > .thumbs > a.thumb-img > img { width:100%; height:100%;}
@@ -3188,7 +3188,7 @@ span#imgFileNm {
 .map-detail-container .map-detail-item .submitArea.type04 .submit .conWrap,
 .map-detail-container .map-detail-item .submitArea.type04 .submit > label > span,
 .map-detail-container .map-detail-item .submitArea.type04 .submit { display:flex; align-items: center; }
-.map-detail-container .map-detail-item .submitArea.type04 .submit { margin-top:15px; height:55px; }
+.map-detail-container .map-detail-item .submitArea.type04 .submit { margin-top:15px; height:52px; }
 .map-detail-container .map-detail-item .submitArea.type04 .submit:nth-of-type(1) { margin-top:0px; }
 
 .map-detail-container .map-detail-item .submitArea.type04 .submit > .conWrap span { line-height:1.5; }
@@ -3200,16 +3200,16 @@ span#imgFileNm {
 
 .map-detail-container .map-detail-item .mStateIcon .state { margin:0; padding-right:0; }
 .map-detail-container .map-detail-item .conWrap .mStateIcon { top:0; height:initial; line-height: initial; }
-.state img { width:38px; height:38px; }
+.state img { width:48px; height:48px; }
 
 .map-detail-container .map-detail-item .serviceState { margin-top:15px; }
 .map-detail-container .map-detail-item .serviceState > ul { display:flex; gap:10px; }
-.map-detail-container .map-detail-item .serviceState > ul > li { padding :12px 15px; background: #F3F3F3; color:var(--sub-color); border-radius: 20px; }
+.map-detail-container .map-detail-item .serviceState > ul > li { display:flex; justify-content: center; width:100%; padding :12px 15px; background: #F3F3F3; color:var(--sub-color); border-radius: 20px; }
 .map-detail-container .map-detail-item .serviceState > ul > li.on { position:relative; padding:12px 38px 12px 15px; background: var(--m-color); color:#FFFFFF;  }
 .map-detail-container .map-detail-item .serviceState > ul > li.on::after {  content:""; position:absolute; right:15px; top:47%; transform:translateY(-50%); }
 .map-detail-container .map-detail-item .serviceState > ul > li.on::after { width:18px; height:18px; background: var(--ic-service-chk) no-repeat 50%/18px auto; }
 .map-detail-container .map-detail-item p.desc.type07 { padding:12px 0 0; }
-.map-detail-container .map-detail-item p.desc.type07  + p.desc.type07{ padding:7px 0 0; }
+.map-detail-container .map-detail-item p.desc.type07  + p.desc.type07{ padding:0px 0 0; }
 .map-detail-container .map-detail-item .btnArea { margin-top:15px; }
 /* s:20241205 */
 :root{
@@ -3381,7 +3381,7 @@ span#imgFileNm {
 .map-detail-container.type02 { justify-content:initial; gap:30px; }
 .map-detail-container.type02 .map-detail-gallery { flex:417px 0 0; }
 .map-detail-container.type02 .map-detail-gallery > .thumb-detail { width:417px; height:270px; }
-.map-detail-container.type02 .map-detail-gallery > .thumbs { margin-top:26px; }
+.map-detail-container.type02 .map-detail-gallery > .thumbs { margin-top:15px; }
 
 .review-container.type02  { margin-top:0; border-top:0; }
 .review-container.type02 .review-controls .review-item > ul > li > .review-area > .review-info > .review-cont { margin-top:18px; }

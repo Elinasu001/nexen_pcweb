@@ -21,28 +21,21 @@
     <div class="allWrap">
         <!--subTitleArea-->
 
-        <!--//[20241205 - 퍼블] -->
-        <div class="popupWrap type09 md-modal md-show" id="modal-1"><!--[20241205 - 퍼블] .type09로 변경-->
+        <!--//상세보기,이용후기 팝업 -->
+        <div class="popupWrap type09 md-modal md-show" id="modal-1">
 
-            <header class="type04" id="agencyHeader"><!--[20241205-퍼블] .type04로-->
+            <header class="type04" id="agencyHeader">
                 <em class="icoArea ic-recom">추천 넥센 전문점</em>
                 <h2>
                     넥센타이어테크 역삼점
-                    <!--//[20241205-퍼블] 삭제-->
-                    <!-- <span class="icoArea">
-                        <img src="../img/common/state_big_ico01.png" alt="추천">
-                        <img src="../img/common/state_big_ico02.png" alt="타이어">
-                    </span> -->
-                    <!--[20241205-퍼블] 삭제//-->
                     <a href="#" onclick="javascript:fn_popupClose();" class="layPopClose"></a>
                 </h2>
             </header>
 
-            <div class="scrollBox type07"> <!--[20241205-퍼블] .scrollBox .type07 클래스 추가 -->
+            <div class="scrollBox type07">
 
-                <div class="map-detail-container"> <!--[20241205-퍼블] div 추가-->
+                <div class="map-detail-container">
 
-                    <!--//[20241205-퍼블] 신규 추가-->
                     <div class="map-detail-gallery mapDetailImg"><!--[D] .mapDetailImg 클래스로 스크립트 적용 중-->
                         <div class="thumb-detail">
                             <img src="" alt="">
@@ -57,9 +50,8 @@
                             <a href="javascript:void(0);" class="thumb-img"></a><!--[D] 이미지가 없을 경우 선택 안됨 처리-->
                         </div>
                     </div>
-                    <!--[20241205-퍼블] 신규 추가//-->
 
-                    <div class="map-detail-item"><!--[20241205-퍼블] div 추가-->
+                    <div class="map-detail-item">
 
                         <div class="submitAreaWrap type03">
                             <div class="submitArea type04 w100per">
@@ -67,7 +59,7 @@
                                     <label for="address"><span>주소</span></label>
                                     <div class="conWrap type07">서울특별시 강북구 덕릉로 174</div>
                                     <button type="button"
-                                        class="type18">길찾기</button><!--[20241205-퍼블] <i class="ico15 po_10 fr"></i> 삭제-->
+                                        class="type18">길찾기</button>
                                 </div>
 
                                 <div class="submit">
@@ -75,10 +67,10 @@
                                     <div class="conWrap type07" id="agencyTel">02-980-3456</div>
                                 </div>
 
-                                <div class="submit">
+                                <div class="submit h80"><!--[20241213 퍼블] .h80 클래스 추가-->
                                     <label for="bTime"><span>영업시간</span></label>
                                     <div class="conWrap type05" id="agencyBizTime">
-                                        <span><!--[20241205-퍼블] span 추가-->
+                                        <span>
                                             (월~금) 09:00~18:00 | (토) 09:00~17:00<br />
                                             (일) 휴일 | (공휴일) 휴일
                                         </span>
@@ -91,19 +83,15 @@
                                         <!--mStateIcon-->
                                         <div class="mStateIcon" id="agencyWkTp">
                                             <div class="state"> <img src="../../img/common/state_ico02.png" alt="타이어">
-                                                <!-- <span>타이어</span> [20241205-퍼블] 삭제-->
                                             </div>
                                             <div class="state">
                                                 <img src="../../img/common/state_ico01.png" alt="추천">
-                                                <!-- <span>추천</span> [20241205-퍼블] 삭제-->
                                             </div>
                                             <div class="state">
                                                 <img src="../../img/common/state_ico03.png" alt="경정비">
-                                                <!-- <span>경정비</span> [20241205-퍼블] 삭제 -->
                                             </div>
                                             <div class="state">
                                                 <img src="../../img/common/state_ico04.png" alt="겨울용">
-                                                <!-- <span>겨울용</span> [20241205-퍼블] 삭제-->
                                             </div>
                                         </div>
                                         <!--mStateIcon-->
@@ -113,7 +101,7 @@
                         </div>
 
                         <div class="customerState">
-                            <div class="custInfo type02"><!--[20241205-퍼블] .type02 클래스 추가-->
+                            <div class="custInfo type02">
                                 <dl>
                                     <dt>탈착기</dt>
                                     <dd>
@@ -139,23 +127,25 @@
                                 </dl>
                             </div>
 
-                            <!--//[20241205-퍼블] 추가-->
                             <div class="serviceState">
                                 <ul><!--[D] .on 클래스 - 스타일 적용 (스크립트 x) -->
-                                    <li class="on">휠 얼라이먼트 무료 서비스</li>
-                                    <li class="on">위치교환 무료 서비스</li>
-                                    <li>워셔액 무료지급</li>
+                                    <li class="on">항균 탈취 무료 서비스</li>
+                                    <li class="on">워셔액 무료 지급</li>
+                                    <li>브레이크패드 무료 점검</li>
                                 </ul>
                             </div>
-                            <!--[20241205-퍼블] 추가//-->
-
                         </div>
-                        <p class="desc type07">※ 수입차 및 대형 차량의 경우 고급형 장비가 있는 곳에서 교체하시기 바랍니다.</p>
+                        <p class="desc type07">※ 엔진오일 및 브레이크 패드 교환 공임은 별도입니다.</p>
+                        <p class="desc type07">※ 수입차 및 대형 차량의 경우 고급형 장비가 있는 곳에서 교체하시기 바랍니다.</p><!--[20241212 퍼블] mt30 클래스 추가-->
+                        <!--//[20241213 퍼블] 버튼 추가-->
+                        <div class="btnArea">
+                            <button type="button" class="type21">매장 선택</button>
+                        </div>
+                        <!--[20241213 퍼블] 버튼 추가//-->
                     </div>
 
                 </div>
 
-                <!--//[20241205-퍼블] 신규-->
                 <div class="review-container">
                     <h3>넥센타이어테크 역삼점 솔직 이용후기</h3>
                     <div class="review-box">
@@ -175,7 +165,7 @@
                             </ul>
                         </div>
                         <div class="review-satisfaction">
-                            <ul><!--[20241206 퍼블] :: 텍스트 변경-->
+                            <ul>
                                 <li><span><b>서비스</b> 만족도</span>
                                     <p class="star-box"><span class="star" style="width:80%;"></span></p>
                                 </li><!--[D] 평점 width로 컨트롤-->
@@ -218,7 +208,7 @@
                                                         </span>
                                                     <button type="button" class="btn-plus">더보기</button>
                                                 </p>
-                                                <div class="thumbs onClass">
+                                                <div class="thumbs onClass ">
                                                     <!--[D] 넥센 전문점 찾기에만 적용--><!--[D] .onClass 클래스로 스크립트 적용 중-->
                                                     <a href="javascript:void(0);"><img
                                                             src="../../img/mypage/sample/front.png" alt=""></a>
@@ -229,11 +219,8 @@
                                                 </div>
                                                 <ul class="review-txt">
                                                     <li class="ico-convenient">예약과 교체 작업이 편리해요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                     <li class="ico-friendly">장착기사님이 매우 친절해요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                     <li class="ico-satisfied">상품 성능이 만족스러워요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                 </ul>
                                             </div>
                                         </div>
@@ -251,7 +238,7 @@
                                                         <img src="../../img/common/sample_supreme.png" alt="빈 이미지"><!--[D] 이미지 : DB 관리-->
                                                     </p>
                                                     <span>205/65R16</span>
-                                                    <a href="javascript:void(0);" class="btn-order">구매하기</a>
+                                                    <!--[20241213 퍼블] 버튼 삭제-->
                                                 </div>
                                             </div>
                                         </div>
@@ -290,11 +277,8 @@
                                                 </div>
                                                 <ul class="review-txt">
                                                     <li class="ico-convenient">예약과 교체 작업이 편리해요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                     <li class="ico-friendly">장착기사님이 매우 친절해요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                     <li class="ico-satisfied">상품 성능이 만족스러워요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                 </ul>
                                             </div>
                                         </div>
@@ -312,7 +296,7 @@
                                                         NPRIZ_AHB
                                                     </p>
                                                     <span>205/65R16</span>
-                                                    <a href="javascript:void(0);" class="btn-order">구매하기</a>
+                                                    <!--[20241213 퍼블] 버튼 삭제-->
                                                 </div>
                                             </div>
                                         </div>
@@ -351,11 +335,8 @@
                                                 </div>
                                                 <ul class="review-txt">
                                                     <li class="ico-convenient">예약과 교체 작업이 편리해요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                     <li class="ico-friendly">장착기사님이 매우 친절해요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                     <li class="ico-satisfied">상품 성능이 만족스러워요</li>
-                                                    <!--[20241206 퍼블] 텍스트 변경-->
                                                 </ul>
                                             </div>
                                         </div>
@@ -373,7 +354,7 @@
                                                             alt="빈 이미지"><!--[D] 이미지 : DB 관리-->
                                                     </p>
                                                     <span>205/65R16</span>
-                                                    <a href="javascript:void(0);" class="btn-order">구매하기</a>
+                                                    <!--[20241213 퍼블] 버튼 삭제-->
                                                 </div>
                                             </div>
                                         </div>
@@ -405,11 +386,18 @@
                             <li class="icon ico-date">(월~금) 09:00-18:00 | (토) 09:00-17:00
                                 (일) 휴일 | (공휴일) 휴일</li>
                             <li class="icon ico-phone">02-1234-5678</li>
-                            <li class="icon ico-intro">안녕하세요, 넥센타이어테크 역삼점 입니다.<br />
-                                센터에 방문에 주시면 최고의 정비 서비스를<br />
-                                제공해드리기 위해 열심히 노력하겠습니다.<br />
-                                믿고 방문해주세요 ! 감사합니다.</li>
+                            <li class="icon ico-intro"><!--[20241212 퍼블] 텍스트 수정-->
+                                안녕하세요. <span>OOO</span>점 입니다.
+                                타이어 교체 시 어려움을 느끼셨다고요?
+                                저희 매장에 방문해 주시면 최고의 타이어 교체 서비스를 제공해드리기 위해 열심히 노력하겠습니다.
+                                감사합니다.
+                            </li>
                         </ul>
+                        <!--//[20241213 퍼블] 버튼 추가-->
+                        <div class="btnArea">
+                            <button type="button" class="type21">매장 선택</button>
+                        </div>
+                        <!--[20241213 퍼블] 버튼 추가//-->
                     </div>
 
                 </div>
@@ -419,10 +407,10 @@
 
         </div>
         <div class="md-overlay"></div>
-        <!--[20241205 - 퍼블]//-->
+        <!--상세보기,이용후기 팝업//-->
 
 
-        <!--//[20241206 - 퍼블] :: 후기 상세 팝업(2) -->
+        <!--//후기 상세 팝업(2) -->
         <div class="popupWrap type10 md-modal md-show" id="modal-2"><!--[D] 팝업 위에 팝업 뜰 경우 type10 클래스 필요-->
 
             <header class="type04">
@@ -460,7 +448,7 @@
                                                     <div class="map-detail-gallery"><!--[D] .mapDetailImg 기능 적용 중-->
                                                         <div class="thumbs">
                                                             <a href="javascript:void(0);" class="thumb-img"><img
-                                                                    src="../../img/mypage/sample/front.png" alt=""></a>
+                                                                    src="../../img/main/banner_01.jpg" alt=""></a>
                                                             <a href="javascript:void(0);" class="thumb-img"><img
                                                                     src="../../img/mypage/sample/panel.png" alt=""></a>
                                                             <a href="javascript:void(0);" class="thumb-img"><img
@@ -527,38 +515,6 @@
                                     교체해보니 상품도 타 제품보다 세계 최고라는 만족감과 특히 넥산타이어 랜탈 서비스에 대해 상세하게 
                                     듣고 나니 너무 감사하고 제휴카드(우리)에 대하여서도 잘 설명을 들어 타카드 사용하던 작금에 우리 카드에 
                                     가입하여 모든 시스템을 우리카드로 사용 할 수 있음에 감사드립니다.
-                                    <br><br>
-                                    지금 타이어를 교체받고 장거리 운행을 해보니 기존 콘티넨탈 타이어보다 승차감이 좋고 브레이크도 잘 듣고 
-                                    하니 안전함이 더욱 생기는 느낌이며 운전하는 동안 안전함이 자생하곤 합니다. 현재에도 주변 차량 소유자에게 
-                                    넥산타이어 랜탈 서비스에 대해 홍보와 칭찬을 하였으며 앞으로도 지속적으로 홍보를 할 것입니다. 
-                                    또한 갈산동 지점의 열심한 매장 관리와 사장님의 친절함에 감사드리며 널리 홍보할 겁니다. 
-                                    다음에도 랜탈 기한이 도래되면 또 다시 랜탈 서비스를 이용할 것입니다. 
-                                    많은 차량이 넥산타이어 랜탈을 이용하도록 기원드리며 갈산동 지점의 무궁한 사업 발전을 기원드립니다. 
-                                    감사합니다.
-                                    <br><br>
-                                    지금 타이어를 교체받고 장거리 운행을 해보니 기존 콘티넨탈 타이어보다 승차감이 좋고 브레이크도 잘 듣고 
-                                    하니 안전함이 더욱 생기는 느낌이며 운전하는 동안 안전함이 자생하곤 합니다. 현재에도 주변 차량 소유자에게 
-                                    넥산타이어 랜탈 서비스에 대해 홍보와 칭찬을 하였으며 앞으로도 지속적으로 홍보를 할 것입니다. 
-                                    또한 갈산동 지점의 열심한 매장 관리와 사장님의 친절함에 감사드리며 널리 홍보할 겁니다. 
-                                    다음에도 랜탈 기한이 도래되면 또 다시 랜탈 서비스를 이용할 것입니다. 
-                                    많은 차량이 넥산타이어 랜탈을 이용하도록 기원드리며 갈산동 지점의 무궁한 사업 발전을 기원드립니다. 
-                                    감사합니다.
-                                    <br><br>
-                                    지금 타이어를 교체받고 장거리 운행을 해보니 기존 콘티넨탈 타이어보다 승차감이 좋고 브레이크도 잘 듣고 
-                                    하니 안전함이 더욱 생기는 느낌이며 운전하는 동안 안전함이 자생하곤 합니다. 현재에도 주변 차량 소유자에게 
-                                    넥산타이어 랜탈 서비스에 대해 홍보와 칭찬을 하였으며 앞으로도 지속적으로 홍보를 할 것입니다. 
-                                    또한 갈산동 지점의 열심한 매장 관리와 사장님의 친절함에 감사드리며 널리 홍보할 겁니다. 
-                                    다음에도 랜탈 기한이 도래되면 또 다시 랜탈 서비스를 이용할 것입니다. 
-                                    많은 차량이 넥산타이어 랜탈을 이용하도록 기원드리며 갈산동 지점의 무궁한 사업 발전을 기원드립니다. 
-                                    감사합니다.
-                                    <br><br>
-                                    지금 타이어를 교체받고 장거리 운행을 해보니 기존 콘티넨탈 타이어보다 승차감이 좋고 브레이크도 잘 듣고 
-                                    하니 안전함이 더욱 생기는 느낌이며 운전하는 동안 안전함이 자생하곤 합니다. 현재에도 주변 차량 소유자에게 
-                                    넥산타이어 랜탈 서비스에 대해 홍보와 칭찬을 하였으며 앞으로도 지속적으로 홍보를 할 것입니다. 
-                                    또한 갈산동 지점의 열심한 매장 관리와 사장님의 친절함에 감사드리며 널리 홍보할 겁니다. 
-                                    다음에도 랜탈 기한이 도래되면 또 다시 랜탈 서비스를 이용할 것입니다. 
-                                    많은 차량이 넥산타이어 랜탈을 이용하도록 기원드리며 갈산동 지점의 무궁한 사업 발전을 기원드립니다. 
-                                    감사합니다.
                                     </div>
                                 </div>
                             </div>
@@ -572,7 +528,7 @@
             </div>
         </div>
         <div class="md-overlay"></div>
-        <!--[20241206 - 퍼블] :: 후기 상세 팝업(2)//-->
+        <!--후기 상세 팝업(2)//-->
 
     </div>
     <!-- allWrap 끝 -->
@@ -653,21 +609,8 @@
         }
         selectBtnHandlers();
 
-        // function expandableTextHandlers() {
-        //     $(".btnExpandTxt").each(function () {
-        //         var $container = $(this);
-        //         var $btns = $container.find(".btn-plus");
-        //         $btns.on("click", function () {
-        //             var $clickedBtn = $(this);
-        //             $container.toggleClass("expanded");
-        //             $clickedBtn.text($container.hasClass("expanded") ? "" : "더보기");
-        //         });
-        //     });
-        // }
-        // expandableTextHandlers();
-
         /**
-         * 더보기 버튼 [20241206 퍼블] :: 더보기 버튼 변경
+         * 더보기 버튼
          */
         function expandableTextHandlers() {
             $(".btnExpandTxt").each(function () {

@@ -21,7 +21,8 @@
     <div class="allWrap">
         <!--subTitleArea-->
         <div class="btnArea"><button type="button" id="btnDetail"  class="type21">상세보기 위치</button></div>
-        <div class="btnArea"><button type="button" id="btnReview" class="type21">이용후기 위치</button></div>
+
+        <div class="btnArea mt50"><button type="button" id="btnReview" class="type21">이용후기 위치</button></div>
     </div>
     <!-- allWrap 끝 -->
 
@@ -75,7 +76,7 @@
                                 <div class="conWrap type07" id="agencyTel">02-980-3456</div>
                             </div>
 
-                            <div class="submit">
+                            <div class="submit h80"><!--[20241213 퍼블] .h80 클래스 추가-->
                                 <label for="bTime"><span>영업시간</span></label>
                                 <div class="conWrap type05" id="agencyBizTime">
                                     <span><!--[20241205-퍼블] span 추가-->
@@ -357,6 +358,7 @@
     </div>
     <div class="md-overlay"></div>
     <!--[20241205 - 퍼블]//-->
+    
 </body>
 <script>
     $(document).ready(function () {
@@ -488,40 +490,33 @@
             $(".popupWrap").addClass("md-show");
         });
 
+        function fn_popupClose(){
+            $("body").removeClass("bgFix");
+            $(".popupWrap").removeClass("md-show");
+            popUpFocus.init();
+        }
+
         /**
          * 상세보기 이용후기 포커스
-         */
+        */
         function popUpFocus() {
-            var $btnDetail = $("#btnDetail");//상세보기 버튼
-            var $btnReview = $("#btnReview");//이용후기 버튼
+            var btnDetail = document.querySelector("#btnDetail");
+            var btnReview = document.querySelector("#btnReview");
 
-            var $focusWrap = $(".scrollBox");//스크롤 영역
+            var focusWrap = document.querySelector(".scrollBox");
+            var reviewFocus = document.querySelector("#reviewFocus");
 
-            var $reviewFocus = $("#reviewFocus");//팝업 이용후기 영역
-
-            $btnReview.on("click", function() {
-                var reviewOffset = $reviewFocus.position().top - 110;
-                $focusWrap.animate({ scrollTop: reviewOffset }, 0);
+            btnReview.addEventListener("click", function() {
+                var reviewOffset = reviewFocus.getBoundingClientRect().top + focusWrap.scrollTop - 140;
+                focusWrap.scrollTop = reviewOffset;
             });
 
-            $btnDetail.on("click", function() {
-                $focusWrap.animate({ scrollTop: 0 }, 0);
+            btnDetail.addEventListener("click", function() {
+                focusWrap.scrollTop = 0;
             });
-        } popUpFocus();
+        }
 
-
-
-
-
-
-
-
-        // $('#btnFocus').click(function(){
-// 	var offset = $('#mapFocus').offset();
-// 	// $('#mapFocus').focus();
-// 	$(window).animate({scrollTop : offset.top}, 400);
-// });
-
+        popUpFocus();
 
     });
 
