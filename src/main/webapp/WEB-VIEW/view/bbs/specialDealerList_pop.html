@@ -537,6 +537,13 @@
             var focusWrap = document.querySelector(".scrollBox");
             var reviewFocus = document.querySelector("#reviewFocus");
 
+            // console.log("reviewFocus offsetTop:", reviewFocus.offsetTop);
+            // console.log("reviewFocus offsetHeight:", reviewFocus.offsetHeight);
+            // console.log("focusWrap scrollHeight:", focusWrap.scrollHeight);
+
+            // console.log("focusWrap clientHeight:", focusWrap.clientHeight);
+            // console.log("focusWrap offsetHeight:", reviewFocus.offsetTop);
+
             btnReview.addEventListener("click", function() {
                 var reviewOffset = reviewFocus.offsetTop - 140;
                 focusWrap.scrollTop = reviewOffset;
@@ -545,9 +552,41 @@
             btnDetail.addEventListener("click", function() {
                 focusWrap.scrollTop = 0;
             });
+
         }
 
         popUpFocus();
+
+
+
+        // function popUpFocus() {
+        //     var btnDetail = document.querySelector("#btnDetail");
+        //     var btnReview = document.querySelector("#btnReview");
+
+        //     var focusWrap = document.querySelector(".scrollBox");
+        //     var reviewFocus = document.querySelector("#reviewFocus");
+
+        //     console.log("reviewFocus offsetTop:", reviewFocus.offsetTop);
+        //     console.log("reviewFocus offsetHeight:", reviewFocus.offsetHeight);
+
+        //     console.log("focusWrap scrollHeight:", focusWrap.scrollHeight);
+        //     console.log("focusWrap clientHeight:", focusWrap.clientHeight);
+        //     console.log("focusWrap offsetHeight:", focusWrap.offsetHeight);
+
+        //     console.log("btnReview offsetHeight:", btnReview.offsetHeight);
+        //     console.log("btnDetail offsetHeight:", btnDetail.offsetHeight);
+
+        //     btnReview.addEventListener("click", function() {
+        //         var reviewOffset = reviewFocus.offsetTop - 140;
+        //         focusWrap.scrollTop = reviewOffset;
+        //     });
+
+        //     btnDetail.addEventListener("click", function() {
+        //         focusWrap.scrollTop = 0;
+        //     });
+        // }
+
+        // popUpFocus();
 
 
 
