@@ -498,6 +498,38 @@
         /**
          * 상세보기 이용후기 포커스
         */
+        // function popUpFocus() {
+        //     var btnDetail = document.querySelector("#btnDetail");
+        //     var btnReview = document.querySelector("#btnReview");
+
+        //     var focusWrap = document.querySelector(".scrollBox");
+        //     var reviewFocus = document.querySelector("#reviewFocus");
+
+        //     btnReview.addEventListener("click", function() {
+        //         var reviewOffset = reviewFocus.getBoundingClientRect().top + focusWrap.scrollTop - 240;
+        //         focusWrap.scrollTop = reviewOffset;
+        //     });
+
+        //     btnDetail.addEventListener("click", function() {
+        //         focusWrap.scrollTop = 0;
+        //     });
+        // }
+
+        // popUpFocus();
+
+        // function popUpFocus() {
+
+        //     var focusWrap = document.querySelector(".scrollBox");//스크롤 영역
+        //     var reviewFocus = document.querySelector("#reviewFocus");//팝업 이용후기 영역
+
+        //     if(popGbn == "REV"){
+        //         var reviewOffset = reviewFocus.getBoundingClientRect().top + focusWrap.scrollTop - 147;
+        //         focusWrap.scrollTop = reviewOffset;
+        //     } else {
+        //         focusWrap.scrollTop = 0;
+        //     }
+        // }
+
         function popUpFocus() {
             var btnDetail = document.querySelector("#btnDetail");
             var btnReview = document.querySelector("#btnReview");
@@ -506,7 +538,7 @@
             var reviewFocus = document.querySelector("#reviewFocus");
 
             btnReview.addEventListener("click", function() {
-                var reviewOffset = reviewFocus.getBoundingClientRect().top + focusWrap.scrollTop - 140;
+                var reviewOffset = reviewFocus.offsetTop - 140;
                 focusWrap.scrollTop = reviewOffset;
             });
 
@@ -516,6 +548,8 @@
         }
 
         popUpFocus();
+
+
 
     });
 
