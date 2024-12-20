@@ -1914,6 +1914,11 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .errorWrap p.errName span{font-family:Helvetica Neue,Helvetica,Arial,sans-serif; font-weight:bold; display:block} 
 .errorWrap p.sTxt{color:#333; font-size:20px; margin:30px 0 50px; line-height:30px;}
 
+/* 전문점 찾기 - 핀 있을 경우 */
+.mapInfoBox .serResult_01 .storeList ul > li.tit{ position: relative; padding-left: 26px; cursor: pointer; }
+.mapInfoBox .serResult_01 .storeList ul > li.tit::before { position: absolute; content:""; left:0; width:22px; height:34px; top:50%; transform: translateY(-60%); background: var(--ic-pin) no-repeat 100%/22px auto; cursor: pointer; }
+.mapInfoBox.type02 .serResult_01 .storeList ul > li.tit::before { transform: translateY(-60%); }
+
 /* 전문점 찾기 별도 엑스 버튼 */
 .popupWrap a.layPopClose.type02 { right:30px; top:30px; width:40px; height:40px; background: var(--ic-close-off) no-repeat 100%/40px auto; }
 .popupWrap a.layPopClose.type02:hover { background: var(--ic-close-on) no-repeat 100%/40px auto; }
@@ -1959,7 +1964,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox .serResult_01 .icoArea.ic-recom { display:inline-block; padding:8px 8px 8px 32px; font-size:14px; font-weight: 500; }
 .mapInfoBox .serResult_01 .icoArea.ic-recom::before { width:22px; height:20px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/22px auto; }
 .mapInfoBox .serResult_01 .storeList ul > li + li.tit { margin-top:15px; }
-.mapInfoBox .serResult_01 .storeList ul > li.tit { font-size:18px; font-weight:600; color:var(--sub-2-color); line-height: 20px; }
+.mapInfoBox .serResult_01 .storeList ul > li.tit { font-size:18px; font-weight:600; color:var(--sub-2-color); line-height: 1.5; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit > .num { padding-left:15px; font-size: 13px; font-weight: 600; color:var(--txt-color);}
 .mapInfoBox .serResult_01 .storeList ul > li.tit > .num > img { margin:0 3px 3px 0; width:12px; height:11px; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit > .num.all-num { padding-left:10px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
@@ -1968,6 +1973,9 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox .serResult_01 .storeList .mStateIcon { margin-top:13px; }
 .mapInfoBox .serResult_01 .storeList .mStateIcon > .state { margin:0; padding-right:0px; }
 .mapInfoBox .serResult_01 .storeList .mStateIcon > .state > img { width:48px; height:auto; }
+
+.mapInfoBox .serResult_01 .storeList .btn-wrap:has(.btn-box) { display:flex; flex-direction: column; }
+.mapInfoBox .serResult_01 .storeList .btn-wrap .btn-box { display:flex; gap:5px; }
 
 /** 전문점 찾기 **/
 .mapInfoBox.type02 {position:absolute; right:0; top:0px; width:440px; height:800px; z-index:1900; }
@@ -3147,7 +3155,6 @@ span#imgFileNm {
 
 /**전문점 찾기 상세보기 팝업**/
 
-
 /* s: 20241206 */
 /* 전문점 상세보기 팝업 */
 /* 팝업 레이아웃 */
@@ -3234,6 +3241,7 @@ span#imgFileNm {
 	--ic-pop-r-arrow: url(../img/common/ic_popup_r_arrow.png);
 	--ic-close-off: url(../img/common/ico_close_off.png);
 	--ic-close-on: url(../img/common/ico_close_on.png);
+	--ic-pin: url(../img/common/ico_pin.png);
 
 	--m-color: #832082;
 	--review-msub-color: #191478;
@@ -3255,8 +3263,6 @@ span#imgFileNm {
 	
 }
 /* e:20241205 */
-
-
 
 /* 이용후기 박스 */
 .review-container { margin-top:60px; border-top:1px solid var(--border-color); }
