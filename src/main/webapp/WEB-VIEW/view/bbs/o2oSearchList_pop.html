@@ -608,6 +608,7 @@
                     var imgSrc = $img.attr("src");
 
                     if (!imgSrc) {
+                        // $(this).attr("tabindex", "-1").removeClass("on").removeAttr("title").addClass("noImage");
                         $(this).attr("tabindex", "-1").removeClass("on").removeAttr("title");
                     } else {
                         $(this).attr("tabindex", "0");
@@ -672,6 +673,7 @@
          * 더보기 버튼 [20241206 퍼블] :: 더보기 버튼 변경
          */
         function expandableTextHandlers() {
+            
             $(".btnExpandTxt").each(function () {
                 var $container = $(this);
                 var $btn = $container.find(".btn-plus");
@@ -689,14 +691,12 @@
                 }
 
                 $btn.on("click", function () {
-                    $container.toggleClass("expanded");
-                    $container.toggleClass("collapsed");
-                    $btn.text($container.hasClass("expanded") ? "" : "더보기");
+                    $container.addClass("expanded");
+                    $container.removeClass("collapsed");
+                    $btn.text("");
                 });
             });
-        }
-        expandableTextHandlers();
-
+        }expandableTextHandlers();
 
     });
 

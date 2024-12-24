@@ -342,6 +342,7 @@ h3.type05:after{ position:relative; left:10px}
 .subTitleArea.type22 .topAreaWrap .topArea .gnb > ul > li > a { color:var(--tit-color); }
 .subTitleArea.type22 .topAreaWrap .topArea header a.basket { right:0; left:auto; background:url(../img/common/basket_black.png) no-repeat center center;  }
 .subTitleArea.type22 .topAreaWrap .topArea header a.login { background: url(../img/common/login_black.png) no-repeat center center; }
+.subTitleArea.type22 .titleArea { display:none; }
 /*e:20241206*/
 
 .subInfo{height:80px; line-height:80px; position:relative; top:-135px;/*margin-top:-135px;*/ background:url("../img/mypage/tit_bg_01.png") repeat 0 0; border-top:1px solid #626262;}
@@ -3085,7 +3086,7 @@ span#imgFileNm {
 
 /*s:20241210*/
 /**공통 - 퀵메뉴 버튼**/
-.action-buttons-wrap { display: none; position: fixed; right: 50px; bottom: 280px; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 4603;}
+.action-buttons-wrap { display: none; position: fixed; right: 50px; bottom: 260px; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 4603;}
 /* 퀵메뉴 버튼 */
 .quick-menu { display:flex; flex-direction: column; gap: 5px; opacity: 0;  }
 .quick-menu>.quick-btn { display:flex; align-items: center; flex-direction: column; justify-content: center; width:120px; height:120px; border: none; text-align: center; background: linear-gradient(to right bottom, #832082, #C21DC0);  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  color: #FFFFFF;  border-radius: 20px; cursor: pointer; font-weight: 500; }
@@ -3171,7 +3172,7 @@ span#imgFileNm {
 .popupWrap header.type04 a.layPopClose { top:50px; right:60px; }
 
 /* 팝업 스크롤 */
-.scrollBox.type07 { height:655px; margin-top:30px; padding:0px 25px 60px 0; overflow-x:hidden; overflow-y: auto; border-top:0; }
+.scrollBox.type07 { height:655px; margin-top:30px; padding:0px 25px 60px 0; overflow-x:hidden; overflow-y: scroll; border-top:0; }
 
 /* 팝업 라벨 */
 .icoArea.ic-recom { position:relative; padding:10px 10px 10px 42px; font-size:16px; background:var(--m-color); color:#fff; border-radius: 2px; }
@@ -3181,9 +3182,9 @@ span#imgFileNm {
 /* 전문점 사진 */
 .map-detail-container { display:flex; gap:40px; justify-content: space-between; }
 .map-detail-gallery {display:flex; flex-direction: column; justify-content: space-between; width:calc(100%/2); }
-.map-detail-gallery > .thumb-detail { width:500px; height:400px;}
+.map-detail-gallery > .thumb-detail { display:flex; justify-content: center; width:500px; height:400px;/* max-width:500px; height:auto;*/}
 .map-detail-gallery > .thumbs { display:flex; gap:12px; margin-top:11px; }
-.map-detail-gallery > .thumbs > a.thumb-img { width:116px; height:116px; }
+.map-detail-gallery > .thumbs > a.thumb-img {display:flex; justify-content: center;  width:116px; height:116px; }
 .map-detail-gallery > .thumb-detail > img,
 .map-detail-gallery > .thumbs > a.thumb-img > img { width:100%; height:100%;}
 .map-detail-gallery > .thumbs > a.thumb-img { opacity: 0.8; }
@@ -3265,7 +3266,7 @@ span#imgFileNm {
 /* e:20241205 */
 
 /* 이용후기 박스 */
-.review-container { margin-top:60px; border-top:1px solid var(--border-color); }
+/* .review-container { margin-top:60px; border-top:1px solid var(--border-color); } */
 .review-container h3 { position: relative; padding:47px 0 20px 36px; border-bottom:2px solid var(--txt-color); color:var(--txt-color); font-size:26px; font-weight:600; font-family: "Spoqa Han Sans","NanumBarunGothic"; }
 .review-container h3::before { content:""; position: absolute; top:57px; transform: translateY(-50%); left:0; width:26px; height:25px; background: var(--ic-star1)no-repeat 100%/26px auto;}
 .review-container .review-box { display:flex; justify-content: space-between; margin:30px 0; padding:24px 59px; background:var(--bg-gray-2-color); }
@@ -3382,6 +3383,10 @@ span#imgFileNm {
 .map-container > .map-info > .btnArea { margin-top:19px; }
 /*e:20241205*/
 
+/* 이미지 없을 경우 */
+.noImage { position: relative; background: #EDEDED; }
+.noImage::after { content:"NO IMAGE"; position: absolute; top:50%; left:23%; transform: translateY(-50%); }
+
 /*s:20241206*/
 /* 2번째 전문점 상세보기 팝업 */
 .map-detail-container.type02 { justify-content:initial; gap:30px; }
@@ -3453,7 +3458,7 @@ span#imgFileNm {
 
 /* s: 20241206 */
 /* 상담신청 */
-.counselRegisterWrap { max-width:1140px; margin:50px 0px 70px; padding:60px 0 70px 0; background-color: var(--white-color); }
+.counselRegisterWrap { max-width:1140px; margin:150px 0px 70px; padding:60px 0 70px 0; background-color: var(--white-color); }
 .counselRegisterWrap .inner { max-width:1022px; margin:0 auto; }
 
 .counselRegisterWrap .descInfo.type07 { text-align: center; padding-bottom:25px; border-bottom:1px solid var(--sub-3-color); }

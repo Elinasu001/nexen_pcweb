@@ -27,7 +27,7 @@
     <!-- allWrap 끝 -->
 
     <!--//[20241205 - 퍼블]-->
-    <div class="popupWrap type09 md-modal md-show" id="modal-1"><!--[20241205 - 퍼블] .type09로 변경-->
+    <div class="popupWrap type09 md-modal" id="modal-1"><!--[20241205 - 퍼블] .type09로 변경-->
             
         <header class="type04" id="agencyHeader"><!--[20241205-퍼블] .type04로-->
             <em class="icoArea ic-recom">추천 렌탈 전문점</em>
@@ -43,7 +43,7 @@
             </h2>
         </header>
 
-        <div id="storeFocus" class="scrollBox type07"> <!--[20241205-퍼블] .scrollBox .type07 클래스 추가 -->
+        <div id="scrollBox" class="scrollBox type07"> <!--[20241205-퍼블] .scrollBox .type07 클래스 추가 -->
 
             <div class="map-detail-container"> <!--[20241205-퍼블] div 추가-->
 
@@ -53,10 +53,11 @@
                         <img src="" alt="">
                     </div>
                     <div class="thumbs">
-                        <a href="javascript:void(0);" class="thumb-img"><img src="../../img/mypage/sample/front.png" alt=""></a>
-                        <a href="javascript:void(0);" class="thumb-img"><img src="../../img/mypage/sample/panel.png" alt=""></a>
+                        <a href="javascript:void(0);" class="thumb-img"><img src="../../img/product/video_first_01.jpg" alt=""></a>
+                        <a href="javascript:void(0);" class="thumb-img"><img src="../../img/product/state_ico_03.png" alt=""></a>
                         <a href="javascript:void(0);" class="thumb-img"><img src="../../img/mypage/sample/tire.png" alt=""></a>
-                        <a href="javascript:void(0);" class="thumb-img"></a><!--[D] 이미지가 없을 경우 선택 안됨 처리-->
+                        <a href="javascript:void(0);" class="thumb-img"><img src="../../img/product/ranking_icon_06.png" alt=""></a><!--[D] 이미지가 없을 경우 선택 안됨 처리-->
+                        <!-- <a href="javascript:void(0);" class="thumb-img"></a> -->
                     </div>
                 </div>
                 <!--[20241205-퍼블] 신규 추가//-->
@@ -193,7 +194,7 @@
                             <button type="button">평점순</button>
                         </div>
                     </div>
-                    <div class="review-item">
+                    <div id="btnTxtWrap" class="review-item">
                         <ul>
                             <li>
                                 <div class="user"><img src="../../img/common/ico_user.png" alt=""></div>
@@ -454,6 +455,38 @@
         /**
          * 더보기 버튼 [20241206 퍼블] :: 더보기 버튼 변경
          */
+        // function expandableTextHandlers() {
+        //     $(".btnExpandTxt").each(function () {
+        //         var $container = $(this);
+        //         var $btn = $container.find(".btn-plus");
+        //         var $text = $container.find("span");
+
+        //         // 컨텐츠의 실제 높이와 제한 높이를 비교
+        //         var originalHeight = $text[0].scrollHeight;
+        //         var maxHeight = parseInt(window.getComputedStyle($text[0]).lineHeight, 10) * 2; // 2줄 높이 계산
+
+        //         if (originalHeight > maxHeight) {
+        //             $btn.show();
+        //             $container.addClass("collapsed");
+        //         } else {
+        //             $btn.hide();
+        //         }
+
+        //         $btn.on("click", function () {
+        //             if ($container.hasClass("expanded")) {
+        //                 $container.removeClass("expanded").addClass("collapsed");
+        //                 $btn.text("더보기");
+        //             } else {
+        //                 $container.removeClass("collapsed").addClass("expanded");
+        //                 $btn.text("");
+        //             }
+        //         });
+
+        //     });
+        // }
+        // expandableTextHandlers();
+
+
         function expandableTextHandlers() {
             $(".btnExpandTxt").each(function () {
                 var $container = $(this);
@@ -472,13 +505,13 @@
                 }
 
                 $btn.on("click", function () {
-                    $container.toggleClass("expanded");
-                    $container.toggleClass("collapsed");
-                    $btn.text($container.hasClass("expanded") ? "" : "더보기");
+                    $container.addClass("expanded");
+                    $container.removeClass("collapsed");
+                    $btn.text("");
                 });
             });
-        }
-        expandableTextHandlers();
+        }expandableTextHandlers();
+
 
         $("#btnDetail").on("click", function(){
             $("body").addClass("bgFix");
@@ -530,32 +563,80 @@
         //     }
         // }
 
+         // function popUpFocus() {
+
+        //     var btnDetail = document.querySelector("#btnDetail");
+        //     var btnReview = document.querySelector("#btnReview");
+
+        //     var focusWrap = document.querySelector("#scrollBox");
+        //     var reviewFocus = document.querySelector("#reviewFocus");
+
+        //     // console.log("reviewFocus offsetTop:", reviewFocus.offsetTop);
+        //     // console.log("reviewFocus offsetHeight:", reviewFocus.offsetHeight);
+        //     // console.log("focusWrap scrollHeight:", focusWrap.scrollHeight);
+
+        //     // console.log("focusWrap clientHeight:", focusWrap.clientHeight);
+        //     // console.log("focusWrap offsetHeight:", reviewFocus.offsetTop);
+
+        //     btnReview.addEventListener("click", function() {
+        //         var reviewOffset = reviewFocus.offsetTop;
+        //         focusWrap.scrollTop = reviewOffset;
+        //     });
+
+        //     btnDetail.addEventListener("click", function() {
+        //         focusWrap.scrollTop = 0;
+        //     });
+
+        // }
+
+        // popUpFocus();
+
+        function popUpFocus() {
+            var focusWrap = document.querySelector("#scrollBox"); // 스크롤 영역
+            var reviewFocus = document.querySelector("#reviewFocus"); // 팝업 이용후기 영역
+
+            function getOffsetM(e) { // 마진 포함
+                var rect = e.getBoundingClientRect();
+                var marginTop = parseInt(window.getComputedStyle(e).marginTop, 10) || 0;
+                return rect.top + window.pageYOffset - marginTop;
+            }
+
+            if (popGbn === "REV") {
+                var reviewOffset = getOffsetM(reviewFocus);
+                var scrollOffset = reviewOffset - focusWrap.getBoundingClientRect().top + focusWrap.scrollTop + 20;
+                focusWrap.scrollTop = scrollOffset;
+            } else {
+                focusWrap.scrollTop = 0; // 상단으로 이동
+            }
+        }
+
         function popUpFocus() {
             var btnDetail = document.querySelector("#btnDetail");
             var btnReview = document.querySelector("#btnReview");
 
-            var focusWrap = document.querySelector(".scrollBox");
+            var focusWrap = document.querySelector("#scrollBox");
             var reviewFocus = document.querySelector("#reviewFocus");
 
-            // console.log("reviewFocus offsetTop:", reviewFocus.offsetTop);
-            // console.log("reviewFocus offsetHeight:", reviewFocus.offsetHeight);
-            // console.log("focusWrap scrollHeight:", focusWrap.scrollHeight);
-
-            // console.log("focusWrap clientHeight:", focusWrap.clientHeight);
-            // console.log("focusWrap offsetHeight:", reviewFocus.offsetTop);
+            // 마진을 포함한 요소의 상단 위치를 계산하는 함수
+            function getOffsetM(element) {
+                var rect = element.getBoundingClientRect();
+                var marginTop = parseInt(window.getComputedStyle(element).marginTop, 10) || 0;
+                return rect.top + window.pageYOffset - marginTop;
+            }
 
             btnReview.addEventListener("click", function() {
-                var reviewOffset = reviewFocus.offsetTop - 140;
-                focusWrap.scrollTop = reviewOffset;
+                var reviewOffset = getOffsetM(reviewFocus);
+                var scrollOffset = reviewOffset - focusWrap.getBoundingClientRect().top + focusWrap.scrollTop + 20;
+                focusWrap.scrollTop = scrollOffset;
             });
 
             btnDetail.addEventListener("click", function() {
                 focusWrap.scrollTop = 0;
             });
-
         }
 
         popUpFocus();
+
 
 
 

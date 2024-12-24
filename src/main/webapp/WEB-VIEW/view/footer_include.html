@@ -20,7 +20,7 @@
 				/**
 				 * [공통] :: 퀵메뉴 버튼
 				 */
-				function handleScrollButtons() {
+				 function handleScrollButtons() {
 					var $quickMenu = $(".action-buttons-wrap").not(".mainPullPage");
 					var $footer = $("footer");
 
@@ -38,16 +38,17 @@
 						if (footerVisible) {
 							newBottom = (scrollTop + windowHeight - footerOffsetTop) + 50;
 						} else {
-							newBottom = 100;
+							newBottom = 260;
 						}
 
 						$quickMenu.stop().animate({
 							bottom: newBottom + "px"
-						}, 300);
+						}, 10);
 					});
 				}
+
 				handleScrollButtons();
-				
+
 			});
 			
 		</script>

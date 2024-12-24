@@ -19,8 +19,219 @@
 
 <body>
     <div class="allWrap">
-        <!--subTitleArea-->
+         <!--subTitleArea-->
+         <div class="subTitleArea type22"><!--[20241206 - 퍼블] : type22 클래스 추가-->
+            <!--  subTitleTop -->
+            <div class="subTitleTop">
+                <!--topArea-->
+                <div class="topAreaWrap ">
+                    <div class="topArea">
+                        <header>
+                            <h1>
+                                <a href="/main"><img src="../../img/common/logo_dark.png" alt="Next Level"
+                                        class="logo-dark" />
+                                    <img src="/img/common/logo_light.png" alt="Next Level" class="logo-light" />
+                                </a>
+                            </h1>
+                            <nav class="gnb">
+                                <ul>
+                                    <li class="nav-menu"> <a href="#">주문하기</a></li>
+                                    <li class="nav-menu"> <a href="#">혜택/서비스</a></li>
+                                    <!-- <li class="logo"><a href="/main"><img src="/img/common/logo_dark.png" alt="Next Level" class="logo-dark" /><img src="/img/common/logo_light.png" alt="Next Level" class="logo-light" /></a></li> -->
+                                    <li class="nav-menu"> <a href="#">뉴스/이벤트</a></li>
+                                    <li class="nav-menu"> <a href="#">고객지원</a></li>
+                                    <li class="nav-menu"> <a href="#">마이페이지</a></li>
+                                </ul>
+                            </nav>
+                            <!-- <a href="#" class="allMenu"></a> -->
+                            <a href="/cart/cartView" class="basket ico_basket_black"></a>
+                            <div id="loginBlock">
+                                <a href="javascript:goTologin();" class="login"></a>
+                            </div>
+                            <!-- <div class="rTopBtn"> -->
+                            <!-- </div> -->
+                        </header>
+                    </div>
+                </div>
+                <!-- mouseover subMenu -->
+                <div class="subMenuWrap">
+                    <div class="subMenu">
+                        <header>
+                            <h1>
+                                <!-- <a href="/main"><img src="/img/common/logo.png" alt="Next Level"/></a> -->
+                                <a href="/main">
+                                    <img src="/img/common/logo_dark.png" alt="Next Level" class="logo-dark" />
+                                    <img src="./img/common/logo_light.png" alt="Next Level" class="logo-light" />
+                                </a>
+                            </h1>
+                            <nav class="gnb">
+                                <ul>
+                                    <li class="nav-menu"><a href="#">주문하기</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a onclick="openSizeFinder( 'num' );">차량번호로 찾기</a></li>
+                                                <li><a onclick="openSizeFinder( 'car' );">차종으로 찾기</a></li>
+                                                <li><a onclick="openSizeFinder( 'size' );">사이즈로 찾기</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">혜택/서비스</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/contents/o2oServiceIntro">O2O 서비스</a></li>
+                                                <li><a href="/contents/rentalServiceIntro">렌탈 서비스</a></li>
+                                                <li><a href="/contents/guaranteeSystem">보증제도 안내</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">뉴스/이벤트</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/news/tireTipList">NEWS&TIP</a></li>
+                                                <li><a href="/evt/evtList">이벤트</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">고객지원</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/bbs/noticeList">공지사항</a></li>
+                                                <li><a href="/bbs/qnaList">자주묻는 질문</a></li>
+                                                <li><a href="/bbs/counselRegister">상담하기</a></li>
+                                                <li><a href="/mypage/questionList">1:1문의</a></li>
+                                                <li><a href="/bbs/specialDealerList">렌탈 전문점 찾기</a></li>
+                                                <li><a href="/bbs/o2oSearchList">넥센 직영점 찾기</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-menu"><a href="#">마이페이지</a>
+                                        <div class="ss">
+                                            <ul>
+                                                <li><a href="/mypage/orderList">나의 주문내역</a></li>
+                                                <li><a href="/mypage/myRentalList">나의 렌탈 관리</a>
+                                                </li>
+                                                <li><a href="/mypage/couponList">나의 쿠폰</a></li>
+                                                <li><a href="/mypage/myRecommend">나의 추천인 코드</a></li>
 
+                                                <li><a href="/mypage/memberModifyPassword">회원정보 관리</a></li>
+                                                <li><a href="javascript:fn_safeKeyView();">인증번호 발급</a></li>
+
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <a href="/cart/cartView" class="basket ico_basket_black"></a>
+                            <a href="javascript:goTologin();" class="login"></a>
+                        </header>
+                    </div>
+                </div>
+                <!-- mouseover subMenu -->
+
+                <!--topArea-->
+                <!-- allMenu -->
+                <div class="allMenuWrap">
+                    <div class="allMenuBox">
+                        <header>
+                            <div class="topArea">
+                                <h1>
+                                    <a href="/main"><img src="/img/common/logo.png" alt="Next Level" /></a>
+                                </h1>
+                                <ul class="topMenu">
+                                    <li><i class="ico02"></i><a href="./member/join">회원가입</a></li>
+                                    <li><i class="ico03"></i><a href="./cart/cartView">장바구니</a></li>
+                                    <li id="loginArea"><i class="ico04"></i><a href="javascript:goTologin();">로그인</a>
+                                    </li>
+                                </ul>
+                                <a href="#" class="allMenuClose"></a>
+                            </div>
+                        </header>
+
+                        <!-- allMenu content-->
+                        <div class="content">
+                            <div class="siteMapWrap">
+                                <!--sMenuBox-->
+                                <div class="sMenuBox">
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">주문하기</h3>
+                                        <ul>
+                                            <li><a href="/product/prdList?viewGbn=H">타이어</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">뉴스/<br />이벤트</h3>
+                                        <ul>
+                                            <li><a href="/news/tireTipList">NEWS&TIP</a></li>
+                                            <li><a href="/evt/evtList">이벤트</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">마이넥센</h3>
+                                        <ul>
+                                            <li><a href="/mypage/orderList">나의 주문내역</a></li>
+                                            <li><a href="/mypage/myRentalList">나의 렌탈 관리</a>
+                                            </li>
+                                            <li><a href="/mypage/couponList">나의 쿠폰</a></li>
+                                            <li><a href="/mypage/myRecommend">나의 추천인 코드</a></li>
+                                            <li><a href="/mypage/questionList">1:1문의</a></li>
+                                            <li><a href="/mypage/memberModifyPassword">회원정보 관리</a></li>
+                                            <li><a href="javascript:fn_safeKeyView();">인증번호 발급</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+                                </div>
+                                <!--sMenuBox-->
+
+                                <!--sMenuBox-->
+                                <div class="sMenuBox type02">
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">혜택/<br />서비스</h3>
+                                        <ul>
+                                            <li><a href="/contents/o2oServiceIntro">O2O 서비스 소개</a></li>
+                                            <li><a href="/contents/rentalServiceIntro">렌탈 서비스 소개</a></li>
+                                            <li><a href="/contents/guaranteeSystem">보증제도 소개</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+
+                                    <!--sMenu-->
+                                    <div class="sMenu">
+                                        <h3 class="type03">고객지원</h3>
+                                        <ul>
+                                            <li><a href="/bbs/noticeList">공지사항</a></li>
+                                            <li><a href="/bbs/qnaList">자주 묻는 질문</a></li>
+                                            <li><a href="/bbs/counselRegister">상담하기</a></li>
+                                            <li><a href="/bbs/specialDealerList">전문점 안내</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--sMenu-->
+                                </div>
+                                <!--sMenuBox-->
+                            </div>
+                        </div>
+                        <!-- allMenu content-->
+                    </div>
+                </div>
+                <!-- allMenu -->
+                <!--subTitleArea-->
+                <div class="titleArea type03">
+                    <h2 class="type03"><img src="/img/title/h2_b_10.png" alt="상담 신청을 남겨주세요." /></h2>
+                    <h3 class="type01">
+                        <img src="/img/title/h2_title_19.png" alt="상담하기" />
+                    </h3>
+
+                </div>
+            </div>
+            <!--  subTitleTop -->
+        </div>
         <!--subTitleArea-->
 
         <!--subContentsWrap-->
