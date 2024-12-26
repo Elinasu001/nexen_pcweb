@@ -839,7 +839,7 @@ h2 span:nth-child(8) { animation-delay: .7s; }*/
 .descInfo.type05{color:#333; margin:70px 0 0px;}
 .descInfo.type05 p{font-size:24px; font-weight:bold; margin-bottom:10px;}
 .descInfo.type06{margin:50px 0 44px;}
-.descInfo.type07{ margin:0; text-align: center;  color:#222222; font-size:38px; font-weight: 600; }/*20241206 상담하기*/
+.descInfo.type07{ margin:0; text-align: center;  color:#222222; font-size:34px; font-weight: 600; }/*20241206 상담하기*/
 
 /* desc text  + select */
 .descInfoState{display:flex; justify-content:space-between;  color:#333; margin:70px 0 5px;}
@@ -2601,7 +2601,7 @@ span.hash{background:#eff0f0; height:37px; line-height:37px; padding:0 13px; bor
 
 /* button */
 button{text-transform:uppercase;  font-weight:bold; letter-spacing:-.3px}
-button.type01{background:#832082; height:80px; color:#fff; font-size:18px; padding:0 30px; text-align:left}
+button.type01{background:#832082; height:70px; color:#fff; font-size:18px; padding:0 30px; text-align:left}
 button.type02{background:#393c44; height:80px; color:#fff; font-size:18px; padding:0 30px; text-align:left}
 button.type03{background:transparent; height:40px; line-height:40px; color:#fff; font-size:14px; padding:0 30px; text-align:left; border:1px solid #fff}
 button.type04{background:#a7a8ac; height:80px; color:#fff; font-size:18px; padding:0 30px; text-align:left}
@@ -3467,11 +3467,11 @@ span#imgFileNm {
 
 /* s: 20241206 */
 /* 상담신청 */
-.counselRegisterWrap { max-width:1140px; margin:150px 0px 70px; padding:60px 0 70px 0; background-color: var(--white-color); }
-.counselRegisterWrap .inner { max-width:1022px; margin:0 auto; }
+.counselRegisterWrap { /*max-width:1140px;*/ margin:150px 0px 70px; padding:50px 0 60px 0; background-color: var(--white-color); }
+.counselRegisterWrap .inner { max-width:990px; margin:0 auto; }
 
 .counselRegisterWrap .descInfo.type07 { text-align: center; padding-bottom:25px; border-bottom:1px solid var(--sub-3-color); }
-.counselRegisterWrap .descInfo.type07 .proViewInfo p { font-size:18px; font-weight: 500; }
+.counselRegisterWrap .descInfo.type07 .proViewInfo p { font-size:17px; font-weight: 500; }
 .counselRegisterWrap .descInfo.type07 .proViewInfo p.desc { padding:0; margin-top:20px;  color:var(--txt-color);  }
 .counselRegisterWrap .descInfo.type07 .proViewInfo p.info { margin-top:10px; color:var(--blue-color); }
 
@@ -3482,20 +3482,21 @@ span#imgFileNm {
 .counselRegisterWrap .submitAreaWrap.type02 + .submitAreaWrap.type02 { margin-top:20px; }
 .counselRegisterWrap .submitAreaWrap.type02 .submitArea .conWrap { width:320px; }
 
-.counselRegisterWrap .bannerWrap { margin-top:40px; width:1022px; height:auto; max-width: 100%;}
+.counselRegisterWrap .bannerWrap { margin-top:30px; width:990px; height:auto; max-width: 100%;}
+.counselRegisterWrap .bannerWrap img { width:100%; height:100%; }
 .counselRegisterWrap .btnArea { padding:25px 0 0; }
 .counselRegisterWrap .btnArea button:disabled, button[disabled] { background: var(--bg-gray-color); }
 
 /* [공통] */
 .infoBox.type03 { padding:15px 0; border:1px solid var(--border-color);  }
 .infoBox.type03 ul li { display:flex; flex-direction: column; justify-content: center; width:50%; color:var(--sub-color); font-weight: 500;}
-.infoBox.type03 ul li span { display:flex; align-items: center; padding:0 40px; color:var(--sub-color); font-size:16px; font-weight: 500; text-align: left; }
+.infoBox.type03 ul li span { display:flex; align-items: center; padding:0 40px; color:var(--sub-color); font-size:15px; font-weight: 500; text-align: left; }
 .infoBox.type03 ul li span em { width:85px; font-weight: 600; color:var(--txt-color); }
 
 input.type10 { height:22px; line-height:22px; background:transparent; border:0; }
 input[type="checkbox"].type10 + label { position: relative; }
 input[type="checkbox"].type10 + label::after {content:""; position: absolute; left:40px; top:1px; width:22px; height:22px; border:1px solid var(--chk-border-color); border-radius: 2px; }
 input[type="checkbox"].type10:checked + label::after { background: var(--ic-white-chk) no-repeat var(--m-color) 50%/13px auto; border:1px solid var(--m-color); }
-input[type="checkbox"].type10 + label > span{ padding: 0 40px 0 80px; color:var(--chk-txt-color); font-size:18px; text-align: left; font-weight: 500; }
+input[type="checkbox"].type10 + label > span{ padding: 0 40px 0 80px; color:var(--chk-txt-color); font-size:16.5px; text-align: left; font-weight: 500; }
 input[type="checkbox"].type10:checked + label > span{ color:var(--m-color); font-weight: 600; }
 /* e: 20241206 */
