@@ -43,7 +43,7 @@
             </h2>
         </header>
 
-        <div id="scrollBox" class="scrollBox type07"> <!--[20241205-퍼블] .scrollBox .type07 클래스 추가 -->
+        <div id="topFocus" class="scrollBox type07"> <!--[20241205-퍼블] .scrollBox .type07 클래스 추가 -->
 
             <div class="map-detail-container"> <!--[20241205-퍼블] div 추가-->
 
@@ -550,19 +550,6 @@
 
         // popUpFocus();
 
-        // function popUpFocus() {
-
-        //     var focusWrap = document.querySelector(".scrollBox");//스크롤 영역
-        //     var reviewFocus = document.querySelector("#reviewFocus");//팝업 이용후기 영역
-
-        //     if(popGbn == "REV"){
-        //         var reviewOffset = reviewFocus.getBoundingClientRect().top + focusWrap.scrollTop - 147;
-        //         focusWrap.scrollTop = reviewOffset;
-        //     } else {
-        //         focusWrap.scrollTop = 0;
-        //     }
-        // }
-
          // function popUpFocus() {
 
         //     var btnDetail = document.querySelector("#btnDetail");
@@ -592,51 +579,109 @@
         // popUpFocus();
 
         function popUpFocus() {
-            var focusWrap = document.querySelector("#scrollBox"); // 스크롤 영역
+            var focusWrap = document.querySelector("#topFocus"); // 스크롤 영역
             var reviewFocus = document.querySelector("#reviewFocus"); // 팝업 이용후기 영역
 
-            function getOffsetM(e) { // 마진 포함
-                var rect = e.getBoundingClientRect();
-                var marginTop = parseInt(window.getComputedStyle(e).marginTop, 10) || 0;
-                return rect.top + window.pageYOffset - marginTop;
+            if (!focusWrap || !reviewFocus) return;
+
+            function getScrollPos(container, target) {
+                var containerR = container.getBoundingClientRect();
+                var targetR = target.getBoundingClientRect();
+                return targetR.top - containerR.top + container.scrollTop + 50;
             }
 
             if (popGbn === "REV") {
-                var reviewOffset = getOffsetM(reviewFocus);
-                var scrollOffset = reviewOffset - focusWrap.getBoundingClientRect().top + focusWrap.scrollTop + 20;
-                focusWrap.scrollTop = scrollOffset;
+                focusWrap.scrollTop = getScrollPos(focusWrap, reviewFocus);
             } else {
                 focusWrap.scrollTop = 0; // 상단으로 이동
             }
         }
 
+
+
+        // 개발 반영된 스크립트트
         function popUpFocus() {
-            var btnDetail = document.querySelector("#btnDetail");
             var btnReview = document.querySelector("#btnReview");
+            var btnDetail = document.querySelector("#btnDetail");
 
-            var focusWrap = document.querySelector("#scrollBox");
-            var reviewFocus = document.querySelector("#reviewFocus");
+            var focusWrap = document.querySelector("#topFocus"); // 스크롤 영역
+            var reviewFocus = document.querySelector("#reviewFocus"); // 팝업 이용후기 영역
+            
 
-            // 마진을 포함한 요소의 상단 위치를 계산하는 함수
-            function getOffsetM(element) {
-                var rect = element.getBoundingClientRect();
-                var marginTop = parseInt(window.getComputedStyle(element).marginTop, 10) || 0;
-                return rect.top + window.pageYOffset - marginTop;
+            if (!focusWrap || !reviewFocus || !btnDetail) return;
+
+            function getScrollPos(container, target) {
+                var containerR = container.getBoundingClientRect();
+                var targetR = target.getBoundingClientRect();
+                return targetR.top - containerR.top + container.scrollTop + 50;
             }
 
             btnReview.addEventListener("click", function() {
-                var reviewOffset = getOffsetM(reviewFocus);
-                var scrollOffset = reviewOffset - focusWrap.getBoundingClientRect().top + focusWrap.scrollTop + 20;
-                focusWrap.scrollTop = scrollOffset;
+                focusWrap.scrollTop = getScrollPos(focusWrap, reviewFocus);
             });
 
-            btnDetail.addEventListener("click", function() {
+            btnDetail.addEventListesner("click", function() {
                 focusWrap.scrollTop = 0;
             });
-        }
 
-        popUpFocus();
 
+        } popUpFocus() 
+
+
+        // function popUpFocus() {
+        //     var btnReview = document.querySelector("#btnReview");
+        //     // var btnDetail = document.querySelector("#btnDetail");
+        //     var focusWrap = document.querySelector("#scrollBox");
+        //     var reviewFocus = document.querySelector("#reviewFocus");
+
+        //     // 필수 요소가 없으면 함수 종료
+        //     if (!btnReview || !focusWrap || !reviewFocus) return;
+
+        //     // 요소의 상단 오프셋 계산 함수
+        //     function getOffset(element) {
+        //         var rect = element.getBoundingClientRect();
+        //         return rect.top + window.pageYOffset;
+        //     }
+
+        //     btnReview.addEventListener("click", function() {
+        //         var reviewOffset = getOffset(reviewFocus);
+        //         var scrollOffset = reviewOffset - focusWrap.getBoundingClientRect().top + focusWrap.scrollTop + 20; // 추가 여유 공간
+        //         focusWrap.scrollTop = scrollOffset;
+        //     });
+
+        //     btnDetail.addEventListener("click", function() {
+        //         focusWrap.scrollTop = 0;
+        //     });
+        // }
+
+        // popUpFocus();
+
+          // function popUpFocus() {
+        //     var btnDetail = document.querySelector("#btnDetail");
+        //     var btnReview = document.querySelector("#btnReview");
+
+        //     var focusWrap = document.querySelector("#scrollBox");
+        //     var reviewFocus = document.querySelector("#reviewFocus");
+
+        //     // 마진을 포함한 요소의 상단 위치를 계산하는 함수
+        //     function getOffsetM(element) {
+        //         var rect = element.getBoundingClientRect();
+        //         var marginTop = parseInt(window.getComputedStyle(element).marginTop, 10) || 0;
+        //         return rect.top + window.pageYOffset - marginTop;
+        //     }
+
+        //     btnReview.addEventListener("click", function() {
+        //         var reviewOffset = getOffsetM(reviewFocus);
+        //         var scrollOffset = reviewOffset - focusWrap.getBoundingClientRect().top + focusWrap.scrollTop + 20;
+        //         focusWrap.scrollTop = scrollOffset;
+        //     });
+
+        //     btnDetail.addEventListener("click", function() {
+        //         focusWrap.scrollTop = 0;
+        //     });
+        // }
+
+        // popUpFocus();
 
 
 
