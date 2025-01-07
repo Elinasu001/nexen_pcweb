@@ -841,6 +841,10 @@ h2 span:nth-child(8) { animation-delay: .7s; }*/
 .descInfo.type06{margin:50px 0 44px;}
 .descInfo.type07{ margin:0; text-align: center;  color:#222222; font-size:34px; font-weight: 600; }/*20241206 상담하기*/
 
+.desc.ico { position: relative; }
+.desc.ico p {  padding-left:28px; padding-bottom:20px; line-height:1.3;  font-size:14px; color:#333333;}
+.desc.ico::before { content:""; position: absolute; left:0; top: 8px; transform: translateY(-50%); width:20px; height:20px; background: var(--ic-chk-arrow) no-repeat 50%/18px auto; border:1px solid #333333; border-radius: 50%; }
+
 /* desc text  + select */
 .descInfoState{display:flex; justify-content:space-between;  color:#333; margin:70px 0 5px;}
 .descInfoState .state{display:flex; align-items:center; position:relative; top:-7px}
@@ -1932,7 +1936,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox{position:absolute; right:0; top:0px; width:440px; height:800px;  z-index:1900; background:#fff;}
 .mapInfoBox .searchArea{padding:40px 30px 0 30px;}
 .mapInfoBox .searchArea .tit { font-size:20px;  }
-.mapInfoBox .searchArea h3{ margin-top:0; margin-bottom:20px; font-size:30px; }
+.mapInfoBox .searchArea h3{ margin-top:0; margin-bottom:15px; font-size:30px; }
 .mapInfoBox .searchArea h3.type08:after { content:none; }/*기존 스타일 적용 x*/
 .mapInfoBox .searchArea p.allView{font-size:16px;font-weight:bold;position:relative;top:18px;} /*??*/
 /* 폼 */
@@ -1941,14 +1945,14 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox .searchArea ul li input.type08 { padding:0 20px 0 0; }
 /* 버튼 */
 .mapInfoBox .btn-wrap { display:flex; gap:5px; margin-top: 25px; }
-.mapInfoBox .btn { width:100%; line-height:50px; font-size:16px; border-radius: 3px; }
+.mapInfoBox .btn { width:100%; line-height:45px; font-size:16px; border-radius: 3px; }
 .mapInfoBox .btn.img { background-color: transparent !important; color: transparent !important; }
 .mapInfoBox .btn.btn-view { max-width:135px; border:1px solid #832082; color:#832082; }
 .mapInfoBox .btn.btn-search { background-color:#832082; color:#FFFFFF; }
 .mapInfoBox .btn.btn-search.img { position: absolute; right:10px; bottom:0; transform: translateY(-50%); width:23px; height:23px; background-image: var(--ic-search); background-repeat: no-repeat; background-size: 23px; }
 /* toolbar */
 .mapInfoBox .totalBar { display:flex; justify-content: space-between; height:59px; line-height:59px; padding:0 30px; }
-.mapInfoBox .totalBar > .total { font-size:18px; }
+.mapInfoBox .totalBar > .total { font-size:14px; }
 .mapInfoBox .totalBar > .total .num { position:relative; margin-left:10px; padding-left:10px; font-weight: 600; }
 .mapInfoBox .totalBar > .total .num:before { content:""; position:absolute; left:0; width:1px; height:10px; top:49%; transform:translateY(-50%); background:#111111; }
 .mapInfoBox .totalBar > .total span { color:#333333; font-weight: 500; }
@@ -1958,17 +1962,18 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox .pagingFooter .paging { margin:0px; padding-bottom:20px; }
 /* 하단 컨텐츠 */
 .mapInfoBox .mapInfoBottom { background:#fff; height:412px; }
-.mapInfoBox .scrollBox.type04 { margin-right:0; padding-right:0; height: 350px; }
+.mapInfoBox .scrollBox.type04 { margin-right:0; padding-right:0; height: 450px; }
 /* 하단 컨텐츠- 리스트 */
 .mapInfoBox .serResult_01{ height:1060px; padding:0px 20px 0px 30px;}
 .mapInfoBox .serResult_01 ul > li.storeItem + li { margin-top:13px; }
-.mapInfoBox .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:25px 20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
+.mapInfoBox .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
 .mapInfoBox .serResult_01 .icoArea.ic-recom { display:inline-block; padding:8px 8px 8px 32px; font-size:14px; font-weight: 500; }
 .mapInfoBox .serResult_01 .icoArea.ic-recom::before { width:22px; height:20px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/22px auto; }
 .mapInfoBox .serResult_01 .storeList ul > li + li.tit { margin-top:15px; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit { font-size:18px; font-weight:600; color:var(--sub-2-color); line-height: 1.5; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit { font-size:18px; font-weight:600; color:var(--sub-2-color); line-height: 20px; }
-.mapInfoBox .serResult_01 .storeList ul > li.tit .score { display: inline-block; padding-left:10px; }
+.mapInfoBox .serResult_01 .storeList ul > li.tit > b { padding-right:10px; }
+.mapInfoBox .serResult_01 .storeList ul > li.tit .score { display: inline-block; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit .num { font-size: 13px; font-weight: 600; color:var(--txt-color);}
 .mapInfoBox .serResult_01 .storeList ul > li.tit .num > img { margin:0 3px 3px 0; width:12px; height:11px; }
 .mapInfoBox .serResult_01 .storeList ul > li.tit .num.all-num { padding-left:10px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
@@ -2015,12 +2020,13 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .mapInfoBox.type02 .serResult_01{height:1060px; padding:0px 40px}
 .mapInfoBox.type02 .serResult_01 > ul { padding-bottom:100px; }
 .mapInfoBox.type02 .serResult_01 > ul > li.storeItem + li { margin-top:13px; }
-.mapInfoBox.type02 .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:25px 20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
+.mapInfoBox.type02 .serResult_01 .storeList {/*border-bottom:1px solid #999;*/ padding:20px 15px; border:1px solid var(--border-color); border-radius: 5px; }
 .mapInfoBox.type02 .serResult_01 .icoArea.ic-recom { display:inline-block; padding:8px 8px 8px 32px; font-size:14px; font-weight: 500; }
 .mapInfoBox.type02 .serResult_01 .icoArea.ic-recom::before { width:22px; height:20px; top:47%; left:6px; background:var(--ic-recommend) no-repeat 100%/22px auto; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li + li.tit { margin-top:15px; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li.tit { font-size:18px; font-weight:600; color:var(--sub-2-color); line-height: 20px; }
-.mapInfoBox.type02 .serResult_01 .storeList ul > li.tit  .score { display: inline-block; padding-left:10px; }
+.mapInfoBox.type02 .serResult_01 .storeList ul > li.tit > b { padding-right: 10px; }
+.mapInfoBox.type02 .serResult_01 .storeList ul > li.tit  .score { display: inline-block; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li.tit  .num { /*padding-left:15px;*/ font-size: 13px; font-weight: 600; color:var(--txt-color);}
 .mapInfoBox.type02 .serResult_01 .storeList ul > li.tit  .num > img { margin:0 3px 3px 0; width:12px; height:11px; }
 .mapInfoBox.type02 .serResult_01 .storeList ul > li.tit  .num.all-num { padding-left:10px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
@@ -2042,7 +2048,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .conWrap .mStateIcon{line-height:20px; height:50px; position:relative; top:-10px;}
 .mStateIcon {display:flex; }
 .mStateIcon .state{margin:15px 0 12px; padding-right:10px;}
-.mStateIcon span{display:block; text-align:center; font-size:11px; }
+.mStateIcon span{display:block; margin-top:4px; text-align:center; font-size:14px; }
 
 /* popup */
 .alertBox{display:none; position:absolute; top:600px; left:50%; width:430px; padding:35px; background:#000; font-size:20px; color:#fff; text-align:center; opacity:.5; border-radius:150px 150px; transform:translate(-50%, 0)}
@@ -2104,7 +2110,7 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 .popupWrapGall .popContents .gallery img{max-width:100%}
 
 
-.popupWrap.map{width:1280px; height:800px; padding:0px}
+.popupWrap.map{width:1280px; height:900px; padding:0px}
 .popupWrap.hAuto{width:650px; height:auto; padding:34px 50px 40px}
 
 .popupWrap .popTerms{margin:38px 0 25px}
@@ -3252,6 +3258,7 @@ span#imgFileNm {
 	--ic-close-off: url(../img/common/ico_close_off.png);
 	--ic-close-on: url(../img/common/ico_close_on.png);
 	--ic-pin: url(../img/common/ico_pin.png);
+	--ic-chk-arrow: url(../img/common/ico_chk-arrow.png);
 
 	--m-color: #832082;
 	--review-msub-color: #191478;
