@@ -1922,8 +1922,8 @@ footer .footerWrap .customer ul li:last-child{font-size:14px; color:#97989b}
 
 /* 전문점 찾기 - 핀 있을 경우 */
 .mapInfoBox .serResult_01 .storeList ul > li.tit{ position: relative; padding-left: 26px; cursor: pointer; }
-.mapInfoBox .serResult_01 .storeList ul > li.tit::before { position: absolute; content:""; left:0; width:22px; height:34px; top:50%; transform: translateY(-60%); background: var(--ic-pin) no-repeat 100%/22px auto; cursor: pointer; }
-.mapInfoBox.type02 .serResult_01 .storeList ul > li.tit::before { transform: translateY(-60%); }
+.mapInfoBox .serResult_01 .storeList ul > li.tit > b::before { position: absolute; content:""; left:0; width:22px; height:34px; top:50%; transform: translateY(-60%); background: var(--ic-pin) no-repeat 100%/22px auto; cursor: pointer; }
+.mapInfoBox.type02 .serResult_01 .storeList ul > li.tit > b::before { transform: translateY(-60%); }
 
 /* 전문점 찾기 별도 엑스 버튼 */
 .popupWrap a.layPopClose.type02 { right:30px; top:30px; width:40px; height:40px; background: var(--ic-close-off) no-repeat 100%/40px auto; }
