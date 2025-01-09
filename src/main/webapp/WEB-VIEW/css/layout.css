@@ -3361,7 +3361,7 @@ span#imgFileNm {
 .review-controls .review-item > ul > li > .review-area > .order-card.premium > .tit { background-color: var(--review-msub-color);  }
 
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont { display:flex; align-items: center; gap:20px; padding:18px 25px 18px 18px;  }
-.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > img { object-fit: cover; object-position: center; width:115px; height:105px; aspect-ratio: 1/1.15; }
+.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > img { object-fit: cover; object-position: center; width:115px; height:100%; aspect-ratio: 20 / 23 }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label { display:flex; gap:5px;}
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > em { line-height: 20px; width:54px; text-align: center; border-radius: 2px; font-size:10px; font-weight: 500; background:rgb(131, 32, 130, 0.1); color:var(--m-color); }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > label { width:130px; height:auto; }
