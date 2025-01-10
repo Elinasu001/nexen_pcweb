@@ -3196,11 +3196,12 @@ span#imgFileNm {
 /* 전문점 사진 */
 .map-detail-container { display:flex; gap:40px; justify-content: space-between; }
 .map-detail-gallery {display:flex; flex-direction: column; /*justify-content: space-between;*/ width:calc(100%/2); }
-.map-detail-gallery > .thumb-detail { display:flex; justify-content: center; width:490px; height:370px;/* max-width:500px; height:auto;*/}
+.map-detail-gallery > .thumb-detail { display:flex; justify-content: center; /*width:490px; height:370px;*/  max-width:490px; width:100%; height:370px; object-fit: cover;  }
 .map-detail-gallery > .thumbs { display:flex; gap:12px; margin-top:11px; }
 .map-detail-gallery > .thumbs > a.thumb-img {display:flex; justify-content: center;  width:113px; height:113px; }
 .map-detail-gallery > .thumb-detail > img,
-.map-detail-gallery > .thumbs > a.thumb-img > img { object-fit: cover; object-position: center; width:100%; height:100%;}
+.map-detail-gallery > .thumbs > a.thumb-img > img  { width:100%; height:100%;}
+.map-detail-gallery > .thumbs > a.thumb-img > img { object-fit: cover; object-position: center; }
 .map-detail-gallery > .thumbs > a.thumb-img { opacity: 0.8; }
 .map-detail-gallery > .thumbs > a.thumb-img.on { opacity: 1; border: 2px solid var(--m-color); }
 
@@ -3353,7 +3354,7 @@ span#imgFileNm {
 .ico-satisfied::before { background: var(--ic-satisfied); }
 .ico-message::before { background: var(--ic-message); }
 
-.review-controls .review-item > ul > li > .review-area > .order-card { width:328px; height:auto; margin-right:7px; box-shadow: 2px 2px 15px 0px rgba(0, 0, 0, 0.15); }
+.review-controls .review-item > ul > li > .review-area > .order-card { width:346px; height:auto; margin-right:7px; box-shadow: 2px 2px 15px 0px rgba(0, 0, 0, 0.15); }
 .review-controls .review-item > ul > li > .review-area > .order-card > .tit { line-height: 25px; text-align: center;}
 .review-controls .review-item > ul > li > .review-area > .order-card > .tit > img { width:74px; height:auto; }
 
@@ -3361,7 +3362,7 @@ span#imgFileNm {
 .review-controls .review-item > ul > li > .review-area > .order-card.premium > .tit { background-color: var(--review-msub-color);  }
 
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont { display:flex; align-items: center; gap:20px; padding:18px 25px 18px 18px;  }
-.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > img { object-fit: cover; object-position: center; width:115px; height:100%; aspect-ratio: 20 / 23 }
+.review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > img { object-fit: cover; object-position: center; width:133px; height:auto; }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label { display:flex; gap:5px;}
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > em { line-height: 20px; width:54px; text-align: center; border-radius: 2px; font-size:10px; font-weight: 500; background:rgb(131, 32, 130, 0.1); color:var(--m-color); }
 .review-controls .review-item > ul > li > .review-area > .order-card > .order-cont > .card-info > p.card-label > label { width:130px; height:auto; }
@@ -3449,20 +3450,20 @@ span#imgFileNm {
 /* [공통] 별모양 스타일 */
 .review-container .star-box ,
 .review-container .star-box .star { display:flex; overflow:hidden; }
-.review-container .star-box .star { line-height: 0; vertical-align: bottom; background-position: left bottom; }
+.review-container .star-box .star { line-height: 0; vertical-align: bottom; background-position: left bottom; background-repeat: no-repeat; }
 
 /* 별모양 스타일 - 전문점 상세보기 - 총 평점 */
 .review-container .review-box .review-num .star-box { width:152px; margin:0 auto; }
 .review-container .review-box .review-num .star-box,
 .review-container .review-box .review-num .star-box .star { height:22px; background-image: var(--ic-star2); background-size:152px 50px; }
 /* 별모양 스타일 - 전문점 상세보기 - 만족도 */
-.review-container .review-box .review-satisfaction .star-box { width:162px; }
+.review-container .review-box .review-satisfaction .star-box { width:167px; }
 .review-container .review-box .review-satisfaction .star-box,
-.review-container .review-box .review-satisfaction .star-box .star { height:25px; background-image: var(--ic-star2); background-size: 162px; }
+.review-container .review-box .review-satisfaction .star-box .star { height:26px; background-image: var(--ic-star2); background-size: 167px; }
 /* 별모양 스타일 - 전문점 상세보기 - 리뷰 내용 */
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box { width:100px; }
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box,
-.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:100px; height:16px; background-image: var(--ic-star2); background-size:100px 36px; }
+.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:100px; height:15px; background-image: var(--ic-star2); background-size:100px 32px; }
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { background-position: left bottom; }
 /* 별모양 스타일 - 2번째 전문점 상세보기 팝업 - 리뷰 내용  */
 .review-container.type02  .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box,
