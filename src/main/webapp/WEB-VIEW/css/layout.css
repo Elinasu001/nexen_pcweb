@@ -3243,6 +3243,8 @@ span#imgFileNm {
 	--ic-service-chk: url(../img/common/ico_service_chk.png);
 	--ic-star1: url(../img/common/ico_star_re.png);
 	--ic-star2: url(../img/common/ico_star02.png);
+	--ic-star3: url(../img/common/ico_star03.png);
+	--ic-star4: url(../img/common/ico_star04.png);
 	--ic-user: url(../img/common/ico_user.png);
 	--ic-convenient: url(../img/common/ico_convenient.png);
 	--ic-friendly: url(../img/common/ico_friendly.png);
@@ -3463,14 +3465,14 @@ span#imgFileNm {
 /* 별모양 스타일 - 전문점 상세보기 - 리뷰 내용 */
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box { width:100px; }
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box,
-.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:100px; height:15px; background-image: var(--ic-star2); background-size:100px 32px; }
+.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:100px; height:14px; background-image: var(--ic-star4); background-size:100px 32px; }
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { background-position: left bottom; }
 /* 별모양 스타일 - 2번째 전문점 상세보기 팝업 - 리뷰 내용  */
 .review-container.type02  .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box,
-.review-container.type02  .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:122px; height:21px; background-size: 122px 44px; }
+.review-container.type02  .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:122px; height:18px; background-image: var(--ic-star3); background-size: 122px 40px; }
 /* 별모양 스타이 - 2번째 전문점 상세보기 팝업 - 만족도 */
 .review-container.type02 .review-box .review-satisfaction .star-box,
-.review-container.type02 .review-box .review-satisfaction .star-box .star { width:132px; height:21px; background-size: 132px 44px; }
+.review-container.type02 .review-box .review-satisfaction .star-box .star { width:132px; height:19px; background-image: var(--ic-star3);  background-size: 132px 44px; }
 /*e:20241206*/
 
 /* s: 20241206 */
