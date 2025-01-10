@@ -3455,18 +3455,15 @@ span#imgFileNm {
 .review-container .star-box .star { line-height: 0; vertical-align: bottom; background-position: left bottom; background-repeat: no-repeat; }
 
 /* 별모양 스타일 - 전문점 상세보기 - 총 평점 */
-.review-container .review-box .review-num .star-box { width:152px; margin:0 auto; }
+.review-container .review-box .review-num .star-box { margin:0 auto; }
 .review-container .review-box .review-num .star-box,
-.review-container .review-box .review-num .star-box .star { height:22px; background-image: var(--ic-star2); background-size:152px 50px; }
+.review-container .review-box .review-num .star-box .star { width:152px; height:22px; background-image: var(--ic-star2); background-size:152px 50px; }
 /* 별모양 스타일 - 전문점 상세보기 - 만족도 */
-.review-container .review-box .review-satisfaction .star-box { width:167px; }
 .review-container .review-box .review-satisfaction .star-box,
-.review-container .review-box .review-satisfaction .star-box .star { height:26px; background-image: var(--ic-star2); background-size: 167px; }
+.review-container .review-box .review-satisfaction .star-box .star { width:167px; height:26px; background-image: var(--ic-star2); background-size: 167px; }
 /* 별모양 스타일 - 전문점 상세보기 - 리뷰 내용 */
-.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box { width:100px; }
 .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box,
-.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:100px; height:14px; background-image: var(--ic-star4); background-size:100px 32px; }
-.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { background-position: left bottom; }
+.review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:99px; height:14px; background-image: var(--ic-star4); background-size:99px 32px; }
 /* 별모양 스타일 - 2번째 전문점 상세보기 팝업 - 리뷰 내용  */
 .review-container.type02  .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box,
 .review-container.type02  .review-controls .review-item > ul > li > .review-area > .review-info > .star-item > .star-box > .star { width:122px; height:18px; background-image: var(--ic-star3); background-size: 122px 40px; }
